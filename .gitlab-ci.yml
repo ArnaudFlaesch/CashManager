@@ -1,0 +1,59 @@
+image: cypress/browsers:node16.13.0-chrome95-ff94
+
+test:
+  script:
+    - npm ci
+    - npm run eslint
+    - npm run lint:styles:report
+    - npm run test
+  stage: test
+  cache:
+    paths:
+      - dist
+      - coverage-jest
+
+pages:
+  stage: deploy
+  script:
+    - npm ci
+    - npm run build
+    - mkdir public
+    - mv dist/cash-manager/* public
+  artifacts:
+    paths:
+      - public
+
+#  rules:
+#   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+coverage-report:
+  stage: .post
+  script:
+    - curl -Os https://uploader.codecov.io/latest/linux/codecov
+    - chmod +x codecov
+    - ./codecov -t ${CODECOV_TOKEN} -F coverage-jest
+  cache:
+    policy: pull
+    paths:
+      - coverage-jest
+
+#snyk-report:
+#  stage: .post
+# script:
+#   - npx snyk auth ${SNYK_TOKEN}
+#   - npx snyk test --json-file-output=snyk-report.json || true
+#   - npx snyk-to-html -i snyk-report.json -o snyk-report.html
+#  rules:
+#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+sonarcloud-check:
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  stage: .post
+  script:
+    - sonar-scanner
+  cache:
+    policy: pull
+    paths:
+      - coverage-jest
