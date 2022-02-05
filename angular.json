@@ -80,6 +80,18 @@
           "options": {
             "browserTarget": "cash-manager:build"
           }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "cash-manager:serve",
+            "browser": "chrome"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "cash-manager:serve:production"
+            }
+          }
         }
       }
     }
