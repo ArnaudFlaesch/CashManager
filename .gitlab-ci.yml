@@ -6,6 +6,7 @@ test:
     - npm run eslint
     - npm run lint:styles:report
     - npm run test
+    - npm run test:e2e
   stage: test
   cache:
     paths:
