@@ -21,9 +21,8 @@ pages:
   artifacts:
     paths:
       - public
-
-#  rules:
-#   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 coverage-report:
   stage: .post
@@ -36,14 +35,19 @@ coverage-report:
     paths:
       - coverage-jest
 
-#snyk-report:
-#  stage: .post
-# script:
-#   - npx snyk auth ${SNYK_TOKEN}
-#   - npx snyk test --json-file-output=snyk-report.json || true
-#   - npx snyk-to-html -i snyk-report.json -o snyk-report.html
-#  rules:
-#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+snyk-report:
+  stage: .post
+  script:
+    - npm i -g snyk-to-html
+    - npx snyk auth ${SNYK_TOKEN}
+    - npx snyk test --json-file-output=snyk-report.json || true
+    - npx snyk-to-html -i snyk-report.json -o snyk-report.html
+  artifacts:
+    expire_in: 30 days
+    paths:
+      - snyk-report.html
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 sonarcloud-check:
   image:
