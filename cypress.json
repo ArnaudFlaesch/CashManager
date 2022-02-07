@@ -9,6 +9,10 @@
   "screenshotOnRunFailure": true,
   "video": false,
   "videoCompression": false,
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "configFile": "reporter-e2e-config.json"
+  },
   "env": {
     "coverage": true
   }
