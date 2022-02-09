@@ -34,7 +34,7 @@ pages:
   stage: deploy
   script:
     - npm ci
-    - npm run build -- --base-href=https://afcompany.gitlab.io/Cash-Manager/
+    - npm run build -- --base-href=https://afcompany.gitlab.io/CashManager-Web/
   artifacts:
     paths:
       - public
