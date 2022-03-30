@@ -60,7 +60,7 @@
     "jest-preset-angular": "11.1.1",
     "mochawesome": "7.0.1",
     "mochawesome-merge": "4.2.1",
-    "mochawesome-report-generator": "6.0.1",
+    "mochawesome-report-generator": "6.2.0",
     "prettier": "2.5.1",
     "stylelint": "14.4.0",
     "stylelint-config-prettier-scss": "0.0.1",
