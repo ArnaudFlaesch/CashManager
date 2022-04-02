@@ -1,0 +1,12 @@
+<div class="flex flex-row flex-wrap">
+  <button id="logoutButton" mat-raised-button (click)="logout()">
+    Déconnexion
+  </button>
+</div>
+
+<div class="label-container">
+  <div *ngFor="let label of this.labels; let labelIndex = index">
+    <span>Etiquette # {{ labelIndex }}</span
+    ><span>{{ label.label }}</span>
+  </div>
+</div>
