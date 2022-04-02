@@ -16,6 +16,8 @@ test:
 
 e2e-tests:
   image: $CI_REGISTRY/group/project/docker:19.03.12
+  variables:
+    DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": ""$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD" | base64 } }}'
   services:
     - name: $CI_REGISTRY/group/project/docker:19.03.12-dind
       alias: docker
