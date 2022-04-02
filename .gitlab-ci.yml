@@ -14,6 +14,21 @@ test:
       - cypress
       - coverage-jest
 
+e2e-tests:
+  script:
+    - |-
+      echo $CI_COMMIT_BRANCH
+      docker login registry.example.com -u <username> -p <token>
+      docker pull postgres:13.2-alpine
+      docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash_test postgres:13.2-alpine
+      if [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${CI_COMMIT_BRANCH#refs/*/} | wc -l)" == 1 && ${CI_COMMIT_BRANCH#refs/*/} != 'main' && ${CI_COMMIT_BRANCH#refs/*/} != 'main' ]]; then
+        docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+        docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test -e OPENWEATHERMAP_KEY=${OPENWEATHERMAP_KEY} -e STRAVA_CLIENT_ID=${STRAVA_CLIENT_ID} -e STRAVA_CLIENT_SECRET=${STRAVA_CLIENT_SECRET} -e STEAM_USER_ID=${STEAM_USER_ID} -e STEAM_API_KEY=${STEAM_API_KEY} arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+      else
+        docker pull arnaudf93/dashwebservices:latest
+        docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test -e OPENWEATHERMAP_KEY=${OPENWEATHERMAP_KEY} -e STRAVA_CLIENT_ID=${STRAVA_CLIENT_ID} -e STRAVA_CLIENT_SECRET=${STRAVA_CLIENT_SECRET} -e STEAM_USER_ID=${STEAM_USER_ID} -e STEAM_API_KEY=${STEAM_API_KEY} arnaudf93/dashwebservices:latest
+      fi
+
 generate-e2e-test-report:
   needs:
     - test
