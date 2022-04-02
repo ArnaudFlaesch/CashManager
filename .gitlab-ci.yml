@@ -1,6 +1,4 @@
 image: cypress/browsers:node16.13.0-chrome95-ff94
-services:
-  - docker:19.03.12-dind
 
 test:
   script:
@@ -17,6 +15,10 @@ test:
       - coverage-jest
 
 e2e-tests:
+  image: $CI_REGISTRY/group/project/docker:19.03.12
+  services:
+    - name: $CI_REGISTRY/group/project/docker:19.03.12-dind
+      alias: docker
   script:
     - |-
       echo $CI_COMMIT_BRANCH
