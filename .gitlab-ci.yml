@@ -30,8 +30,7 @@ test:
       - cypress
 
 generate-e2e-test-report:
-  needs:
-    - test
+  stage: .post
   script:
     - mkdir cypress/screenshots || true
     - npm run report:merge
