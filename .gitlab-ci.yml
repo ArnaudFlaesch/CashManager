@@ -20,11 +20,17 @@ e2e-tests:
     POSTGRES_DB: "dash_test"
     POSTGRES_URL: "jdbc:postgresql://postgres:5432/dash_test"
     FF_NETWORK_PER_BUILD: 1
+    OPENWEATHERMAP_KEY: ${OPENWEATHERMAP_KEY}
+    STEAM_API_KEY: ${STEAM_API_KEY}
+    STEAM_USER_ID: ${STEAM_USER_ID}
+    STRAVA_CLIENT_ID: ${STRAVA_CLIENT_ID}
+    STRAVA_CLIENT_SECRET: ${STRAVA_CLIENT_SECRET}
   services:
     - name: postgres:13.2-alpine
     - name: arnaudf93/dashwebservices:latest
   script:
     - |-
+      echo ${OPENWEATHERMAP_KEY}
       npm ci
       npm run test:e2e
   stage: test
