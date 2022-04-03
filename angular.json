@@ -108,19 +108,6 @@
               "devServerTarget": "CashManager:production"
             }
           }
-        },
-        "e2e-ci": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "cash-manager:serve",
-            "configFile": "cypress-test.json",
-            "browser": "chrome"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "cash-manager:production"
-            }
-          }
         }
       }
     }
