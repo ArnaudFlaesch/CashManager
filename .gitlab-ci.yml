@@ -22,7 +22,9 @@ e2e-tests:
     FF_NETWORK_PER_BUILD: "true"
   services:
     - name: postgres:13.2-alpine
+      command: ["--port", "5432"]
     - name: arnaudf93/dashwebservices:latest
+      command: ["--port", "8080"]
   script:
     - |-
       npm ci
