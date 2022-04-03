@@ -28,7 +28,6 @@ test:
     paths:
       - dist
       - coverage-jest
-      - cypress
 
 generate-e2e-test-report:
   stage: .post
