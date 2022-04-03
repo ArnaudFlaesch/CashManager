@@ -6,6 +6,6 @@ function isTestMode(): boolean {
 export const environment = {
   production: true,
   backend_url: isTestMode()
-    ? 'http://backend:8080/'
+    ? 'http://backend/'
     : 'https://dash-webservices.herokuapp.com'
 };
