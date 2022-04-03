@@ -19,12 +19,10 @@ e2e-tests:
     POSTGRES_PASSWORD: "postgres"
     POSTGRES_DB: "dash_test"
     POSTGRES_URL: "jdbc:postgresql://localhost:5432/dash_test"
-    FF_NETWORK_PER_BUILD: "true"
+    FF_NETWORK_PER_BUILD: 1
   services:
     - name: postgres:13.2-alpine
-      command: ["--port", "5432"]
     - name: arnaudf93/dashwebservices:latest
-      command: ["--port", "8080"]
   script:
     - |-
       npm ci
