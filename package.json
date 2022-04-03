@@ -44,7 +44,7 @@
     "@angular/cli": "13.3.0",
     "@angular/compiler-cli": "13.3.0",
     "@cypress/schematic": "1.6.0",
-    "@ngneat/spectator": "10.0.0",
+    "@ngneat/spectator": "10.0.1",
     "@types/jasmine": "3.10.5",
     "@types/jest": "27.4.1",
     "@types/node": "16.11.22",
@@ -62,7 +62,7 @@
     "mochawesome-merge": "4.2.1",
     "mochawesome-report-generator": "6.2.0",
     "prettier": "2.5.1",
-    "stylelint": "14.4.0",
+    "stylelint": "14.6.1",
     "stylelint-config-prettier-scss": "0.0.1",
     "stylelint-config-standard-scss": "3.0.0",
     "typescript": "4.5.5"
