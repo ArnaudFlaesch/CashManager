@@ -15,6 +15,6 @@
     "configFile": "reporter-e2e-config.json"
   },
   "env": {
-    "coverage": true
+    "backend_url": "localhost:8080"
   }
 }
