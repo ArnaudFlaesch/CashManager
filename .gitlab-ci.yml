@@ -21,7 +21,7 @@ e2e-tests:
     POSTGRES_URL: "jdbc:postgresql://localhost:5432/dash_test"
   services:
     - name: postgres:13.2-alpine
-    - name: arnaudf93:dash-webservices:"$BACKEND_TAG"
+    - name: arnaudf93/dash-webservices:"$BACKEND_TAG"
   script:
     - |-
       npm ci
