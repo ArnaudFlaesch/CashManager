@@ -4,6 +4,7 @@ test:
   services:
     - name: postgres:13.2-alpine
     - name: arnaudf93/dashwebservices:latest
+      alias: backend
   variables:
     # BACKEND_TAG: '(if [ "$${CI_COMMIT_TAG}" == "" ]; then echo "1.3.5.$$CI_PIPELINE_IID"; else echo "$${CI_COMMIT_TAG}"; fi);'
     BACKEND_TAG: "latest"
