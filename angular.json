@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cash-manager": {
+    "CashManager": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "public",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "cash-manager:build:production"
+              "browserTarget": "CashManager:build:production"
             },
             "development": {
-              "browserTarget": "cash-manager:build:development"
+              "browserTarget": "CashManager:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,23 +78,36 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cash-manager:build"
+            "browserTarget": "CashManager:build"
           }
         },
         "e2e": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "cash-manager:serve",
+            "devServerTarget": "CashManager:serve",
             "browser": "chrome"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "cash-manager:serve:production"
+              "devServerTarget": "CashManager:serve:production"
+            }
+          }
+        },
+        "e2e-ci": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "CashManager:serve",
+            "configFile": "cypress-test.json",
+            "browser": "chrome"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "CashManager:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "cash-manager"
+  "defaultProject": "CashManager"
 }
