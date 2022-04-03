@@ -1,8 +1,9 @@
 {
+  "$schema": "https://on.cypress.io/cypress.schema.json",
   "baseUrl": "http://localhost:4200/",
   "testFiles": ["**/**/*.spec.ts"],
   "watchForFileChanges": false,
-  "defaultCommandTimeout": 4000,
+  "defaultCommandTimeout": 8000,
   "viewportWidth": 1920,
   "viewportHeight": 1080,
   "supportFile": "cypress/support/index.ts",
