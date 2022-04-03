@@ -19,6 +19,7 @@ e2e-tests:
     POSTGRES_PASSWORD: "postgres"
     POSTGRES_DB: "dash_test"
     POSTGRES_URL: "jdbc:postgresql://localhost:5432/dash_test"
+    FF_NETWORK_PER_BUILD: "true"
   services:
     - name: postgres:13.2-alpine
     - name: arnaudf93/dashwebservices:latest
