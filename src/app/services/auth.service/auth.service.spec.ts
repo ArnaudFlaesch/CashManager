@@ -36,7 +36,7 @@ describe('ApiService tests', () => {
     );
     request.flush(expectedUserData);
 
-    expect(localStorage.getItem('user')).toBeTruthy;
+    expect(localStorage.getItem('user')).toBeTruthy();
     spectator.service.logout();
     expect(localStorage.getItem('user')).toBeNull();
   });

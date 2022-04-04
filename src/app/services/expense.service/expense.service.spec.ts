@@ -37,7 +37,7 @@ describe('ExpenseService tests', () => {
 
   it('Devrait supprimer un onglet', () => {
     const expenseId = 1;
-    spectator.service.deleteTab(expenseId).subscribe((response) => null);
+    spectator.service.deleteTab(expenseId).subscribe(() => null);
 
     const request = spectator.expectOne(
       environment.backend_url + expensePath + 'deleteExpense/?id=' + expenseId,
