@@ -7,3 +7,11 @@ export interface IUser {
   name: string;
   firstname: string;
 }
+
+export interface IJWTResponse {
+  id: number;
+  email: string;
+  accessToken: string;
+  roles: string[];
+  tokenType: string;
+}

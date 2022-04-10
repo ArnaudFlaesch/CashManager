@@ -9,4 +9,20 @@
     <span>Etiquette # {{ labelIndex }}</span
     ><span>{{ label.label }}</span>
   </div>
+
+  <div *ngFor="let expense of this.expenses; let expenseIndex = index">
+    <div>{{ expense.amount }}</div>
+    <div>{{ expense.expenseDate }}</div>
+  </div>
+
+  <div id="chartContainer">
+    <canvas
+      class="min-h-24 max-h-96 max-w-2xl"
+      baseChart
+      [data]="this.expensesByLabelChart"
+      [type]="'bar'"
+    ></canvas>
+  </div>
+
+  <app-create-expense [labels]="this.labels"></app-create-expense>
 </div>

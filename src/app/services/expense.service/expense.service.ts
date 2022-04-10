@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IExpense } from '../../../app/model/IExpense';
+import { Expense } from '../../../app/model/Expense';
 import { environment } from '../../../environments/environment';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
 
@@ -9,19 +9,26 @@ import authorizationBearer from '../authorizationBearer/authorizationBearer';
 export class ExpenseService {
   constructor(private http: HttpClient) {}
 
-  public getExpenses(): Observable<IExpense[]> {
-    return this.http.get<IExpense[]>(`${environment.backend_url}/expense/`, {
+  public getExpenses(
+    startIntervalDate: Date,
+    endIntervalDate: Date
+  ): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${environment.backend_url}/expense/`, {
       headers: {
         Authorization: authorizationBearer(),
         'Content-type': 'application/json'
+      },
+      params: {
+        startIntervalDate: startIntervalDate.toISOString(),
+        endIntervalDate: endIntervalDate.toISOString()
       }
     });
   }
 
-  public addExpense(label: string): Observable<IExpense> {
-    return this.http.post<IExpense>(
+  public addExpense(expense: Expense): Observable<Expense> {
+    return this.http.post<Expense>(
       `${environment.backend_url}/expense/addExpense`,
-      { label: label },
+      { expense },
       {
         headers: {
           Authorization: authorizationBearer(),
@@ -31,7 +38,7 @@ export class ExpenseService {
     );
   }
 
-  public deleteTab(id: number): Observable<void> {
+  public deleteExpense(id: number): Observable<void> {
     return this.http.delete<void>(
       `${environment.backend_url}/expense/deleteExpense/?id=${id}`,
       {

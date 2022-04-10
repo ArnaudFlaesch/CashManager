@@ -1,3 +1,4 @@
+import { IJWTResponse } from './../../model/IUser';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import jwt_decode from 'jwt-decode';
@@ -19,9 +20,9 @@ export class AuthService {
     'Content-type': 'application/json'
   };
 
-  public login(username: string, password: string): Observable<IUser> {
+  public login(username: string, password: string): Observable<IJWTResponse> {
     return this.http
-      .post<IUser>(
+      .post<IJWTResponse>(
         `${environment.backend_url}/auth/login`,
         {
           username,

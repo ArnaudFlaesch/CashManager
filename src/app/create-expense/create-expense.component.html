@@ -1,0 +1,50 @@
+<div>
+  <input
+    id="expenseAmount"
+    name="amount"
+    [(ngModel)]="this.expenseToCreate.amount"
+    placeholder="Saisissez le montant de la dépense"
+  />
+
+  <form class="example-form">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Label</mat-label>
+      <input
+        type="text"
+        placeholder="Pick one"
+        aria-label="Label"
+        matInput
+        [formControl]="myControl"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option.label }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <button
+      id="addExpenseButton"
+      mat-raised-button
+      (click)="handleCreateExpense()"
+    >
+      Ajouter une dépense
+    </button>
+  </form>
+
+  <!--
+  <mat-form-field appearance="fill">
+    <mat-label>Input</mat-label>
+    <input matInput />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Select</mat-label>
+    <mat-select>
+      <mat-option value="one">First option</mat-option>
+      <mat-option value="two">Second option</mat-option>
+    </mat-select>
+  </mat-form-field>-->
+</div>

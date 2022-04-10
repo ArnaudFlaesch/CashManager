@@ -1,10 +1,14 @@
-import { ILabel } from './../model/ILabel';
+import { Expense } from './../model/Expense';
+import { ExpenseService } from './../services/expense.service/expense.service';
+import { Label } from '../model/Label';
 import { LabelService } from './../services/label.service/label.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { AuthService } from './../services/auth.service/auth.service';
+import { ChartData, ChartTypeRegistry } from 'chart.js';
+import startOfMonth from 'date-fns/startOfMonth';
 
 @Component({
   selector: 'app-home',
@@ -12,18 +16,70 @@ import { AuthService } from './../services/auth.service/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  public labels: ILabel[] = [];
+  public labels: Label[] = [];
+  public expenses: Expense[] = [];
+  public expensesByLabelChart:
+    | ChartData<keyof ChartTypeRegistry, number[], string>
+    | undefined = undefined;
+
+  private EXPENSES_CHART_LABEL = 'Dépenses';
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private labelService: LabelService,
+    private expenseService: ExpenseService,
     private errorHandlerService: ErrorHandlerService
   ) {
     this.initDashboard();
   }
 
   private initDashboard() {
+    this.getLabels();
+    this.getExpenses();
+  }
+
+  private getExpenses() {
+    const startIntervalDate = startOfMonth(new Date());
+    const endIntervalDate = new Date();
+    this.expenseService
+      .getExpenses(startIntervalDate, endIntervalDate)
+      .subscribe({
+        next: (expenses) => {
+          this.expenses = expenses;
+          const expensesByLabel = this.getExpensesByLabel(this.expenses);
+          this.expensesByLabelChart = {
+            labels: [this.EXPENSES_CHART_LABEL],
+            datasets: Object.keys(expensesByLabel).map((label) => {
+              return {
+                label: label,
+                data: [
+                  expensesByLabel[label].reduce(
+                    (total, amount) => total + amount
+                  )
+                ]
+              };
+            })
+          };
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorHandlerService.handleError(error.message, 'this.epenses')
+      });
+  }
+
+  private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
+    return expenses.reduce(
+      (expensesByLabel: Record<string, number[]>, currentExpense: Expense) => {
+        const label = currentExpense.label.label;
+        expensesByLabel[label] = expensesByLabel[label] ?? [];
+        expensesByLabel[label].push(currentExpense.amount);
+        return expensesByLabel;
+      },
+      {}
+    );
+  }
+
+  private getLabels() {
     this.labelService.getLabels().subscribe({
       next: (labels) => {
         this.labels = labels;

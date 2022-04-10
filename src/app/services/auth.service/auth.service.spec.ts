@@ -1,3 +1,4 @@
+import { IJWTResponse, IUser } from './../../model/IUser';
 import {
   createHttpFactory,
   HttpMethod,
@@ -12,10 +13,9 @@ describe('ApiService tests', () => {
     service: AuthService
   });
 
-  const expectedUserData: Record<string, unknown> = {
+  const expectedUserData: IJWTResponse = {
     accessToken: 'access_token',
     id: 2,
-    username: 'admintest',
     email: 'admin@email.com',
     roles: ['ROLE_ADMIN'],
     tokenType: 'Bearer'

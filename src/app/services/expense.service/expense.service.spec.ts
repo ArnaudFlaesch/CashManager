@@ -1,4 +1,4 @@
-import { IExpense } from './../../model/IExpense';
+import { Expense } from './../../model/Expense';
 import {
   createHttpFactory,
   HttpMethod,
@@ -17,8 +17,8 @@ describe('ExpenseService tests', () => {
 
   beforeEach(() => (spectator = createSpectator()));
 
-  it('Devrait retourner deux onglets', () => {
-    const expectedExpenseData: IExpense[] = [
+  it('Devrait retourner trois dépenses', () => {
+    const expectedExpenseData: Expense[] = [
       { id: 1, amount: 323, label: 'Courses' },
       { id: 2, amount: 130, label: 'Courses' },
       { id: 3, amount: 4, label: 'Restaurant' }
@@ -35,9 +35,9 @@ describe('ExpenseService tests', () => {
     request.flush(expectedExpenseData);
   });
 
-  it('Devrait supprimer un onglet', () => {
+  it('Devrait supprimer une dépense', () => {
     const expenseId = 1;
-    spectator.service.deleteTab(expenseId).subscribe(() => null);
+    spectator.service.deleteExpense(expenseId).subscribe(() => null);
 
     const request = spectator.expectOne(
       environment.backend_url + expensePath + 'deleteExpense/?id=' + expenseId,

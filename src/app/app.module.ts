@@ -3,11 +3,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service/auth.service';
@@ -17,20 +21,31 @@ import { ErrorHandlerService } from './services/error.handler.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { NgChartsModule } from 'ng2-charts';
+import { CreateExpenseComponent } from './create-expense/create-expense.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    HomeComponent,
+    CreateExpenseComponent
+  ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     MatSnackBarModule,
     HttpClientModule,
-    NgChartsModule
+    NgChartsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthService,

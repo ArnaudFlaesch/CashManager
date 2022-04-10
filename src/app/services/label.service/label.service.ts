@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ILabel } from '../../model/ILabel';
+import { Label } from '../../model/Label';
 import { environment } from '../../../environments/environment';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
 
@@ -9,8 +9,8 @@ import authorizationBearer from '../authorizationBearer/authorizationBearer';
 export class LabelService {
   constructor(private http: HttpClient) {}
 
-  public getLabels(): Observable<ILabel[]> {
-    return this.http.get<ILabel[]>(`${environment.backend_url}/label/`, {
+  public getLabels(): Observable<Label[]> {
+    return this.http.get<Label[]>(`${environment.backend_url}/label/`, {
       headers: {
         Authorization: authorizationBearer(),
         'Content-type': 'application/json'
@@ -18,8 +18,8 @@ export class LabelService {
     });
   }
 
-  public addLabel(label: string): Observable<ILabel> {
-    return this.http.post<ILabel>(
+  public addLabel(label: string): Observable<Label> {
+    return this.http.post<Label>(
       `${environment.backend_url}/label/addLabel`,
       { label: label },
       {

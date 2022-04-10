@@ -6,7 +6,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { LabelService } from './label.service';
 
-describe('ApiService tests', () => {
+describe('Label service tests', () => {
   let spectator: SpectatorHttp<LabelService>;
   const createSpectator = createHttpFactory({
     service: LabelService
@@ -30,6 +30,7 @@ describe('ApiService tests', () => {
       environment.backend_url + labelPath,
       HttpMethod.GET
     );
+    request.flush(labelData);
   });
 
   it('Devrait créer une étiquette', () => {
