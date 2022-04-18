@@ -47,20 +47,7 @@ export class HomeComponent {
       .subscribe({
         next: (expenses) => {
           this.expenses = expenses;
-          const expensesByLabel = this.getExpensesByLabel(this.expenses);
-          this.expensesByLabelChart = {
-            labels: [this.EXPENSES_CHART_LABEL],
-            datasets: Object.keys(expensesByLabel).map((label) => {
-              return {
-                label: label,
-                data: [
-                  expensesByLabel[label].reduce(
-                    (total, amount) => total + amount
-                  )
-                ]
-              };
-            })
-          };
+          this.refreshExpensesChart();
         },
         error: (error: HttpErrorResponse) =>
           this.errorHandlerService.handleError(error.message, 'this.epenses')
@@ -70,7 +57,7 @@ export class HomeComponent {
   private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
     return expenses.reduce(
       (expensesByLabel: Record<string, number[]>, currentExpense: Expense) => {
-        const label = currentExpense.label.label;
+        const label = currentExpense.label.id;
         expensesByLabel[label] = expensesByLabel[label] ?? [];
         expensesByLabel[label].push(currentExpense.amount);
         return expensesByLabel;
@@ -88,6 +75,50 @@ export class HomeComponent {
         this.errorHandlerService.handleError(
           error.message,
           'this.ERROR_MESSAGE_INIT_DASHBOARD'
+        )
+    });
+  }
+
+  private refreshExpensesChart() {
+    const expensesByLabel = this.getExpensesByLabel(this.expenses);
+    console.log(Object.keys(expensesByLabel));
+    this.expensesByLabelChart = {
+      labels: [this.EXPENSES_CHART_LABEL],
+      datasets: Object.keys(expensesByLabel).map((labelId) => {
+        return {
+          label: this.labels.filter(
+            (label) => label.id.toString() === labelId
+          )[0].label,
+          data: [
+            expensesByLabel[labelId].reduce((total, amount) => total + amount)
+          ]
+        };
+      })
+    };
+  }
+
+  public handleExpenseCreation(newExpense: Expense) {
+    this.expenses = [...this.expenses, newExpense];
+    this.refreshExpensesChart();
+  }
+
+  public handleLabelCreation(newLabel: Label) {
+    this.labels = [...this.labels, newLabel];
+  }
+
+  public deleteLabel(labelId: number): void {
+    this.labelService.deleteLabel(labelId).subscribe({
+      next: () => {
+        this.labels = this.labels.filter((label) => label.id !== labelId);
+        this.expenses = this.expenses.filter(
+          (expense) => expense.label.id !== labelId
+        );
+        this.refreshExpensesChart();
+      },
+      error: (error) =>
+        this.errorHandlerService.handleError(
+          error.message,
+          'erreur suppression label'
         )
     });
   }

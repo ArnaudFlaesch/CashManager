@@ -2,9 +2,23 @@
   <input
     id="expenseAmount"
     name="amount"
+    type="number"
     [(ngModel)]="this.expenseToCreate.amount"
     placeholder="Saisissez le montant de la dépense"
   />
+
+  <mat-form-field appearance="fill">
+    <input
+      [formControl]="dateFormControl"
+      matInput
+      [matDatepicker]="picker"
+      placeholder="Choose a date"
+      readonly
+    />
+    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 
   <form class="example-form">
     <mat-form-field class="example-full-width" appearance="fill">
@@ -14,9 +28,10 @@
         placeholder="Pick one"
         aria-label="Label"
         matInput
-        [formControl]="myControl"
+        [formControl]="labelControl"
         [matAutocomplete]="auto"
       />
+
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option
           *ngFor="let option of filteredOptions | async"
@@ -26,6 +41,7 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+
     <button
       id="addExpenseButton"
       mat-raised-button

@@ -1,4 +1,4 @@
-import { IJWTResponse, IUser } from './../../model/IUser';
+import { IJWTResponse } from './../../model/IUser';
 import {
   createHttpFactory,
   HttpMethod,

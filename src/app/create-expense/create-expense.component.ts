@@ -1,11 +1,14 @@
-import { LabelService } from './../services/label.service/label.service';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { format } from 'date-fns';
+import { map, Observable, of, startWith } from 'rxjs';
+import { Expense } from '../model/Expense';
 import { Label } from './../model/Label';
+import { InsertExpensePayload } from './../model/payloads/InsertExpensePayload';
 import { ErrorHandlerService } from './../services/error.handler.service';
 import { ExpenseService } from './../services/expense.service/expense.service';
-import { Expense } from './../model/Expense';
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { map, Observable, of, startWith } from 'rxjs';
+import { LabelService } from './../services/label.service/label.service';
 
 @Component({
   selector: 'app-create-expense',
@@ -13,9 +16,12 @@ import { map, Observable, of, startWith } from 'rxjs';
   styleUrls: ['./create-expense.component.scss']
 })
 export class CreateExpenseComponent {
-  public expenseToCreate: Expense;
+  public expenseToCreate: InsertExpensePayload;
+  @Output() insertedExpenseEvent = new EventEmitter<Expense>();
+  @Output() insertedLabelEvent = new EventEmitter<Label>();
 
-  myControl = new FormControl('');
+  labelControl = new FormControl('');
+  dateFormControl = new FormControl('');
 
   @Input()
   public labels: Label[] = [];
@@ -27,13 +33,17 @@ export class CreateExpenseComponent {
   constructor(
     private expenseService: ExpenseService,
     private labelService: LabelService,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private adapter: DateAdapter<unknown>,
+    @Inject(MAT_DATE_LOCALE) private locale: string
   ) {
-    this.expenseToCreate = new Expense();
+    this.expenseToCreate = new InsertExpensePayload();
+    this.locale = 'fr';
+    this.adapter.setLocale(this.locale);
   }
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.labelControl.valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value.name)),
       map((name) => (name ? this._filter(name) : this.labels.slice()))
@@ -41,14 +51,29 @@ export class CreateExpenseComponent {
   }
 
   public handleCreateExpense() {
-    console.log(this.myControl.value);
-    console.log();
-    if (typeof this.myControl.value == 'string') {
-      // Add label to database, then get its id and add the expense
+    if (typeof this.labelControl.value == 'string') {
+      this.labelService.addLabel(this.labelControl.value).subscribe({
+        next: (insertedLabel) => {
+          this.labels = [...this.labels, insertedLabel];
+          this.insertedLabelEvent.emit(insertedLabel);
+          this.labelControl.setValue(insertedLabel);
+          this.insertExpense(this.labelControl.value.id);
+        },
+        error: (error) =>
+          this.errorHandlerService.handleError(error.message, 'error new label')
+      });
+    } else {
+      this.insertExpense(this.labelControl.value.id);
     }
-    const selectedLabel: Label = this.myControl.value;
+  }
+
+  private insertExpense(labelId: number) {
+    this.expenseToCreate.labelId = labelId;
+    this.expenseToCreate.expenseDate = this.dateFormControl.value;
+    const date: Date = this.dateFormControl.value;
+    console.log(date.toISOString());
     this.expenseService.addExpense(this.expenseToCreate).subscribe({
-      next: (createdExpense) => console.log(createdExpense),
+      next: (createdExpense) => this.insertedExpenseEvent.emit(createdExpense),
       error: (error) =>
         this.errorHandlerService.handleError(
           error.message,

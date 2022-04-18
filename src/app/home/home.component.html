@@ -5,14 +5,14 @@
 </div>
 
 <div class="label-container">
-  <div *ngFor="let label of this.labels; let labelIndex = index">
-    <span>Etiquette # {{ labelIndex }}</span
-    ><span>{{ label.label }}</span>
-  </div>
-
-  <div *ngFor="let expense of this.expenses; let expenseIndex = index">
-    <div>{{ expense.amount }}</div>
-    <div>{{ expense.expenseDate }}</div>
+  <div *ngFor="let label of this.labels">
+    <span class="mr-2">Etiquette # {{ label.id }}</span
+    ><span class="mr-2">{{ label.label }}</span>
+    <span
+      ><mat-icon class="deleteLabelButton" (click)="this.deleteLabel(label.id)"
+        >delete</mat-icon
+      ></span
+    >
   </div>
 
   <div id="chartContainer">
@@ -24,5 +24,9 @@
     ></canvas>
   </div>
 
-  <app-create-expense [labels]="this.labels"></app-create-expense>
+  <app-create-expense
+    (insertedExpenseEvent)="handleExpenseCreation($event)"
+    (insertedLabelEvent)="handleLabelCreation($event)"
+    [labels]="this.labels"
+  ></app-create-expense>
 </div>
