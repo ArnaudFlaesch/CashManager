@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { format } from 'date-fns';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { map, Observable, of, startWith } from 'rxjs';
 import { Expense } from '../model/Expense';
 import { Label } from './../model/Label';
@@ -33,13 +32,9 @@ export class CreateExpenseComponent {
   constructor(
     private expenseService: ExpenseService,
     private labelService: LabelService,
-    private errorHandlerService: ErrorHandlerService,
-    private adapter: DateAdapter<unknown>,
-    @Inject(MAT_DATE_LOCALE) private locale: string
+    private errorHandlerService: ErrorHandlerService
   ) {
     this.expenseToCreate = new InsertExpensePayload();
-    this.locale = 'fr';
-    this.adapter.setLocale(this.locale);
   }
 
   ngOnInit() {

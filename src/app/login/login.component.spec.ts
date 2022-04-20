@@ -37,7 +37,7 @@ describe('LoginComponent', () => {
 
   it('Should display the title', () => {
     spectator.fixture.detectChanges();
-    expect(spectator.query('h1')?.textContent).toEqual('Dash');
+    expect(spectator.query('h1')?.textContent).toEqual('CashManager');
   });
 
   it('Should prevent login', () => {

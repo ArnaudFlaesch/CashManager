@@ -1,24 +1,40 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  createComponentFactory,
+  createHttpFactory,
+  Spectator,
+  SpectatorHttp
+} from '@ngneat/spectator';
+import { AuthService } from '../services/auth.service/auth.service';
+import { ErrorHandlerService } from '../services/error.handler.service';
+import { ExpenseService } from '../services/expense.service/expense.service';
+import { LabelService } from '../services/label.service/label.service';
 
 import { CreateExpenseComponent } from './create-expense.component';
 
 describe('CreateExpenseComponent', () => {
-  let component: CreateExpenseComponent;
-  let fixture: ComponentFixture<CreateExpenseComponent>;
+  let spectator: Spectator<CreateExpenseComponent>;
+  let labelService: SpectatorHttp<LabelService>;
+  let expenseService: SpectatorHttp<ExpenseService>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [CreateExpenseComponent]
-    }).compileComponents();
+  const createComponent = createComponentFactory({
+    component: CreateExpenseComponent,
+    imports: [MatSnackBarModule, MatAutocompleteModule],
+    providers: [AuthService, LabelService, ErrorHandlerService],
+    schemas: [NO_ERRORS_SCHEMA]
   });
+  const createLabelHttp = createHttpFactory(LabelService);
+  const createExpenseHttp = createHttpFactory(ExpenseService);
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateExpenseComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    labelService = createLabelHttp();
+    expenseService = createExpenseHttp();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('Should display two labels', () => {
+    expect(spectator.component).toBeTruthy();
   });
 });

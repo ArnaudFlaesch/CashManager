@@ -6,6 +6,8 @@ import {
 } from '@ngneat/spectator/jest';
 import { environment } from '../../../environments/environment';
 import { ExpenseService } from './expense.service';
+import { startOfMonth } from 'date-fns';
+import { Label } from '../../../app/model/Label';
 
 describe('ExpenseService tests', () => {
   let spectator: SpectatorHttp<ExpenseService>;
@@ -19,17 +21,20 @@ describe('ExpenseService tests', () => {
 
   it('Devrait retourner trois dépenses', () => {
     const expectedExpenseData: Expense[] = [
-      { id: 1, amount: 323, label: 'Courses' },
-      { id: 2, amount: 130, label: 'Courses' },
-      { id: 3, amount: 4, label: 'Restaurant' }
+      new Expense(1, 323, new Date(), new Label(1, 'Courses')),
+      new Expense(2, 130, new Date(), new Label(2, 'Restaurant')),
+      new Expense(3, 4, new Date(), new Label(2, 'Restaurant'))
     ];
 
+    const startIntervalDate = new Date(2022, 2, 1);
+    const endIntervalDate = new Date(2022, 2, 24);
+
     spectator.service
-      .getExpenses()
+      .getExpenses(startIntervalDate, endIntervalDate)
       .subscribe((response) => expect(response).toEqual(expectedExpenseData));
 
     const request = spectator.expectOne(
-      environment.backend_url + expensePath,
+      `${environment.backend_url}${expensePath}?startIntervalDate=2022-03-01&endIntervalDate=2022-03-24`,
       HttpMethod.GET
     );
     request.flush(expectedExpenseData);

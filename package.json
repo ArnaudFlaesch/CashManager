@@ -9,11 +9,10 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
     "test": "jest --config jest-config.js",
+    "test:watch": "npm run test -- --watch",
     "test:e2e": "ng e2e",
     "test:e2e:ci": "ng run CashManager:e2e-ci",
-    "test:watch": "npm run test -- --watch",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:verify": "cypress verify",

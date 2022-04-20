@@ -14,6 +14,7 @@ import { AuthService } from './../services/auth.service/auth.service';
 import { ErrorHandlerService } from './../services/error.handler.service';
 import { HomeComponent } from './home.component';
 import { environment } from '../../environments/environment';
+import { Label } from '../model/Label';
 
 describe('HomeComponent', () => {
   let spectator: Spectator<HomeComponent>;
@@ -29,10 +30,7 @@ describe('HomeComponent', () => {
   });
   const createLabelHttp = createHttpFactory(LabelService);
 
-  const labelData = [
-    { id: 1, label: 'Courses' },
-    { id: 2, label: 'Restaurant' }
-  ];
+  const labelData = [new Label(1, 'Courses'), new Label(2, 'Restaurant')];
 
   beforeEach(() => {
     spectator = createComponent();

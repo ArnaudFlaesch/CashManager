@@ -4,7 +4,14 @@ export class Expense {
   private _id = 0;
   private _amount = 0;
   private _expenseDate: Date = new Date();
-  private _label: Label = new Label();
+  private _label: Label = new Label(0, '');
+
+  constructor(id: number, amount: number, expenseDate: Date, label: Label) {
+    this._id = id;
+    this._amount = amount;
+    this._expenseDate = expenseDate;
+    this._label = label;
+  }
 
   /**
    * Getter id
