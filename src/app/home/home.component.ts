@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { AuthService } from './../services/auth.service/auth.service';
 import { ChartData, ChartTypeRegistry } from 'chart.js';
-import startOfMonth from 'date-fns/startOfMonth';
+import { startOfMonth } from 'date-fns';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +36,6 @@ export class HomeComponent {
 
   private initDashboard() {
     this.getLabels();
-    this.getExpenses();
   }
 
   private getExpenses() {
@@ -70,6 +69,7 @@ export class HomeComponent {
     this.labelService.getLabels().subscribe({
       next: (labels) => {
         this.labels = labels;
+        this.getExpenses();
       },
       error: (error: HttpErrorResponse) =>
         this.errorHandlerService.handleError(
