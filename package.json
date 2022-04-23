@@ -37,7 +37,7 @@
     "@angular/router": "13.3.4",
     "rxjs": "7.5.5",
     "snyk": "1.912.0",
-    "tslib": "2.3.1",
+    "tslib": "2.4.0",
     "zone.js": "0.11.5"
   },
   "devDependencies": {
