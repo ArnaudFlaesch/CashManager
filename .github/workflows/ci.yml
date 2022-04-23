@@ -87,7 +87,7 @@ jobs:
 
       - name: Send coverage report
         run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov 
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
           chmod +x codecov
           ./codecov -t ${{ secrets.CODECOV_TOKEN }} -F coverage-jest
 
@@ -98,7 +98,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Deploy with gh-pages
-        if: success() && github.ref == 'refs/heads/main'
+        #if: success() && github.ref == 'refs/heads/main'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages-clean
