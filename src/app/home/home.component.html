@@ -7,7 +7,7 @@
 <div class="label-container">
   <div *ngFor="let label of this.labels">
     <span class="mr-2">Etiquette # {{ label.id }}</span
-    ><span class="mr-2">{{ label.label }}</span>
+    ><span class="mr-2 label-name">{{ label.label }}</span>
     <span
       ><mat-icon class="deleteLabelButton" (click)="this.deleteLabel(label.id)"
         >delete</mat-icon

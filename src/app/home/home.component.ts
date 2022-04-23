@@ -81,7 +81,6 @@ export class HomeComponent {
 
   private refreshExpensesChart() {
     const expensesByLabel = this.getExpensesByLabel(this.expenses);
-    console.log(Object.keys(expensesByLabel));
     this.expensesByLabelChart = {
       labels: [this.EXPENSES_CHART_LABEL],
       datasets: Object.keys(expensesByLabel).map((labelId) => {

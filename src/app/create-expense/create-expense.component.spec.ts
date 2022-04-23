@@ -22,7 +22,7 @@ describe('CreateExpenseComponent', () => {
   const createComponent = createComponentFactory({
     component: CreateExpenseComponent,
     imports: [MatSnackBarModule, MatAutocompleteModule],
-    providers: [AuthService, LabelService, ErrorHandlerService],
+    providers: [AuthService, ErrorHandlerService],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createLabelHttp = createHttpFactory(LabelService);

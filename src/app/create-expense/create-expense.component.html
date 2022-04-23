@@ -7,10 +7,11 @@
     placeholder="Saisissez le montant de la dépense"
   />
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" id="expenseDate-container">
     <input
       [formControl]="dateFormControl"
       matInput
+      id="expenseDate"
       [matDatepicker]="picker"
       placeholder="Choose a date"
       readonly
@@ -25,7 +26,8 @@
       <mat-label>Label</mat-label>
       <input
         type="text"
-        placeholder="Pick one"
+        id="expenseLabel"
+        placeholder="Renseignez un label"
         aria-label="Label"
         matInput
         [formControl]="labelControl"
@@ -34,6 +36,7 @@
 
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option
+          class="label-autocomplete-option"
           *ngFor="let option of filteredOptions | async"
           [value]="option"
         >
@@ -50,17 +53,4 @@
       Ajouter une dépense
     </button>
   </form>
-
-  <!--
-  <mat-form-field appearance="fill">
-    <mat-label>Input</mat-label>
-    <input matInput />
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Select</mat-label>
-    <mat-select>
-      <mat-option value="one">First option</mat-option>
-      <mat-option value="two">Second option</mat-option>
-    </mat-select>
-  </mat-form-field>-->
 </div>

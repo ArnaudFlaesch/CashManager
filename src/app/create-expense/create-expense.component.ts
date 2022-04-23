@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { map, Observable, of, startWith } from 'rxjs';
 import { Expense } from '../model/Expense';
 import { Label } from './../model/Label';
