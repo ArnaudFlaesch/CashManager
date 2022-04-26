@@ -85,6 +85,7 @@ describe('HomeComponent', () => {
 
     expect(spectator.component.expenses).toEqual(expectedExpenseData);
     expect(spectator.component.expenses.length).toEqual(3);
+    expect(spectator.component.getTotalForMonth()).toEqual(457);
 
     spectator.component.handleSelectExpensesForMonth(
       spectator.component.pastMonths[0]
