@@ -64,7 +64,6 @@ export class CreateExpenseComponent {
   private insertExpense(labelId: number) {
     this.expenseToCreate.labelId = labelId;
     this.expenseToCreate.expenseDate = this.dateFormControl.value;
-    const date: Date = this.dateFormControl.value;
     this.expenseService.addExpense(this.expenseToCreate).subscribe({
       next: (createdExpense) => this.insertedExpenseEvent.emit(createdExpense),
       error: (error) =>

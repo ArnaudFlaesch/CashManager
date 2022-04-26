@@ -58,7 +58,7 @@ describe('HomeComponent', () => {
     expenseService = createExpenseHttp();
   });
 
-  it('Should display two labels and three expenses', () => {
+  it('Should display two labels and three expenses, then change the month', () => {
     const aprilMonth = new Date(2022, 3, 1);
     const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
     const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
@@ -66,9 +66,9 @@ describe('HomeComponent', () => {
     spectator.component.currentSelectedMonth = aprilMonth;
 
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, new Date(), labelData[0]),
-      new Expense(2, 130, new Date(), labelData[1]),
-      new Expense(3, 4, new Date(), labelData[1])
+      new Expense(1, 323, new Date(2022, 3, 1), labelData[0]),
+      new Expense(2, 130, new Date(2022, 3, 1), labelData[1]),
+      new Expense(3, 4, new Date(2022, 3, 1), labelData[1])
     ];
 
     const getLabelsRequest = labelService.expectOne(
@@ -85,5 +85,60 @@ describe('HomeComponent', () => {
 
     expect(spectator.component.expenses).toEqual(expectedExpenseData);
     expect(spectator.component.expenses.length).toEqual(3);
+
+    spectator.component.handleSelectExpensesForMonth(
+      spectator.component.pastMonths[0]
+    );
+
+    const januaryMonth = new Date(2022, 0, 1);
+    const startIntervalDateJanuary = format(
+      startOfMonth(januaryMonth),
+      dateFormat
+    );
+    const endIntervalDateJanuary = format(endOfMonth(januaryMonth), dateFormat);
+    const getJanuaryExpensesRequest = expenseService.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDateJanuary}&endIntervalDate=${endIntervalDateJanuary}`,
+      HttpMethod.GET
+    );
+    getJanuaryExpensesRequest.flush([]);
+    expect(spectator.component.expenses.length).toEqual(0);
+  });
+
+  it('Should add an expense and a new label, and delete the label', () => {
+    const aprilMonth = new Date(2022, 3, 1);
+    const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
+    const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
+    spectator.component.currentSelectedMonth = aprilMonth;
+
+    const getLabelsRequest = labelService.expectOne(
+      environment.backend_url + labelPath,
+      HttpMethod.GET
+    );
+    getLabelsRequest.flush([]);
+
+    const getExpensesRequest = expenseService.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
+      HttpMethod.GET
+    );
+    getExpensesRequest.flush([]);
+
+    const insertedLabel = new Label(1, 'Vacances');
+    spectator.component.handleLabelCreation(insertedLabel);
+    expect(spectator.component.labels).toEqual([insertedLabel]);
+
+    const insertedExpense = new Expense(1, 23, new Date(), insertedLabel);
+    spectator.component.handleExpenseCreation(insertedExpense);
+    expect(spectator.component.expenses).toEqual([insertedExpense]);
+
+    spectator.component.deleteLabel(insertedLabel.id);
+    const deleteLabelRequest = labelService.expectOne(
+      environment.backend_url +
+        labelPath +
+        'deleteLabel/?labelId=' +
+        insertedLabel.id,
+      HttpMethod.DELETE
+    );
+    deleteLabelRequest.flush({});
+    expect(spectator.component.labels.length).toEqual(0);
   });
 });
