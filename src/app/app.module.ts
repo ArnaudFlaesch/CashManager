@@ -1,3 +1,5 @@
+import { ConfigService } from './../app/services/config.service/config.service';
+import { ImportConfigModalComponent } from './modals/import-config-modal/import-config-modal.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +33,7 @@ import { LabelService } from './services/label.service/label.service';
     AppComponent,
     LoginComponent,
     HomeComponent,
+    ImportConfigModalComponent,
     CreateExpenseComponent
   ],
   imports: [
@@ -57,6 +60,7 @@ import { LabelService } from './services/label.service/label.service';
     AuthService,
     LabelService,
     ExpenseService,
+    ConfigService,
     ErrorHandlerService,
     AuthGuard,
     MatDatepickerModule,

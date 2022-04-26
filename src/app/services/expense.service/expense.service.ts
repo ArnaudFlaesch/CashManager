@@ -13,7 +13,7 @@ export class ExpenseService {
 
   constructor(private http: HttpClient) {}
 
-  public getExpenses(
+  public getExpensesAtMonth(
     startIntervalDate: Date,
     endIntervalDate: Date
   ): Observable<Expense[]> {
@@ -27,6 +27,18 @@ export class ExpenseService {
         endIntervalDate: format(endIntervalDate, this.dateFormat)
       }
     });
+  }
+
+  public getMonthsWithExpenses(): Observable<string[]> {
+    return this.http.get<string[]>(
+      `${environment.backend_url}/expense/monthsWithExpenses/`,
+      {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
+        }
+      }
+    );
   }
 
   public addExpense(expense: InsertExpensePayload): Observable<Expense> {

@@ -1,10 +1,22 @@
 <div class="flex flex-row flex-wrap">
+  <mat-icon
+    id="downloadConfigButton"
+    (click)="this.downloadConfig()"
+    aria-hidden="false"
+    >download</mat-icon
+  >
+  <mat-icon
+    id="openImportConfigModal"
+    (click)="this.openImportConfigModal()"
+    aria-hidden="false"
+    >upload</mat-icon
+  >
   <button id="logoutButton" mat-raised-button (click)="logout()">
     Déconnexion
   </button>
 </div>
 
-<div class="label-container">
+<div class="label-container grid grid-cols-4 gap-3">
   <div *ngFor="let label of this.labels">
     <span class="mr-2">Etiquette # {{ label.id }}</span
     ><span class="mr-2 label-name">{{ label.label }}</span>
@@ -14,19 +26,39 @@
       ></span
     >
   </div>
+</div>
 
+<div class="flex flex-row">
+  <div class="flex flex-row" *ngFor="let monthDate of pastMonths">
+    <button
+      mat-raised-button
+      [color]="getMonthButtonColor(monthDate)"
+      (click)="this.handleSelectExpensesForMonth(monthDate)"
+    >
+      {{ formatMonthToDisplay(monthDate) }}
+    </button>
+  </div>
+</div>
+
+<div class="flex flex-row">
   <div id="chartContainer">
     <canvas
-      class="min-h-24 max-h-96 max-w-2xl"
+      class="h-96 max-w-2xl"
       baseChart
       [data]="this.expensesByLabelChart"
       [type]="'bar'"
     ></canvas>
   </div>
-
-  <app-create-expense
-    (insertedExpenseEvent)="handleExpenseCreation($event)"
-    (insertedLabelEvent)="handleLabelCreation($event)"
-    [labels]="this.labels"
-  ></app-create-expense>
+  <div id="expensesContainer" *ngIf="this.expenses.length">
+    <div>Total ce mois : {{ getTotalForMonth() }}</div>
+    <div *ngFor="let expense of this.expenses">
+      <span>{{ expense.amount }}</span>
+    </div>
+  </div>
 </div>
+
+<app-create-expense
+  (insertedExpenseEvent)="handleExpenseCreation($event)"
+  (insertedLabelEvent)="handleLabelCreation($event)"
+  [labels]="this.labels"
+></app-create-expense>

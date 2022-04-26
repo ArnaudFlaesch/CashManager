@@ -1,3 +1,4 @@
+import { ConfigService } from '../../app/services/config.service/config.service';
 import { LabelService } from './../services/label.service/label.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -17,7 +18,8 @@ import { environment } from '../../environments/environment';
 import { Label } from '../model/Label';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { Expense } from '../model/Expense';
-import { format, startOfMonth } from 'date-fns';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 describe('HomeComponent', () => {
   let spectator: Spectator<HomeComponent>;
@@ -29,8 +31,18 @@ describe('HomeComponent', () => {
 
   const createComponent = createComponentFactory({
     component: HomeComponent,
-    imports: [HttpClientTestingModule, RouterTestingModule, MatSnackBarModule],
-    providers: [AuthService, ErrorHandlerService],
+    imports: [
+      HttpClientTestingModule,
+      RouterTestingModule,
+      MatSnackBarModule,
+      MatDialogModule
+    ],
+    providers: [
+      AuthService,
+      ConfigService,
+      ErrorHandlerService,
+      { provide: MatDialogRef, useValue: {} }
+    ],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createLabelHttp = createHttpFactory(LabelService);
@@ -47,8 +59,11 @@ describe('HomeComponent', () => {
   });
 
   it('Should display two labels and three expenses', () => {
-    const startIntervalDate = format(startOfMonth(new Date()), dateFormat);
-    const endIntervalDate = format(new Date(), dateFormat);
+    const aprilMonth = new Date(2022, 3, 1);
+    const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
+    const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
+
+    spectator.component.currentSelectedMonth = aprilMonth;
 
     const expectedExpenseData: Expense[] = [
       new Expense(1, 323, new Date(), labelData[0]),
@@ -62,7 +77,6 @@ describe('HomeComponent', () => {
     );
 
     getLabelsRequest.flush(labelData);
-
     const getExpensesRequest = expenseService.expectOne(
       `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
       HttpMethod.GET

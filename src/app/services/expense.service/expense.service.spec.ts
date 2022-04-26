@@ -29,7 +29,7 @@ describe('ExpenseService tests', () => {
     const endIntervalDate = new Date(2022, 2, 24);
 
     spectator.service
-      .getExpenses(startIntervalDate, endIntervalDate)
+      .getExpensesAtMonth(startIntervalDate, endIntervalDate)
       .subscribe((response) => expect(response).toEqual(expectedExpenseData));
 
     const request = spectator.expectOne(

@@ -8,7 +8,10 @@ import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { AuthService } from './../services/auth.service/auth.service';
 import { ChartData, ChartTypeRegistry } from 'chart.js';
-import { startOfMonth } from 'date-fns';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { ImportConfigModalComponent } from '../modals/import-config-modal/import-config-modal.component';
+import { ConfigService } from '../services/config.service/config.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -18,17 +21,26 @@ import { startOfMonth } from 'date-fns';
 export class HomeComponent {
   public labels: Label[] = [];
   public expenses: Expense[] = [];
+  public monthsWithExpenses: string[] = [];
+  public currentSelectedMonth = startOfMonth(new Date());
   public expensesByLabelChart:
     | ChartData<keyof ChartTypeRegistry, number[], string>
     | undefined = undefined;
 
   private EXPENSES_CHART_LABEL = 'Dépenses';
+  private ERROR_EXPORT_CONFIGURATION =
+    "Erreur lors de l'export de la configuration.";
+  public pastMonths: Date[] = Array.from(
+    Array(new Date().getMonth() + 1).keys()
+  ).map((month) => new Date(new Date().getFullYear(), month, 1));
 
   constructor(
     private router: Router,
+    public dialog: MatDialog,
     private authService: AuthService,
     private labelService: LabelService,
     private expenseService: ExpenseService,
+    private configService: ConfigService,
     private errorHandlerService: ErrorHandlerService
   ) {
     this.initDashboard();
@@ -38,11 +50,16 @@ export class HomeComponent {
     this.getLabels();
   }
 
-  private getExpenses() {
-    const startIntervalDate = startOfMonth(new Date());
-    const endIntervalDate = new Date();
+  public handleSelectExpensesForMonth(month: Date) {
+    if (this.currentSelectedMonth.getTime() !== startOfMonth(month).getTime()) {
+      this.currentSelectedMonth = startOfMonth(month);
+      this.getExpenses(this.currentSelectedMonth, endOfMonth(month));
+    }
+  }
+
+  private getExpenses(startIntervalDate: Date, endIntervalDate: Date) {
     this.expenseService
-      .getExpenses(startIntervalDate, endIntervalDate)
+      .getExpensesAtMonth(startIntervalDate, endIntervalDate)
       .subscribe({
         next: (expenses) => {
           this.expenses = expenses;
@@ -69,7 +86,9 @@ export class HomeComponent {
     this.labelService.getLabels().subscribe({
       next: (labels) => {
         this.labels = labels;
-        this.getExpenses();
+        const startIntervalDate = this.currentSelectedMonth;
+        const endIntervalDate = endOfMonth(this.currentSelectedMonth);
+        this.getExpenses(startIntervalDate, endIntervalDate);
       },
       error: (error: HttpErrorResponse) =>
         this.errorHandlerService.handleError(
@@ -121,6 +140,45 @@ export class HomeComponent {
         )
     });
   }
+
+  public getTotalForMonth = () =>
+    this.expenses
+      .map((expense) => expense.amount)
+      .reduce((total, amount) => total + amount);
+
+  public openImportConfigModal(): void {
+    this.dialog.open(ImportConfigModalComponent, {
+      height: '400px',
+      width: '600px'
+    });
+  }
+
+  public downloadConfig(): void {
+    this.configService.exportConfig().subscribe({
+      next: (response) => {
+        console.info('Configuration exportée');
+        const url = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'cashManagerData.json');
+        document.body.appendChild(link);
+        link.click();
+      },
+      error: (error: HttpErrorResponse) =>
+        this.errorHandlerService.handleError(
+          error.message,
+          this.ERROR_EXPORT_CONFIGURATION
+        )
+    });
+  }
+
+  public formatMonthToDisplay = (monthDate: Date) =>
+    format(monthDate, 'MMMM yyyy');
+
+  public getMonthButtonColor = (monthDate: Date) =>
+    this.currentSelectedMonth.getTime() === startOfMonth(monthDate).getTime()
+      ? 'primary'
+      : '';
 
   public logout() {
     this.authService.logout();
