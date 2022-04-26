@@ -22,27 +22,11 @@ export class Expense {
   }
 
   /**
-   * Setter id
-   * @param {number } value
-   */
-  public set id(value: number) {
-    this._id = value;
-  }
-
-  /**
    * Getter amount
    * @return {number }
    */
   public get amount(): number {
     return this._amount;
-  }
-
-  /**
-   * Setter expenseDate
-   * @param {number } value
-   */
-  public set amount(value: number) {
-    this._amount = value;
   }
 
   /**
@@ -54,26 +38,10 @@ export class Expense {
   }
 
   /**
-   * Setter expenseDate
-   * @param {Date } value
-   */
-  public set expenseDate(value: Date) {
-    this._expenseDate = value;
-  }
-
-  /**
    * Getter label
    * @return {Label }
    */
   public get label(): Label {
     return this._label;
-  }
-
-  /**
-   * Setter label
-   * @param {Label } value
-   */
-  public set label(value: Label) {
-    this._label = value;
   }
 }
