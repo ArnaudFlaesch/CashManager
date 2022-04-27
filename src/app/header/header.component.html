@@ -1,0 +1,17 @@
+<div class="flex flex-row flex-wrap">
+  <mat-icon
+    id="downloadConfigButton"
+    (click)="this.downloadConfig()"
+    aria-hidden="false"
+    >download</mat-icon
+  >
+  <mat-icon
+    id="openImportConfigModal"
+    (click)="this.openImportConfigModal()"
+    aria-hidden="false"
+    >upload</mat-icon
+  >
+  <button id="logoutButton" mat-raised-button (click)="logout()">
+    Déconnexion
+  </button>
+</div>

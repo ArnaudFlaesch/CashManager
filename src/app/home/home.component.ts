@@ -1,17 +1,18 @@
-import { Expense } from './../model/Expense';
-import { ExpenseService } from './../services/expense.service/expense.service';
-import { Label } from '../model/Label';
-import { LabelService } from './../services/label.service/label.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ErrorHandlerService } from '../services/error.handler.service';
-import { AuthService } from './../services/auth.service/auth.service';
-import { ChartData, ChartTypeRegistry } from 'chart.js';
-import { endOfMonth, format, startOfMonth } from 'date-fns';
-import { ImportConfigModalComponent } from '../modals/import-config-modal/import-config-modal.component';
-import { ConfigService } from '../services/config.service/config.service';
 import { MatDialog } from '@angular/material/dialog';
+import {
+  ChartConfiguration,
+  ChartData,
+  ChartEvent,
+  ChartTypeRegistry
+} from 'chart.js';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { Label } from '../model/Label';
+import { ErrorHandlerService } from '../services/error.handler.service';
+import { Expense } from './../model/Expense';
+import { ExpenseService } from './../services/expense.service/expense.service';
+import { LabelService } from './../services/label.service/label.service';
 
 @Component({
   selector: 'app-home',
@@ -26,21 +27,24 @@ export class HomeComponent {
   public expensesByLabelChart:
     | ChartData<keyof ChartTypeRegistry, number[], string>
     | undefined = undefined;
+  public barChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true
+      }
+    }
+  };
 
   private EXPENSES_CHART_LABEL = 'Dépenses';
-  private ERROR_EXPORT_CONFIGURATION =
-    "Erreur lors de l'export de la configuration.";
   public pastMonths: Date[] = Array.from(
     Array(new Date().getMonth() + 1).keys()
   ).map((month) => new Date(new Date().getFullYear(), month, 1));
 
   constructor(
-    private router: Router,
     public dialog: MatDialog,
-    private authService: AuthService,
     private labelService: LabelService,
     private expenseService: ExpenseService,
-    private configService: ConfigService,
     private errorHandlerService: ErrorHandlerService
   ) {
     this.initDashboard();
@@ -146,32 +150,6 @@ export class HomeComponent {
       .map((expense) => expense.amount)
       .reduce((total, amount) => total + amount);
 
-  public openImportConfigModal(): void {
-    this.dialog.open(ImportConfigModalComponent, {
-      height: '400px',
-      width: '600px'
-    });
-  }
-
-  public downloadConfig(): void {
-    this.configService.exportConfig().subscribe({
-      next: (response) => {
-        console.info('Configuration exportée');
-        const url = window.URL.createObjectURL(new Blob([response]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'cashManagerData.json');
-        document.body.appendChild(link);
-        link.click();
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          this.ERROR_EXPORT_CONFIGURATION
-        )
-    });
-  }
-
   public formatMonthToDisplay = (monthDate: Date) =>
     format(monthDate, 'MMMM yyyy');
 
@@ -180,8 +158,13 @@ export class HomeComponent {
       ? 'primary'
       : '';
 
-  public logout() {
-    this.authService.logout();
-    this.router.navigate(['login']);
+  public handleChartClickedEvent({
+    event,
+    active
+  }: {
+    event?: ChartEvent;
+    active?: Record<string, unknown>[];
+  }): void {
+    console.log(event, active);
   }
 }

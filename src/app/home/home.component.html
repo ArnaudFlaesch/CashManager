@@ -1,20 +1,4 @@
-<div class="flex flex-row flex-wrap">
-  <mat-icon
-    id="downloadConfigButton"
-    (click)="this.downloadConfig()"
-    aria-hidden="false"
-    >download</mat-icon
-  >
-  <mat-icon
-    id="openImportConfigModal"
-    (click)="this.openImportConfigModal()"
-    aria-hidden="false"
-    >upload</mat-icon
-  >
-  <button id="logoutButton" mat-raised-button (click)="logout()">
-    Déconnexion
-  </button>
-</div>
+<app-header></app-header>
 
 <div class="label-container grid grid-cols-4 gap-3">
   <div *ngFor="let label of this.labels">
@@ -46,7 +30,9 @@
       class="h-96 max-w-2xl"
       baseChart
       [data]="this.expensesByLabelChart"
+      [options]="barChartOptions"
       [type]="'bar'"
+      (chartClick)="handleChartClickedEvent($event)"
     ></canvas>
   </div>
   <div id="expensesContainer" *ngIf="this.expenses.length">

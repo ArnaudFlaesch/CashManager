@@ -1,7 +1,6 @@
-import { ConfigService } from '../../app/services/config.service/config.service';
-import { LabelService } from './../services/label.service/label.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
@@ -11,15 +10,14 @@ import {
   Spectator,
   SpectatorHttp
 } from '@ngneat/spectator/jest';
-import { AuthService } from './../services/auth.service/auth.service';
-import { ErrorHandlerService } from './../services/error.handler.service';
-import { HomeComponent } from './home.component';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
 import { environment } from '../../environments/environment';
+import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
 import { ExpenseService } from '../services/expense.service/expense.service';
-import { Expense } from '../model/Expense';
-import { endOfMonth, format, startOfMonth } from 'date-fns';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { ErrorHandlerService } from './../services/error.handler.service';
+import { LabelService } from './../services/label.service/label.service';
+import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let spectator: Spectator<HomeComponent>;
@@ -37,12 +35,7 @@ describe('HomeComponent', () => {
       MatSnackBarModule,
       MatDialogModule
     ],
-    providers: [
-      AuthService,
-      ConfigService,
-      ErrorHandlerService,
-      { provide: MatDialogRef, useValue: {} }
-    ],
+    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createLabelHttp = createHttpFactory(LabelService);

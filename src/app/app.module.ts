@@ -27,6 +27,7 @@ import { AuthService } from './services/auth.service/auth.service';
 import { ErrorHandlerService } from './services/error.handler.service';
 import { ExpenseService } from './services/expense.service/expense.service';
 import { LabelService } from './services/label.service/label.service';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { LabelService } from './services/label.service/label.service';
     LoginComponent,
     HomeComponent,
     ImportConfigModalComponent,
-    CreateExpenseComponent
+    CreateExpenseComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserAnimationsModule,
