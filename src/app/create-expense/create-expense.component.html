@@ -22,8 +22,8 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <form class="example-form">
-    <mat-form-field class="example-full-width" appearance="fill">
+  <form>
+    <mat-form-field appearance="fill">
       <mat-label>Label</mat-label>
       <input
         type="text"
@@ -35,7 +35,7 @@
         [matAutocomplete]="auto"
       />
 
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayLabel">
         <mat-option
           class="label-autocomplete-option"
           *ngFor="let option of filteredOptions | async"

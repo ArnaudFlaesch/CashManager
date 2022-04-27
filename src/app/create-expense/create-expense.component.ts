@@ -40,7 +40,7 @@ export class CreateExpenseComponent {
     this.filteredOptions = this.labelControl.valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value.name)),
-      map((name) => (name ? this._filter(name) : this.labels.slice()))
+      map((name) => (name ? this.filterLabels(name) : this.labels.slice()))
     );
   }
 
@@ -74,11 +74,10 @@ export class CreateExpenseComponent {
     });
   }
 
-  displayFn(label: Label): string {
-    return label && label.label ? label.label : '';
-  }
+  public displayLabel = (label: Label): string =>
+    label && label.label ? label.label : '';
 
-  private _filter(value: string): Label[] {
+  private filterLabels(value: string): Label[] {
     const filterValue = value.toLowerCase();
     return this.labels.filter((label) =>
       label.label.toLowerCase().includes(filterValue)
