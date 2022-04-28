@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Importer la configuration</h1>
+<mat-dialog-content>
+  <input type="file" id="file" name="file" (change)="selectFile($event)" />
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button id="closeImportConfigModal" mat-dialog-close>Annuler</button>
+  <button mat-raised-button id="uploadFileButton" disabled="{{ !fileToUpload }}" (click)="upload()">Upload</button>
+</mat-dialog-actions>

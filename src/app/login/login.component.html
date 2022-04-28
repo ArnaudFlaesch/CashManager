@@ -1,0 +1,35 @@
+<div class="flex h-screen">
+  <div class="text-center m-auto">
+    <div>
+      <img src="assets/logo.png" class="mx-auto" alt="cash manager logo" />
+    </div>
+    <div>
+      <h1 id="loginPageTitle" class="text-5xl">CashManager</h1>
+    </div>
+    <div class="flex flex-col mt-10 space-y-5">
+      <input
+        id="inputUsername"
+        placeholder="Username"
+        [(ngModel)]="inputUsername"
+      />
+
+      <input
+        id="inputPassword"
+        placeholder="Password"
+        [(ngModel)]="inputPassword"
+        type="password"
+      />
+
+      <button
+        mat-raised-button
+        id="loginButton"
+        [disabled]="!this.inputUsername || !inputPassword || isLoading"
+        (click)="handleLogin()"
+        color="primary"
+      >
+        <mat-spinner *ngIf="isLoading" class="mr-5"></mat-spinner>
+        <span>Se connecter</span>
+      </button>
+    </div>
+  </div>
+</div>
