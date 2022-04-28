@@ -6,7 +6,7 @@ describe('AppComponent', () => {
   let spectator: Spectator<AppComponent>;
   const createComponent = createComponentFactory({
     component: AppComponent,
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule]
   });
 
   beforeEach(() => (spectator = createComponent()));
