@@ -1,7 +1,8 @@
+import { ITotalExpenseByMonth } from '../../model/ITotalExpenseByMonth';
 import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayload';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Expense } from '../../../app/model/Expense';
 import { environment } from '../../../environments/environment';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
@@ -29,16 +30,48 @@ export class ExpenseService {
     });
   }
 
-  public getMonthsWithExpenses(): Observable<string[]> {
-    return this.http.get<string[]>(
-      `${environment.backend_url}/expense/monthsWithExpenses/`,
-      {
-        headers: {
-          Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
+  public getTotalExpensesByMonth(): Observable<ITotalExpenseByMonth[]> {
+    return this.http
+      .get<ITotalExpenseByMonth[]>(
+        `${environment.backend_url}/expense/getTotalExpensesByMonth`,
+        {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          }
         }
-      }
-    );
+      )
+      .pipe(
+        map((totalsByMonth) => {
+          return totalsByMonth.map((total) => {
+            total.date = new Date(total.date);
+            return total;
+          });
+        })
+      );
+  }
+
+  public getTotalExpensesByMonthByLabelId(
+    labelId: number
+  ): Observable<ITotalExpenseByMonth[]> {
+    return this.http
+      .get<ITotalExpenseByMonth[]>(
+        `${environment.backend_url}/expense/getTotalExpensesByMonthByLabelId?labelId=${labelId}`,
+        {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          }
+        }
+      )
+      .pipe(
+        map((totalsByMonth) => {
+          return totalsByMonth.map((total) => {
+            total.date = new Date(total.date);
+            return total;
+          });
+        })
+      );
   }
 
   public addExpense(expense: InsertExpensePayload): Observable<Expense> {
@@ -54,9 +87,9 @@ export class ExpenseService {
     );
   }
 
-  public deleteExpense(id: number): Observable<void> {
+  public deleteExpense(expenseId: number): Observable<void> {
     return this.http.delete<void>(
-      `${environment.backend_url}/expense/deleteExpense/?id=${id}`,
+      `${environment.backend_url}/expense/deleteExpense/?id=${expenseId}`,
       {
         headers: {
           Authorization: authorizationBearer(),
