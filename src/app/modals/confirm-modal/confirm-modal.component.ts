@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IConfirmDialogData } from './IConfirmDialogData';
 
 @Component({
   selector: 'app-confirm-modal.component',
@@ -7,5 +8,8 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent {
-  constructor(public dialogRef: MatDialogRef<ConfirmModalComponent>) {}
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IConfirmDialogData
+  ) {}
 }

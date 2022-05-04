@@ -13,5 +13,8 @@ describe('HomeComponent', () => {
 
   it('Should create', () => {
     expect(spectator.component).toBeTruthy();
+    expect(spectator.component.isExpenseByMonthViewSelected()).toBe(true);
+    spectator.component.selectTotalExpensesByMonthView();
+    expect(spectator.component.isTotalExpensesByMonthViewSelected()).toBe(true);
   });
 });

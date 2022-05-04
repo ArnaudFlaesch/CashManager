@@ -1,10 +1,15 @@
-<h1 mat-dialog-title>Suppression d'un label</h1>
+<h1 mat-dialog-title>{{ data.title }}</h1>
 <mat-dialog-content>
-  Êtes-vous sûr de vouloir supprimer ce label ?
+  {{ data.message }}
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button id="cancelAction" mat-dialog-close>Annuler</button>
-  <button mat-raised-button id="validateAction" [mat-dialog-close]="'validate'">
+  <button
+    [color]="'primary'"
+    mat-raised-button
+    id="validateAction"
+    [mat-dialog-close]="'validate'"
+  >
     Valider
   </button>
 </mat-dialog-actions>

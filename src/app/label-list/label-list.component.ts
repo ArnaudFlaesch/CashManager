@@ -4,6 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Label } from '../model/Label';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
+import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
 
 @Component({
   selector: 'app-label-list',
@@ -22,8 +23,12 @@ export class LabelListComponent {
 
   public openDeleteLabelDialog(labelId: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      height: '400px',
-      width: '600px'
+      height: DIALOG_SMALL_HEIGHT,
+      width: DIALOG_SMALL_WIDTH,
+      data: {
+        title: "Suppression d'un label",
+        message: 'Êtes-vous sûr de vouloir supprimer ce label ?'
+      }
     });
 
     dialogRef.afterClosed().subscribe((result) => {

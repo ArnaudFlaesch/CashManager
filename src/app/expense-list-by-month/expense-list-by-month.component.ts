@@ -8,11 +8,13 @@ import {
   ChartEvent
 } from 'chart.js';
 import { startOfMonth, endOfMonth, format } from 'date-fns';
+import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { LabelService } from '../services/label.service/label.service';
+import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
 
 @Component({
   selector: 'app-expense-list-by-month',
@@ -154,6 +156,38 @@ export class ExpenseListByMonthComponent {
   public handleExpenseCreation(newExpense: Expense) {
     this.expenses = [...this.expenses, newExpense];
     this.refreshExpensesChart();
+  }
+
+  public openDeleteExpenseModal(expenseId: number) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      height: DIALOG_SMALL_HEIGHT,
+      width: DIALOG_SMALL_WIDTH,
+      data: {
+        title: "Suppression d'une dépense",
+        message: 'Êtes-vous sûr de vouloir supprimer cette dépense ?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'validate') {
+        this.deleteExpense(expenseId);
+      }
+    });
+  }
+
+  private deleteExpense(expenseId: number) {
+    this.expenseService.deleteExpense(expenseId).subscribe({
+      next: () => {
+        this.expenses = this.expenses.filter(
+          (expense) => expense.id !== expenseId
+        );
+        this.refreshExpensesChart();
+      }
+    });
+  }
+
+  public getLabelFromId(labelId: number): Label | undefined {
+    return this.labels.find((label) => label.id === labelId);
   }
 
   public getTotalForMonth = () =>

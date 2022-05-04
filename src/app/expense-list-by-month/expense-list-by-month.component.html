@@ -28,8 +28,14 @@
   </div>
   <div id="expensesContainer" *ngIf="this.expenses.length">
     <div>Total ce mois : {{ getTotalForMonth() }}</div>
-    <div *ngFor="let expense of this.expenses">
-      <span>{{ expense.amount }}</span>
+    <div *ngFor="let expense of this.expenses; let index = index">
+      <span
+        >Dépense #{{ index + 1 }} {{ expense.amount }}
+        {{ getLabelFromId(expense.label.id)?.label }}</span
+      >
+      <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </div>
 </div>

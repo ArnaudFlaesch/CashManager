@@ -71,7 +71,7 @@ export class ExpenseService {
 
   public deleteExpense(expenseId: number): Observable<void> {
     return this.http.delete<void>(
-      `${environment.backend_url}/expense/deleteExpense/?id=${expenseId}`,
+      `${environment.backend_url}/expense/deleteExpense/?expenseId=${expenseId}`,
       {
         headers: {
           Authorization: authorizationBearer(),
