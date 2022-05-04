@@ -2,6 +2,8 @@ import { ErrorHandlerService } from './../services/error.handler.service';
 import { LabelService } from './../services/label.service/label.service';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Label } from '../model/Label';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-label-list',
@@ -14,10 +16,24 @@ export class LabelListComponent {
 
   constructor(
     private labelService: LabelService,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    public dialog: MatDialog
   ) {}
 
-  public deleteLabel(labelId: number): void {
+  public openDeleteLabelDialog(labelId: number) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      height: '400px',
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'validate') {
+        this.deleteLabel(labelId);
+      }
+    });
+  }
+
+  private deleteLabel(labelId: number): void {
     this.labelService.deleteLabel(labelId).subscribe({
       next: () => {
         this.labels = this.labels.filter((label) => label.id !== labelId);

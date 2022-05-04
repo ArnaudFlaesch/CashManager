@@ -9,7 +9,7 @@ import {
   HttpMethod,
   Spectator,
   SpectatorHttp
-} from '@ngneat/spectator';
+} from '@ngneat/spectator/jest';
 import { AuthService } from '../services/auth.service/auth.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';

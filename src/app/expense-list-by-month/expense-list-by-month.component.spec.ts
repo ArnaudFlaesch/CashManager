@@ -9,7 +9,7 @@ import {
   HttpMethod,
   Spectator,
   SpectatorHttp
-} from '@ngneat/spectator';
+} from '@ngneat/spectator/jest';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import { environment } from '../../environments/environment';
 import { Expense } from '../model/Expense';

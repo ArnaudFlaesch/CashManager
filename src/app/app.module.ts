@@ -31,6 +31,7 @@ import { HeaderComponent } from './header/header.component';
 import { ExpenseListByMonthComponent } from './expense-list-by-month/expense-list-by-month.component';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-expense-by-month.component';
 import { LabelListComponent } from './label-list/label-list.component';
+import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { LabelListComponent } from './label-list/label-list.component';
     HeaderComponent,
     ExpenseListByMonthComponent,
     TotalExpenseByMonthComponent,
-    LabelListComponent
+    LabelListComponent,
+    ConfirmModalComponent
   ],
   imports: [
     BrowserAnimationsModule,

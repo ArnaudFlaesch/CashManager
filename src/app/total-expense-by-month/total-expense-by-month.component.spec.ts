@@ -8,7 +8,7 @@ import {
   HttpMethod,
   Spectator,
   SpectatorHttp
-} from '@ngneat/spectator';
+} from '@ngneat/spectator/jest';
 import { environment } from '../../environments/environment';
 import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';

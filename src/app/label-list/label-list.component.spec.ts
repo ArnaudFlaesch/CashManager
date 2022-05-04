@@ -1,5 +1,6 @@
+import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { createHttpFactory, SpectatorHttp } from '@ngneat/spectator/jest';
 import { LabelService } from '../services/label.service/label.service';
 import { ErrorHandlerService } from './../services/error.handler.service';
@@ -12,8 +13,8 @@ describe('LabelListComponent', () => {
 
   const createComponent = createComponentFactory({
     component: LabelListComponent,
-    imports: [MatSnackBarModule],
-    providers: [ErrorHandlerService]
+    imports: [MatSnackBarModule, MatDialogModule],
+    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
   });
 
   const createLabelHttp = createHttpFactory(LabelService);
