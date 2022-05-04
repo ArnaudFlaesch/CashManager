@@ -51,10 +51,12 @@ export class TotalExpenseByMonthComponent {
   }
 
   private refreshChart(data: ITotalExpenseByMonth[]) {
-    data.sort((dataA, dataB) => (isBefore(dataA.date, dataB.date) ? -1 : 1));
+    data.sort((dataA, dataB) =>
+      isBefore(new Date(dataA.date), new Date(dataB.date)) ? -1 : 1
+    );
     this.totalExpensesByMonthChart = {
       labels: data.map((totalByMonth) =>
-        format(totalByMonth.date, 'MMMM yyyy')
+        format(new Date(totalByMonth.date), 'MMMM yyyy')
       ),
       datasets: [
         {

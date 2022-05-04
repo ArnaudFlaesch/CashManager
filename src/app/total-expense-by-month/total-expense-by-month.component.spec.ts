@@ -1,6 +1,4 @@
-import { ITotalExpenseByMonth } from './../model/ITotalExpenseByMonth';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,6 +14,7 @@ import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { LabelService } from '../services/label.service/label.service';
+import { ITotalExpenseByMonth } from './../model/ITotalExpenseByMonth';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month.component';
 
 describe('TotalExpenseByMonthComponent', () => {
@@ -41,7 +40,7 @@ describe('TotalExpenseByMonthComponent', () => {
 
   const labelData = [new Label(1, 'Courses'), new Label(2, 'Restaurant')];
   const expectedTotalExpenseByMonthData = [
-    { date: new Date('2022-04-01'), total: 200 }
+    { date: '2022-04-01', total: 200 }
   ] as ITotalExpenseByMonth[];
 
   beforeEach(() => {
@@ -63,5 +62,30 @@ describe('TotalExpenseByMonthComponent', () => {
     );
     getTotalExpenseByMonthRequest.flush(expectedTotalExpenseByMonthData);
     expect(spectator.component.labels).toEqual(labelData);
+
+    const expectedTotalExpenseByMonthByLabelIdData = [
+      { date: '2022-04-01', total: 400 },
+      { date: '2022-03-01', total: 100 }
+    ] as ITotalExpenseByMonth[];
+
+    const labelIdToSelect = spectator.component.labels[0].id;
+    spectator.component.selectLabel(labelIdToSelect);
+    const getTotalExpenseByMonthByLabelIdRequest = expenseService.expectOne(
+      `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`,
+      HttpMethod.GET
+    );
+    getTotalExpenseByMonthByLabelIdRequest.flush(
+      expectedTotalExpenseByMonthByLabelIdData
+    );
+    expect(spectator.component.isLabelSelected(labelIdToSelect)).toEqual(true);
+    expect(spectator.component.totalExpensesByMonthChart).toEqual({
+      datasets: [
+        {
+          data: [100, 400],
+          label: 'Total des dépenses'
+        }
+      ],
+      labels: ['March 2022', 'April 2022']
+    });
   });
 });

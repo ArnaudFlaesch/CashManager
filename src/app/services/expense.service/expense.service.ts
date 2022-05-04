@@ -1,12 +1,12 @@
-import { ITotalExpenseByMonth } from '../../model/ITotalExpenseByMonth';
-import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayload';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { format } from 'date-fns';
+import { Observable } from 'rxjs';
 import { Expense } from '../../../app/model/Expense';
 import { environment } from '../../../environments/environment';
+import { ITotalExpenseByMonth } from '../../model/ITotalExpenseByMonth';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
-import { format } from 'date-fns';
+import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayload';
 
 @Injectable()
 export class ExpenseService {
@@ -31,47 +31,29 @@ export class ExpenseService {
   }
 
   public getTotalExpensesByMonth(): Observable<ITotalExpenseByMonth[]> {
-    return this.http
-      .get<ITotalExpenseByMonth[]>(
-        `${environment.backend_url}/expense/getTotalExpensesByMonth`,
-        {
-          headers: {
-            Authorization: authorizationBearer(),
-            'Content-type': 'application/json'
-          }
+    return this.http.get<ITotalExpenseByMonth[]>(
+      `${environment.backend_url}/expense/getTotalExpensesByMonth`,
+      {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
         }
-      )
-      .pipe(
-        map((totalsByMonth) => {
-          return totalsByMonth.map((total) => {
-            total.date = new Date(total.date);
-            return total;
-          });
-        })
-      );
+      }
+    );
   }
 
   public getTotalExpensesByMonthByLabelId(
     labelId: number
   ): Observable<ITotalExpenseByMonth[]> {
-    return this.http
-      .get<ITotalExpenseByMonth[]>(
-        `${environment.backend_url}/expense/getTotalExpensesByMonthByLabelId?labelId=${labelId}`,
-        {
-          headers: {
-            Authorization: authorizationBearer(),
-            'Content-type': 'application/json'
-          }
+    return this.http.get<ITotalExpenseByMonth[]>(
+      `${environment.backend_url}/expense/getTotalExpensesByMonthByLabelId?labelId=${labelId}`,
+      {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
         }
-      )
-      .pipe(
-        map((totalsByMonth) => {
-          return totalsByMonth.map((total) => {
-            total.date = new Date(total.date);
-            return total;
-          });
-        })
-      );
+      }
+    );
   }
 
   public addExpense(expense: InsertExpensePayload): Observable<Expense> {
