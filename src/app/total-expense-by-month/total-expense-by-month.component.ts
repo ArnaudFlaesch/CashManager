@@ -30,10 +30,14 @@ export class TotalExpenseByMonthComponent {
     private expenseService: ExpenseService,
     private labelService: LabelService
   ) {
-    this.getTotalExpensesByMonth();
+    this.getLabels();
+  }
+
+  private getLabels() {
     this.labelService.getLabels().subscribe({
       next: (labels) => {
         this.labels = labels;
+        this.getTotalExpensesByMonth();
       }
     });
   }
