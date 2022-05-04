@@ -1,7 +1,11 @@
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { createHttpFactory, SpectatorHttp } from '@ngneat/spectator/jest';
+import {
+  createComponentFactory,
+  createHttpFactory,
+  Spectator,
+  SpectatorHttp
+} from '@ngneat/spectator/jest';
 import { LabelService } from '../services/label.service/label.service';
 import { ErrorHandlerService } from './../services/error.handler.service';
 
