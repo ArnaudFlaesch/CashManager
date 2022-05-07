@@ -28,6 +28,10 @@ import { ErrorHandlerService } from './services/error.handler.service';
 import { ExpenseService } from './services/expense.service/expense.service';
 import { LabelService } from './services/label.service/label.service';
 import { HeaderComponent } from './header/header.component';
+import { ExpenseListByMonthComponent } from './expense-list-by-month/expense-list-by-month.component';
+import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-expense-by-month.component';
+import { LabelListComponent } from './label-list/label-list.component';
+import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +40,11 @@ import { HeaderComponent } from './header/header.component';
     HomeComponent,
     ImportConfigModalComponent,
     CreateExpenseComponent,
-    HeaderComponent
+    HeaderComponent,
+    ExpenseListByMonthComponent,
+    TotalExpenseByMonthComponent,
+    LabelListComponent,
+    ConfirmModalComponent
   ],
   imports: [
     BrowserAnimationsModule,
