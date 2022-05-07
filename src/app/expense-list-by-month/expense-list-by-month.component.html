@@ -1,0 +1,47 @@
+<app-label-list
+  (labelDeletedEvent)="handleLabelDeletion($event)"
+  [labels]="this.labels"
+></app-label-list>
+
+<div class="flex flex-row">
+  <div class="flex flex-row" *ngFor="let monthDate of pastMonths">
+    <button
+      mat-raised-button
+      [color]="getMonthButtonColor(monthDate)"
+      (click)="this.handleSelectExpensesForMonth(monthDate)"
+    >
+      {{ formatMonthToDisplay(monthDate) }}
+    </button>
+  </div>
+</div>
+
+<div class="flex flex-row">
+  <div id="chartContainer">
+    <canvas
+      class="h-96 max-w-2xl"
+      baseChart
+      [data]="this.expensesByLabelChart"
+      [options]="barChartOptions"
+      [type]="'bar'"
+      (chartClick)="handleChartClickedEvent($event)"
+    ></canvas>
+  </div>
+  <div id="expensesContainer" *ngIf="this.expenses.length">
+    <div>Total ce mois : {{ getTotalForMonth() }}</div>
+    <div *ngFor="let expense of this.expenses; let index = index">
+      <span
+        >Dépense #{{ index + 1 }} {{ expense.amount }}
+        {{ getLabelFromId(expense.label.id)?.label }}</span
+      >
+      <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-create-expense
+  (insertedExpenseEvent)="handleExpenseCreation($event)"
+  (insertedLabelEvent)="handleLabelCreation($event)"
+  [labels]="this.labels"
+></app-create-expense>

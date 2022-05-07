@@ -44,7 +44,10 @@ describe('ExpenseService tests', () => {
     spectator.service.deleteExpense(expenseId).subscribe(() => null);
 
     const request = spectator.expectOne(
-      environment.backend_url + expensePath + 'deleteExpense/?id=' + expenseId,
+      environment.backend_url +
+        expensePath +
+        'deleteExpense/?expenseId=' +
+        expenseId,
       HttpMethod.DELETE
     );
     request.flush(true);

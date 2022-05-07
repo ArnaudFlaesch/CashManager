@@ -1,11 +1,12 @@
-import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayload';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { Expense } from '../../../app/model/Expense';
 import { environment } from '../../../environments/environment';
+import { ITotalExpenseByMonth } from '../../model/ITotalExpenseByMonth';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
-import { format } from 'date-fns';
+import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayload';
 
 @Injectable()
 export class ExpenseService {
@@ -29,9 +30,23 @@ export class ExpenseService {
     });
   }
 
-  public getMonthsWithExpenses(): Observable<string[]> {
-    return this.http.get<string[]>(
-      `${environment.backend_url}/expense/monthsWithExpenses/`,
+  public getTotalExpensesByMonth(): Observable<ITotalExpenseByMonth[]> {
+    return this.http.get<ITotalExpenseByMonth[]>(
+      `${environment.backend_url}/expense/getTotalExpensesByMonth`,
+      {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
+        }
+      }
+    );
+  }
+
+  public getTotalExpensesByMonthByLabelId(
+    labelId: number
+  ): Observable<ITotalExpenseByMonth[]> {
+    return this.http.get<ITotalExpenseByMonth[]>(
+      `${environment.backend_url}/expense/getTotalExpensesByMonthByLabelId?labelId=${labelId}`,
       {
         headers: {
           Authorization: authorizationBearer(),
@@ -54,9 +69,9 @@ export class ExpenseService {
     );
   }
 
-  public deleteExpense(id: number): Observable<void> {
+  public deleteExpense(expenseId: number): Observable<void> {
     return this.http.delete<void>(
-      `${environment.backend_url}/expense/deleteExpense/?id=${id}`,
+      `${environment.backend_url}/expense/deleteExpense/?expenseId=${expenseId}`,
       {
         headers: {
           Authorization: authorizationBearer(),
