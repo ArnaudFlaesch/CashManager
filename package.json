@@ -54,7 +54,7 @@
     "@ngneat/spectator": "10.0.1",
     "@types/jasmine": "4.0.3",
     "@types/jest": "27.5.1",
-    "@types/node": "16.11.35",
+    "@types/node": "16.11.36",
     "@typescript-eslint/eslint-plugin": "5.24.0",
     "@typescript-eslint/parser": "5.24.0",
     "cypress": "9.6.1",
