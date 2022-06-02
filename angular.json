@@ -100,7 +100,7 @@
           "builder": "@cypress/schematic:cypress",
           "options": {
             "devServerTarget": "CashManager:serve",
-            "configFile": "cypress-test.json",
+            "configFile": "cypress-test.config.ts",
             "browser": "chrome"
           },
           "configurations": {
