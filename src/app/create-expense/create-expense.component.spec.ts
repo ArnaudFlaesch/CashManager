@@ -43,10 +43,11 @@ describe('CreateExpenseComponent', () => {
   });
 
   it('Should create an expense', () => {
-    spectator.component.labelControl.setValue('Vacances');
+    const newLabelName = 'Vacances';
+    spectator.component.labelControl.setValue(newLabelName);
+    spectator.component.dateFormControl.setValue('2022-3-5');
     spectator.component.expenseToCreate = new InsertExpensePayload();
     spectator.component.expenseToCreate.amount = 23;
-    spectator.component.expenseToCreate.expenseDate = new Date(2022, 3, 5);
     spectator.component.handleCreateExpense();
 
     const addLabelRequest = labelService.expectOne(
@@ -54,10 +55,7 @@ describe('CreateExpenseComponent', () => {
       HttpMethod.POST
     );
 
-    const expectedAddedLabel = new Label(
-      1,
-      spectator.component.labelControl.value
-    );
+    const expectedAddedLabel = new Label(1, newLabelName);
 
     addLabelRequest.flush(expectedAddedLabel);
 

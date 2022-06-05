@@ -18,7 +18,7 @@ export class CreateExpenseComponent {
   @Output() insertedExpenseEvent = new EventEmitter<Expense>();
   @Output() insertedLabelEvent = new EventEmitter<Label>();
 
-  labelControl = new FormControl('');
+  labelControl = new FormControl<Label | string>('');
   dateFormControl = new FormControl('');
 
   @Input()
@@ -39,7 +39,7 @@ export class CreateExpenseComponent {
   ngOnInit() {
     this.filteredOptions = this.labelControl.valueChanges.pipe(
       startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
+      map((value) => (typeof value === 'string' ? value : '')),
       map((name) => (name ? this.filterLabels(name) : this.labels.slice()))
     );
   }
@@ -51,27 +51,32 @@ export class CreateExpenseComponent {
           this.labels = [...this.labels, insertedLabel];
           this.insertedLabelEvent.emit(insertedLabel);
           this.labelControl.setValue(insertedLabel);
-          this.insertExpense(this.labelControl.value.id);
+          this.insertExpense(insertedLabel.id);
         },
         error: (error) =>
           this.errorHandlerService.handleError(error.message, 'error new label')
       });
-    } else {
+    } else if (this.labelControl.value) {
       this.insertExpense(this.labelControl.value.id);
     }
   }
 
   private insertExpense(labelId: number) {
-    this.expenseToCreate.labelId = labelId;
-    this.expenseToCreate.expenseDate = this.dateFormControl.value;
-    this.expenseService.addExpense(this.expenseToCreate).subscribe({
-      next: (createdExpense) => this.insertedExpenseEvent.emit(createdExpense),
-      error: (error) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          this.ERROR_CREATING_EXPENSE_MESSAGE
-        )
-    });
+    if (this.dateFormControl.value) {
+      this.expenseToCreate.labelId = labelId;
+      this.expenseToCreate.expenseDate = new Date(
+        Date.parse(this.dateFormControl.value)
+      );
+      this.expenseService.addExpense(this.expenseToCreate).subscribe({
+        next: (createdExpense) =>
+          this.insertedExpenseEvent.emit(createdExpense),
+        error: (error) =>
+          this.errorHandlerService.handleError(
+            error.message,
+            this.ERROR_CREATING_EXPENSE_MESSAGE
+          )
+      });
+    }
   }
 
   public displayLabel = (label: Label): string =>
