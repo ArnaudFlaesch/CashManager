@@ -47,8 +47,8 @@
     "zone.js": "0.11.6"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "14.0.3",
-    "@angular/cli": "14.0.3",
+    "@angular-devkit/build-angular": "14.0.4",
+    "@angular/cli": "14.0.4",
     "@angular/compiler-cli": "14.0.3",
     "@cypress/schematic": "2.0.0",
     "@ngneat/spectator": "11.1.0",
