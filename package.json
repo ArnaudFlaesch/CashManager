@@ -31,7 +31,7 @@
     "@angular/compiler": "14.0.4",
     "@angular/core": "14.0.4",
     "@angular/forms": "14.0.4",
-    "@angular/material": "14.0.3",
+    "@angular/material": "14.0.4",
     "@angular/platform-browser": "14.0.4",
     "@angular/platform-browser-dynamic": "14.0.4",
     "@angular/router": "14.0.4",
