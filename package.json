@@ -51,7 +51,7 @@
     "@angular/cli": "14.1.0",
     "@angular/compiler-cli": "14.1.0",
     "@cypress/schematic": "2.0.0",
-    "@ngneat/spectator": "11.1.0",
+    "@ngneat/spectator": "11.1.1",
     "@types/jasmine": "4.0.3",
     "@types/jest": "28.1.6",
     "@types/node": "16.11.45",
