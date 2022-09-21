@@ -16,6 +16,9 @@ export default defineConfig({
     backend_url: 'localhost:8080'
   },
   e2e: {
+    retries: {
+      runMode: 3
+    },
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
