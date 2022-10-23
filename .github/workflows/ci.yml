@@ -6,13 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      OPENWEATHERMAP_KEY: ${{ secrets.OPENWEATHERMAP_KEY }}
-      STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
-      STEAM_USER_ID: ${{ secrets.STEAM_USER_ID }}
-      STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-      STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-
     steps:
       - uses: actions/checkout@v3
 
@@ -55,16 +48,16 @@ jobs:
       - name: Pull database image
         run: |
           docker pull postgres:13.2-alpine
-          docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash_test postgres:13.2-alpine
+          docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash postgres:13.2-alpine
 
       - name: Pull backend image
         run: |
           if [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${GITHUB_REF#refs/*/} | wc -l)" == 1 && ${GITHUB_REF#refs/*/} != 'main' && ${GITHUB_REF#refs/*/} != 'main' ]]; then
             docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
-            docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test -e OPENWEATHERMAP_KEY=${OPENWEATHERMAP_KEY} -e STRAVA_CLIENT_ID=${STRAVA_CLIENT_ID} -e STRAVA_CLIENT_SECRET=${STRAVA_CLIENT_SECRET} -e STEAM_USER_ID=${STEAM_USER_ID} -e STEAM_API_KEY=${STEAM_API_KEY} arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+            docker run -p 8080:8080 -d --network="host" -e OPENWEATHERMAP_KEY=test -e STRAVA_CLIENT_ID=test -e STRAVA_CLIENT_SECRET=test -e STEAM_API_KEY=test -e AIRPARIF_API_TOKEN=test arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
           else
             docker pull arnaudf93/dashwebservices:latest
-            docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test -e OPENWEATHERMAP_KEY=${OPENWEATHERMAP_KEY} -e STRAVA_CLIENT_ID=${STRAVA_CLIENT_ID} -e STRAVA_CLIENT_SECRET=${STRAVA_CLIENT_SECRET} -e STEAM_USER_ID=${STEAM_USER_ID} -e STEAM_API_KEY=${STEAM_API_KEY} arnaudf93/dashwebservices:latest
+            docker run -p 8080:8080 -d --network="host" -e OPENWEATHERMAP_KEY=test -e STRAVA_CLIENT_ID=test -e STRAVA_CLIENT_SECRET=test -e STEAM_API_KEY=test -e AIRPARIF_API_TOKEN=test arnaudf93/dashwebservices:latest
           fi
 
       - name: E2E Tests
@@ -94,7 +87,7 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Deploy with gh-pages

@@ -1,27 +1,76 @@
 # CashManager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.2.
+[![Node.js CI](https://github.com/ArnaudFlaesch/CashManager/actions/workflows/ci.yml/badge.svg)](https://github.com/ArnaudFlaesch/CashManager/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
+[![codecov](https://codecov.io/gh/ArnaudFlaesch/CashManager/branch/main/graph/badge.svg?token=9NEN97P2Y1)](https://codecov.io/gh/ArnaudFlaesch/CashManager)
+[![Known Vulnerabilities](https://snyk.io/test/github/ArnaudFlaesch/CashManager/badge.svg)](https://snyk.io/test/github/ArnaudFlaesch/CashManager)
+[![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 
-## Development server
+## Description
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Le projet est déployé via Github Pages et accessible à cette addresse : https://arnaudflaesch.github.io/CashManager/.
 
-## Code scaffolding
+## Démarrage
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Installation des dépendances
 
-## Build
+  > npm install
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Démarrage de l'application
 
-## Running unit tests
+  > npm start
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+L'application est ensuite accessible à l'addresse http://localhost:4200.
 
-## Running end-to-end tests
+- Démarrage du backend
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Il est nécessaire d'exécuter le backend et sa base de données pour que l'application fonctionne. Les sources et le README sont accessibles ici :https://github.com/ArnaudFlaesch/Dash-WebServices.
 
-## Further help
+Pour lancer le frontend sans avoir à utiliser le backend en local, il est possible d'exécuter la commande :
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+> npm run start:prod:backend
+
+Cette commande va permettre de se connecter au backend déployé sur Heroku directement.
+
+Sinon, il est possible de récupérer le backend via Docker en commençant par sa base de données :
+
+> docker pull postgres:13.2-alpine
+> docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash postgres:13.2-alpine;
+
+et son image Docker :
+
+> docker pull arnaudf93/dashwebservices:latest
+
+puis de l'exécuter via la commande :
+
+> docker run -p 8080:8080 -d -e OPENWEATHERMAP_KEY=${OPENWEATHERMAP_KEY} -e STRAVA_CLIENT_ID=${STRAVA_CLIENT_ID} -e STRAVA_CLIENT_SECRET=${STRAVA_CLIENT_SECRET} -e STEAM_API_KEY=${STEAM_API_KEY} -e AIRPARIF_API_TOKEN=${AIRPARIF_API_TOKEN} arnaudf93/dashwebservices:latest
+
+en renseignant les variables d'environnement nécessaires en suivant le README du backend ici :
+https://github.com/ArnaudFlaesch/Dash-Webservices#demarrage
+
+## Commandes utiles
+
+> npm run test
+
+Exécute les tests Jest (\*.spec.ts) présents dans le répertoire **src**.
+
+> npm run test:watch
+
+Même chose que la commande précédente, mais les tests seront réexécutés à chaque changement du code pour vérifier que l'application fonctionne toujours correctement.
+
+> npm run cy:open
+
+Lance le dashboard Cypress pour pouvoir exécuter manuellement les tests End-to-End.
+
+> npm run eslint
+
+Affiche la liste des erreurs liées au code Typescript à partir des règles définies dans le fichier **.eslintrc.js**.
+
+> npm run linst:styles
+
+Affiche la liste des erreurs liées au code CSS/Sass à partir des conventions et règles définies dans le fichier **.stylelintrc.json**.
+
+### Coverage
+
+![Coverage](https://codecov.io/gh/ArnaudFlaesch/CashManager/branch/main/graphs/sunburst.svg)

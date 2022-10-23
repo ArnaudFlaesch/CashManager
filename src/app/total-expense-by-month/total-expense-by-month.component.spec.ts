@@ -87,5 +87,12 @@ describe('TotalExpenseByMonthComponent', () => {
       ],
       labels: ['March 2022', 'April 2022']
     });
+
+    spectator.component.selectLabel(labelIdToSelect);
+    const getExpensesRequest = expenseService.expectOne(
+      `${environment.backend_url}${expensePath}getTotalExpensesByMonth`,
+      HttpMethod.GET
+    );
+    getExpensesRequest.flush([]);
   });
 });
