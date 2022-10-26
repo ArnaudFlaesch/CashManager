@@ -38,7 +38,7 @@ describe('TotalExpenseByMonthComponent', () => {
   const createLabelHttp = createHttpFactory(LabelService);
   const createExpenseHttp = createHttpFactory(ExpenseService);
 
-  const labelData = [new Label(1, 'Courses'), new Label(2, 'Restaurant')];
+  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
   const expectedTotalExpenseByMonthData = [
     { date: '2022-04-01', total: 200 }
   ] as ITotalExpenseByMonth[];

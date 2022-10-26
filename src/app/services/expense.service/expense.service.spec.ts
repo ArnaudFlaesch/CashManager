@@ -20,9 +20,9 @@ describe('ExpenseService tests', () => {
 
   it('Devrait retourner trois dépenses', () => {
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, new Date(), new Label(1, 'Courses')),
-      new Expense(2, 130, new Date(), new Label(2, 'Restaurant')),
-      new Expense(3, 4, new Date(), new Label(2, 'Restaurant'))
+      new Expense(1, 323, new Date(), 1),
+      new Expense(2, 130, new Date(), 1),
+      new Expense(3, 4, new Date(), 1)
     ];
 
     const startIntervalDate = new Date(2022, 2, 1);

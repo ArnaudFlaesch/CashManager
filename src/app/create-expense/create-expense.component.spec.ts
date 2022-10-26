@@ -55,7 +55,7 @@ describe('CreateExpenseComponent', () => {
       HttpMethod.POST
     );
 
-    const expectedAddedLabel = new Label(1, newLabelName);
+    const expectedAddedLabel = new Label(1, newLabelName, 1);
 
     addLabelRequest.flush(expectedAddedLabel);
 
@@ -68,13 +68,13 @@ describe('CreateExpenseComponent', () => {
         1,
         spectator.component.expenseToCreate.amount,
         spectator.component.expenseToCreate.expenseDate,
-        expectedAddedLabel
+        expectedAddedLabel._id
       )
     );
   });
 
   it('Should display the label', () => {
-    const label = new Label(1, 'Dépense 1');
+    const label = new Label(1, 'Dépense 1', 1);
     expect(spectator.component.displayLabel(label)).toEqual('Dépense 1');
   });
 });
