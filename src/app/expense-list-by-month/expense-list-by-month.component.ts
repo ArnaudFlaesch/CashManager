@@ -82,7 +82,7 @@ export class ExpenseListByMonthComponent {
 
   public handleLabelDeletion(labelId: number) {
     this.expenses = this.expenses.filter(
-      (expense) => expense.label.id !== labelId
+      (expense) => expense.labelId !== labelId
     );
     this.refreshExpensesChart();
   }
@@ -92,7 +92,7 @@ export class ExpenseListByMonthComponent {
       next: () => {
         this.labels = this.labels.filter((label) => label.id !== labelId);
         this.expenses = this.expenses.filter(
-          (expense) => expense.label.id !== labelId
+          (expense) => expense.labelId !== labelId
         );
         this.refreshExpensesChart();
       },
@@ -114,9 +114,9 @@ export class ExpenseListByMonthComponent {
   private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
     return expenses.reduce(
       (expensesByLabel: Record<string, number[]>, currentExpense: Expense) => {
-        const label = currentExpense.label.id;
-        expensesByLabel[label] = expensesByLabel[label] ?? [];
-        expensesByLabel[label].push(currentExpense.amount);
+        const labelId = currentExpense.labelId;
+        expensesByLabel[labelId] = expensesByLabel[labelId] ?? [];
+        expensesByLabel[labelId].push(currentExpense.amount);
         return expensesByLabel;
       },
       {}

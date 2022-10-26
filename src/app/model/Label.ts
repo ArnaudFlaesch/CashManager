@@ -1,10 +1,12 @@
 export class Label {
   _id = 0;
   _label = '';
+  _userId = 0;
 
-  constructor(id: number, label: string) {
+  constructor(id: number, label: string, userId: number) {
     this._id = id;
     this._label = label;
+    this._userId = userId;
   }
 
   /**
@@ -21,5 +23,9 @@ export class Label {
    */
   public get label(): string {
     return this._label;
+  }
+
+  public get userId(): number {
+    return this._userId;
   }
 }

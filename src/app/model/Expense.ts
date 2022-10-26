@@ -4,13 +4,13 @@ export class Expense {
   private _id = 0;
   private _amount = 0;
   private _expenseDate: Date = new Date();
-  private _label: Label = new Label(0, '');
+  private _labelId = 0;
 
-  constructor(id: number, amount: number, expenseDate: Date, label: Label) {
+  constructor(id: number, amount: number, expenseDate: Date, labelId: number) {
     this._id = id;
     this._amount = amount;
     this._expenseDate = expenseDate;
-    this._label = label;
+    this._labelId = labelId;
   }
 
   /**
@@ -38,10 +38,10 @@ export class Expense {
   }
 
   /**
-   * Getter label
-   * @return {Label }
+   * Getter labelId
+   * @return {number }
    */
-  public get label(): Label {
-    return this._label;
+  public get labelId(): number {
+    return this._labelId;
   }
 }
