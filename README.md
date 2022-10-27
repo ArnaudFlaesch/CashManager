@@ -29,7 +29,7 @@ Il est nécessaire d'exécuter le backend et sa base de données pour que l'appl
 
 Pour lancer le frontend sans avoir à utiliser le backend en local, il est possible d'exécuter la commande :
 
-> npm run start:prod:backend
+> npm run start:dev
 
 Cette commande va permettre de se connecter au backend déployé sur Heroku directement.
 
@@ -67,7 +67,7 @@ Lance le dashboard Cypress pour pouvoir exécuter manuellement les tests End-to-
 
 Affiche la liste des erreurs liées au code Typescript à partir des règles définies dans le fichier **.eslintrc.js**.
 
-> npm run linst:styles
+> npm run lint:styles
 
 Affiche la liste des erreurs liées au code CSS/Sass à partir des conventions et règles définies dans le fichier **.stylelintrc.json**.
 

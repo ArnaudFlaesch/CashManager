@@ -26,13 +26,18 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
             },
             "scripts": []
           },
@@ -58,6 +63,14 @@
               ],
               "outputHashing": "all"
             },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -74,6 +87,9 @@
           "configurations": {
             "production": {
               "browserTarget": "CashManager:build:production"
+            },
+            "dev": {
+              "browserTarget": "CashManager:build:dev"
             },
             "development": {
               "browserTarget": "CashManager:build:development"
