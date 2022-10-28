@@ -18,6 +18,7 @@ import { CreateExpenseComponent } from './create-expense.component';
 import { InsertExpensePayload } from '../model/payloads/InsertExpensePayload';
 import { environment } from '../../environments/environment';
 import { Label } from '../model/Label';
+import { DateUtilsService } from '../utils/date.utils.service';
 
 describe('CreateExpenseComponent', () => {
   let spectator: Spectator<CreateExpenseComponent>;
@@ -30,7 +31,7 @@ describe('CreateExpenseComponent', () => {
   const createComponent = createComponentFactory({
     component: CreateExpenseComponent,
     imports: [MatSnackBarModule, MatAutocompleteModule],
-    providers: [AuthService, ErrorHandlerService],
+    providers: [AuthService, ErrorHandlerService, DateUtilsService],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createLabelHttp = createHttpFactory(LabelService);
