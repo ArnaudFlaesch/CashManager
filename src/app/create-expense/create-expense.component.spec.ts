@@ -77,5 +77,6 @@ describe('CreateExpenseComponent', () => {
   it('Should display the label', () => {
     const label = new Label(1, 'Dépense 1', 1);
     expect(spectator.component.displayLabel(label)).toEqual('Dépense 1');
+    expect(label.userId).toEqual(1);
   });
 });
