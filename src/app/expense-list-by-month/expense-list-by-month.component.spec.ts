@@ -42,7 +42,7 @@ describe('ExpenseListByMonthComponent', () => {
   const createLabelHttp = createHttpFactory(LabelService);
   const createExpenseHttp = createHttpFactory(ExpenseService);
 
-  const labelData = [new Label(1, 'Courses'), new Label(2, 'Restaurant')];
+  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
 
   const dateFormat = 'yyyy-MM-dd';
 
@@ -60,9 +60,9 @@ describe('ExpenseListByMonthComponent', () => {
     spectator.component.currentSelectedMonth = aprilMonth;
 
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, new Date(2022, 3, 1), labelData[0]),
-      new Expense(2, 130, new Date(2022, 3, 1), labelData[1]),
-      new Expense(3, 4, new Date(2022, 3, 1), labelData[1])
+      new Expense(1, 323, new Date(2022, 3, 1), labelData[0].id),
+      new Expense(2, 130, new Date(2022, 3, 1), labelData[1].id),
+      new Expense(3, 4, new Date(2022, 3, 1), labelData[1].id)
     ];
 
     const getLabelsRequest = labelService.expectOne(
@@ -117,11 +117,11 @@ describe('ExpenseListByMonthComponent', () => {
     );
     getExpensesRequest.flush([]);
 
-    const insertedLabel = new Label(1, 'Vacances');
+    const insertedLabel = new Label(1, 'Vacances', 1);
     spectator.component.handleLabelCreation(insertedLabel);
     expect(spectator.component.labels).toEqual([insertedLabel]);
 
-    const insertedExpense = new Expense(1, 23, new Date(), insertedLabel);
+    const insertedExpense = new Expense(1, 23, new Date(), insertedLabel.id);
     spectator.component.handleExpenseCreation(insertedExpense);
     expect(spectator.component.expenses).toEqual([insertedExpense]);
 

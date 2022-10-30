@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 import { Expense } from '../model/Expense';
+import { DateUtilsService } from '../utils/date.utils.service';
 import { Label } from './../model/Label';
 import { InsertExpensePayload } from './../model/payloads/InsertExpensePayload';
 import { ErrorHandlerService } from './../services/error.handler.service';
@@ -31,6 +32,7 @@ export class CreateExpenseComponent {
   constructor(
     private expenseService: ExpenseService,
     private labelService: LabelService,
+    private dateUtilsService: DateUtilsService,
     private errorHandlerService: ErrorHandlerService
   ) {
     this.expenseToCreate = new InsertExpensePayload();
@@ -64,9 +66,12 @@ export class CreateExpenseComponent {
   private insertExpense(labelId: number) {
     if (this.dateFormControl.value) {
       this.expenseToCreate.labelId = labelId;
-      this.expenseToCreate.expenseDate = new Date(
-        Date.parse(this.dateFormControl.value)
-      );
+
+      this.expenseToCreate.expenseDate =
+        this.dateUtilsService.formatDateWithOffsetToUtc(
+          new Date(Date.parse(this.dateFormControl.value))
+        );
+
       this.expenseService.addExpense(this.expenseToCreate).subscribe({
         next: (createdExpense) =>
           this.insertedExpenseEvent.emit(createdExpense),

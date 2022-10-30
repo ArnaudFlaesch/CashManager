@@ -32,6 +32,7 @@ import { ExpenseListByMonthComponent } from './expense-list-by-month/expense-lis
 import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-expense-by-month.component';
 import { LabelListComponent } from './label-list/label-list.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
+import { DateUtilsService } from './utils/date.utils.service';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,7 @@ import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.comp
     ConfigService,
     ErrorHandlerService,
     AuthGuard,
-    MatDatepickerModule,
+    DateUtilsService,
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }
   ],
   bootstrap: [AppComponent]

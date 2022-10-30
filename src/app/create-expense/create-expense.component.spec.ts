@@ -18,6 +18,7 @@ import { CreateExpenseComponent } from './create-expense.component';
 import { InsertExpensePayload } from '../model/payloads/InsertExpensePayload';
 import { environment } from '../../environments/environment';
 import { Label } from '../model/Label';
+import { DateUtilsService } from '../utils/date.utils.service';
 
 describe('CreateExpenseComponent', () => {
   let spectator: Spectator<CreateExpenseComponent>;
@@ -30,7 +31,7 @@ describe('CreateExpenseComponent', () => {
   const createComponent = createComponentFactory({
     component: CreateExpenseComponent,
     imports: [MatSnackBarModule, MatAutocompleteModule],
-    providers: [AuthService, ErrorHandlerService],
+    providers: [AuthService, ErrorHandlerService, DateUtilsService],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createLabelHttp = createHttpFactory(LabelService);
@@ -55,7 +56,7 @@ describe('CreateExpenseComponent', () => {
       HttpMethod.POST
     );
 
-    const expectedAddedLabel = new Label(1, newLabelName);
+    const expectedAddedLabel = new Label(1, newLabelName, 1);
 
     addLabelRequest.flush(expectedAddedLabel);
 
@@ -68,13 +69,14 @@ describe('CreateExpenseComponent', () => {
         1,
         spectator.component.expenseToCreate.amount,
         spectator.component.expenseToCreate.expenseDate,
-        expectedAddedLabel
+        expectedAddedLabel._id
       )
     );
   });
 
   it('Should display the label', () => {
-    const label = new Label(1, 'Dépense 1');
+    const label = new Label(1, 'Dépense 1', 1);
     expect(spectator.component.displayLabel(label)).toEqual('Dépense 1');
+    expect(label.userId).toEqual(1);
   });
 });
