@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: |
           npm run build -- --base-href=https://arnaudflaesch.github.io/CashManager/
-          cp dist/index.html dist/404.html
+          cp public/index.html public/404.html
 
       - name: Test
         run: npm run test
