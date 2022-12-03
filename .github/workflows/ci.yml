@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 16
+      - name: Use Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 18.12.1
+          node-version: 18.x
 
       - uses: actions/cache@v3
         with:
@@ -46,12 +46,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Pull database image
+      - name: Start database image
         run: |
-          docker pull postgres:13.2-alpine
           docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash postgres:13.2-alpine
 
-      - name: Pull backend image
+      - name: Start backend image
         run: |
           if [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${GITHUB_REF#refs/*/} | wc -l)" == 1 && ${GITHUB_REF#refs/*/} != 'master' ]]; then
             docker run -p 8080:8080 -d --network="host" -e OPENWEATHERMAP_KEY=test -e STRAVA_CLIENT_ID=test -e STRAVA_CLIENT_SECRET=test -e STEAM_API_KEY=test -e AIRPARIF_API_TOKEN=test ghcr.io/arnaudflaesch/dash-webservices:${GITHUB_REF#refs/*/}
