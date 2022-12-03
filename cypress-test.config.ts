@@ -23,8 +23,8 @@ export default defineConfig({
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
       return require('./cypress/plugins/index.ts')(on, config);
-    }, // FIXME Remplacer par localhost
-    baseUrl: 'http://127.0.0.1:4200/',
+    },
+    baseUrl: 'http://localhost:4200/',
     specPattern: 'cypress/e2e/**/**/*.spec.ts'
   }
 });
