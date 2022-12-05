@@ -4,5 +4,6 @@ declare namespace Cypress {
   interface Chainable {
     loginAsAdmin(): Chainable<Response>;
     loginAsUser(): Chainable<Response>;
+    shouldDisplayErrorMessage(errorMessage: string): Chainable;
   }
 }
