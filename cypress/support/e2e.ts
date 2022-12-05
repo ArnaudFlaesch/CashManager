@@ -41,4 +41,20 @@ Cypress.on('test:after:run', (test, runnable) => {
 
     addContext({ test }, imageUrl);
   }
+
+  Cypress.Commands.add(
+    'shouldDisplayErrorMessage',
+    (errorMessage: string): Cypress.Chainable => {
+      return shouldDisplayErrorMessage(errorMessage);
+    }
+  );
+
+  function shouldDisplayErrorMessage(errorMessage: string): Cypress.Chainable {
+    return cy
+      .get('.mat-mdc-simple-snack-bar')
+      .invoke('text')
+      .then((text) => {
+        expect(text.trim()).equal(errorMessage);
+      });
+  }
 });

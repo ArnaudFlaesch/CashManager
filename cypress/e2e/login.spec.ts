@@ -18,8 +18,7 @@ describe('Login tests', () => {
       .wait('@login')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(401);
-        cy.get('.mat-simple-snackbar').should(
-          'have.text',
+        cy.shouldDisplayErrorMessage(
           "Erreur lors de la connexion de l'utilisateur."
         );
       });
