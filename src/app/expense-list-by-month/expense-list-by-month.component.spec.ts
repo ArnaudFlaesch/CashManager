@@ -53,16 +53,16 @@ describe('ExpenseListByMonthComponent', () => {
   });
 
   it('Should display two labels and three expenses, then change the month', () => {
-    const aprilMonth = new Date(2022, 3, 1);
+    const aprilMonth = new Date(2023, 3, 1);
     const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
     const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
 
     spectator.component.currentSelectedMonth = aprilMonth;
 
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, new Date(2022, 3, 1), labelData[0].id),
-      new Expense(2, 130, new Date(2022, 3, 1), labelData[1].id),
-      new Expense(3, 4, new Date(2022, 3, 1), labelData[1].id)
+      new Expense(1, 323, new Date(2023, 3, 1), labelData[0].id),
+      new Expense(2, 130, new Date(2023, 3, 1), labelData[1].id),
+      new Expense(3, 4, new Date(2023, 3, 1), labelData[1].id)
     ];
 
     const getLabelsRequest = labelService.expectOne(
@@ -85,7 +85,7 @@ describe('ExpenseListByMonthComponent', () => {
       spectator.component.pastMonths[0]
     );
 
-    const januaryMonth = new Date(2022, 0, 1);
+    const januaryMonth = new Date(2023, 0, 1);
     const startIntervalDateJanuary = format(
       startOfMonth(januaryMonth),
       dateFormat
@@ -100,7 +100,7 @@ describe('ExpenseListByMonthComponent', () => {
   });
 
   it('Should add an expense and a new label, and delete the label', () => {
-    const aprilMonth = new Date(2022, 3, 1);
+    const aprilMonth = new Date(2023, 3, 1);
     const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
     const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
     spectator.component.currentSelectedMonth = aprilMonth;
