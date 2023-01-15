@@ -7,7 +7,12 @@ import {
   ChartConfiguration,
   ChartEvent
 } from 'chart.js';
-import { startOfMonth, endOfMonth, format } from 'date-fns';
+import {
+  startOfMonth,
+  endOfMonth,
+  format,
+  eachMonthOfInterval
+} from 'date-fns';
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
@@ -41,10 +46,13 @@ export class ExpenseListByMonthComponent {
     }
   };
 
+  private FIRST_MONTH_OF_EXPENSES = new Date(2021, 9, 1);
+
   private EXPENSES_CHART_LABEL = 'Dépenses';
-  public pastMonths: Date[] = Array.from(
-    Array(new Date().getMonth() + 1).keys()
-  ).map((month) => new Date(new Date().getFullYear(), month, 1));
+  public pastMonths: Date[] = eachMonthOfInterval({
+    start: this.FIRST_MONTH_OF_EXPENSES,
+    end: new Date()
+  });
 
   constructor(
     public dialog: MatDialog,
