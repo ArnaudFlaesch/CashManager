@@ -53,16 +53,16 @@ describe('ExpenseListByMonthComponent', () => {
   });
 
   it('Should display two labels and three expenses, then change the month', () => {
-    const aprilMonth = new Date(2023, 3, 1);
-    const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
-    const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
+    const octoberMonth = new Date(2021, 9, 1);
+    const startIntervalDate = format(startOfMonth(octoberMonth), dateFormat);
+    const endIntervalDate = format(endOfMonth(octoberMonth), dateFormat);
 
-    spectator.component.currentSelectedMonth = aprilMonth;
+    spectator.component.currentSelectedMonth = octoberMonth;
 
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, new Date(2023, 3, 1), labelData[0].id),
-      new Expense(2, 130, new Date(2023, 3, 1), labelData[1].id),
-      new Expense(3, 4, new Date(2023, 3, 1), labelData[1].id)
+      new Expense(1, 323, octoberMonth, labelData[0].id),
+      new Expense(2, 130, octoberMonth, labelData[1].id),
+      new Expense(3, 4, octoberMonth, labelData[1].id)
     ];
 
     const getLabelsRequest = labelService.expectOne(
@@ -82,7 +82,7 @@ describe('ExpenseListByMonthComponent', () => {
     expect(spectator.component.getTotalForMonth()).toEqual(457);
 
     spectator.component.handleSelectExpensesForMonth(
-      spectator.component.pastMonths[0]
+      spectator.component.pastMonths[15]
     );
 
     const januaryMonth = new Date(2023, 0, 1);
