@@ -62,7 +62,7 @@
     "eslint": "8.32.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-cypress": "2.12.1",
-    "gh-pages": "4.0.0",
+    "gh-pages": "5.0.0",
     "jasmine-core": "4.5.0",
     "jest-preset-angular": "12.2.5",
     "mochawesome": "7.1.3",
