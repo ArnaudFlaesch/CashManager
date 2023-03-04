@@ -1,0 +1,40 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { Label } from 'src/app/model/Label';
+import { ErrorHandlerService } from 'src/app/services/error.handler.service';
+import { LabelService } from 'src/app/services/label.service/label.service';
+import { ExpenseViewEnum } from '../../enums/ExpenseViewEnum';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
+export class HomeComponent {
+  public expenseView = ExpenseViewEnum.EXPENSES_BY_MONTH;
+  public labels: Label[] = [];
+
+  constructor(
+    private labelService: LabelService,
+    private errorHandlerService: ErrorHandlerService
+  ) {
+    this.initDashboard();
+  }
+
+  private initDashboard() {
+    this.getLabels();
+  }
+
+  private getLabels() {
+    this.labelService.getLabels().subscribe({
+      next: (labels) => {
+        this.labels = labels;
+      },
+      error: (error: HttpErrorResponse) =>
+        this.errorHandlerService.handleError(
+          error.message,
+          'this.ERROR_MESSAGE_INIT_DASHBOARD'
+        )
+    });
+  }
+}

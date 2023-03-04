@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   ChartData,
@@ -20,6 +20,8 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { LabelService } from '../services/label.service/label.service';
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-expense-list-by-month',
@@ -27,9 +29,11 @@ import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
   styleUrls: ['./expense-list-by-month.component.scss']
 })
 export class ExpenseListByMonthComponent {
+  @Input()
   public labels: Label[] = [];
   public expenses: Expense[] = [];
   public monthsWithExpenses: string[] = [];
+  public selectedMonthFormControl = new FormControl(startOfMonth(new Date()));
 
   public currentSelectedMonth = startOfMonth(new Date());
 
@@ -63,36 +67,15 @@ export class ExpenseListByMonthComponent {
     this.initDashboard();
   }
 
-  private initDashboard() {
-    this.getLabels();
-  }
-
-  private getLabels() {
-    this.labelService.getLabels().subscribe({
-      next: (labels) => {
-        this.labels = labels;
-        const startIntervalDate = this.currentSelectedMonth;
-        const endIntervalDate = endOfMonth(this.currentSelectedMonth);
-        this.getExpenses(startIntervalDate, endIntervalDate);
-        // Get total expenses, et switch avec la liste des expense par mois
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          'this.ERROR_MESSAGE_INIT_DASHBOARD'
-        )
-    });
+  private initDashboard(): void {
+    const startIntervalDate = this.currentSelectedMonth;
+    const endIntervalDate = endOfMonth(this.currentSelectedMonth);
+    this.getExpenses(startIntervalDate, endIntervalDate);
+    // Get total expenses, et switch avec la liste des expense par mois
   }
 
   public handleLabelCreation(newLabel: Label) {
     this.labels = [...this.labels, newLabel];
-  }
-
-  public handleLabelDeletion(labelId: number) {
-    this.expenses = this.expenses.filter(
-      (expense) => expense.labelId !== labelId
-    );
-    this.refreshExpensesChart();
   }
 
   public deleteLabel(labelId: number): void {
@@ -203,14 +186,6 @@ export class ExpenseListByMonthComponent {
       .map((expense) => expense.amount)
       .reduce((total, amount) => total + amount);
 
-  public formatMonthToDisplay = (monthDate: Date) =>
-    format(monthDate, 'MMMM yyyy');
-
-  public getMonthButtonColor = (monthDate: Date) =>
-    this.currentSelectedMonth.getTime() === startOfMonth(monthDate).getTime()
-      ? 'primary'
-      : '';
-
   public handleChartClickedEvent({
     event,
     active
@@ -219,5 +194,19 @@ export class ExpenseListByMonthComponent {
     active?: Record<string, unknown>[];
   }): void {
     console.log(event, active);
+  }
+
+  public setMonthAndYear(
+    normalizedMonthAndYear: Date,
+    datepicker: MatDatepicker<Date>
+  ): void {
+    const selectedMonth = new Date(
+      normalizedMonthAndYear.getFullYear(),
+      normalizedMonthAndYear.getMonth(),
+      1
+    );
+    this.selectedMonthFormControl.setValue(selectedMonth);
+    this.handleSelectExpensesForMonth(selectedMonth);
+    datepicker.close();
   }
 }

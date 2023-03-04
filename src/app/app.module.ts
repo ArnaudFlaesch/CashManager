@@ -11,6 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -21,8 +22,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateExpenseComponent } from './create-expense/create-expense.component';
 import { AuthGuard } from './guards/auth.guard';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
 import { AuthService } from './services/auth.service/auth.service';
 import { ErrorHandlerService } from './services/error.handler.service';
 import { ExpenseService } from './services/expense.service/expense.service';
@@ -33,12 +34,14 @@ import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-exp
 import { LabelListComponent } from './label-list/label-list.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
 import { DateUtilsService } from './utils/date.utils.service';
+import { ErrorComponent } from './pages/error/error.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
+    ErrorComponent,
     ImportConfigModalComponent,
     CreateExpenseComponent,
     HeaderComponent,
@@ -62,6 +65,7 @@ import { DateUtilsService } from './utils/date.utils.service';
     MatNativeDateModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    MatTabsModule,
     MatSnackBarModule,
     HttpClientModule,
     NgChartsModule,

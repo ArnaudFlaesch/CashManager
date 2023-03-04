@@ -7,9 +7,12 @@
     "at-rule-no-unknown": [
       true,
       {
-        "ignoreAtRules": ["tailwind"]
+        "ignoreAtRules": [
+          "tailwind"
+        ]
       }
     ],
+    "no-empty-source": null,
     "selector-id-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
     "selector-class-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
     "indentation": 2

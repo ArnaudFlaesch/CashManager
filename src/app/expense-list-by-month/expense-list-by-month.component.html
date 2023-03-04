@@ -1,12 +1,11 @@
-<app-label-list (labelDeletedEvent)="handleLabelDeletion($event)" [labels]="this.labels"></app-label-list>
-
-<div class="flex flex-row">
-  <div class="flex flex-row" *ngFor="let monthDate of pastMonths">
-    <button mat-raised-button [color]="getMonthButtonColor(monthDate)"
-      (click)="this.handleSelectExpensesForMonth(monthDate)">
-      {{ formatMonthToDisplay(monthDate) }}
-    </button>
-  </div>
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Sélectionnez un mois</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker startView="multi-year" (monthSelected)="setMonthAndYear($event, picker)"
+      [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
+  </mat-form-field>
 </div>
 
 <div class="flex flex-row">

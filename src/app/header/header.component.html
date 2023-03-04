@@ -1,20 +1,12 @@
-<div class="flex flex-row flex-wrap">
-  <button
-    mat-icon-button
-    id="downloadConfigButton"
-    (click)="this.downloadConfig()"
-  >
-    <mat-icon>download</mat-icon>
+<div id="action-bar-buttons">
+  <button (click)="this.downloadConfig()" mat-mini-fab id="downloadConfigButton" color="primary">
+    <mat-icon title="Download current user data and config" aria-hidden="false">download
+    </mat-icon>
   </button>
-  <button
-    mat-icon-button
-    id="openImportConfigModal"
-    (click)="this.openImportConfigModal()"
-  >
-    <mat-icon>upload</mat-icon>
+  <button (click)="this.openImportConfigModal()" mat-mini-fab id="openImportConfigModal" color="primary">
+    <mat-icon title="Upload user data and config" aria-hidden="false">upload</mat-icon>
   </button>
-
-  <button id="logoutButton" mat-raised-button (click)="logout()">
-    Déconnexion
+  <button (click)="logout()" mat-mini-fab id="logoutButton" color="warn">
+    <mat-icon title="Logout">logout</mat-icon>
   </button>
 </div>
