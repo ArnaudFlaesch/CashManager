@@ -53,24 +53,18 @@ describe('ExpenseListByMonthComponent', () => {
   });
 
   it('Should display two labels and three expenses, then change the month', () => {
-    const octoberMonth = new Date(2021, 9, 1);
-    const startIntervalDate = format(startOfMonth(octoberMonth), dateFormat);
-    const endIntervalDate = format(endOfMonth(octoberMonth), dateFormat);
+    const currentMonth = new Date();
+    const startIntervalDate = format(startOfMonth(currentMonth), dateFormat);
+    const endIntervalDate = format(endOfMonth(currentMonth), dateFormat);
 
-    spectator.component.currentSelectedMonth = octoberMonth;
+    spectator.component.currentSelectedMonth = currentMonth;
 
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, octoberMonth, labelData[0].id),
-      new Expense(2, 130, octoberMonth, labelData[1].id),
-      new Expense(3, 4, octoberMonth, labelData[1].id)
+      new Expense(1, 323, currentMonth, labelData[0].id),
+      new Expense(2, 130, currentMonth, labelData[1].id),
+      new Expense(3, 4, currentMonth, labelData[1].id)
     ];
 
-    const getLabelsRequest = labelService.expectOne(
-      environment.backend_url + labelPath,
-      HttpMethod.GET
-    );
-
-    getLabelsRequest.flush(labelData);
     const getExpensesRequest = expenseService.expectOne(
       `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
       HttpMethod.GET
@@ -100,16 +94,10 @@ describe('ExpenseListByMonthComponent', () => {
   });
 
   it('Should add an expense and a new label, and delete the label', () => {
-    const aprilMonth = new Date(2023, 3, 1);
-    const startIntervalDate = format(startOfMonth(aprilMonth), dateFormat);
-    const endIntervalDate = format(endOfMonth(aprilMonth), dateFormat);
-    spectator.component.currentSelectedMonth = aprilMonth;
-
-    const getLabelsRequest = labelService.expectOne(
-      environment.backend_url + labelPath,
-      HttpMethod.GET
-    );
-    getLabelsRequest.flush([]);
+    const currentMonth = new Date();
+    const startIntervalDate = format(startOfMonth(currentMonth), dateFormat);
+    const endIntervalDate = format(endOfMonth(currentMonth), dateFormat);
+    spectator.component.currentSelectedMonth = currentMonth;
 
     const getExpensesRequest = expenseService.expectOne(
       `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,

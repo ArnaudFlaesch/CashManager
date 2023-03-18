@@ -132,10 +132,14 @@ export class ExpenseListByMonthComponent {
     this.expensesByLabelChart = {
       labels: [this.EXPENSES_CHART_LABEL],
       datasets: Object.keys(expensesByLabel).map((labelId) => {
+        const labelName = this.labels.filter(
+          (label) => label.id.toString() === labelId
+        )[0];
+        if (!labelId || labelName === undefined) {
+          return { label: '', data: [] };
+        }
         return {
-          label: this.labels.filter(
-            (label) => label.id.toString() === labelId
-          )[0].label,
+          label: labelName.label,
           data: [
             expensesByLabel[labelId].reduce((total, amount) => total + amount)
           ]

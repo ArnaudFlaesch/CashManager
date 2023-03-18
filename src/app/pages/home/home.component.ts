@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Label } from 'src/app/model/Label';
-import { ErrorHandlerService } from 'src/app/services/error.handler.service';
-import { LabelService } from 'src/app/services/label.service/label.service';
+import { Label } from '../../model/Label';
+import { ErrorHandlerService } from '../../services/error.handler.service';
+import { LabelService } from '../../services/label.service/label.service';
 import { ExpenseViewEnum } from '../../enums/ExpenseViewEnum';
 import { Component } from '@angular/core';
 
