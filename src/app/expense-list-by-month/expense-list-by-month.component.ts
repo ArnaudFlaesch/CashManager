@@ -7,12 +7,7 @@ import {
   ChartConfiguration,
   ChartEvent
 } from 'chart.js';
-import {
-  startOfMonth,
-  endOfMonth,
-  format,
-  eachMonthOfInterval
-} from 'date-fns';
+import { startOfMonth, endOfMonth, eachMonthOfInterval } from 'date-fns';
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';

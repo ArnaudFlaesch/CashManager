@@ -1,5 +1,3 @@
-import { Label } from './Label';
-
 export class Expense {
   private _id = 0;
   private _amount = 0;
