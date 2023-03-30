@@ -8,7 +8,7 @@ describe('Home page tests', () => {
   it('Should display the labels', () => {
     cy.get('#mat-tab-label-0-2')
       .click()
-      .get('.label-name')
+      cy.get('.label-name')
       .should('have.length', 2)
       .eq(0)
       .should('have.text', 'Courses')
