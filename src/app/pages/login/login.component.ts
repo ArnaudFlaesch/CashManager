@@ -34,7 +34,7 @@ export class LoginComponent {
         error: (error: HttpErrorResponse) => {
           this.isLoading = false;
           this.errorHandlerService.handleError(
-            error.message,
+            error,
             this.ERROR_AUTHENTICATING_USER
           );
         },

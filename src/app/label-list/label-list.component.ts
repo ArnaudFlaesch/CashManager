@@ -15,6 +15,8 @@ export class LabelListComponent {
   @Input() labels: Label[] = [];
   @Output() labelDeletedEvent = new EventEmitter<number>();
 
+  private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
+
   constructor(
     private labelService: LabelService,
     private errorHandlerService: ErrorHandlerService,
@@ -45,10 +47,7 @@ export class LabelListComponent {
         this.labelDeletedEvent.emit(labelId);
       },
       error: (error) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          'erreur suppression label'
-        )
+        this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
     });
   }
 }

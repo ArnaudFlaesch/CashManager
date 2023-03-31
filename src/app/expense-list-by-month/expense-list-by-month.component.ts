@@ -47,6 +47,10 @@ export class ExpenseListByMonthComponent {
 
   private FIRST_MONTH_OF_EXPENSES = new Date(2021, 9, 1);
 
+  private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
+  private ERROR_GETTING_EXPENSES =
+    'Erreur lors de la récupération des dépenses.';
+
   private EXPENSES_CHART_LABEL = 'Dépenses';
   public pastMonths: Date[] = eachMonthOfInterval({
     start: this.FIRST_MONTH_OF_EXPENSES,
@@ -82,11 +86,8 @@ export class ExpenseListByMonthComponent {
         );
         this.refreshExpensesChart();
       },
-      error: (error) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          'erreur suppression label'
-        )
+      error: (error: HttpErrorResponse) =>
+        this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
     });
   }
 
@@ -118,7 +119,10 @@ export class ExpenseListByMonthComponent {
           this.refreshExpensesChart();
         },
         error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(error.message, 'this.epenses')
+          this.errorHandlerService.handleError(
+            error,
+            this.ERROR_GETTING_EXPENSES
+          )
       });
   }
 

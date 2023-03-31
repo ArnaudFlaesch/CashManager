@@ -14,6 +14,8 @@ export class HomeComponent {
   public expenseView = ExpenseViewEnum.EXPENSES_BY_MONTH;
   public labels: Label[] = [];
 
+  private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
+
   constructor(
     private labelService: LabelService,
     private errorHandlerService: ErrorHandlerService
@@ -31,10 +33,7 @@ export class HomeComponent {
         this.labels = labels;
       },
       error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          'this.ERROR_MESSAGE_INIT_DASHBOARD'
-        )
+        this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)
     });
   }
 }

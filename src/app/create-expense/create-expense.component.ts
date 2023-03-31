@@ -29,6 +29,8 @@ export class CreateExpenseComponent {
   private ERROR_CREATING_EXPENSE_MESSAGE =
     "Erreur lors de l'ajout de la dépense.";
 
+  private ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
+
   constructor(
     private expenseService: ExpenseService,
     private labelService: LabelService,
@@ -56,7 +58,10 @@ export class CreateExpenseComponent {
           this.insertExpense(insertedLabel.id);
         },
         error: (error) =>
-          this.errorHandlerService.handleError(error.message, 'error new label')
+          this.errorHandlerService.handleError(
+            error.message,
+            this.ERROR_CREATING_LABEL_MESSAGE
+          )
       });
     } else if (this.labelControl.value) {
       this.insertExpense(this.labelControl.value.id);
@@ -77,7 +82,7 @@ export class CreateExpenseComponent {
           this.insertedExpenseEvent.emit(createdExpense),
         error: (error) =>
           this.errorHandlerService.handleError(
-            error.message,
+            error,
             this.ERROR_CREATING_EXPENSE_MESSAGE
           )
       });

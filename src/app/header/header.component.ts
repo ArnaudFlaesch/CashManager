@@ -37,7 +37,7 @@ export class HeaderComponent {
       },
       error: (error: HttpErrorResponse) =>
         this.errorHandlerService.handleError(
-          error.message,
+          error,
           this.ERROR_EXPORT_CONFIGURATION
         )
     });

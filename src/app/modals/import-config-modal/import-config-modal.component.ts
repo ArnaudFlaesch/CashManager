@@ -31,7 +31,7 @@ export class ImportConfigModalComponent {
       this.configService.importConfig(this.fileToUpload).subscribe({
         error: (error: HttpErrorResponse) =>
           this.errorHandlerService.handleError(
-            error.message,
+            error,
             this.ERROR_IMPORT_CONFIGURATION
           ),
         complete: () => {
