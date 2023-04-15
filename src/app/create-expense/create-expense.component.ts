@@ -15,15 +15,16 @@ import { LabelService } from './../services/label.service/label.service';
   styleUrls: ['./create-expense.component.scss']
 })
 export class CreateExpenseComponent {
-  public expenseToCreate: InsertExpensePayload;
+  @Input()
+  public labels: Label[] = [];
+
   @Output() insertedExpenseEvent = new EventEmitter<Expense>();
   @Output() insertedLabelEvent = new EventEmitter<Label>();
 
   labelControl = new FormControl<Label | string>('');
   dateFormControl = new FormControl('');
 
-  @Input()
-  public labels: Label[] = [];
+  public expenseToCreate: InsertExpensePayload;
   public filteredOptions: Observable<Label[]> = of([]);
 
   private ERROR_CREATING_EXPENSE_MESSAGE =
@@ -40,7 +41,7 @@ export class CreateExpenseComponent {
     this.expenseToCreate = new InsertExpensePayload();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filteredOptions = this.labelControl.valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : '')),
@@ -48,7 +49,7 @@ export class CreateExpenseComponent {
     );
   }
 
-  public handleCreateExpense() {
+  public handleCreateExpense(): void {
     if (typeof this.labelControl.value == 'string') {
       this.labelService.addLabel(this.labelControl.value).subscribe({
         next: (insertedLabel) => {
@@ -66,6 +67,10 @@ export class CreateExpenseComponent {
     } else if (this.labelControl.value) {
       this.insertExpense(this.labelControl.value.id);
     }
+  }
+
+  public displayLabel(label: Label): string {
+    return label && label.label ? label.label : '';
   }
 
   private insertExpense(labelId: number) {
@@ -88,9 +93,6 @@ export class CreateExpenseComponent {
       });
     }
   }
-
-  public displayLabel = (label: Label): string =>
-    label && label.label ? label.label : '';
 
   private filterLabels(value: string): Label[] {
     const filterValue = value.toLowerCase();

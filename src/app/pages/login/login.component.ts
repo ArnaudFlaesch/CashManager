@@ -23,7 +23,7 @@ export class LoginComponent {
     private router: Router
   ) {}
 
-  public handleLogin() {
+  public handleLogin(): void {
     if (this.inputUsername && this.inputPassword) {
       this.isLoading = true;
       this.authService.login(this.inputUsername, this.inputPassword).subscribe({

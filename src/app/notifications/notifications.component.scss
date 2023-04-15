@@ -1,0 +1,22 @@
+.notification-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+
+  &.unread-notification {
+    .mark-action-as-read-button,
+    .notification-date,
+    .mark-notification-as-read-button {
+      margin-left: 0.5rem;
+    }
+
+    &.info {
+      background-color: lightblue;
+    }
+
+    &.warn {
+      background-color: orange;
+    }
+  }
+}

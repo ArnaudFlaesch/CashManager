@@ -20,7 +20,7 @@ export class ImportConfigModalComponent {
     public dialogRef: MatDialogRef<ImportConfigModalComponent>
   ) {}
 
-  public selectFile(event: any) {
+  public selectFile(event: any): void {
     if (event.target.files && event.target.files[0]) {
       this.fileToUpload = event.target.files[0];
     }

@@ -75,16 +75,14 @@ describe('ExpenseListByMonthComponent', () => {
     expect(spectator.component.expenses.length).toEqual(3);
     expect(spectator.component.getTotalForMonth()).toEqual(457);
 
-    spectator.component.handleSelectExpensesForMonth(
-      spectator.component.pastMonths[15]
-    );
-
     const januaryMonth = new Date(2023, 0, 1);
     const startIntervalDateJanuary = format(
       startOfMonth(januaryMonth),
       dateFormat
     );
     const endIntervalDateJanuary = format(endOfMonth(januaryMonth), dateFormat);
+    spectator.component.handleSelectExpensesForMonth(januaryMonth);
+
     const getJanuaryExpensesRequest = expenseService.expectOne(
       `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDateJanuary}&endIntervalDate=${endIntervalDateJanuary}`,
       HttpMethod.GET

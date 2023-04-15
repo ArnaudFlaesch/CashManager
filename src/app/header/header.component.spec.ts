@@ -14,6 +14,8 @@ import { ConfigService } from '../services/config.service/config.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
 
 import { HeaderComponent } from './header.component';
+import { ThemeService } from '../services/theme.service/theme.service';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('HeaderComponent', () => {
   let spectator: Spectator<HeaderComponent>;
@@ -26,9 +28,14 @@ describe('HeaderComponent', () => {
       HttpClientTestingModule,
       RouterTestingModule,
       MatSnackBarModule,
+      MatMenuModule,
       MatDialogModule
     ],
-    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }],
+    providers: [
+      ErrorHandlerService,
+      ThemeService,
+      { provide: MatDialogRef, useValue: {} }
+    ],
     schemas: [NO_ERRORS_SCHEMA]
   });
 

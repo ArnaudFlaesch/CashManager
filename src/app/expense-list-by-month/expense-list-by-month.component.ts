@@ -1,13 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  ChartData,
-  ChartTypeRegistry,
   ChartConfiguration,
-  ChartEvent
+  ChartData,
+  ChartEvent,
+  ChartTypeRegistry
 } from 'chart.js';
-import { startOfMonth, endOfMonth, eachMonthOfInterval } from 'date-fns';
+import { endOfMonth, startOfMonth } from 'date-fns';
+
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
@@ -15,8 +18,6 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { LabelService } from '../services/label.service/label.service';
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
-import { MatDatepicker } from '@angular/material/datepicker';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-expense-list-by-month',
@@ -45,17 +46,11 @@ export class ExpenseListByMonthComponent {
     }
   };
 
-  private FIRST_MONTH_OF_EXPENSES = new Date(2021, 9, 1);
-
   private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
   private ERROR_GETTING_EXPENSES =
     'Erreur lors de la récupération des dépenses.';
 
   private EXPENSES_CHART_LABEL = 'Dépenses';
-  public pastMonths: Date[] = eachMonthOfInterval({
-    start: this.FIRST_MONTH_OF_EXPENSES,
-    end: new Date()
-  });
 
   constructor(
     public dialog: MatDialog,
@@ -63,17 +58,13 @@ export class ExpenseListByMonthComponent {
     private expenseService: ExpenseService,
     private errorHandlerService: ErrorHandlerService
   ) {
-    this.initDashboard();
-  }
-
-  private initDashboard(): void {
     const startIntervalDate = this.currentSelectedMonth;
     const endIntervalDate = endOfMonth(this.currentSelectedMonth);
     this.getExpenses(startIntervalDate, endIntervalDate);
     // Get total expenses, et switch avec la liste des expense par mois
   }
 
-  public handleLabelCreation(newLabel: Label) {
+  public handleLabelCreation(newLabel: Label): void {
     this.labels = [...this.labels, newLabel];
   }
 
@@ -91,11 +82,78 @@ export class ExpenseListByMonthComponent {
     });
   }
 
-  public handleSelectExpensesForMonth(month: Date) {
+  public handleSelectExpensesForMonth(month: Date): void {
     if (this.currentSelectedMonth.getTime() !== startOfMonth(month).getTime()) {
       this.currentSelectedMonth = startOfMonth(month);
       this.getExpenses(this.currentSelectedMonth, endOfMonth(month));
     }
+  }
+
+  public handleExpenseCreation(newExpense: Expense): void {
+    this.expenses = [...this.expenses, newExpense];
+    this.refreshExpensesChart();
+  }
+
+  public openDeleteExpenseModal(expenseId: number): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      height: DIALOG_SMALL_HEIGHT,
+      width: DIALOG_SMALL_WIDTH,
+      data: {
+        title: "Suppression d'une dépense",
+        message: 'Êtes-vous sûr de vouloir supprimer cette dépense ?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'validate') {
+        this.deleteExpense(expenseId);
+      }
+    });
+  }
+
+  public getLabelFromId(labelId: number): Label | undefined {
+    return this.labels.find((label) => label.id === labelId);
+  }
+
+  public getTotalForMonth(): number {
+    return this.expenses
+      .map((expense) => expense.amount)
+      .reduce((total, amount) => total + amount);
+  }
+
+  public handleChartClickedEvent({
+    event,
+    active
+  }: {
+    event?: ChartEvent;
+    active?: Record<string, unknown>[];
+  }): void {
+    console.log(event, active);
+  }
+
+  public setMonthAndYear(
+    normalizedMonthAndYear: Date,
+    datepicker: MatDatepicker<Date>
+  ): void {
+    const selectedMonth = new Date(
+      normalizedMonthAndYear.getFullYear(),
+      normalizedMonthAndYear.getMonth(),
+      1
+    );
+    this.selectedMonthFormControl.setValue(selectedMonth);
+    this.handleSelectExpensesForMonth(selectedMonth);
+    datepicker.close();
+  }
+
+  private deleteExpense(expenseId: number) {
+    this.expenseService.deleteExpense(expenseId).subscribe({
+      next: () => {
+        this.expenses = this.expenses.filter(
+          (expense) => expense.id !== expenseId
+        );
+        this.refreshExpensesChart();
+      }
+    });
   }
 
   private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
@@ -145,71 +203,5 @@ export class ExpenseListByMonthComponent {
         };
       })
     };
-  }
-
-  public handleExpenseCreation(newExpense: Expense) {
-    this.expenses = [...this.expenses, newExpense];
-    this.refreshExpensesChart();
-  }
-
-  public openDeleteExpenseModal(expenseId: number) {
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      height: DIALOG_SMALL_HEIGHT,
-      width: DIALOG_SMALL_WIDTH,
-      data: {
-        title: "Suppression d'une dépense",
-        message: 'Êtes-vous sûr de vouloir supprimer cette dépense ?'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'validate') {
-        this.deleteExpense(expenseId);
-      }
-    });
-  }
-
-  private deleteExpense(expenseId: number) {
-    this.expenseService.deleteExpense(expenseId).subscribe({
-      next: () => {
-        this.expenses = this.expenses.filter(
-          (expense) => expense.id !== expenseId
-        );
-        this.refreshExpensesChart();
-      }
-    });
-  }
-
-  public getLabelFromId(labelId: number): Label | undefined {
-    return this.labels.find((label) => label.id === labelId);
-  }
-
-  public getTotalForMonth = () =>
-    this.expenses
-      .map((expense) => expense.amount)
-      .reduce((total, amount) => total + amount);
-
-  public handleChartClickedEvent({
-    event,
-    active
-  }: {
-    event?: ChartEvent;
-    active?: Record<string, unknown>[];
-  }): void {
-    console.log(event, active);
-  }
-
-  public setMonthAndYear(
-    normalizedMonthAndYear: Date,
-    datepicker: MatDatepicker<Date>
-  ): void {
-    const selectedMonth = new Date(
-      normalizedMonthAndYear.getFullYear(),
-      normalizedMonthAndYear.getMonth(),
-      1
-    );
-    this.selectedMonthFormControl.setValue(selectedMonth);
-    this.handleSelectExpensesForMonth(selectedMonth);
-    datepicker.close();
   }
 }

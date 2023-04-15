@@ -20,10 +20,6 @@ export class HomeComponent {
     private labelService: LabelService,
     private errorHandlerService: ErrorHandlerService
   ) {
-    this.initDashboard();
-  }
-
-  private initDashboard() {
     this.getLabels();
   }
 

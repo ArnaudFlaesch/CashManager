@@ -1,0 +1,21 @@
+<button id="display-notifications-button" color="primary" mat-mini-fab [matMenuTriggerFor]="notificationsMenu">
+  <mat-icon [matBadge]="unreadNotificationsForBadge" title="Notifications">notifications</mat-icon>
+</button>
+
+
+<mat-menu #notificationsMenu="matMenu">
+  <button id="mark-all-notifications-as-read-button" *ngIf="this.unreadNotificationsForBadge !== ''"
+    (click)="markAllNotificationsAsRead($event)" mat-icon-button><mat-icon>check</mat-icon></button>
+
+  <div class="notification-container" [ngClass]="{'unread-notification' : !notification.isRead, 'info': notification.notificationType.toString() === notificationTypeEnum.INFO,
+     'warn': notification.notificationType.toString() === notificationTypeEnum.WARN}"
+    *ngFor="let notification of this.notificationsToDisplay">
+    <span>{{notification.message}}</span>
+    <span [matTooltip]="notification.notificationDate | dateFormat:'short'"
+      class="notification-date">{{notification.notificationDateToDisplay}}</span>
+    <span><mat-icon>{{notification.notificationTypeToDisplay}}</mat-icon></span>
+    <span *ngIf="!notification.isRead"><button class="mark-notification-as-read-button"
+        (click)="markNotificationAsRead(notification.id, $event)"
+        mat-icon-button><mat-icon>check</mat-icon></button></span>
+  </div>
+</mat-menu>

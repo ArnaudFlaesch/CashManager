@@ -1,12 +1,50 @@
 <div id="action-bar-buttons">
-  <button (click)="this.downloadConfig()" mat-mini-fab id="downloadConfigButton" color="primary">
-    <mat-icon title="Download current user data and config" aria-hidden="false">download
-    </mat-icon>
+  <app-notifications *ngIf="this.canUserSeeNotifications()"></app-notifications>
+
+  <button id="cashmanager-menu" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu" color="primary">
+    <mat-icon>account_circle</mat-icon>
   </button>
-  <button (click)="this.openImportConfigModal()" mat-mini-fab id="openImportConfigModal" color="primary">
-    <mat-icon title="Upload user data and config" aria-hidden="false">upload</mat-icon>
-  </button>
-  <button (click)="logout()" mat-mini-fab id="logoutButton" color="warn">
-    <mat-icon title="Logout">logout</mat-icon>
-  </button>
+
+  <mat-menu #cashManagerMenu="matMenu">
+    <div mat-menu-item>
+      <div id="toggle-mode-container">
+        <mat-icon>light_mode</mat-icon>
+        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formControl]="toggleControl">
+        </mat-slide-toggle>
+        <mat-icon>dark_mode</mat-icon>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="this.downloadConfig()" id="downloadConfigButton">
+      <mat-icon>download</mat-icon>
+      <span>Télécharger la configuration</span>
+    </button>
+    <button mat-menu-item (click)="this.openImportConfigModal()" id="openImportConfigModal">
+      <mat-icon>upload</mat-icon>
+      <span>Importer une configuration</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()" id="logoutButton">
+      <mat-icon>logout</mat-icon>
+      <span>Déconnexion</span>
+    </button>
+  </mat-menu>
 </div>
+
+
+
+
+
+<!--
+
+<button (click)="this.downloadConfig()" mat-mini-fab id="downloadConfigButton" color="primary">
+  <mat-icon title="Download current user data and config" aria-hidden="false">download
+  </mat-icon>
+</button>
+<button (click)="this.openImportConfigModal()" mat-mini-fab id="openImportConfigModal" color="primary">
+  <mat-icon title="Upload user data and config" aria-hidden="false">upload</mat-icon>
+</button>
+<button (click)="logout()" mat-mini-fab id="logoutButton" color="warn">
+  <mat-icon title="Logout">logout</mat-icon>
+</button>
+-->

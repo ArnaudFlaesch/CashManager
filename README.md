@@ -3,7 +3,7 @@
 [![Node.js CI](https://github.com/ArnaudFlaesch/CashManager/actions/workflows/ci.yml/badge.svg)](https://github.com/ArnaudFlaesch/CashManager/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
-[![codecov](https://codecov.io/gh/ArnaudFlaesch/CashManager/branch/main/graph/badge.svg?token=9NEN97P2Y1)](https://codecov.io/gh/ArnaudFlaesch/CashManager)
+[![codecov](https://codecov.io/gh/ArnaudFlaesch/CashManager/branch/main/graph/badge.svg)](https://codecov.io/gh/ArnaudFlaesch/CashManager)
 [![Known Vulnerabilities](https://snyk.io/test/github/ArnaudFlaesch/CashManager/badge.svg)](https://snyk.io/test/github/ArnaudFlaesch/CashManager)
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 

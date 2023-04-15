@@ -8,10 +8,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -24,6 +30,7 @@ import { CreateExpenseComponent } from './create-expense/create-expense.componen
 import { AuthGuard } from './guards/auth.guard';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
+import { DateFormatPipe } from './pipes/date-format.pipe';
 import { AuthService } from './services/auth.service/auth.service';
 import { ErrorHandlerService } from './services/error.handler.service';
 import { ExpenseService } from './services/expense.service/expense.service';
@@ -35,6 +42,9 @@ import { LabelListComponent } from './label-list/label-list.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
 import { DateUtilsService } from './utils/date.utils.service';
 import { ErrorComponent } from './pages/error/error.component';
+import { ThemeService } from './services/theme.service/theme.service';
+import { NotificationService } from './services/notification.service/NotificationService';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -43,12 +53,14 @@ import { ErrorComponent } from './pages/error/error.component';
     HomeComponent,
     ErrorComponent,
     ImportConfigModalComponent,
+    NotificationsComponent,
     CreateExpenseComponent,
     HeaderComponent,
     ExpenseListByMonthComponent,
     TotalExpenseByMonthComponent,
     LabelListComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    DateFormatPipe
   ],
   imports: [
     BrowserAnimationsModule,
@@ -58,12 +70,17 @@ import { ErrorComponent } from './pages/error/error.component';
     MatAutocompleteModule,
     MatButtonModule,
     MatDatepickerModule,
+    MatDividerModule,
+    MatMenuModule,
     MatDialogModule,
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
     MatNativeDateModule,
     MatProgressSpinnerModule,
+    MatBadgeModule,
+    MatTooltipModule,
+    MatSlideToggleModule,
     MatSelectModule,
     MatTabsModule,
     MatSnackBarModule,
@@ -78,6 +95,8 @@ import { ErrorComponent } from './pages/error/error.component';
     ConfigService,
     ErrorHandlerService,
     AuthGuard,
+    NotificationService,
+    ThemeService,
     DateUtilsService,
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }
   ],
