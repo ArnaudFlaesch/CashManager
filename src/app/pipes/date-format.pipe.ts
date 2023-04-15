@@ -8,6 +8,8 @@ export class DateFormatPipe implements PipeTransform {
     if (typeof value === 'string') {
       value = new Date(value);
     }
-    return arg === 'short' ? value.toLocaleDateString('fr') : value.toLocaleString();
+    return arg === 'short'
+      ? value.toLocaleDateString('fr')
+      : value.toLocaleString();
   }
 }

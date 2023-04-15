@@ -11,15 +11,20 @@ export class NotificationService {
   constructor(private http: HttpClient) {}
 
   public getNotifications(): Observable<IPage<INotification>> {
-    return this.http.get<IPage<INotification>>(`${environment.backend_url}/notifications/`, {
-      headers: {
-        Authorization: authorizationBearer(),
-        'Content-type': 'application/json'
+    return this.http.get<IPage<INotification>>(
+      `${environment.backend_url}/notifications/`,
+      {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
+        }
       }
-    });
+    );
   }
 
-  public markNotificationAsRead(notificationIds: number[]): Observable<INotification[]> {
+  public markNotificationAsRead(
+    notificationIds: number[]
+  ): Observable<INotification[]> {
     return this.http.put<INotification[]>(
       `${environment.backend_url}/notifications/markNotificationAsRead`,
       {

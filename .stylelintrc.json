@@ -8,7 +8,9 @@
       true,
       {
         "ignoreAtRules": [
-          "tailwind"
+          "tailwind",
+          "use",
+          "include"
         ]
       }
     ],
