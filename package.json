@@ -20,6 +20,7 @@
     "eslint": "eslint . --ext .ts",
     "eslint:fix": "npm run eslint -- --fix",
     "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" ",
+    "lint:styles:fix": "npm run lint:styles -- --fix ",
     "lint:styles:report": "npm run lint:styles -- --formatter json --output-file ./styleLintReport.json",
     "report:merge": "npx mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
     "report:generate": "npx mochawesome-report-generator tests-report.json -o cypress/reports/html",

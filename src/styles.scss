@@ -21,7 +21,6 @@ $light-theme: mat.define-light-theme((color: (primary: mat.define-palette(mat.$i
 @include mat.core-theme($light-theme);
 @include mat.button-color($light-theme);
 
-
 /* stylelint-disable */
 @tailwind base;
 @tailwind components;
