@@ -116,9 +116,12 @@ export class ExpenseListByMonthComponent {
   }
 
   public getTotalForMonth(): number {
-    return this.expenses
-      .map((expense) => expense.amount)
-      .reduce((total, amount) => total + amount);
+    return parseFloat(
+      this.expenses
+        .map((expense) => expense.amount)
+        .reduce((total, amount) => total + amount)
+        .toFixed(10)
+    );
   }
 
   public handleChartClickedEvent({
