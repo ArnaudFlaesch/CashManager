@@ -1,7 +1,5 @@
-import { LabelService } from './../services/label.service/label.service';
-import { Expense } from './../model/Expense';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   createComponentFactory,
@@ -10,23 +8,22 @@ import {
   Spectator,
   SpectatorHttp
 } from '@ngneat/spectator/jest';
+
+import { environment } from '../../environments/environment';
+import { Label } from '../model/Label';
+import { InsertExpensePayload } from '../model/payloads/InsertExpensePayload';
 import { AuthService } from '../services/auth.service/auth.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
-
-import { CreateExpenseComponent } from './create-expense.component';
-import { InsertExpensePayload } from '../model/payloads/InsertExpensePayload';
-import { environment } from '../../environments/environment';
-import { Label } from '../model/Label';
 import { DateUtilsService } from '../utils/date.utils.service';
+import { Expense } from './../model/Expense';
+import { CreateExpenseComponent } from './create-expense.component';
 
 describe('CreateExpenseComponent', () => {
   let spectator: Spectator<CreateExpenseComponent>;
-  let labelService: SpectatorHttp<LabelService>;
   let expenseService: SpectatorHttp<ExpenseService>;
 
   const expensePath = '/expense/';
-  const labelPath = '/label/';
 
   const createComponent = createComponentFactory({
     component: CreateExpenseComponent,
@@ -34,12 +31,10 @@ describe('CreateExpenseComponent', () => {
     providers: [AuthService, ErrorHandlerService, DateUtilsService],
     schemas: [NO_ERRORS_SCHEMA]
   });
-  const createLabelHttp = createHttpFactory(LabelService);
   const createExpenseHttp = createHttpFactory(ExpenseService);
 
   beforeEach(() => {
     spectator = createComponent();
-    labelService = createLabelHttp();
     expenseService = createExpenseHttp();
   });
 

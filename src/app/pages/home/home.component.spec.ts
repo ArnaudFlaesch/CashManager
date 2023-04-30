@@ -39,8 +39,6 @@ describe('HomeComponent', () => {
 
     getLabelsRequest.flush(labelData);
 
-    // const labelToInsert = 'Vacances';
-    // spectator.component.handleCreateLabel();
     expect(spectator.component.labels).toEqual(labelData);
   });
 });

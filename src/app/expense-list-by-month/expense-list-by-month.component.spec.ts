@@ -11,21 +11,18 @@ import {
   SpectatorHttp
 } from '@ngneat/spectator/jest';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
+
 import { environment } from '../../environments/environment';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
-import { LabelService } from '../services/label.service/label.service';
-
 import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
 
 describe('ExpenseListByMonthComponent', () => {
   let spectator: Spectator<ExpenseListByMonthComponent>;
-  let labelService: SpectatorHttp<LabelService>;
   let expenseService: SpectatorHttp<ExpenseService>;
 
-  const labelPath = '/label/';
   const expensePath = '/expense/';
 
   const createComponent = createComponentFactory({
@@ -39,7 +36,6 @@ describe('ExpenseListByMonthComponent', () => {
     providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }],
     schemas: [NO_ERRORS_SCHEMA]
   });
-  const createLabelHttp = createHttpFactory(LabelService);
   const createExpenseHttp = createHttpFactory(ExpenseService);
 
   const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
@@ -48,7 +44,6 @@ describe('ExpenseListByMonthComponent', () => {
 
   beforeEach(() => {
     spectator = createComponent();
-    labelService = createLabelHttp();
     expenseService = createExpenseHttp();
   });
 
