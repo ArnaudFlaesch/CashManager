@@ -44,8 +44,4 @@ export class LoginComponent {
       this.isLoading = false;
     }
   }
-
-  public goToHome(): void {
-    this.router.navigate(['home']);
-  }
 }
