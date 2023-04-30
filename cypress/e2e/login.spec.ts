@@ -29,7 +29,7 @@ describe('Login tests', () => {
       cy.get('#logoutButton').click();
       cy.waitUntil(() =>
         cy
-          .get('#loginPageTitle')
+          .get('#login-page-title')
           .should('have.text', 'CashManager')
           .url()
           .should('be.equal', `${Cypress.config('baseUrl')}login`)
