@@ -1,9 +1,19 @@
 <div id="action-bar-buttons">
+  <button mat-mini-fab [matMenuTriggerFor]="appsMenu" color="primary">
+    <mat-icon>apps</mat-icon>
+  </button>
   <app-notifications *ngIf="this.canUserSeeNotifications()"></app-notifications>
 
   <button id="cashmanager-menu" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu" color="primary">
     <mat-icon>account_circle</mat-icon>
   </button>
+
+  <mat-menu #appsMenu="matMenu">
+    <a [href]="dashApplicationUrl">
+      <mat-icon>dashboard</mat-icon>
+      <span>Dash</span>
+    </a>
+  </mat-menu>
 
   <mat-menu #cashManagerMenu="matMenu">
     <div mat-menu-item>
@@ -30,10 +40,6 @@
     </button>
   </mat-menu>
 </div>
-
-
-
-
 
 <!--
 

@@ -2,8 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Label } from '../../model/Label';
 import { ErrorHandlerService } from '../../services/error.handler.service';
 import { LabelService } from '../../services/label.service/label.service';
-import { ExpenseViewEnum } from '../../enums/ExpenseViewEnum';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +11,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  public expenseView = ExpenseViewEnum.EXPENSES_BY_MONTH;
+  @Output() insertedLabelEvent = new EventEmitter<Label>();
+
   public labels: Label[] = [];
 
+  labelControl = new FormControl<string>('');
+
+  private ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
   private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
 
   constructor(
@@ -21,6 +25,23 @@ export class HomeComponent {
     private errorHandlerService: ErrorHandlerService
   ) {
     this.getLabels();
+  }
+
+  public handleCreateLabel(): void {
+    if (this.labelControl.value) {
+      this.labelService.addLabel(this.labelControl.value).subscribe({
+        next: (insertedLabel) => {
+          this.labels = [...this.labels, insertedLabel];
+          this.insertedLabelEvent.emit(insertedLabel);
+          this.labelControl.setValue(null);
+        },
+        error: (error) =>
+          this.errorHandlerService.handleError(
+            error.message,
+            this.ERROR_CREATING_LABEL_MESSAGE
+          )
+      });
+    }
   }
 
   private getLabels() {

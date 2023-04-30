@@ -23,7 +23,7 @@ export class LabelListComponent {
     public dialog: MatDialog
   ) {}
 
-  public openDeleteLabelDialog(labelId: number) {
+  public openDeleteLabelDialog(labelId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       height: DIALOG_SMALL_HEIGHT,
       width: DIALOG_SMALL_WIDTH,

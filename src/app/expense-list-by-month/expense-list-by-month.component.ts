@@ -64,10 +64,6 @@ export class ExpenseListByMonthComponent {
     // Get total expenses, et switch avec la liste des expense par mois
   }
 
-  public handleLabelCreation(newLabel: Label): void {
-    this.labels = [...this.labels, newLabel];
-  }
-
   public deleteLabel(labelId: number): void {
     this.labelService.deleteLabel(labelId).subscribe({
       next: () => {
@@ -119,7 +115,7 @@ export class ExpenseListByMonthComponent {
     return parseFloat(
       this.expenses
         .map((expense) => expense.amount)
-        .reduce((total, amount) => total + amount)
+        .reduce((total, amount) => total + amount, 0)
         .toFixed(10)
     );
   }

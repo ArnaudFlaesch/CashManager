@@ -17,6 +17,8 @@ import { ThemeService } from '../services/theme.service/theme.service';
 export class HeaderComponent implements OnInit {
   public toggleControl = new FormControl(false);
 
+  public dashApplicationUrl = 'https://arnaudflaesch.github.io/Dash-Web/';
+
   private ERROR_EXPORT_CONFIGURATION =
     "Erreur lors de l'export de la configuration.";
 

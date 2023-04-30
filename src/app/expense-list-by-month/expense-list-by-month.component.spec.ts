@@ -90,36 +90,4 @@ describe('ExpenseListByMonthComponent', () => {
     getJanuaryExpensesRequest.flush([]);
     expect(spectator.component.expenses.length).toEqual(0);
   });
-
-  it('Should add an expense and a new label, and delete the label', () => {
-    const currentMonth = new Date();
-    const startIntervalDate = format(startOfMonth(currentMonth), dateFormat);
-    const endIntervalDate = format(endOfMonth(currentMonth), dateFormat);
-    spectator.component.currentSelectedMonth = currentMonth;
-
-    const getExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
-      HttpMethod.GET
-    );
-    getExpensesRequest.flush([]);
-
-    const insertedLabel = new Label(1, 'Vacances', 1);
-    spectator.component.handleLabelCreation(insertedLabel);
-    expect(spectator.component.labels).toEqual([insertedLabel]);
-
-    const insertedExpense = new Expense(1, 23, new Date(), insertedLabel.id);
-    spectator.component.handleExpenseCreation(insertedExpense);
-    expect(spectator.component.expenses).toEqual([insertedExpense]);
-
-    spectator.component.deleteLabel(insertedLabel.id);
-    const deleteLabelRequest = labelService.expectOne(
-      environment.backend_url +
-        labelPath +
-        'deleteLabel/?labelId=' +
-        insertedLabel.id,
-      HttpMethod.DELETE
-    );
-    deleteLabelRequest.flush({});
-    expect(spectator.component.labels.length).toEqual(0);
-  });
 });
