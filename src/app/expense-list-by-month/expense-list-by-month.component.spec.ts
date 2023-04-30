@@ -18,6 +18,7 @@ import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
+import { LabelService } from '../services/label.service/label.service';
 
 describe('ExpenseListByMonthComponent', () => {
   let spectator: Spectator<ExpenseListByMonthComponent>;
@@ -33,7 +34,11 @@ describe('ExpenseListByMonthComponent', () => {
       MatSnackBarModule,
       MatDialogModule
     ],
-    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }],
+    providers: [
+      ErrorHandlerService,
+      LabelService,
+      { provide: MatDialogRef, useValue: {} }
+    ],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createExpenseHttp = createHttpFactory(ExpenseService);
