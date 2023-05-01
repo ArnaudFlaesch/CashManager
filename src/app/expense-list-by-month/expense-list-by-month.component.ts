@@ -9,7 +9,7 @@ import {
   ChartEvent,
   ChartTypeRegistry
 } from 'chart.js';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
 
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
@@ -130,6 +130,14 @@ export class ExpenseListByMonthComponent {
     console.log(event, active);
   }
 
+  public selectPreviousMonth(): void {
+    this.selectMonth(subMonths(this.currentSelectedMonth, 1));
+  }
+
+  public selectNextMonth(): void {
+    this.selectMonth(addMonths(this.currentSelectedMonth, 1));
+  }
+
   public setMonthAndYear(
     normalizedMonthAndYear: Date,
     datepicker: MatDatepicker<Date>
@@ -139,9 +147,13 @@ export class ExpenseListByMonthComponent {
       normalizedMonthAndYear.getMonth(),
       1
     );
+    this.selectMonth(selectedMonth);
+    datepicker.close();
+  }
+
+  private selectMonth(selectedMonth: Date): void {
     this.selectedMonthFormControl.setValue(selectedMonth);
     this.handleSelectExpensesForMonth(selectedMonth);
-    datepicker.close();
   }
 
   private deleteExpense(expenseId: number) {

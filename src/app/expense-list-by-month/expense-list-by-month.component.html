@@ -1,4 +1,7 @@
 <div>
+  <button (click)="selectPreviousMonth()" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
   <mat-form-field appearance="fill">
     <mat-label>Sélectionnez un mois</mat-label>
     <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl">
@@ -6,6 +9,10 @@
     <mat-datepicker #picker startView="multi-year" (monthSelected)="setMonthAndYear($event, picker)"
       [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
   </mat-form-field>
+
+  <button (click)="selectNextMonth()" mat-icon-button>
+    <mat-icon>arrow_forward</mat-icon>
+  </button>
 </div>
 
 <div class="flex flex-row">
