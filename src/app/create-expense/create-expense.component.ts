@@ -62,7 +62,7 @@ export class CreateExpenseComponent {
   }
 
   public displayLabel(label: Label): string {
-    return label && label.label ? label.label : '';
+    return label?.label ? label.label : '';
   }
 
   public canCreateExpense(): boolean {

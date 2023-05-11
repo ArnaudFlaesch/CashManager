@@ -22,7 +22,8 @@ export class ErrorHandlerService {
               error.message,
               this.ERROR_UNAUTHORIZED_CODE
             )
-          );
+          )
+          .catch((error) => console.log(error.message));
         break;
       }
       case 403: {
