@@ -19,8 +19,6 @@ import { MatMenuModule } from '@angular/material/menu';
 
 describe('HeaderComponent', () => {
   let spectator: Spectator<HeaderComponent>;
-  let configService: SpectatorHttp<ConfigService>;
-  let authService: SpectatorHttp<AuthService>;
 
   const createComponent = createComponentFactory({
     component: HeaderComponent,
@@ -32,6 +30,8 @@ describe('HeaderComponent', () => {
       MatDialogModule
     ],
     providers: [
+      ConfigService,
+      AuthService,
       ErrorHandlerService,
       ThemeService,
       { provide: MatDialogRef, useValue: {} }
@@ -39,16 +39,20 @@ describe('HeaderComponent', () => {
     schemas: [NO_ERRORS_SCHEMA]
   });
 
-  const createConfigHttp = createHttpFactory(ConfigService);
-  const createAuthHttp = createHttpFactory(AuthService);
-
   beforeEach(() => {
     spectator = createComponent();
-    configService = createConfigHttp();
-    authService = createAuthHttp();
   });
 
   it('should create', () => {
     expect(spectator.component).toBeTruthy();
+  });
+
+  it('Should switch between light and dark mode', () => {
+    spectator.component.toggleTheme(true);
+    expect(localStorage.getItem('preferredTheme')).toEqual('dark');
+    spectator.component.toggleTheme(true);
+    expect(localStorage.getItem('preferredTheme')).toEqual('dark');
+    spectator.component.toggleTheme(false);
+    expect(localStorage.getItem('preferredTheme')).toEqual('light');
   });
 });
