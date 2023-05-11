@@ -5,6 +5,7 @@ import { ChartConfiguration, ChartEvent } from 'chart.js';
 import { format, isBefore } from 'date-fns';
 import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
 import { ExpenseService } from '../services/expense.service/expense.service';
+import { ErrorHandlerService } from '../services/error.handler.service';
 
 @Component({
   selector: 'app-total-expense-by-month',
