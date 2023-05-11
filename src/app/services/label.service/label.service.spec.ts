@@ -5,6 +5,7 @@ import {
 } from '@ngneat/spectator/jest';
 import { environment } from '../../../environments/environment';
 import { LabelService } from './label.service';
+import { Label } from '../../model/Label';
 
 describe('Label service tests', () => {
   let spectator: SpectatorHttp<LabelService>;
@@ -20,7 +21,7 @@ describe('Label service tests', () => {
     const labelData = [
       { id: 1, label: 'Courses' },
       { id: 2, label: 'Restaurant' }
-    ];
+    ] as Label[];
 
     spectator.service
       .getLabels()
@@ -35,7 +36,7 @@ describe('Label service tests', () => {
 
   it('Devrait créer une étiquette', () => {
     const tabLabel = 'Impots';
-    const expectedNewLabel = { id: 3, label: tabLabel };
+    const expectedNewLabel = { id: 3, label: tabLabel } as Label;
 
     spectator.service
       .addLabel(tabLabel)

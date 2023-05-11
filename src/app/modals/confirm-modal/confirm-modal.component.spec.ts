@@ -1,5 +1,5 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { IConfirmDialogData } from './IConfirmDialogData';
 
 import { ConfirmModalComponent } from './confirm-modal.component';

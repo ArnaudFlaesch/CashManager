@@ -45,7 +45,7 @@ describe('LoginComponent', () => {
     expect(spectator.component.inputUsername).toBe('');
     expect(spectator.component.inputPassword).toBe('');
     spectator.component.handleLogin();
-    expect(loginSpy).toBeCalledTimes(0);
+    expect(loginSpy).toHaveBeenCalledTimes(0);
     spectator.fixture.detectChanges();
   });
 
