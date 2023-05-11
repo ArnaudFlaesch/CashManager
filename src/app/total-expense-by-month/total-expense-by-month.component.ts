@@ -31,7 +31,8 @@ export class TotalExpenseByMonthComponent {
 
   constructor(
     private expenseService: ExpenseService,
-    private labelService: LabelService
+    private labelService: LabelService,
+    private errorHandlerService: ErrorHandlerService
   ) {
     this.getLabels();
   }
