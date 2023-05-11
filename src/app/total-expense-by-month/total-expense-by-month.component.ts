@@ -26,6 +26,7 @@ export class TotalExpenseByMonthComponent {
     }
   };
 
+  private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
   private selectedLabelId = 0;
 
   constructor(
@@ -68,7 +69,9 @@ export class TotalExpenseByMonthComponent {
       next: (labels) => {
         this.labels = labels;
         this.getTotalExpensesByMonth();
-      }
+      },
+      error: (error) =>
+        this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)
     });
   }
 
