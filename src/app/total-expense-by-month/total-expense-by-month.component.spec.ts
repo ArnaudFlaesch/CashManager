@@ -26,16 +26,6 @@ describe('TotalExpenseByMonthComponent', () => {
   const labelPath = '/label/';
   const expensePath = '/expense/';
 
-  const createComponent = createComponentFactory({
-    component: TotalExpenseByMonthComponent,
-    imports: [
-      HttpClientTestingModule,
-      RouterTestingModule,
-      MatSnackBarModule,
-      MatDialogModule
-    ],
-    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
-  });
   const createLabelHttp = createHttpFactory(LabelService);
   const createExpenseHttp = createHttpFactory(ExpenseService);
 
@@ -45,6 +35,17 @@ describe('TotalExpenseByMonthComponent', () => {
   ] as ITotalExpenseByMonth[];
 
   describe('Nominal cases', () => {
+    const createComponent = createComponentFactory({
+      component: TotalExpenseByMonthComponent,
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatSnackBarModule,
+        MatDialogModule
+      ],
+      providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
+    });
+
     beforeEach(() => {
       spectator = createComponent();
       labelService = createLabelHttp();
@@ -102,6 +103,19 @@ describe('TotalExpenseByMonthComponent', () => {
   });
 
   describe('Error cases', () => {
+    const createComponent = createComponentFactory({
+      component: TotalExpenseByMonthComponent,
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatSnackBarModule,
+        MatDialogModule
+      ],
+      providers: [
+        { provide: ErrorHandlerService, useValue: errorHandlerService }
+      ]
+    });
+
     it('Should log error on get labels when server throws an error', () => {
       const errorHandlerService = createSpyObject(ErrorHandlerService);
 
