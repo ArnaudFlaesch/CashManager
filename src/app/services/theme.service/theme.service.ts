@@ -27,6 +27,6 @@ export class ThemeService {
     const preferredTheme = localStorage.getItem(
       this.PREFERRED_THEME_LOCALSTORAGE_KEY
     );
-    return preferredTheme !== null && preferredTheme === 'dark';
+    return preferredTheme === 'dark';
   }
 }
