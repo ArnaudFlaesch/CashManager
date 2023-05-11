@@ -103,6 +103,7 @@ describe('TotalExpenseByMonthComponent', () => {
   });
 
   describe('Error cases', () => {
+    const errorHandlerService = createSpyObject(ErrorHandlerService);
     const createComponent = createComponentFactory({
       component: TotalExpenseByMonthComponent,
       imports: [
@@ -117,13 +118,7 @@ describe('TotalExpenseByMonthComponent', () => {
     });
 
     it('Should log error on get labels when server throws an error', () => {
-      const errorHandlerService = createSpyObject(ErrorHandlerService);
-
-      spectator = createComponent({
-        providers: [
-          { provide: ErrorHandlerService, useValue: errorHandlerService }
-        ]
-      });
+      spectator = createComponent();
       labelService = createLabelHttp();
 
       labelService.controller
