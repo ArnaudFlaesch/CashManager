@@ -59,7 +59,7 @@ export class AuthService {
 
   public isUserAdmin(): boolean {
     const authenticatedUser = this.getCurrentUserData();
-    return authenticatedUser?.roles.includes(RoleEnum.ROLE_ADMIN) || false;
+    return authenticatedUser?.roles.includes(RoleEnum.ROLE_ADMIN) ?? false;
   }
 
   public userHasValidToken(): boolean {
