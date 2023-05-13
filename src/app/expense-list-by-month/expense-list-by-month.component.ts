@@ -31,8 +31,6 @@ export class ExpenseListByMonthComponent {
   public monthsWithExpenses: string[] = [];
   public selectedMonthFormControl = new FormControl(startOfMonth(new Date()));
 
-  public currentSelectedMonth = startOfMonth(new Date());
-
   public expensesByLabelChart:
     | ChartData<keyof ChartTypeRegistry, number[], string>
     | undefined = undefined;
@@ -45,6 +43,8 @@ export class ExpenseListByMonthComponent {
       }
     }
   };
+
+  private currentSelectedMonth = startOfMonth(new Date());
 
   private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
   private ERROR_GETTING_EXPENSES =

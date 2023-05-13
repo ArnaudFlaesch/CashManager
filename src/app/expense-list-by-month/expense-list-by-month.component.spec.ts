@@ -24,6 +24,7 @@ import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
 describe('ExpenseListByMonthComponent', () => {
   let spectator: Spectator<ExpenseListByMonthComponent>;
   let expenseService: SpectatorHttp<ExpenseService>;
+  let labelService: SpectatorHttp<LabelService>;
 
   const mockedCurrentMonth = new Date(1644882400);
   advanceTo(mockedCurrentMonth); // 15/02/2022
@@ -38,14 +39,11 @@ describe('ExpenseListByMonthComponent', () => {
       MatSnackBarModule,
       MatDialogModule
     ],
-    providers: [
-      ErrorHandlerService,
-      LabelService,
-      { provide: MatDialogRef, useValue: {} }
-    ],
+    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }],
     schemas: [NO_ERRORS_SCHEMA]
   });
   const createExpenseHttp = createHttpFactory(ExpenseService);
+  const createLabelHttp = createHttpFactory(LabelService);
 
   const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
 
@@ -54,6 +52,7 @@ describe('ExpenseListByMonthComponent', () => {
   beforeEach(() => {
     spectator = createComponent();
     expenseService = createExpenseHttp();
+    labelService = createLabelHttp();
   });
 
   it('Should display two labels and three expenses, then change the month', () => {
@@ -63,8 +62,6 @@ describe('ExpenseListByMonthComponent', () => {
       dateFormat
     );
     const endIntervalDate = format(endOfMonth(mockedCurrentMonth), dateFormat);
-
-    spectator.component.currentSelectedMonth = mockedCurrentMonth;
 
     const expectedExpenseData: Expense[] = [
       new Expense(1, 323, currentMonth, labelData[0].id),
@@ -106,5 +103,19 @@ describe('ExpenseListByMonthComponent', () => {
       HttpMethod.GET
     );
     getNextMonthExpensesRequest.flush(expectedExpenseData);
+
+    spectator.component.labels = labelData;
+    expect(spectator.component.getLabelFromId(99)).toEqual(undefined);
+    expect(
+      spectator.component.getLabelFromId(expectedExpenseData[0].labelId)?.label
+    ).toEqual(labelData[0].label);
+
+    spectator.component.deleteLabel(labelData[1].id);
+    const deleteLabelRequest = labelService.expectOne(
+      `${environment.backend_url}/label/deleteLabel/?labelId=${labelData[1].id}`,
+      HttpMethod.DELETE
+    );
+    deleteLabelRequest.flush({});
+    expect(spectator.component.labels).toEqual([labelData[0]]);
   });
 });
