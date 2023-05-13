@@ -1,6 +1,6 @@
 name: Node.js CI
 
-on: ["push"]
+on: ['push']
 
 jobs:
   test:
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v1
-        # if: success() && github.ref == 'refs/heads/main'
+        if: success() && github.ref == 'refs/heads/main'
         with:
           path: ./public
 
@@ -99,7 +99,7 @@ jobs:
 
     runs-on: ubuntu-latest
     needs: test
-    # if: success() && github.ref == 'refs/heads/main'
+    if: success() && github.ref == 'refs/heads/main'
 
     steps:
       - name: Deploy to GitHub Pages
