@@ -78,13 +78,6 @@ export class ExpenseListByMonthComponent {
     });
   }
 
-  public handleSelectExpensesForMonth(month: Date): void {
-    if (this.currentSelectedMonth.getTime() !== startOfMonth(month).getTime()) {
-      this.currentSelectedMonth = startOfMonth(month);
-      this.getExpenses(this.currentSelectedMonth, endOfMonth(month));
-    }
-  }
-
   public handleExpenseCreation(newExpense: Expense): void {
     this.expenses = [...this.expenses, newExpense];
     this.refreshExpensesChart();
@@ -177,6 +170,13 @@ export class ExpenseListByMonthComponent {
       },
       {}
     );
+  }
+
+  private handleSelectExpensesForMonth(month: Date): void {
+    if (this.currentSelectedMonth.getTime() !== startOfMonth(month).getTime()) {
+      this.currentSelectedMonth = startOfMonth(month);
+      this.getExpenses(this.currentSelectedMonth, endOfMonth(month));
+    }
   }
 
   private getExpenses(startIntervalDate: Date, endIntervalDate: Date) {

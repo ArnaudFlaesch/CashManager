@@ -10,19 +10,23 @@ import {
   Spectator,
   SpectatorHttp
 } from '@ngneat/spectator/jest';
-import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
+import { advanceTo } from 'jest-date-mock';
 
 import { environment } from '../../environments/environment';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
-import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
 import { LabelService } from '../services/label.service/label.service';
+import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
 
 describe('ExpenseListByMonthComponent', () => {
   let spectator: Spectator<ExpenseListByMonthComponent>;
   let expenseService: SpectatorHttp<ExpenseService>;
+
+  const mockedCurrentMonth = new Date(1644882400);
+  advanceTo(mockedCurrentMonth); // 15/02/2022
 
   const expensePath = '/expense/';
 
@@ -54,10 +58,13 @@ describe('ExpenseListByMonthComponent', () => {
 
   it('Should display two labels and three expenses, then change the month', () => {
     const currentMonth = new Date();
-    const startIntervalDate = format(startOfMonth(currentMonth), dateFormat);
-    const endIntervalDate = format(endOfMonth(currentMonth), dateFormat);
+    const startIntervalDate = format(
+      startOfMonth(mockedCurrentMonth),
+      dateFormat
+    );
+    const endIntervalDate = format(endOfMonth(mockedCurrentMonth), dateFormat);
 
-    spectator.component.currentSelectedMonth = currentMonth;
+    spectator.component.currentSelectedMonth = mockedCurrentMonth;
 
     const expectedExpenseData: Expense[] = [
       new Expense(1, 323, currentMonth, labelData[0].id),
@@ -75,19 +82,29 @@ describe('ExpenseListByMonthComponent', () => {
     expect(spectator.component.expenses.length).toEqual(3);
     expect(spectator.component.getTotalForMonth()).toEqual(457);
 
-    const januaryMonth = new Date(2023, 0, 1);
-    const startIntervalDateJanuary = format(
-      startOfMonth(januaryMonth),
+    const previousMonth = subMonths(mockedCurrentMonth, 1);
+    const startIntervalDatePreviousMonth = format(
+      startOfMonth(previousMonth),
       dateFormat
     );
-    const endIntervalDateJanuary = format(endOfMonth(januaryMonth), dateFormat);
-    spectator.component.handleSelectExpensesForMonth(januaryMonth);
+    const endIntervalDatePreviousMonth = format(
+      endOfMonth(previousMonth),
+      dateFormat
+    );
+    spectator.component.selectPreviousMonth();
 
-    const getJanuaryExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDateJanuary}&endIntervalDate=${endIntervalDateJanuary}`,
+    const getPreviousMonthExpensesRequest = expenseService.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDatePreviousMonth}&endIntervalDate=${endIntervalDatePreviousMonth}`,
       HttpMethod.GET
     );
-    getJanuaryExpensesRequest.flush([]);
+    getPreviousMonthExpensesRequest.flush([]);
     expect(spectator.component.expenses.length).toEqual(0);
+
+    spectator.component.selectNextMonth();
+    const getNextMonthExpensesRequest = expenseService.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
+      HttpMethod.GET
+    );
+    getNextMonthExpensesRequest.flush(expectedExpenseData);
   });
 });
