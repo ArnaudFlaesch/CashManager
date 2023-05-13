@@ -31,7 +31,7 @@ describe('HomeComponent', () => {
     labelService = createLabelHttp();
   });
 
-  it('Should create', () => {
+  it('Should create component and get label list', () => {
     const getLabelsRequest = labelService.expectOne(
       environment.backend_url + labelPath,
       HttpMethod.GET
@@ -40,5 +40,16 @@ describe('HomeComponent', () => {
     getLabelsRequest.flush(labelData);
 
     expect(spectator.component.labels).toEqual(labelData);
+
+    spectator.component.labelControl.setValue('New label');
+    spectator.component.handleCreateLabel();
+    const createLabelRequest = labelService.expectOne(
+      environment.backend_url + labelPath + 'addLabel',
+      HttpMethod.POST
+    );
+
+    const newLabel = { id: 2, label: 'New label' } as Label;
+    createLabelRequest.flush(newLabel);
+    expect(spectator.component.labels).toEqual([...labelData, newLabel]);
   });
 });
