@@ -1,28 +1,39 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ImportConfigModalComponent } from '../modals/import-config-modal/import-config-modal.component';
 import { AuthService } from '../services/auth.service/auth.service';
 import { ConfigService } from '../services/config.service/config.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
+import { FormControl } from '@angular/forms';
+import { ThemeService } from '../services/theme.service/theme.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  public toggleControl = new FormControl(false);
+
+  public dashApplicationUrl = 'https://arnaudflaesch.github.io/Dash-Web/';
+
   private ERROR_EXPORT_CONFIGURATION =
     "Erreur lors de l'export de la configuration.";
 
   constructor(
     private authService: AuthService,
     private configService: ConfigService,
+    private themeService: ThemeService,
     private errorHandlerService: ErrorHandlerService,
     public dialog: MatDialog,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.toggleControl.setValue(this.themeService.isPreferredThemeDarkMode());
+  }
 
   public downloadConfig(): void {
     this.configService.exportConfig().subscribe({
@@ -37,7 +48,7 @@ export class HeaderComponent {
       },
       error: (error: HttpErrorResponse) =>
         this.errorHandlerService.handleError(
-          error.message,
+          error,
           this.ERROR_EXPORT_CONFIGURATION
         )
     });
@@ -50,8 +61,18 @@ export class HeaderComponent {
     });
   }
 
-  public logout() {
+  public toggleTheme(isToggleChecked: boolean): void {
+    this.themeService.selectDarkMode(isToggleChecked);
+  }
+
+  public canUserSeeNotifications(): boolean {
+    return this.authService.isUserAdmin();
+  }
+
+  public logout(): void {
     this.authService.logout();
-    this.router.navigate(['login']);
+    this.router
+      .navigate(['login'])
+      .catch((error) => console.log(error.message));
   }
 }

@@ -5,6 +5,7 @@ import { ChartConfiguration, ChartEvent } from 'chart.js';
 import { format, isBefore } from 'date-fns';
 import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
 import { ExpenseService } from '../services/expense.service/expense.service';
+import { ErrorHandlerService } from '../services/error.handler.service';
 
 @Component({
   selector: 'app-total-expense-by-month',
@@ -13,10 +14,10 @@ import { ExpenseService } from '../services/expense.service/expense.service';
 })
 export class TotalExpenseByMonthComponent {
   public labels: Label[] = [];
-  private selectedLabelId = 0;
 
   public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined =
     undefined;
+
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
@@ -26,11 +27,43 @@ export class TotalExpenseByMonthComponent {
     }
   };
 
+  private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
+  private selectedLabelId = 0;
+
   constructor(
     private expenseService: ExpenseService,
-    private labelService: LabelService
+    private labelService: LabelService,
+    private errorHandlerService: ErrorHandlerService
   ) {
     this.getLabels();
+  }
+
+  public selectLabel(labelId: number): void {
+    if (this.selectedLabelId === labelId) {
+      this.selectedLabelId = 0;
+      this.getTotalExpensesByMonth();
+    } else {
+      this.selectedLabelId = labelId;
+      this.expenseService
+        .getTotalExpensesByMonthByLabelId(this.selectedLabelId)
+        .subscribe({
+          next: (data) => this.refreshChart(data)
+        });
+    }
+  }
+
+  public isLabelSelected(labelId: number): boolean {
+    return this.selectedLabelId === labelId;
+  }
+
+  public handleChartClickedEvent({
+    event,
+    active
+  }: {
+    event?: ChartEvent;
+    active?: Record<string, unknown>[];
+  }): void {
+    console.log(event, active);
   }
 
   private getLabels() {
@@ -38,7 +71,9 @@ export class TotalExpenseByMonthComponent {
       next: (labels) => {
         this.labels = labels;
         this.getTotalExpensesByMonth();
-      }
+      },
+      error: (error) =>
+        this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)
     });
   }
 
@@ -65,33 +100,5 @@ export class TotalExpenseByMonthComponent {
         }
       ]
     };
-  }
-
-  public selectLabel(labelId: number) {
-    if (this.selectedLabelId === labelId) {
-      this.selectedLabelId = 0;
-      this.getTotalExpensesByMonth();
-    } else {
-      this.selectedLabelId = labelId;
-      this.expenseService
-        .getTotalExpensesByMonthByLabelId(this.selectedLabelId)
-        .subscribe({
-          next: (data) => this.refreshChart(data)
-        });
-    }
-  }
-
-  public isLabelSelected(labelId: number) {
-    return this.selectedLabelId === labelId;
-  }
-
-  public handleChartClickedEvent({
-    event,
-    active
-  }: {
-    event?: ChartEvent;
-    active?: Record<string, unknown>[];
-  }): void {
-    console.log(event, active);
   }
 }

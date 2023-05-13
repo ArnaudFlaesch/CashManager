@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service/auth.service';
-import { ErrorHandlerService } from './../services/error.handler.service';
+import { AuthService } from '../../services/auth.service/auth.service';
+import { ErrorHandlerService } from '../../services/error.handler.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -23,18 +23,20 @@ export class LoginComponent {
     private router: Router
   ) {}
 
-  public handleLogin() {
+  public handleLogin(): void {
     if (this.inputUsername && this.inputPassword) {
       this.isLoading = true;
       this.authService.login(this.inputUsername, this.inputPassword).subscribe({
         next: () => {
           this.isLoading = false;
-          this.router.navigate(['home']);
+          this.router
+            .navigate(['home'])
+            .catch((error) => console.log(error.message));
         },
         error: (error: HttpErrorResponse) => {
           this.isLoading = false;
-          this.errorHandlerService.handleError(
-            error.message,
+          this.errorHandlerService.handleLoginError(
+            error,
             this.ERROR_AUTHENTICATING_USER
           );
         },

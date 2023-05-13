@@ -1,6 +1,6 @@
 name: Node.js CI
 
-on: ["push"]
+on: ['push']
 
 jobs:
   test:
@@ -49,6 +49,7 @@ jobs:
           else
             docker run -p 8080:8080 -d --network="host" -e OPENWEATHERMAP_KEY=test -e STRAVA_CLIENT_ID=test -e STRAVA_CLIENT_SECRET=test -e STEAM_API_KEY=test -e AIRPARIF_API_TOKEN=test ghcr.io/arnaudflaesch/dash-webservices:latest
           fi
+
       - name: E2E Tests
         run: |
           npm run test:e2e:ci

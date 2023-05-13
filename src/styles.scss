@@ -1,4 +1,33 @@
-@import 'colors';
+@use '@angular/material' as mat;
+
+@include mat.core;
+
+// Define a dark theme
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$pink-palette),
+      accent: mat.define-palette(mat.$blue-grey-palette)
+    ),
+    // Only include `typography` and `density` in the default dark theme.
+    typography: mat.define-typography-config(),
+    density: 0
+  )
+);
+
+// Define a light theme
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$indigo-palette),
+      accent: mat.define-palette(mat.$pink-palette)
+    )
+  )
+);
+
+// Apply the dark theme by default
+@include mat.core-theme($light-theme);
+@include mat.button-color($light-theme);
 
 /* stylelint-disable */
 @tailwind base;
@@ -8,8 +37,21 @@
 
 html,
 body {
+  // Light mode
+  --light-mode-background-color: #4e4945;
+
+  // Dark mode
+  --dark-mode-background-color: #282a33;
+
   height: 100%;
-  background-color: $cash-manager-background-color;
+  background-color: var(--light-mode-background-color);
+
+  &.dark-mode {
+    @include mat.core-theme($dark-theme);
+    @include mat.button-color($dark-theme);
+
+    background-color: var(--dark-mode-background-color);
+  }
 }
 
 body {

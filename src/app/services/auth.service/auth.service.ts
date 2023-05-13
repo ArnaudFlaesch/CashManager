@@ -1,11 +1,13 @@
-import { IJWTResponse } from './../../model/IUser';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IUser } from '../../..//app/model/IUser';
 import { environment } from '../../../environments/environment';
+
+import { IUser } from './../../model/User';
+import { RoleEnum } from './../../model/RoleEnum';
+
 interface IJwt {
   sub: string;
   iat: number;
@@ -14,15 +16,15 @@ interface IJwt {
 
 @Injectable()
 export class AuthService {
-  constructor(private http: HttpClient) {}
-
   private headers = {
     'Content-type': 'application/json'
   };
 
-  public login(username: string, password: string): Observable<IJWTResponse> {
+  constructor(private http: HttpClient) {}
+
+  public login(username: string, password: string): Observable<IUser> {
     return this.http
-      .post<IJWTResponse>(
+      .post<IUser>(
         `${environment.backend_url}/auth/login`,
         {
           username,
@@ -53,6 +55,11 @@ export class AuthService {
     } else {
       return JSON.parse(userData);
     }
+  }
+
+  public isUserAdmin(): boolean {
+    const authenticatedUser = this.getCurrentUserData();
+    return authenticatedUser?.roles.includes(RoleEnum.ROLE_ADMIN) ?? false;
   }
 
   public userHasValidToken(): boolean {

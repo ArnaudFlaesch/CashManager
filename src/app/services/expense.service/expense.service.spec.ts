@@ -6,7 +6,6 @@ import {
 } from '@ngneat/spectator/jest';
 import { environment } from '../../../environments/environment';
 import { ExpenseService } from './expense.service';
-import { Label } from '../../../app/model/Label';
 
 describe('ExpenseService tests', () => {
   let spectator: SpectatorHttp<ExpenseService>;

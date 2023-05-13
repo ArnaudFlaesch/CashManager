@@ -15,13 +15,15 @@ export class LabelListComponent {
   @Input() labels: Label[] = [];
   @Output() labelDeletedEvent = new EventEmitter<number>();
 
+  private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
+
   constructor(
     private labelService: LabelService,
     private errorHandlerService: ErrorHandlerService,
     public dialog: MatDialog
   ) {}
 
-  public openDeleteLabelDialog(labelId: number) {
+  public openDeleteLabelDialog(labelId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       height: DIALOG_SMALL_HEIGHT,
       width: DIALOG_SMALL_WIDTH,
@@ -45,10 +47,7 @@ export class LabelListComponent {
         this.labelDeletedEvent.emit(labelId);
       },
       error: (error) =>
-        this.errorHandlerService.handleError(
-          error.message,
-          'erreur suppression label'
-        )
+        this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
     });
   }
 }

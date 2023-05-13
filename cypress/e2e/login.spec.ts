@@ -25,10 +25,11 @@ describe('Login tests', () => {
     cy.wait('@login').then((request: Interception) => {
       expect(request.response.statusCode).to.equal(200);
       cy.url().should('be.equal', `${Cypress.config('baseUrl')}home`);
+      cy.get('#cashmanager-menu').click();
       cy.get('#logoutButton').click();
       cy.waitUntil(() =>
         cy
-          .get('#loginPageTitle')
+          .get('#login-page-title')
           .should('have.text', 'CashManager')
           .url()
           .should('be.equal', `${Cypress.config('baseUrl')}login`)

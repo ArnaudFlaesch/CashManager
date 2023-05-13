@@ -1,20 +1,42 @@
-<div class="flex flex-row flex-wrap">
-  <button
-    mat-icon-button
-    id="downloadConfigButton"
-    (click)="this.downloadConfig()"
-  >
-    <mat-icon>download</mat-icon>
+<div id="action-bar-buttons">
+  <button mat-mini-fab [matMenuTriggerFor]="appsMenu" color="primary">
+    <mat-icon>apps</mat-icon>
   </button>
-  <button
-    mat-icon-button
-    id="openImportConfigModal"
-    (click)="this.openImportConfigModal()"
-  >
-    <mat-icon>upload</mat-icon>
+  <app-notifications *ngIf="this.canUserSeeNotifications()"></app-notifications>
+
+  <button id="cashmanager-menu" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu" color="primary">
+    <mat-icon>account_circle</mat-icon>
   </button>
 
-  <button id="logoutButton" mat-raised-button (click)="logout()">
-    Déconnexion
-  </button>
+  <mat-menu #appsMenu="matMenu">
+    <a [href]="dashApplicationUrl">
+      <mat-icon>dashboard</mat-icon>
+      <span>Dash</span>
+    </a>
+  </mat-menu>
+
+  <mat-menu #cashManagerMenu="matMenu">
+    <div mat-menu-item>
+      <div id="toggle-mode-container">
+        <mat-icon>light_mode</mat-icon>
+        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formControl]="toggleControl">
+        </mat-slide-toggle>
+        <mat-icon>dark_mode</mat-icon>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="this.downloadConfig()" id="downloadConfigButton">
+      <mat-icon>download</mat-icon>
+      <span>Télécharger la configuration</span>
+    </button>
+    <button mat-menu-item (click)="this.openImportConfigModal()" id="openImportConfigModal">
+      <mat-icon>upload</mat-icon>
+      <span>Importer une configuration</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()" id="logoutButton">
+      <mat-icon>logout</mat-icon>
+      <span>Déconnexion</span>
+    </button>
+  </mat-menu>
 </div>

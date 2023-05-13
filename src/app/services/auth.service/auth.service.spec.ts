@@ -1,4 +1,3 @@
-import { IJWTResponse } from './../../model/IUser';
 import {
   createHttpFactory,
   HttpMethod,
@@ -6,6 +5,8 @@ import {
 } from '@ngneat/spectator/jest';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
+import { IUser } from './../../model/User';
+import { RoleEnum } from './../../model/RoleEnum';
 
 describe('ApiService tests', () => {
   let spectator: SpectatorHttp<AuthService>;
@@ -13,12 +14,12 @@ describe('ApiService tests', () => {
     service: AuthService
   });
 
-  const expectedUserData: IJWTResponse = {
+  const expectedUserData: IUser = {
     accessToken: 'access_token',
     id: 2,
     email: 'admin@email.com',
-    roles: ['ROLE_ADMIN'],
-    tokenType: 'Bearer'
+    username: 'test',
+    roles: [RoleEnum.ROLE_ADMIN]
   };
 
   const loginPath = '/auth/login';

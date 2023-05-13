@@ -1,5 +1,5 @@
-import { ErrorHandlerService } from './../services/error.handler.service';
-import { AuthService } from './../services/auth.service/auth.service';
+import { ErrorHandlerService } from '../../services/error.handler.service';
+import { AuthService } from '../../services/auth.service/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -12,7 +12,7 @@ import {
   SpectatorHttp
 } from '@ngneat/spectator/jest';
 import { LoginComponent } from './login.component';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 describe('LoginComponent', () => {
   let spectator: Spectator<LoginComponent>;
@@ -45,7 +45,7 @@ describe('LoginComponent', () => {
     expect(spectator.component.inputUsername).toBe('');
     expect(spectator.component.inputPassword).toBe('');
     spectator.component.handleLogin();
-    expect(loginSpy).toBeCalledTimes(0);
+    expect(loginSpy).toHaveBeenCalledTimes(0);
     spectator.fixture.detectChanges();
   });
 

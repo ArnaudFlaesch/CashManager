@@ -1,0 +1,25 @@
+<app-header></app-header>
+
+<mat-tab-group>
+  <mat-tab label="Affichage des dépenses par mois"> <app-expense-list-by-month
+      [labels]="this.labels"></app-expense-list-by-month>
+  </mat-tab>
+  <mat-tab label="Affichage du total par mois"> <app-total-expense-by-month></app-total-expense-by-month>
+  </mat-tab>
+  <mat-tab label="Affichage de la liste des labels">
+
+    <app-label-list [labels]="this.labels"></app-label-list>
+
+    <form>
+      <mat-form-field appearance="fill">
+        <mat-label>Label</mat-label>
+        <input type="text" id="label-form" placeholder="Renseignez un label" aria-label="Label" matInput
+          [formControl]="labelControl" />
+      </mat-form-field>
+
+      <button id="create-label-button" mat-raised-button (click)="handleCreateLabel()">
+        Ajouter une étiquette
+      </button>
+    </form>
+  </mat-tab>
+</mat-tab-group>

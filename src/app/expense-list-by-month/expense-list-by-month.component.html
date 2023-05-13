@@ -1,12 +1,18 @@
-<app-label-list (labelDeletedEvent)="handleLabelDeletion($event)" [labels]="this.labels"></app-label-list>
+<div>
+  <button (click)="selectPreviousMonth()" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <mat-form-field appearance="fill">
+    <mat-label>Sélectionnez un mois</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker startView="multi-year" (monthSelected)="setMonthAndYear($event, picker)"
+      [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
+  </mat-form-field>
 
-<div class="flex flex-row">
-  <div class="flex flex-row" *ngFor="let monthDate of pastMonths">
-    <button mat-raised-button [color]="getMonthButtonColor(monthDate)"
-      (click)="this.handleSelectExpensesForMonth(monthDate)">
-      {{ formatMonthToDisplay(monthDate) }}
-    </button>
-  </div>
+  <button (click)="selectNextMonth()" mat-icon-button>
+    <mat-icon>arrow_forward</mat-icon>
+  </button>
 </div>
 
 <div class="flex flex-row">
@@ -14,8 +20,8 @@
     <canvas class="h-96 max-w-2xl" baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions"
       [type]="'bar'" (chartClick)="handleChartClickedEvent($event)"></canvas>
   </div>
-  <div id="expensesContainer" *ngIf="this.expenses.length">
-    <div>Total ce mois : {{ getTotalForMonth() }}</div>
+  <div>Total ce mois : {{ getTotalForMonth() }}</div>
+  <div id="expenses-container" *ngIf="this.expenses.length">
     <div *ngFor="let expense of this.expenses; let index = index">
       <span>Dépense #{{ index + 1 }} {{ expense.amount }}
         {{ getLabelFromId(expense.labelId)?.label }}</span>
@@ -26,5 +32,4 @@
   </div>
 </div>
 
-<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)"
-  (insertedLabelEvent)="handleLabelCreation($event)" [labels]="this.labels"></app-create-expense>
+<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="this.labels"></app-create-expense>

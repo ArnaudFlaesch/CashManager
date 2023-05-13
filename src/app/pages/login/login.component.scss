@@ -1,0 +1,56 @@
+#login-page {
+  display: flex;
+  height: 100vh;
+
+  #login-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 4rem;
+    background-color: rgb(255 255 255);
+    border-color: rgb(0 0 0);
+    border-width: 2px;
+    border-radius: 0.25rem;
+    align-items: center;
+    margin: auto;
+
+    #logo-container {
+      width: 75%;
+      display: inline-block;
+      margin: 1rem;
+
+      #cash-manager-logo {
+        display: flex;
+        margin: 0 auto;
+      }
+    }
+
+    #login-page-title {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    #login-form {
+      display: flex;
+      flex-direction: column;
+      margin-top: 2.5rem;
+
+      > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 1.25rem;
+      }
+
+      #login-button-label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        mat-spinner {
+          margin-right: 1.25rem;
+
+          span {
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,22 +1,10 @@
 <div>
-  <input
-    id="expenseAmount"
-    name="amount"
-    type="number"
-    step=".01"
-    [(ngModel)]="this.expenseToCreate.amount"
-    placeholder="Saisissez le montant de la dépense"
-  />
+  <input id="expenseAmount" name="amount" type="number" step=".01" [(ngModel)]="this.expenseToCreate.amount"
+    placeholder="Saisissez le montant de la dépense" />
 
   <mat-form-field appearance="fill" id="expenseDate-container">
-    <input
-      [formControl]="dateFormControl"
-      matInput
-      id="expenseDate"
-      [matDatepicker]="picker"
-      placeholder="Choose a date"
-      readonly
-    />
+    <input [formControl]="dateFormControl" matInput id="expenseDate" [matDatepicker]="picker"
+      placeholder="Choose a date" readonly />
     <mat-hint>DD/MM/YYYY</mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
@@ -25,32 +13,18 @@
   <form>
     <mat-form-field appearance="fill">
       <mat-label>Label</mat-label>
-      <input
-        type="text"
-        id="expenseLabel"
-        placeholder="Renseignez un label"
-        aria-label="Label"
-        matInput
-        [formControl]="labelControl"
-        [matAutocomplete]="auto"
-      />
+      <input type="text" id="expenseLabel" placeholder="Renseignez un label" aria-label="Label" matInput
+        (change)="clearSelectedLabel()" [formControl]="labelControl" [matAutocomplete]="auto" />
 
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayLabel">
-        <mat-option
-          class="label-autocomplete-option"
-          *ngFor="let option of filteredOptions | async"
-          [value]="option"
-        >
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLabel($event.option.value)"
+        [displayWith]="displayLabel">
+        <mat-option class="label-autocomplete-option" *ngFor="let option of filteredOptions | async" [value]="option">
           {{ option.label }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
 
-    <button
-      id="addExpenseButton"
-      mat-raised-button
-      (click)="handleCreateExpense()"
-    >
+    <button id="addExpenseButton" [disabled]="!canCreateExpense()" mat-raised-button (click)="handleCreateExpense()">
       Ajouter une dépense
     </button>
   </form>

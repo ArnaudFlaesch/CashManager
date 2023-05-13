@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   createComponentFactory,
   createHttpFactory,
+  createSpyObject,
   HttpMethod,
   Spectator,
   SpectatorHttp
@@ -25,16 +26,6 @@ describe('TotalExpenseByMonthComponent', () => {
   const labelPath = '/label/';
   const expensePath = '/expense/';
 
-  const createComponent = createComponentFactory({
-    component: TotalExpenseByMonthComponent,
-    imports: [
-      HttpClientTestingModule,
-      RouterTestingModule,
-      MatSnackBarModule,
-      MatDialogModule
-    ],
-    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
-  });
   const createLabelHttp = createHttpFactory(LabelService);
   const createExpenseHttp = createHttpFactory(ExpenseService);
 
@@ -43,56 +34,98 @@ describe('TotalExpenseByMonthComponent', () => {
     { date: '2022-04-01', total: 200 }
   ] as ITotalExpenseByMonth[];
 
-  beforeEach(() => {
-    spectator = createComponent();
-    labelService = createLabelHttp();
-    expenseService = createExpenseHttp();
-  });
-
-  it('Should display the total with two labels', () => {
-    const getLabelsRequest = labelService.expectOne(
-      environment.backend_url + labelPath,
-      HttpMethod.GET
-    );
-    getLabelsRequest.flush(labelData);
-
-    const getTotalExpenseByMonthRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}getTotalExpensesByMonth`,
-      HttpMethod.GET
-    );
-    getTotalExpenseByMonthRequest.flush(expectedTotalExpenseByMonthData);
-    expect(spectator.component.labels).toEqual(labelData);
-
-    const expectedTotalExpenseByMonthByLabelIdData = [
-      { date: '2022-04-01', total: 400 },
-      { date: '2022-03-01', total: 100 }
-    ] as ITotalExpenseByMonth[];
-
-    const labelIdToSelect = spectator.component.labels[0].id;
-    spectator.component.selectLabel(labelIdToSelect);
-    const getTotalExpenseByMonthByLabelIdRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`,
-      HttpMethod.GET
-    );
-    getTotalExpenseByMonthByLabelIdRequest.flush(
-      expectedTotalExpenseByMonthByLabelIdData
-    );
-    expect(spectator.component.isLabelSelected(labelIdToSelect)).toEqual(true);
-    expect(spectator.component.totalExpensesByMonthChart).toEqual({
-      datasets: [
-        {
-          data: [100, 400],
-          label: 'Total des dépenses'
-        }
+  describe('Nominal cases', () => {
+    const createComponent = createComponentFactory({
+      component: TotalExpenseByMonthComponent,
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatSnackBarModule,
+        MatDialogModule
       ],
-      labels: ['March 2022', 'April 2022']
+      providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
     });
 
-    spectator.component.selectLabel(labelIdToSelect);
-    const getExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}getTotalExpensesByMonth`,
-      HttpMethod.GET
-    );
-    getExpensesRequest.flush([]);
+    beforeEach(() => {
+      spectator = createComponent();
+      labelService = createLabelHttp();
+      expenseService = createExpenseHttp();
+    });
+
+    it('Should display the total with two labels', () => {
+      const getLabelsRequest = labelService.expectOne(
+        environment.backend_url + labelPath,
+        HttpMethod.GET
+      );
+      getLabelsRequest.flush(labelData);
+
+      const getTotalExpenseByMonthRequest = expenseService.expectOne(
+        `${environment.backend_url}${expensePath}getTotalExpensesByMonth`,
+        HttpMethod.GET
+      );
+      getTotalExpenseByMonthRequest.flush(expectedTotalExpenseByMonthData);
+      expect(spectator.component.labels).toEqual(labelData);
+
+      const expectedTotalExpenseByMonthByLabelIdData = [
+        { date: '2022-04-01', total: 400 },
+        { date: '2022-03-01', total: 100 }
+      ] as ITotalExpenseByMonth[];
+
+      const labelIdToSelect = spectator.component.labels[0].id;
+      spectator.component.selectLabel(labelIdToSelect);
+      const getTotalExpenseByMonthByLabelIdRequest = expenseService.expectOne(
+        `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`,
+        HttpMethod.GET
+      );
+      getTotalExpenseByMonthByLabelIdRequest.flush(
+        expectedTotalExpenseByMonthByLabelIdData
+      );
+      expect(spectator.component.isLabelSelected(labelIdToSelect)).toEqual(
+        true
+      );
+      expect(spectator.component.totalExpensesByMonthChart).toEqual({
+        datasets: [
+          {
+            data: [100, 400],
+            label: 'Total des dépenses'
+          }
+        ],
+        labels: ['March 2022', 'April 2022']
+      });
+
+      spectator.component.selectLabel(labelIdToSelect);
+      const getExpensesRequest = expenseService.expectOne(
+        `${environment.backend_url}${expensePath}getTotalExpensesByMonth`,
+        HttpMethod.GET
+      );
+      getExpensesRequest.flush([]);
+    });
+  });
+
+  describe('Error cases', () => {
+    const errorHandlerService = createSpyObject(ErrorHandlerService);
+    const createComponent = createComponentFactory({
+      component: TotalExpenseByMonthComponent,
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatSnackBarModule,
+        MatDialogModule
+      ],
+      providers: [
+        { provide: ErrorHandlerService, useValue: errorHandlerService }
+      ]
+    });
+
+    it('Should log error on get labels when server throws an error', () => {
+      spectator = createComponent();
+      labelService = createLabelHttp();
+
+      labelService.controller
+        .expectOne(environment.backend_url + labelPath, HttpMethod.GET)
+        .error(new ProgressEvent('Server error'));
+
+      expect(errorHandlerService.handleError).toHaveBeenCalledTimes(1);
+    });
   });
 });

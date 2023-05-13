@@ -1,0 +1,25 @@
+<div id="login-page">
+  <div id="login-container">
+    <a routerLink href="/home" id="logo-container">
+      <img src="assets/logo.png" id="cash-manager-logo" alt="cash manager logo" />
+    </a>
+    <div>
+      <h1 id="login-page-title">CashManager</h1>
+    </div>
+    <div id="login-form">
+      <input id="inputUsername" placeholder="Username" [(ngModel)]="inputUsername" />
+
+      <input id="inputPassword" placeholder="Password" [(ngModel)]="inputPassword" type="password" />
+
+      <button mat-raised-button id="loginButton" [disabled]="!this.inputUsername || !inputPassword || isLoading"
+        (click)="handleLogin()" color="primary">
+
+        <span id="login-button-label">
+          <mat-spinner diameter="30" *ngIf="isLoading"></mat-spinner>
+          <span>Se connecter</span>
+        </span>
+      </button>
+
+    </div>
+  </div>
+</div>
