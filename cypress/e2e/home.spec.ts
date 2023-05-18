@@ -17,7 +17,7 @@ describe('Home page tests', () => {
   });
 
   it('Should add a new expense related to an existing label', () => {
-    cy.clock(new Date(2022, 3, 20, 0, 0, 0).getTime());
+    cy.clock(Date.parse('2022-04-20'));
     cy.get('#expenseAmount').clear();
     cy.get('#expenseAmount').type('120');
     cy.get('#expenseDate-container .mat-datepicker-toggle').click();
