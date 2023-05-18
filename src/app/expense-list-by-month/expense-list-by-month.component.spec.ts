@@ -112,7 +112,7 @@ describe('ExpenseListByMonthComponent', () => {
 
     spectator.component.deleteLabel(labelData[1].id);
     const deleteLabelRequest = labelService.expectOne(
-      `${environment.backend_url}/label/deleteLabel/?labelId=${labelData[1].id}`,
+      `${environment.backend_url}/label/deleteLabel?labelId=${labelData[1].id}`,
       HttpMethod.DELETE
     );
     deleteLabelRequest.flush({});
