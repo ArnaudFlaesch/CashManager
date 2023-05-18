@@ -33,7 +33,7 @@ export class LabelService {
 
   public deleteLabel(id: number): Observable<void> {
     return this.http.delete<void>(
-      `${environment.backend_url}/label/deleteLabel/?labelId=${id}`,
+      `${environment.backend_url}/label/deleteLabel?labelId=${id}`,
       {
         headers: {
           Authorization: authorizationBearer(),
