@@ -39,6 +39,7 @@ describe('Home page tests', () => {
       cy.get('#mat-tab-label-0-2').click();
       cy.intercept('DELETE', '/label/deleteLabel?labelId=*').as('deleteLabel');
       cy.get('.deleteLabelButton:nth(2)').click();
+      cy.waitUntil(() => cy.get('.mat-mdc-dialog-title').should('be.visible'));
       cy.get('#validateAction').click();
 
       cy.wait('@deleteLabel').then((request: Interception) => {
