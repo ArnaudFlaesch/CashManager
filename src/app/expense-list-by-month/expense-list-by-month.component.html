@@ -15,13 +15,13 @@
   </button>
 </div>
 
-<div class="flex flex-row">
+<div id="expenses-container">
   <div id="chartContainer">
-    <canvas class="h-96 max-w-2xl" baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions"
-      [type]="'bar'" (chartClick)="handleChartClickedEvent($event)"></canvas>
+    <canvas baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions" [type]="'bar'"
+      (chartClick)="handleChartClickedEvent($event)"></canvas>
   </div>
   <div>Total ce mois : {{ getTotalForMonth() }}</div>
-  <div id="expenses-container" *ngIf="this.expenses.length">
+  <div id="expenses-list" *ngIf="this.expenses.length">
     <div *ngFor="let expense of this.expenses; let index = index">
       <span>Dépense #{{ index + 1 }} {{ expense.amount }}
         {{ getLabelFromId(expense.labelId)?.label }}</span>

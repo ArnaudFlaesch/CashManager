@@ -89,7 +89,7 @@ export class TotalExpenseByMonthComponent {
     data.sort((dataA, dataB) => {
       const dateA = new Date(dataA.date);
       const dateB = new Date(dataB.date);
-      if (dateA === dateB) return 0;
+      if (dateA.getTime() === dateB.getTime()) return 0;
       return isBefore(dateA, dateB) ? -1 : 1;
     });
     this.totalExpensesByMonthChart = {

@@ -29,12 +29,6 @@ $light-theme: mat.define-light-theme(
 @include mat.core-theme($light-theme);
 @include mat.button-color($light-theme);
 
-/* stylelint-disable */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-/* stylelint-enable */
-
 html,
 body {
   // Light mode

@@ -23,7 +23,7 @@ describe('Home page tests', () => {
     cy.get('#expenseDate-container .mat-datepicker-toggle').click();
     cy.get('.mat-calendar-body-today').click();
     cy.get('#expenseDate').should('have.value', '20/04/2022');
-    cy.get('#expenseLabel').type('Cou');
+    cy.get('#expense-label').type('Cou');
     cy.get('.label-autocomplete-option')
       .should('have.length', 1)
       .eq(0)
@@ -32,11 +32,8 @@ describe('Home page tests', () => {
         expect(text.trim()).equal('Courses');
       });
     cy.get('.label-autocomplete-option').eq(0).click();
-    cy.get('#expenseLabel')
-      .invoke('val')
-      .then((val) => {
-        expect(val).equal('Courses');
-      })
+    cy.get('#expense-label')
+      .should('have.value', 'Courses')
       .clock()
       .then((clock) => {
         clock.restore();

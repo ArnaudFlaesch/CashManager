@@ -1,20 +1,10 @@
 <div>
-  <button
-    [color]="isLabelSelected(label.id) ? 'primary' : ''"
-    (click)="selectLabel(label.id)"
-    mat-raised-button
-    *ngFor="let label of this.labels"
-  >
+  <button [color]="isLabelSelected(label.id) ? 'primary' : ''" (click)="selectLabel(label.id)" mat-raised-button
+    *ngFor="let label of this.labels">
     {{ label.label }}
   </button>
 </div>
 
-<canvas
-  *ngIf="this.totalExpensesByMonthChart"
-  class="h-96 max-w-2xl"
-  baseChart
-  [data]="this.totalExpensesByMonthChart"
-  [options]="barChartOptions"
-  [type]="'line'"
-  (chartClick)="handleChartClickedEvent($event)"
-></canvas>
+<canvas id="total-expenses-chart" *ngIf="this.totalExpensesByMonthChart" baseChart
+  [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"
+  (chartClick)="handleChartClickedEvent($event)"></canvas>

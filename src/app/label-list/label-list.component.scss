@@ -1,3 +1,13 @@
-.dummy-class {
-  color: black;
+.label-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+
+  .label-id {
+    margin-right: 0.5rem;
+  }
+
+  .label-name {
+    margin-right: 0.5rem;
+  }
 }

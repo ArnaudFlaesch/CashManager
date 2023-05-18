@@ -65,7 +65,7 @@ export class AuthService {
   public userHasValidToken(): boolean {
     const authenticatedUser = this.getCurrentUserData();
     let result = false;
-    if (authenticatedUser && authenticatedUser.accessToken) {
+    if (authenticatedUser?.accessToken) {
       try {
         result =
           Date.now() <

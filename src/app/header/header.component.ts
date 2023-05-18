@@ -69,10 +69,8 @@ export class HeaderComponent implements OnInit {
     return this.authService.isUserAdmin();
   }
 
-  public logout(): void {
+  public async logout(): Promise<void> {
     this.authService.logout();
-    this.router
-      .navigate(['login'])
-      .catch((error) => console.log(error.message));
+    await this.router.navigate(['login']);
   }
 }
