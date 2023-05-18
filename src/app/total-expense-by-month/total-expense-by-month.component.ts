@@ -86,9 +86,12 @@ export class TotalExpenseByMonthComponent {
   }
 
   private refreshChart(data: ITotalExpenseByMonth[]) {
-    data.sort((dataA, dataB) =>
-      isBefore(new Date(dataA.date), new Date(dataB.date)) ? -1 : 1
-    );
+    data.sort((dataA, dataB) => {
+      const dateA = new Date(dataA.date);
+      const dateB = new Date(dataB.date);
+      if (dateA === dateB) return 0;
+      return isBefore(dateA, dateB) ? -1 : 1;
+    });
     this.totalExpensesByMonthChart = {
       labels: data.map((totalByMonth) =>
         format(new Date(totalByMonth.date), 'MMMM yyyy')

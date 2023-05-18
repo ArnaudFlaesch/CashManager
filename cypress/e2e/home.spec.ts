@@ -22,11 +22,7 @@ describe('Home page tests', () => {
     cy.get('#expenseAmount').type('120');
     cy.get('#expenseDate-container .mat-datepicker-toggle').click();
     cy.get('.mat-calendar-body-today').click();
-    cy.get('#expenseDate')
-      .invoke('val')
-      .then((val) => {
-        expect(val).equal('20/04/2022');
-      });
+    cy.get('#expenseDate').should('have.value', '20/04/2022');
     cy.get('#expenseLabel').type('Cou');
     cy.get('.label-autocomplete-option')
       .should('have.length', 1)
