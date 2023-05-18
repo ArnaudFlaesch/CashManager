@@ -23,8 +23,7 @@ describe('Home page tests', () => {
       cy.get('#expenseAmount').clear();
       cy.get('#expenseAmount').type('120');
       cy.get('#expenseDate-container .mat-datepicker-toggle').click();
-      cy.get('.mat-calendar-body-today').click();
-      cy.get('.mat-calendar-body-today').click();
+      cy.get('.mat-calendar-body-today').dblclick();
       cy.get('#expenseDate').should('have.value', '15/05/2023');
       cy.get('#expense-label').type('Vac');
       cy.get('.label-autocomplete-option')
