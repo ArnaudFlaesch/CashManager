@@ -25,15 +25,9 @@ $light-theme: mat.define-light-theme(
   )
 );
 
-// Apply the dark theme by default
+// Apply the light theme by default
 @include mat.core-theme($light-theme);
 @include mat.button-color($light-theme);
-
-/* stylelint-disable */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-/* stylelint-enable */
 
 html,
 body {
@@ -47,7 +41,7 @@ body {
   background-color: var(--light-mode-background-color);
 
   &.dark-mode {
-    @include mat.core-theme($dark-theme);
+    @include mat.core-color($dark-theme);
     @include mat.button-color($dark-theme);
 
     background-color: var(--dark-mode-background-color);

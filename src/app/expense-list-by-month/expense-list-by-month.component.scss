@@ -1,7 +1,17 @@
 #expenses-container {
-  display: grid;
+  display: flex;
+  flex-direction: row;
 
-  @media (width >= 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  canvas {
+    height: 24rem;
+    max-width: 42rem;
+  }
+
+  #expenses-list {
+    display: grid;
+
+    @media (width >= 640px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 }

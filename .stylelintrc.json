@@ -4,16 +4,6 @@
     "stylelint-config-prettier-scss"
   ],
   "rules": {
-    "at-rule-no-unknown": [
-      true,
-      {
-        "ignoreAtRules": [
-          "tailwind",
-          "use",
-          "include"
-        ]
-      }
-    ],
     "no-empty-source": null,
     "selector-id-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
     "selector-class-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
