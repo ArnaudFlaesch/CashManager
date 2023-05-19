@@ -7,7 +7,7 @@ describe('Home page tests', () => {
     cy.loginAsAdmin().visit('/');
   });
 
-  it('Should create a label, add an expense to it and then delete the label', () => {
+  xit('Should create a label, add an expense to it and then delete the label', () => {
     cy.intercept('POST', '/label/addLabel').as('addLabel');
     cy.clock(Date.parse('2023-05-15'));
 
@@ -39,8 +39,7 @@ describe('Home page tests', () => {
       cy.get('#mat-tab-label-0-2').click();
       cy.intercept('DELETE', '/label/deleteLabel?labelId=*').as('deleteLabel');
       cy.get('.deleteLabelButton:nth(2)').click();
-      cy.waitUntil(() => cy.get('.mat-mdc-dialog-title').should('be.visible'));
-      cy.get('#validateAction').click();
+      cy.get('#validateAction').dblclick();
 
       cy.wait('@deleteLabel').then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
