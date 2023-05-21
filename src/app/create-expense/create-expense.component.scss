@@ -1,3 +1,5 @@
-.dummy-class {
-  color: black;
+#create-expense-form {
+  > :not(:last-child) {
+    margin-right: 5px;
+  }
 }
