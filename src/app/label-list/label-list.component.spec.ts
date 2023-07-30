@@ -3,8 +3,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   createComponentFactory,
   createHttpFactory,
-  Spectator,
-  SpectatorHttp
+  Spectator
 } from '@ngneat/spectator/jest';
 import { LabelService } from '../services/label.service/label.service';
 import { ErrorHandlerService } from './../services/error.handler.service';
