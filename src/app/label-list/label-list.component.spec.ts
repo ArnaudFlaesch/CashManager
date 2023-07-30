@@ -13,7 +13,6 @@ import { LabelListComponent } from './label-list.component';
 
 describe('LabelListComponent', () => {
   let spectator: Spectator<LabelListComponent>;
-  let labelService: SpectatorHttp<LabelService>;
 
   const createComponent = createComponentFactory({
     component: LabelListComponent,
@@ -25,7 +24,7 @@ describe('LabelListComponent', () => {
 
   beforeEach(() => {
     spectator = createComponent();
-    labelService = createLabelHttp();
+    createLabelHttp();
   });
 
   it('should create', () => {
