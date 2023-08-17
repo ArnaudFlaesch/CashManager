@@ -118,7 +118,7 @@ export class ExpenseListByMonthComponent {
     active
   }: {
     event?: ChartEvent;
-    active?: Record<string, unknown>[];
+    active?: object[];
   }): void {
     console.log(event, active);
   }
