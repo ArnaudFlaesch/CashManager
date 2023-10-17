@@ -44,7 +44,7 @@
     "ng2-charts": "5.0.3",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
-    "zone.js": "0.14.0"
+    "zone.js": "0.13.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "16.2.6",
@@ -71,7 +71,7 @@
     "mochawesome-merge": "4.3.0",
     "mochawesome-report-generator": "6.2.0",
     "prettier": "3.0.3",
-    "stylelint": "15.10.3",
+    "stylelint": "15.11.0",
     "stylelint-config-prettier-scss": "1.0.0",
     "stylelint-config-standard-scss": "11.0.0",
     "typescript": "5.1.6"

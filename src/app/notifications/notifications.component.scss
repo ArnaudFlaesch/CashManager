@@ -1,8 +1,7 @@
 .notification-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-items: center;
+  place-items: center center;
 
   &.unread-notification {
     .mark-action-as-read-button,
