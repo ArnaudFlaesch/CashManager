@@ -51,8 +51,12 @@ jobs:
           fi
 
       - name: E2E Tests
-        run: |
-          npm run test:e2e:ci
+        uses: cypress-io/github-action@v6
+        with:
+          browser: firefox
+          config-file: cypress-test.config.ts
+          start: npm start
+          wait-on: 'http://localhost:4200'
 
       - name: Generate test report
         if: always()
