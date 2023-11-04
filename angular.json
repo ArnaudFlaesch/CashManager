@@ -102,31 +102,6 @@
           "options": {
             "browserTarget": "CashManager:build"
           }
-        },
-        "e2e": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "CashManager:serve",
-            "browser": "firefox"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "CashManager:serve:production"
-            }
-          }
-        },
-        "e2e-ci": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "CashManager:serve",
-            "configFile": "cypress-test.config.ts",
-            "browser": "firefox"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "CashManager:production"
-            }
-          }
         }
       }
     }
