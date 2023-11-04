@@ -26,13 +26,18 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
+              "includePaths": [
+                "src/styles"
+              ]
             },
             "scripts": []
           },
@@ -96,31 +101,6 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "CashManager:build"
-          }
-        },
-        "e2e": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "CashManager:serve",
-            "browser": "chrome"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "CashManager:serve:production"
-            }
-          }
-        },
-        "e2e-ci": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "CashManager:serve",
-            "configFile": "cypress-test.config.ts",
-            "browser": "chrome"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "CashManager:production"
-            }
           }
         }
       }
