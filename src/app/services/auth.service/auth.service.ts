@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../../environments/environment';
 import { RoleEnum } from './../../model/RoleEnum';
 import { IUser } from './../../model/User';
