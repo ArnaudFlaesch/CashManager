@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import jwt_decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 
-import { IUser } from './../../model/User';
+import jwtDecode from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 import { RoleEnum } from './../../model/RoleEnum';
+import { IUser } from './../../model/User';
 
 interface IJwt {
   sub: string;
@@ -69,7 +69,7 @@ export class AuthService {
       try {
         result =
           Date.now() <
-          jwt_decode<IJwt>(authenticatedUser.accessToken).exp * 1000;
+          jwtDecode<IJwt>(authenticatedUser.accessToken).exp * 1000;
       } catch (error) {
         result = false;
       }
