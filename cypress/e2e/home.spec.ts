@@ -23,20 +23,24 @@ describe('Home page tests', () => {
     cy.get('#expenseDate-container .mat-datepicker-toggle').click();
     cy.get('.mat-calendar-body-today').click();
     cy.get('#expenseDate').should('have.value', '20/04/2022');
-    cy.get('#expense-label').type('Cou');
-    cy.get('.label-autocomplete-option')
-      .should('have.length', 1)
-      .eq(0)
-      .invoke('text')
-      .then((text) => {
-        expect(text.trim()).equal('Courses');
-      });
-    cy.get('.label-autocomplete-option').eq(0).click();
-    cy.get('#expense-label')
-      .should('have.value', 'Courses')
-      .clock()
-      .then((clock) => {
-        clock.restore();
-      });
+    cy.waitUntil(() => cy.get('#expense-label').should('be.visible')).then(
+      () => {
+        cy.get('#expense-label').type('Cou');
+        cy.get('.label-autocomplete-option')
+          .should('have.length', 1)
+          .eq(0)
+          .invoke('text')
+          .then((text) => {
+            expect(text.trim()).equal('Courses');
+          });
+        cy.get('.label-autocomplete-option').eq(0).click();
+        cy.get('#expense-label')
+          .should('have.value', 'Courses')
+          .clock()
+          .then((clock) => {
+            clock.restore();
+          });
+      }
+    );
   });
 });
