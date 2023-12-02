@@ -58,7 +58,7 @@
     "cypress": "13.6.0",
     "cypress-multi-reporters": "1.6.4",
     "eslint": "8.55.0",
-    "eslint-config-prettier": "9.0.0",
+    "eslint-config-prettier": "9.1.0",
     "eslint-plugin-cypress": "2.15.1",
     "gh-pages": "6.1.0",
     "jasmine-core": "5.1.1",
