@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "stylelint-config-standard-scss"
-  ],
+  "extends": ["stylelint-config-standard-scss"],
   "rules": {
     "no-empty-source": null,
     "selector-id-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",

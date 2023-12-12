@@ -10,7 +10,10 @@ export class ErrorHandlerService {
   private ERROR_FORBIDDEN_CODE =
     "Vous n'avez pas les droits nécessaires pour effectuer cette opération.";
 
-  constructor(private router: Router, private snackbar: MatSnackBar) {}
+  constructor(
+    private router: Router,
+    private snackbar: MatSnackBar
+  ) {}
 
   public handleError(error: HttpErrorResponse, messageToDisplay: string): void {
     switch (error.status) {
