@@ -4,12 +4,13 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
 [![codecov](https://codecov.io/gh/ArnaudFlaesch/CashManager/branch/main/graph/badge.svg)](https://codecov.io/gh/ArnaudFlaesch/CashManager)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/18204cf77151446889b30a2c21c49d52)](https://app.codacy.com/gh/ArnaudFlaesch/CashManager/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Known Vulnerabilities](https://snyk.io/test/github/ArnaudFlaesch/CashManager/badge.svg)](https://snyk.io/test/github/ArnaudFlaesch/CashManager)
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 
 ## Description
 
-Le projet est déployé via Github Pages et accessible à cette addresse : https://arnaudflaesch.github.io/CashManager/.
+Le projet est déployé via Github Pages et accessible à cette addresse : <https://arnaudflaesch.github.io/CashManager/>.
 
 ## Démarrage
 
@@ -21,11 +22,11 @@ Le projet est déployé via Github Pages et accessible à cette addresse : https
 
   > npm start
 
-L'application est ensuite accessible à l'addresse http://localhost:4200.
+L'application est ensuite accessible à l'addresse <http://localhost:4200>.
 
 - Démarrage du backend
 
-Il est nécessaire d'exécuter le backend et sa base de données pour que l'application fonctionne. Les sources et le README sont accessibles ici :https://github.com/ArnaudFlaesch/Dash-WebServices.
+Il est nécessaire d'exécuter le backend et sa base de données pour que l'application fonctionne. Les sources et le README sont accessibles ici :<https://github.com/ArnaudFlaesch/Dash-WebServices>.
 
 Pour lancer le frontend sans avoir à utiliser le backend en local, il est possible d'exécuter la commande :
 
@@ -47,7 +48,7 @@ puis de l'exécuter via la commande :
 > docker run -p 8080:8080 -d -e OPENWEATHERMAP_KEY=${OPENWEATHERMAP_KEY} -e STRAVA_CLIENT_ID=${STRAVA_CLIENT_ID} -e STRAVA_CLIENT_SECRET=${STRAVA_CLIENT_SECRET} -e STEAM_API_KEY=${STEAM_API_KEY} -e AIRPARIF_API_TOKEN=${AIRPARIF_API_TOKEN} arnaudf93/dashwebservices:latest
 
 en renseignant les variables d'environnement nécessaires en suivant le README du backend ici :
-https://github.com/ArnaudFlaesch/Dash-Webservices#demarrage
+<https://github.com/ArnaudFlaesch/Dash-Webservices#demarrage>
 
 ## Commandes utiles
 
