@@ -3,6 +3,8 @@
 [![Node.js CI](https://github.com/ArnaudFlaesch/CashManager/actions/workflows/ci.yml/badge.svg)](https://github.com/ArnaudFlaesch/CashManager/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ArnaudFlaesch_CashManager&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ArnaudFlaesch_CashManager)
 [![codecov](https://codecov.io/gh/ArnaudFlaesch/CashManager/branch/main/graph/badge.svg)](https://codecov.io/gh/ArnaudFlaesch/CashManager)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/18204cf77151446889b30a2c21c49d52)](https://app.codacy.com/gh/ArnaudFlaesch/CashManager/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/18204cf77151446889b30a2c21c49d52)](https://app.codacy.com/gh/ArnaudFlaesch/CashManager/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
