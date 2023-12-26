@@ -29,7 +29,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateExpenseComponent } from './create-expense/create-expense.component';
 import { ExpenseListByMonthComponent } from './expense-list-by-month/expense-list-by-month.component';
-import { AuthGuard } from './guards/auth.guard';
 import { HeaderComponent } from './header/header.component';
 import { LabelListComponent } from './label-list/label-list.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
@@ -97,7 +96,6 @@ import { DateUtilsService } from './utils/date.utils.service';
     ExpenseService,
     ConfigService,
     ErrorHandlerService,
-    AuthGuard,
     NotificationService,
     ThemeService,
     DateUtilsService,
