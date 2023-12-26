@@ -22,7 +22,7 @@ export class ImportConfigModalComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public selectFile(event: any): void {
-    if (event.target.files?[0]) {
+    if (event.target.files?.[0]) {
       this.fileToUpload = event.target.files[0];
     }
   }
