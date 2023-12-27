@@ -48,20 +48,6 @@ export class AuthService {
     localStorage.removeItem('user');
   }
 
-  public getCurrentUserData(): IUser | null {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
-      return null;
-    } else {
-      return JSON.parse(userData);
-    }
-  }
-
-  public isUserAdmin(): boolean {
-    const authenticatedUser = this.getCurrentUserData();
-    return authenticatedUser?.roles.includes(RoleEnum.ROLE_ADMIN) ?? false;
-  }
-
   public userHasValidToken(): boolean {
     const authenticatedUser = this.getCurrentUserData();
     let result = false;
@@ -75,5 +61,19 @@ export class AuthService {
       }
     }
     return result;
+  }
+
+  public isUserAdmin(): boolean {
+    const authenticatedUser = this.getCurrentUserData();
+    return authenticatedUser?.roles.includes(RoleEnum.ROLE_ADMIN) ?? false;
+  }
+
+  private getCurrentUserData(): IUser | null {
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      return null;
+    } else {
+      return JSON.parse(userData);
+    }
   }
 }
