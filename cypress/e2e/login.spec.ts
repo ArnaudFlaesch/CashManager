@@ -3,7 +3,9 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('Login tests', () => {
-  beforeEach(() => cy.intercept('POST', '/auth/login').as('login').visit('/'));
+  beforeEach(() =>
+    cy.intercept('POST', '/auth/login').as('login').visit('/login')
+  );
 
   it('Should fail to login', () => {
     cy.get('#loginButton').should('be.disabled');

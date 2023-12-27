@@ -29,7 +29,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateExpenseComponent } from './create-expense/create-expense.component';
 import { ExpenseListByMonthComponent } from './expense-list-by-month/expense-list-by-month.component';
-import { AuthGuard } from './guards/auth.guard';
 import { HeaderComponent } from './header/header.component';
 import { LabelListComponent } from './label-list/label-list.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
@@ -47,6 +46,7 @@ import { NotificationService } from './services/notification.service/Notificatio
 import { ThemeService } from './services/theme.service/theme.service';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-expense-by-month.component';
 import { DateUtilsService } from './utils/date.utils.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -92,12 +92,12 @@ import { DateUtilsService } from './utils/date.utils.service';
     ReactiveFormsModule
   ],
   providers: [
+    AuthGuard,
     AuthService,
     LabelService,
     ExpenseService,
     ConfigService,
     ErrorHandlerService,
-    AuthGuard,
     NotificationService,
     ThemeService,
     DateUtilsService,

@@ -1,30 +1,20 @@
-import { AuthService } from './../services/auth.service/auth.service';
 import { Injectable } from '@angular/core';
-import {
-  Router,
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot
-} from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
+
+import { AuthService } from '../services/auth.service/auth.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard {
   constructor(
     private router: Router,
     private authService: AuthService
   ) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
+  canActivate(): boolean | UrlTree {
     if (this.authService.userHasValidToken()) {
+      return this.router.parseUrl('login');
+    } else {
       return true;
     }
-
-    this.router
-      .navigate(['/login'], { queryParams: { returnUrl: state.url } })
-      .catch((error) => console.log(error.message));
-    return false;
   }
 }
