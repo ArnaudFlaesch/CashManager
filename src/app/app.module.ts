@@ -46,6 +46,7 @@ import { NotificationService } from './services/notification.service/Notificatio
 import { ThemeService } from './services/theme.service/theme.service';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-expense-by-month.component';
 import { DateUtilsService } from './utils/date.utils.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { DateUtilsService } from './utils/date.utils.service';
     ReactiveFormsModule
   ],
   providers: [
+    AuthGuard,
     AuthService,
     LabelService,
     ExpenseService,
