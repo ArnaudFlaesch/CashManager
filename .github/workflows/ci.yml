@@ -73,11 +73,11 @@ jobs:
           name: Cypress report
           path: cypress/reports/html
 
-      - name: Send coverage report
-        run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov -t ${{ secrets.CODECOV_TOKEN }} -F coverage-jest
+      - name: Report coverage for Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: coverage-jest
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Report coverage for Codacy
         run: |
@@ -126,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
 
       # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
       - name: Run Codacy Analysis CLI
