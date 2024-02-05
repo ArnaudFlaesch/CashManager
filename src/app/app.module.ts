@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -47,6 +47,7 @@ import { ThemeService } from './services/theme.service/theme.service';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month/total-expense-by-month.component';
 import { DateUtilsService } from './utils/date.utils.service';
 import { AuthGuard } from './guards/auth.guard';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,13 @@ import { AuthGuard } from './guards/auth.guard';
     MatSnackBarModule,
     HttpClientModule,
     NgChartsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     AuthGuard,
