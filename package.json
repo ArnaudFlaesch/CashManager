@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "7.0.2",
     "cypress": "13.6.6",
     "cypress-multi-reporters": "1.6.4",
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-cypress": "2.15.1",
     "gh-pages": "6.1.1",
