@@ -151,7 +151,7 @@ export class ExpenseListByMonthComponent {
   }
 
   public formatExpenseDate(expenseDate: Date): string {
-    return format(expenseDate, 'dd-MM-yyyy');
+    return format(expenseDate, 'dd-MM');
   }
 
   private selectMonth(selectedMonth: Date): void {
