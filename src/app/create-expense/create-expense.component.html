@@ -6,14 +6,14 @@
 
   <mat-form-field appearance="fill" id="expenseDate-container">
     <input [formControl]="dateFormControl" matInput id="expenseDate" [matDatepicker]="picker"
-      placeholder="Choose a date" readonly />
+      placeholder="Sélectionnez une date" readonly />
     <mat-hint>DD/MM/YYYY</mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
-    <mat-label>Label</mat-label>
+    <mat-label>Étiquette</mat-label>
     <input type="text" id="expense-label" placeholder="Renseignez un label" aria-label="Label" matInput
       (change)="clearSelectedLabel()" [formControl]="labelControl" [matAutocomplete]="auto" />
 

@@ -1,4 +1,8 @@
 #total-expenses-chart {
   height: 100% !important;
   width: 100vw !important;
+
+  @media (width <= 640px) {
+    min-height: 20vh !important;
+  }
 }

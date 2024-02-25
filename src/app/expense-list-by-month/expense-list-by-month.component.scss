@@ -4,14 +4,20 @@
   gap: 1em 2em;
   margin-bottom: 1em;
 
-  canvas {
-    height: 100% !important;
-    width: 55vw !important;
+  #chart-container {
+    display: flex;
+    flex: 1 0 70%;
+
+    canvas {
+      flex: 1;
+      min-height: 40vh !important;
+    }
   }
 
   #expenses-detail {
     display: flex;
     flex-direction: column;
+    flex: 0 1 30%;
     row-gap: 0.5em;
 
     #expenses-list {
@@ -29,10 +35,6 @@
 @media (width <= 640px) {
   #expenses-container {
     flex-direction: column;
-
-    canvas {
-      width: 100vw !important;
-    }
 
     #expenses-list {
       grid-template-columns: repeat(2, minmax(0, 1fr));

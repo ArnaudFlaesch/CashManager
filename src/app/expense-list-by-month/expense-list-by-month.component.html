@@ -16,7 +16,7 @@
 </div>
 
 <div id="expenses-container">
-  <div id="chartContainer">
+  <div id="chart-container">
     <canvas baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions" [type]="'bar'"
       (chartClick)="handleChartClickedEvent($event)"></canvas>
   </div>
