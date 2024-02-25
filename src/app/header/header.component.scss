@@ -1,3 +1,6 @@
 #action-bar-buttons {
-  text-align: right;
+  display: flex;
+  flex-direction: row;
+  gap: 0.375rem;
+  justify-content: flex-end;
 }
