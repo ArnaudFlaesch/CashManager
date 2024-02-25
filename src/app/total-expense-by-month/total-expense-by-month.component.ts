@@ -6,6 +6,7 @@ import { format, isBefore } from 'date-fns';
 import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-total-expense-by-month',
@@ -13,11 +14,11 @@ import { ErrorHandlerService } from '../services/error.handler.service';
   styleUrls: ['./total-expense-by-month.component.scss']
 })
 export class TotalExpenseByMonthComponent {
-  public labels: Label[] = [];
+  readonly noLabelIdSelected = 0;
 
+  public labels: Label[] = [];
   public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined =
     undefined;
-
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
@@ -26,9 +27,10 @@ export class TotalExpenseByMonthComponent {
       }
     }
   };
+  public labelControl = new FormControl<number>(this.noLabelIdSelected);
 
   private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
-  private selectedLabelId = 0;
+  private selectedLabelId = this.noLabelIdSelected;
 
   constructor(
     private expenseService: ExpenseService,
@@ -36,24 +38,28 @@ export class TotalExpenseByMonthComponent {
     private errorHandlerService: ErrorHandlerService
   ) {
     this.getLabels();
+    this.labelControl.valueChanges.subscribe((newValue) => {
+      this.selectLabel(newValue ?? this.noLabelIdSelected);
+    });
+  }
+
+  public resetSelectedLabel(): void {
+    this.labelControl.setValue(this.noLabelIdSelected);
   }
 
   public selectLabel(labelId: number): void {
-    if (this.selectedLabelId === labelId) {
-      this.selectedLabelId = 0;
-      this.getTotalExpensesByMonth();
-    } else {
+    if (this.selectedLabelId !== labelId) {
       this.selectedLabelId = labelId;
-      this.expenseService
-        .getTotalExpensesByMonthByLabelId(this.selectedLabelId)
-        .subscribe({
-          next: (data) => this.refreshChart(data)
-        });
+      if (this.selectedLabelId === this.noLabelIdSelected) {
+        this.getTotalExpensesByMonth();
+      } else {
+        this.expenseService
+          .getTotalExpensesByMonthByLabelId(this.selectedLabelId)
+          .subscribe({
+            next: (data) => this.refreshChart(data)
+          });
+      }
     }
-  }
-
-  public isLabelSelected(labelId: number): boolean {
-    return this.selectedLabelId === labelId;
   }
 
   public handleChartClickedEvent({
@@ -64,6 +70,10 @@ export class TotalExpenseByMonthComponent {
     active?: object[];
   }): void {
     console.log(event, active);
+  }
+
+  public isOneLabelSelected(): boolean {
+    return this.selectedLabelId !== this.noLabelIdSelected;
   }
 
   private getLabels() {

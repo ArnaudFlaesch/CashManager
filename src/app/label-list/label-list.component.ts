@@ -1,6 +1,12 @@
 import { ErrorHandlerService } from './../services/error.handler.service';
 import { LabelService } from './../services/label.service/label.service';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Label } from '../model/Label';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
@@ -9,7 +15,8 @@ import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
 @Component({
   selector: 'app-label-list',
   templateUrl: './label-list.component.html',
-  styleUrls: ['./label-list.component.scss']
+  styleUrls: ['./label-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LabelListComponent {
   @Input() labels: Label[] = [];

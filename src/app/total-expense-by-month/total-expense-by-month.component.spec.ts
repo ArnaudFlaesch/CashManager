@@ -80,9 +80,7 @@ describe('TotalExpenseByMonthComponent', () => {
       getTotalExpenseByMonthByLabelIdRequest.flush(
         expectedTotalExpenseByMonthByLabelIdData
       );
-      expect(spectator.component.isLabelSelected(labelIdToSelect)).toEqual(
-        true
-      );
+      expect(spectator.component.isOneLabelSelected()).toEqual(true);
       expect(spectator.component.totalExpensesByMonthChart).toEqual({
         datasets: [
           {
@@ -92,13 +90,6 @@ describe('TotalExpenseByMonthComponent', () => {
         ],
         labels: ['March 2022', 'April 2022']
       });
-
-      spectator.component.selectLabel(labelIdToSelect);
-      const getExpensesRequest = expenseService.expectOne(
-        `${environment.backend_url}${expensePath}getTotalExpensesByMonth`,
-        HttpMethod.GET
-      );
-      getExpensesRequest.flush([]);
     });
   });
 

@@ -20,13 +20,14 @@
     <canvas baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions" [type]="'bar'"
       (chartClick)="handleChartClickedEvent($event)"></canvas>
   </div>
-  <div>
-    <div>Total ce mois : {{ getTotalForMonth() }}</div>
+
+  <div id="expenses-detail">
+    <h3 id="expenses-total">Total ce mois : {{ getTotalForMonth() }}€</h3>
     <div id="expenses-list" *ngIf="this.expenses.length">
       <div *ngFor="let expense of this.expenses; let index = index">
-        <span>Dépense #{{ index + 1 }} {{ expense.amount }}
+        <span>{{formatExpenseDate(expense.expenseDate)}} : {{ expense.amount }}€
           {{ getLabelFromId(expense.labelId)?.label }}</span>
-        <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
+        <button *ngIf="false" mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

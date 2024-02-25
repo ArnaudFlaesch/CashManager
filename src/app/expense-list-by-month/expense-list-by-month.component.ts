@@ -9,7 +9,13 @@ import {
   ChartEvent,
   ChartTypeRegistry
 } from 'chart.js';
-import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
+import {
+  addMonths,
+  endOfMonth,
+  format,
+  startOfMonth,
+  subMonths
+} from 'date-fns';
 
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
@@ -142,6 +148,10 @@ export class ExpenseListByMonthComponent {
     );
     this.selectMonth(selectedMonth);
     datepicker.close();
+  }
+
+  public formatExpenseDate(expenseDate: Date): string {
+    return format(expenseDate, 'dd/MM');
   }
 
   private selectMonth(selectedMonth: Date): void {

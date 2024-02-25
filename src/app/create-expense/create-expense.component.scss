@@ -1,5 +1,14 @@
 #create-expense-form {
-  > :not(:last-child) {
-    margin-right: 5px;
+  display: flex;
+  column-gap: 0.5em;
+  align-items: center;
+
+  #add-expense-button {
+    width: fit-content;
+  }
+
+  @media (width <= 650px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }
