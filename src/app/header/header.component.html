@@ -1,10 +1,11 @@
 <div id="action-bar-buttons">
-  <button mat-mini-fab [matMenuTriggerFor]="appsMenu" color="primary">
+  <button mat-mini-fab matTooltip="Applications" [matMenuTriggerFor]="appsMenu" color="primary">
     <mat-icon>apps</mat-icon>
   </button>
   <app-notifications *ngIf="this.canUserSeeNotifications()"></app-notifications>
 
-  <button id="cashmanager-menu" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu" color="primary">
+  <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu"
+    color="primary">
     <mat-icon>account_circle</mat-icon>
   </button>
 
