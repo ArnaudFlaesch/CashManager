@@ -37,6 +37,11 @@ body {
   --dark-mode-background-color: #282a33;
 
   height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
   background-color: var(--light-mode-background-color);
 
   &.dark-mode {
@@ -44,15 +49,5 @@ body {
     @include mat.button-color($dark-theme);
 
     background-color: var(--dark-mode-background-color);
-  }
-}
-
-body {
-  height: 100%;
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-
-  mat-tab-body {
-    margin-top: 1em;
   }
 }

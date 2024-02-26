@@ -1,7 +1,7 @@
-<button id="display-notifications-button" color="primary" mat-mini-fab [matMenuTriggerFor]="notificationsMenu">
+<button id="display-notifications-button" matTooltip="Notifications" color="primary" mat-mini-fab
+  [matMenuTriggerFor]="notificationsMenu">
   <mat-icon [matBadge]="unreadNotificationsForBadge" title="Notifications">notifications</mat-icon>
 </button>
-
 
 <mat-menu #notificationsMenu="matMenu">
   <button id="mark-all-notifications-as-read-button" *ngIf="this.unreadNotificationsForBadge !== ''"
