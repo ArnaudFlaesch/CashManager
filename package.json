@@ -37,7 +37,7 @@
     "@angular/platform-browser-dynamic": "17.2.3",
     "@angular/router": "17.2.3",
     "@angular/service-worker": "17.2.3",
-    "chart.js": "4.4.1",
+    "chart.js": "4.4.2",
     "cypress-wait-until": "3.0.1",
     "date-fns": "3.3.1",
     "jwt-decode": "4.0.0",
