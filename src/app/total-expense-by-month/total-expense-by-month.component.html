@@ -7,6 +7,7 @@
 <button *ngIf="this.isOneLabelSelected()" mat-icon-button
   (click)="resetSelectedLabel()"><mat-icon>close</mat-icon></button>
 
-<canvas id="total-expenses-chart" *ngIf="this.totalExpensesByMonthChart" baseChart
-  [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"
-  (chartClick)="handleChartClickedEvent($event)"></canvas>
+<div id="total-expenses-chart" *ngIf="this.totalExpensesByMonthChart">
+  <canvas baseChart [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"
+    (chartClick)="handleChartClickedEvent($event)"></canvas>
+</div>
