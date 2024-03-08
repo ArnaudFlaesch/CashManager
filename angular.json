@@ -36,7 +36,9 @@
               "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
+              "includePaths": [
+                "src/styles"
+              ]
             },
             "scripts": [],
             "serviceWorker": true,
@@ -87,13 +89,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "CashManager:build:production"
+              "buildTarget": "CashManager:build:production"
             },
             "dev": {
-              "browserTarget": "CashManager:build:dev"
+              "buildTarget": "CashManager:build:dev"
             },
             "development": {
-              "browserTarget": "CashManager:build:development"
+              "buildTarget": "CashManager:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -101,13 +103,12 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "CashManager:build"
+            "buildTarget": "CashManager:build"
           }
         }
       }
     }
   },
-  "defaultProject": "CashManager",
   "cli": {
     "analytics": false
   }

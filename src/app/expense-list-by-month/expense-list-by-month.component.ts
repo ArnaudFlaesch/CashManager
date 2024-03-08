@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import {
   ChartConfiguration,
@@ -24,11 +24,20 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { LabelService } from '../services/label.service/label.service';
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
+import { CreateExpenseComponent } from '../create-expense/create-expense.component';
+import { NgIf, NgFor } from '@angular/common';
+import { NgChartsModule } from 'ng2-charts';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-expense-list-by-month',
-  templateUrl: './expense-list-by-month.component.html',
-  styleUrls: ['./expense-list-by-month.component.scss']
+    selector: 'app-expense-list-by-month',
+    templateUrl: './expense-list-by-month.component.html',
+    styleUrls: ['./expense-list-by-month.component.scss'],
+    standalone: true,
+    imports: [MatIconButton, MatIcon, MatFormField, MatLabel, MatInput, MatDatepickerInput, FormsModule, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, NgChartsModule, NgIf, NgFor, CreateExpenseComponent]
 })
 export class ExpenseListByMonthComponent {
   @Input()

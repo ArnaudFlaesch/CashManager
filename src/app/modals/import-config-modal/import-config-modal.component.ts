@@ -1,13 +1,16 @@
 import { ErrorHandlerService } from './../../services/error.handler.service';
 import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfigService } from '../../../app/services/config.service/config.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-import-config-modal',
-  templateUrl: './import-config-modal.component.html',
-  styleUrls: ['./import-config-modal.component.scss']
+    selector: 'app-import-config-modal',
+    templateUrl: './import-config-modal.component.html',
+    styleUrls: ['./import-config-modal.component.scss'],
+    standalone: true,
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {
   public fileToUpload: File | null = null;

@@ -3,12 +3,22 @@ import { Label } from '../../model/Label';
 import { ErrorHandlerService } from '../../services/error.handler.service';
 import { LabelService } from '../../services/label.service/label.service';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LabelListComponent } from '../../label-list/label-list.component';
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { TotalExpenseByMonthComponent } from '../../total-expense-by-month/total-expense-by-month.component';
+import { ExpenseListByMonthComponent } from '../../expense-list-by-month/expense-list-by-month.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { HeaderComponent } from '../../header/header.component';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: true,
+    imports: [HeaderComponent, MatTabGroup, MatTab, ExpenseListByMonthComponent, TotalExpenseByMonthComponent, FormsModule, MatFormField, MatLabel, MatInput, ReactiveFormsModule, MatButton, LabelListComponent]
 })
 export class HomeComponent {
   @Output() insertedLabelEvent = new EventEmitter<Label>();

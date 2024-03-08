@@ -9,11 +9,20 @@ import {
 } from '../model/INotification';
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { NotificationService } from '../services/notification.service/NotificationService';
+import { DateFormatPipe } from '../pipes/date-format.pipe';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { MatBadge } from '@angular/material/badge';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu } from '@angular/material/menu';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMiniFabButton, MatIconButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss']
+    selector: 'app-notifications',
+    templateUrl: './notifications.component.html',
+    styleUrls: ['./notifications.component.scss'],
+    standalone: true,
+    imports: [MatMiniFabButton, MatTooltip, MatMenuTrigger, MatIcon, MatBadge, MatMenu, NgIf, MatIconButton, NgFor, NgClass, DateFormatPipe]
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   public notificationsFromDatabase: INotification[] = [];

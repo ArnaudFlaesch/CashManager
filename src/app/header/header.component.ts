@@ -6,13 +6,23 @@ import { ImportConfigModalComponent } from '../modals/import-config-modal/import
 import { AuthService } from '../services/auth.service/auth.service';
 import { ConfigService } from '../services/config.service/config.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from '../services/theme.service/theme.service';
+import { MatDivider } from '@angular/material/divider';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { NotificationsComponent } from '../notifications/notifications.component';
+import { NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    standalone: true,
+    imports: [MatMiniFabButton, MatTooltip, MatMenuTrigger, MatIcon, NgIf, NotificationsComponent, MatMenu, MatMenuItem, MatSlideToggle, FormsModule, ReactiveFormsModule, MatDivider]
 })
 export class HeaderComponent implements OnInit {
   public toggleControl = new FormControl(false);

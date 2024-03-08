@@ -6,12 +6,34 @@ import { format, isBefore } from 'date-fns';
 import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { ErrorHandlerService } from '../services/error.handler.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { NgFor, NgIf } from '@angular/common';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { fr } from 'date-fns/locale/fr';
 
 @Component({
   selector: 'app-total-expense-by-month',
   templateUrl: './total-expense-by-month.component.html',
-  styleUrls: ['./total-expense-by-month.component.scss']
+  styleUrls: ['./total-expense-by-month.component.scss'],
+  standalone: true,
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    ReactiveFormsModule,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatIconButton,
+    MatIcon,
+    NgChartsModule
+  ]
 })
 export class TotalExpenseByMonthComponent {
   readonly noLabelIdSelected = 0;
@@ -104,7 +126,7 @@ export class TotalExpenseByMonthComponent {
     });
     this.totalExpensesByMonthChart = {
       labels: data.map((totalByMonth) =>
-        format(new Date(totalByMonth.date), 'MMMM yyyy')
+        format(new Date(totalByMonth.date), 'MMMM yyyy', { locale: fr })
       ),
       datasets: [
         {
