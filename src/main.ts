@@ -1,11 +1,14 @@
 import { enableProdMode, importProvidersFrom, isDevMode } from '@angular/core';
-
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import {
   provideHttpClient,
   withInterceptorsFromDi
 } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
+import {
+  MatDateFnsModule,
+  provideDateFnsAdapter
+} from '@angular/material-date-fns-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +30,6 @@ import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { fr } from 'date-fns/locale/fr';
-import { NgChartsModule } from 'ng2-charts';
 import { AppRoutingModule } from './app/app-routing.module';
 import { AppComponent } from './app/app.component';
 import { AuthGuard } from './app/guards/auth.guard';
@@ -69,7 +71,6 @@ bootstrapApplication(AppComponent, {
       MatSelectModule,
       MatTabsModule,
       MatSnackBarModule,
-      NgChartsModule,
       ReactiveFormsModule,
       ServiceWorkerModule.register('ngsw-worker.js', {
         enabled: !isDevMode(),
@@ -88,6 +89,8 @@ bootstrapApplication(AppComponent, {
     ThemeService,
     DateUtilsService,
     { provide: MAT_DATE_LOCALE, useValue: fr },
+    provideCharts(withDefaultRegisterables()),
+    provideDateFnsAdapter(),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi())
   ]

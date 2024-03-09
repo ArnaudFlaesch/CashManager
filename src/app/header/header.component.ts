@@ -18,11 +18,24 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    standalone: true,
-    imports: [MatMiniFabButton, MatTooltip, MatMenuTrigger, MatIcon, NgIf, NotificationsComponent, MatMenu, MatMenuItem, MatSlideToggle, FormsModule, ReactiveFormsModule, MatDivider]
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [
+    MatMiniFabButton,
+    MatTooltip,
+    MatMenuTrigger,
+    MatIcon,
+    NgIf,
+    NotificationsComponent,
+    MatMenu,
+    MatMenuItem,
+    MatSlideToggle,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDivider
+  ]
 })
 export class HeaderComponent implements OnInit {
   public toggleControl = new FormControl(false);

@@ -1,20 +1,18 @@
-import { Label } from './../model/Label';
-import { LabelService } from './../services/label.service/label.service';
-import { Component } from '@angular/core';
-import { ChartConfiguration, ChartEvent } from 'chart.js';
-import { format, isBefore } from 'date-fns';
-import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
-import { ExpenseService } from '../services/expense.service/expense.service';
-import { ErrorHandlerService } from '../services/error.handler.service';
+import { NgFor, NgIf } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgChartsModule } from 'ng2-charts';
-import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
-import { NgFor, NgIf } from '@angular/common';
-import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatSelect } from '@angular/material/select';
+import { ChartConfiguration, ChartEvent } from 'chart.js';
+import { format, isBefore } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
+import { BaseChartDirective } from 'ng2-charts';
+import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
+import { ExpenseService } from '../services/expense.service/expense.service';
+import { Label } from './../model/Label';
 
 @Component({
   selector: 'app-total-expense-by-month',
@@ -22,6 +20,7 @@ import { fr } from 'date-fns/locale/fr';
   styleUrls: ['./total-expense-by-month.component.scss'],
   standalone: true,
   imports: [
+    BaseChartDirective,
     MatFormField,
     MatLabel,
     MatSelect,
@@ -31,14 +30,13 @@ import { fr } from 'date-fns/locale/fr';
     MatOption,
     NgIf,
     MatIconButton,
-    MatIcon,
-    NgChartsModule
+    MatIcon
   ]
 })
-export class TotalExpenseByMonthComponent {
-  readonly noLabelIdSelected = 0;
+export class TotalExpenseByMonthComponent implements OnInit {
+  @Input() public labels: Label[] = [];
 
-  public labels: Label[] = [];
+  readonly noLabelIdSelected = 0;
   public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined =
     undefined;
   public barChartOptions: ChartConfiguration['options'] = {
@@ -51,18 +49,16 @@ export class TotalExpenseByMonthComponent {
   };
   public labelControl = new FormControl<number>(this.noLabelIdSelected);
 
-  private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
   private selectedLabelId = this.noLabelIdSelected;
 
-  constructor(
-    private expenseService: ExpenseService,
-    private labelService: LabelService,
-    private errorHandlerService: ErrorHandlerService
-  ) {
-    this.getLabels();
+  constructor(private expenseService: ExpenseService) {
     this.labelControl.valueChanges.subscribe((newValue) => {
       this.selectLabel(newValue ?? this.noLabelIdSelected);
     });
+  }
+
+  public ngOnInit(): void {
+    this.getTotalExpensesByMonth();
   }
 
   public resetSelectedLabel(): void {
@@ -96,17 +92,6 @@ export class TotalExpenseByMonthComponent {
 
   public isOneLabelSelected(): boolean {
     return this.selectedLabelId !== this.noLabelIdSelected;
-  }
-
-  private getLabels() {
-    this.labelService.getLabels().subscribe({
-      next: (labels) => {
-        this.labels = labels;
-        this.getTotalExpensesByMonth();
-      },
-      error: (error) =>
-        this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)
-    });
   }
 
   private getTotalExpensesByMonth(): void {

@@ -8,11 +8,11 @@ import { NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: true,
-    imports: [RouterLink, FormsModule, MatButton, NgIf, MatProgressSpinner]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: true,
+  imports: [RouterLink, FormsModule, MatButton, NgIf, MatProgressSpinner]
 })
 export class LoginComponent {
   public isLoading = false;
@@ -24,7 +24,7 @@ export class LoginComponent {
     "Erreur lors de la connexion de l'utilisateur.";
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private errorHandlerService: ErrorHandlerService,
     private router: Router
   ) {}

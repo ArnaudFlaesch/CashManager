@@ -16,12 +16,12 @@ import { MatIconButton } from '@angular/material/button';
 import { NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-label-list',
-    templateUrl: './label-list.component.html',
-    styleUrls: ['./label-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [NgFor, MatIconButton, MatIcon]
+  selector: 'app-label-list',
+  templateUrl: './label-list.component.html',
+  styleUrls: ['./label-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgFor, MatIconButton, MatIcon]
 })
 export class LabelListComponent {
   @Input() labels: Label[] = [];

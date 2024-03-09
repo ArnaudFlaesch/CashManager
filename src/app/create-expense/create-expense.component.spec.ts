@@ -1,14 +1,12 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {
-  createComponentFactory,
-  createHttpFactory,
-  HttpMethod,
-  Spectator,
-  SpectatorHttp
-} from '@ngneat/spectator/jest';
 
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { environment } from '../../environments/environment';
 import { Label } from '../model/Label';
 import { InsertExpensePayload } from '../model/payloads/InsertExpensePayload';
@@ -20,44 +18,54 @@ import { Expense } from './../model/Expense';
 import { CreateExpenseComponent } from './create-expense.component';
 
 describe('CreateExpenseComponent', () => {
-  let spectator: Spectator<CreateExpenseComponent>;
-  let expenseService: SpectatorHttp<ExpenseService>;
+  let component: CreateExpenseComponent;
+  let httpTestingController: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        MatSnackBarModule,
+        MatAutocompleteModule,
+        HttpClientTestingModule
+      ],
+      providers: [
+        AuthService,
+        ExpenseService,
+        ErrorHandlerService,
+        DateUtilsService,
+        provideDateFnsAdapter()
+      ]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(CreateExpenseComponent);
+    component = fixture.componentInstance;
+    httpTestingController = TestBed.inject(HttpTestingController);
+  });
+  afterEach(() => {
+    httpTestingController.verify();
+  });
 
   const expensePath = '/expense/';
 
-  const createComponent = createComponentFactory({
-    component: CreateExpenseComponent,
-    imports: [MatSnackBarModule, MatAutocompleteModule],
-    providers: [AuthService, ErrorHandlerService, DateUtilsService],
-    schemas: [NO_ERRORS_SCHEMA]
-  });
-  const createExpenseHttp = createHttpFactory(ExpenseService);
-
-  beforeEach(() => {
-    spectator = createComponent();
-    expenseService = createExpenseHttp();
-  });
-
   it('Should create an expense', () => {
     const newLabelName = 'Vacances';
-    expect(spectator.component.canCreateExpense()).toEqual(false);
-    spectator.component.selectLabel(new Label(1, newLabelName, 1));
-    spectator.component.dateFormControl.setValue('2022-3-5');
-    spectator.component.expenseToCreate = new InsertExpensePayload();
-    spectator.component.expenseToCreate.amount = 23;
+    expect(component.canCreateExpense()).toEqual(false);
+    component.selectLabel(new Label(1, newLabelName, 1));
+    component.dateFormControl.setValue('2022-3-5');
+    component.expenseToCreate = new InsertExpensePayload();
+    component.expenseToCreate.amount = 23;
 
-    expect(spectator.component.canCreateExpense()).toEqual(true);
-    spectator.component.handleCreateExpense();
+    expect(component.canCreateExpense()).toEqual(true);
+    component.handleCreateExpense();
 
-    const getExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}addExpense`,
-      HttpMethod.POST
+    const getExpensesRequest = httpTestingController.expectOne(
+      `${environment.backend_url}${expensePath}addExpense`
     );
     getExpensesRequest.flush(
       new Expense(
         1,
-        spectator.component.expenseToCreate.amount,
-        spectator.component.expenseToCreate.expenseDate,
+        component.expenseToCreate.amount,
+        component.expenseToCreate.expenseDate,
         1
       )
     );
@@ -65,7 +73,7 @@ describe('CreateExpenseComponent', () => {
 
   it('Should display the label', () => {
     const label = new Label(1, 'Dépense 1', 1);
-    expect(spectator.component.displayLabel(label)).toEqual('Dépense 1');
+    expect(component.displayLabel(label)).toEqual('Dépense 1');
     expect(label.userId).toEqual(1);
   });
 });
