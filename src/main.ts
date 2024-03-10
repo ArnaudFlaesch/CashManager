@@ -34,7 +34,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { ROUTES, Routes } from '@angular/router';
+import { Routes, provideRouter } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { fr } from 'date-fns/locale/fr';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
@@ -111,7 +111,7 @@ bootstrapApplication(AppComponent, {
     ThemeService,
     DateUtilsService,
     { provide: MAT_DATE_LOCALE, useValue: fr },
-    { provide: ROUTES, useValue: routes },
+    provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
     provideAnimations(),
