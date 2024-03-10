@@ -1,6 +1,6 @@
 <button id="display-notifications-button" matTooltip="Notifications" color="primary" mat-mini-fab
   [matMenuTriggerFor]="notificationsMenu">
-  <mat-icon [matBadge]="unreadNotificationsForBadge" title="Notifications">notifications</mat-icon>
+  <mat-icon [matBadge]="unreadNotificationsForBadge" title="Notifications" aria-hidden="false">notifications</mat-icon>
 </button>
 
 <mat-menu #notificationsMenu="matMenu">
