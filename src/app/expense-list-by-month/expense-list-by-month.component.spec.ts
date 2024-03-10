@@ -1,58 +1,59 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing';
+
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  createComponentFactory,
-  createHttpFactory,
-  HttpMethod,
-  Spectator,
-  SpectatorHttp
-} from '@ngneat/spectator/jest';
 import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
 import { advanceTo } from 'jest-date-mock';
 
+import { TestBed } from '@angular/core/testing';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { environment } from '../../environments/environment';
 import { Expense } from '../model/Expense';
 import { Label } from '../model/Label';
 import { ErrorHandlerService } from '../services/error.handler.service';
-import { ExpenseService } from '../services/expense.service/expense.service';
-import { LabelService } from '../services/label.service/label.service';
+import { DateUtilsService } from '../utils/date.utils.service';
 import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
+import { LabelService } from '../services/label.service/label.service';
+import { ExpenseService } from '../services/expense.service/expense.service';
 
 describe('ExpenseListByMonthComponent', () => {
-  let spectator: Spectator<ExpenseListByMonthComponent>;
-  let expenseService: SpectatorHttp<ExpenseService>;
-  let labelService: SpectatorHttp<LabelService>;
-
+  let component: ExpenseListByMonthComponent;
+  let httpTestingController: HttpTestingController;
   const mockedCurrentMonth = new Date(1644882400);
   advanceTo(mockedCurrentMonth); // 15/02/2022
-
+  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
+  const dateFormat = 'yyyy-MM-dd';
   const expensePath = '/expense/';
 
-  const createComponent = createComponentFactory({
-    component: ExpenseListByMonthComponent,
-    imports: [
-      HttpClientTestingModule,
-      RouterTestingModule,
-      MatSnackBarModule,
-      MatDialogModule
-    ],
-    providers: [ErrorHandlerService, { provide: MatDialogRef, useValue: {} }],
-    schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatSnackBarModule,
+        MatDialogModule
+      ],
+      providers: [
+        ErrorHandlerService,
+        { provide: MatDialogRef, useValue: {} },
+        DateUtilsService,
+        LabelService,
+        ExpenseService,
+        provideDateFnsAdapter()
+      ]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(ExpenseListByMonthComponent);
+    component = fixture.componentInstance;
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
-  const createExpenseHttp = createHttpFactory(ExpenseService);
-  const createLabelHttp = createHttpFactory(LabelService);
 
-  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
-
-  const dateFormat = 'yyyy-MM-dd';
-
-  beforeEach(() => {
-    spectator = createComponent();
-    expenseService = createExpenseHttp();
-    labelService = createLabelHttp();
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('Should display two labels and three expenses, then change the month', () => {
@@ -69,15 +70,16 @@ describe('ExpenseListByMonthComponent', () => {
       new Expense(3, 4, currentMonth, labelData[1].id)
     ];
 
-    const getExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
-      HttpMethod.GET
+    component.ngOnInit();
+
+    const getExpensesRequest = httpTestingController.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`
     );
     getExpensesRequest.flush(expectedExpenseData);
 
-    expect(spectator.component.expenses).toEqual(expectedExpenseData);
-    expect(spectator.component.expenses.length).toEqual(3);
-    expect(spectator.component.getTotalForMonth()).toEqual(457);
+    expect(component.expenses).toEqual(expectedExpenseData);
+    expect(component.expenses.length).toEqual(3);
+    expect(component.getTotalForMonth()).toEqual(457);
 
     const previousMonth = subMonths(mockedCurrentMonth, 1);
     const startIntervalDatePreviousMonth = format(
@@ -88,34 +90,31 @@ describe('ExpenseListByMonthComponent', () => {
       endOfMonth(previousMonth),
       dateFormat
     );
-    spectator.component.selectPreviousMonth();
+    component.selectPreviousMonth();
 
-    const getPreviousMonthExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDatePreviousMonth}&endIntervalDate=${endIntervalDatePreviousMonth}`,
-      HttpMethod.GET
+    const getPreviousMonthExpensesRequest = httpTestingController.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDatePreviousMonth}&endIntervalDate=${endIntervalDatePreviousMonth}`
     );
     getPreviousMonthExpensesRequest.flush([]);
-    expect(spectator.component.expenses.length).toEqual(0);
+    expect(component.expenses.length).toEqual(0);
 
-    spectator.component.selectNextMonth();
-    const getNextMonthExpensesRequest = expenseService.expectOne(
-      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`,
-      HttpMethod.GET
+    component.selectNextMonth();
+    const getNextMonthExpensesRequest = httpTestingController.expectOne(
+      `${environment.backend_url}${expensePath}?startIntervalDate=${startIntervalDate}&endIntervalDate=${endIntervalDate}`
     );
     getNextMonthExpensesRequest.flush(expectedExpenseData);
 
-    spectator.component.labels = labelData;
-    expect(spectator.component.getLabelFromId(99)).toEqual(undefined);
+    component.labels = labelData;
+    expect(component.getLabelFromId(99)).toEqual(undefined);
     expect(
-      spectator.component.getLabelFromId(expectedExpenseData[0].labelId)?.label
+      component.getLabelFromId(expectedExpenseData[0].labelId)?.label
     ).toEqual(labelData[0].label);
 
-    spectator.component.deleteLabel(labelData[1].id);
-    const deleteLabelRequest = labelService.expectOne(
-      `${environment.backend_url}/label/deleteLabel?labelId=${labelData[1].id}`,
-      HttpMethod.DELETE
+    component.deleteLabel(labelData[1].id);
+    const deleteLabelRequest = httpTestingController.expectOne(
+      `${environment.backend_url}/label/deleteLabel?labelId=${labelData[1].id}`
     );
     deleteLabelRequest.flush({});
-    expect(spectator.component.labels).toEqual([labelData[0]]);
+    expect(component.labels).toEqual([labelData[0]]);
   });
 });

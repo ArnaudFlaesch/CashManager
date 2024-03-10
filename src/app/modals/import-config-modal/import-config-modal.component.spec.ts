@@ -1,34 +1,29 @@
+import { TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {
-  createComponentFactory,
-  createHttpFactory,
-  Spectator
-} from '@ngneat/spectator/jest';
 import { ConfigService } from '../../../app/services/config.service/config.service';
 import { ErrorHandlerService } from './../../services/error.handler.service';
 import { ImportConfigModalComponent } from './import-config-modal.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ImportConfigModalComponent', () => {
-  let spectator: Spectator<ImportConfigModalComponent>;
+  let component: ImportConfigModalComponent;
 
-  const createComponent = createComponentFactory({
-    component: ImportConfigModalComponent,
-    imports: [MatSnackBarModule],
-    providers: [
-      ConfigService,
-      ErrorHandlerService,
-      { provide: MatDialogRef, useValue: {} }
-    ]
-  });
-  const createHttp = createHttpFactory(ConfigService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MatSnackBarModule, HttpClientTestingModule],
+      providers: [
+        ConfigService,
+        ErrorHandlerService,
+        { provide: MatDialogRef, useValue: {} }
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    spectator = createComponent();
-    createHttp();
+    const fixture = TestBed.createComponent(ImportConfigModalComponent);
+    component = fixture.componentInstance;
   });
 
   it('Should create the component', () => {
-    expect(spectator.component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });

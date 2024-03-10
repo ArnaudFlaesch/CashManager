@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 
 import { Expense } from '../model/Expense';
@@ -8,11 +8,49 @@ import { Label } from './../model/Label';
 import { InsertExpensePayload } from './../model/payloads/InsertExpensePayload';
 import { ErrorHandlerService } from './../services/error.handler.service';
 import { ExpenseService } from './../services/expense.service/expense.service';
+import { MatButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { NgFor, AsyncPipe } from '@angular/common';
+import {
+  MatAutocompleteTrigger,
+  MatAutocomplete
+} from '@angular/material/autocomplete';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker
+} from '@angular/material/datepicker';
+import { MatInput } from '@angular/material/input';
+import {
+  MatFormField,
+  MatHint,
+  MatSuffix,
+  MatLabel
+} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-create-expense',
   templateUrl: './create-expense.component.html',
-  styleUrls: ['./create-expense.component.scss']
+  styleUrls: ['./create-expense.component.scss'],
+  standalone: true,
+  imports: [
+    MatFormField,
+    FormsModule,
+    MatInput,
+    MatDatepickerInput,
+    ReactiveFormsModule,
+    MatHint,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatLabel,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgFor,
+    MatOption,
+    MatButton,
+    AsyncPipe
+  ]
 })
 export class CreateExpenseComponent {
   @Input()

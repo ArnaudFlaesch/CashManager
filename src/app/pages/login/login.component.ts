@@ -1,12 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service/auth.service';
 import { ErrorHandlerService } from '../../services/error.handler.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  standalone: true,
+  imports: [RouterLink, FormsModule, MatButton, NgIf, MatProgressSpinner]
 })
 export class LoginComponent {
   public isLoading = false;
@@ -18,7 +24,7 @@ export class LoginComponent {
     "Erreur lors de la connexion de l'utilisateur.";
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private errorHandlerService: ErrorHandlerService,
     private router: Router
   ) {}

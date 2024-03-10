@@ -1,15 +1,20 @@
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { TestBed } from '@angular/core/testing';
 import { ErrorComponent } from './error.component';
 
 describe('ErrorComponent', () => {
-  let spectator: Spectator<ErrorComponent>;
-  const createComponent = createComponentFactory({
-    component: ErrorComponent
+  let component: ErrorComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: []
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(ErrorComponent);
+    component = fixture.componentInstance;
   });
 
-  beforeEach(() => (spectator = createComponent()));
-
   it('should create the app', () => {
-    expect(spectator.component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });
