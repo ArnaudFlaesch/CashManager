@@ -37,7 +37,7 @@ Cypress.on('test:after:run', (test, runnable) => {
 
     const fullTestName = nameParts.filter(Boolean).join(' -- '); // this is how cypress joins the test title fragments
 
-    const imageUrl = `screenshots/${Cypress.spec.name}/${fullTestName} (failed).png`;
+    const imageUrl = `screenshots/${Cypress.spec.relative.replace('cypress/e2e/', '')}/${fullTestName} (failed).png`;
 
     addContext({ test }, imageUrl);
   }
