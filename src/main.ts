@@ -1,9 +1,15 @@
-import { enableProdMode, importProvidersFrom, isDevMode } from '@angular/core';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { registerLocaleData } from '@angular/common';
 import {
   provideHttpClient,
   withInterceptorsFromDi
 } from '@angular/common/http';
+import localeFr from '@angular/common/locales/fr';
+import {
+  enableProdMode,
+  importProvidersFrom,
+  inject,
+  isDevMode
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDateFnsModule,
@@ -28,11 +34,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { Routes, provideRouter } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { fr } from 'date-fns/locale/fr';
-import { AppRoutingModule } from './app/app-routing.module';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AppComponent } from './app/app.component';
 import { AuthGuard } from './app/guards/auth.guard';
+import { ErrorComponent } from './app/pages/error/error.component';
+import { HomeComponent } from './app/pages/home/home.component';
+import { LoginComponent } from './app/pages/login/login.component';
 import { AuthService } from './app/services/auth.service/auth.service';
 import { ConfigService } from './app/services/config.service/config.service';
 import { ErrorHandlerService } from './app/services/error.handler.service';
@@ -47,11 +57,23 @@ if (environment.production) {
   enableProdMode();
 }
 
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [() => inject(AuthGuard)]
+  },
+  { path: 'error', component: ErrorComponent },
+  { path: '**', redirectTo: 'home' }
+];
+
+registerLocaleData(localeFr);
+
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
       BrowserModule,
-      AppRoutingModule,
       FormsModule,
       MatAutocompleteModule,
       MatButtonModule,
@@ -89,6 +111,7 @@ bootstrapApplication(AppComponent, {
     ThemeService,
     DateUtilsService,
     { provide: MAT_DATE_LOCALE, useValue: fr },
+    provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
     provideAnimations(),
