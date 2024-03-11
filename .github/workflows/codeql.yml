@@ -2,11 +2,7 @@ name: 'CodeQL'
 
 on:
   push:
-    branches: ['main']
-    branches-ignore: ['!*renovate/*']
-  pull_request:
-    branches: ['main']
-    branches-ignore: ['!*renovate/*']
+    branches: ['main', '!*renovate/*']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
