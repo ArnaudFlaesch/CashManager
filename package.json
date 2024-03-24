@@ -25,6 +25,9 @@
     "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
+  "overrides": {
+    "webpack-dev-middleware": "5.3.4"
+  },
   "dependencies": {
     "@angular/animations": "17.3.1",
     "@angular/common": "17.3.1",
