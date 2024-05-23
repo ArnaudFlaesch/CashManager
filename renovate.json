@@ -1,13 +1,10 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "assignees": ["ArnaudFlaesch"],
   "packageRules": [
     {
-      "groupName": "angular",
-      "matchPackagePrefixes": [
-        "@angular*"
-      ]
+      "extends": ["monorepo:angular", "monorepo:angularmaterial"],
+      "packageNames": ["@angular", "@angular-devkit", "zone.js"]
     }
   ],
   "schedule": ["at 2:00 pm on Fri"]
