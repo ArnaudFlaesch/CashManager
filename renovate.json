@@ -3,9 +3,11 @@
   "assignees": ["ArnaudFlaesch"],
   "packageRules": [
     {
-      "extends": ["monorepo:angular", "monorepo:angularmaterial", "monorepo:angular-cli"],
-      "packageNames": ["@angular", "@angular-devkit","angularmaterial", "angular-cli", "zone.js"]
+      "groupName": "angular",
+      "matchPackagePatterns": [
+        "^@angular/"
+      ]
     }
-  ],
+  ]
   "schedule": ["at 2:00 pm on Fri"]
 }
