@@ -5,7 +5,9 @@
     {
       "groupName": "angular",
       "matchPackagePatterns": [
-        "^@angular/"
+        "^@angular/",
+        "^@angular-devkit/",
+        "zone.js/",
       ]
     }
   ],
