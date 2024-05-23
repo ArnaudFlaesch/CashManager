@@ -8,6 +8,6 @@
         "^@angular/"
       ]
     }
-  ]
+  ],
   "schedule": ["at 2:00 pm on Fri"]
 }
