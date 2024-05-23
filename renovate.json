@@ -4,7 +4,7 @@
   "packageRules": [
     {
       "extends": ["monorepo:angular", "monorepo:angularmaterial"],
-      "packageNames": ["@angular", "@angular-devkit", "zone.js"]
+      "packageNames": ["@angular", "@angular-devkit","@angularmaterial", "@angular-cli", "zone.js"]
     }
   ],
   "schedule": ["at 2:00 pm on Fri"]
