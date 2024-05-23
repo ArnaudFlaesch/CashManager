@@ -6,7 +6,7 @@
     {
       "groupName": "angular",
       "matchPackagePrefixes": [
-        "@angular/"
+        "@angular*"
       ]
     }
   ],
