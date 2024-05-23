@@ -3,7 +3,7 @@
   "assignees": ["ArnaudFlaesch"],
   "packageRules": [
     {
-      "extends": ["monorepo:angular", "monorepo:angularmaterial"],
+      "extends": ["monorepo:angular", "monorepo:angularmaterial", "monorepo:angular-cli"],
       "packageNames": ["@angular", "@angular-devkit","angularmaterial", "angular-cli", "zone.js"]
     }
   ],
