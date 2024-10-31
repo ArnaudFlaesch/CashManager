@@ -1,5 +1,5 @@
 import { ErrorHandlerService } from './../../services/error.handler.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MatDialogRef,
   MatDialogTitle,
@@ -25,15 +25,13 @@ import { MatButton } from '@angular/material/button';
   ]
 })
 export class ImportConfigModalComponent {
+  private configService = inject(ConfigService);
+  private errorHandlerService = inject(ErrorHandlerService);
+  dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
+
   public fileToUpload: File | null = null;
   private ERROR_IMPORT_CONFIGURATION =
     "Erreur lors de l'import de la configuration.";
-
-  constructor(
-    private configService: ConfigService,
-    private errorHandlerService: ErrorHandlerService,
-    public dialogRef: MatDialogRef<ImportConfigModalComponent>
-  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public selectFile(event: any): void {

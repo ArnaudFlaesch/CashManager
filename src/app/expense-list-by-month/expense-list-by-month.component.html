@@ -7,7 +7,7 @@
     <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl">
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker startView="multi-year" (monthSelected)="setMonthAndYear($event, picker)"
-      [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
+    [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
   </mat-form-field>
 
   <button (click)="selectNextMonth()" mat-icon-button>
@@ -18,20 +18,26 @@
 <div id="expenses-container">
   <div id="chart-container">
     <canvas baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions" [type]="'bar'"
-      (chartClick)="handleChartClickedEvent($event)"></canvas>
+    (chartClick)="handleChartClickedEvent($event)"></canvas>
   </div>
 
   <div id="expenses-detail">
     <h3 id="expenses-total">Total ce mois : {{ getTotalForMonth() }}€</h3>
-    <div id="expenses-list" *ngIf="this.expenses.length">
-      <div *ngFor="let expense of this.expenses; let index = index">
-        <span>{{formatExpenseDate(expense.expenseDate)}} : {{ expense.amount }}€
-          {{ getLabelFromId(expense.labelId)?.label }}</span>
-        <button *ngIf="false" mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
+    @if (this.expenses.length) {
+      <div id="expenses-list">
+        @for (expense of this.expenses; track expense; let index = $index) {
+          <div>
+            <span>{{formatExpenseDate(expense.expenseDate)}} : {{ expense.amount }}€
+            {{ getLabelFromId(expense.labelId)?.label }}</span>
+            @if (false) {
+              <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+        }
       </div>
-    </div>
+    }
   </div>
 </div>
 

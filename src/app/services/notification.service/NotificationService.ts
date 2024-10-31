@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
@@ -8,7 +8,8 @@ import { IPage } from '../../../app/model/IPage';
 
 @Injectable()
 export class NotificationService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   public getNotifications(): Observable<IPage<INotification>> {
     return this.http.get<IPage<INotification>>(

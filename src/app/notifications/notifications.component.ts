@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { isToday } from 'date-fns';
 import { Subject } from 'rxjs';
 
@@ -10,7 +10,7 @@ import {
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { NotificationService } from '../services/notification.service/NotificationService';
 import { DateFormatPipe } from '../pipes/date-format.pipe';
-import { NgIf, NgFor, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatBadge } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu } from '@angular/material/menu';
@@ -29,14 +29,15 @@ import { MatMiniFabButton, MatIconButton } from '@angular/material/button';
     MatIcon,
     MatBadge,
     MatMenu,
-    NgIf,
     MatIconButton,
-    NgFor,
     NgClass,
     DateFormatPipe
-  ]
+]
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
+  private notificationService = inject(NotificationService);
+  private errorHandlerService = inject(ErrorHandlerService);
+
   public notificationsFromDatabase: INotification[] = [];
   public notificationsToDisplay: INotificationToDisplay[] = [];
   public unreadNotificationsForBadge = '';
@@ -46,11 +47,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   private ERROR_MARKING_NOTIFICATION_AS_READ =
     'Erreur lors du traitement de la requête.';
-
-  constructor(
-    private notificationService: NotificationService,
-    private errorHandlerService: ErrorHandlerService
-  ) {}
 
   ngOnInit(): void {
     this.fetchNotificationsFromDatabase();

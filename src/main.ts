@@ -40,9 +40,9 @@ import { fr } from 'date-fns/locale/fr';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AppComponent } from './app/app.component';
 import { AuthGuard } from './app/guards/auth.guard';
-import { ErrorComponent } from './app/pages/error/error.component';
-import { HomeComponent } from './app/pages/home/home.component';
-import { LoginComponent } from './app/pages/login/login.component';
+
+
+
 import { AuthService } from './app/services/auth.service/auth.service';
 import { ConfigService } from './app/services/config.service/config.service';
 import { ErrorHandlerService } from './app/services/error.handler.service';
@@ -58,13 +58,13 @@ if (environment.production) {
 }
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', loadComponent: () => import('./app/pages/login/login.component').then(m => m.LoginComponent) },
   {
     path: 'home',
-    component: HomeComponent,
+    loadComponent: () => import('./app/pages/home/home.component').then(m => m.HomeComponent),
     canActivate: [() => inject(AuthGuard)]
   },
-  { path: 'error', component: ErrorComponent },
+  { path: 'error', loadComponent: () => import('./app/pages/error/error.component').then(m => m.ErrorComponent) },
   { path: '**', redirectTo: 'home' }
 ];
 

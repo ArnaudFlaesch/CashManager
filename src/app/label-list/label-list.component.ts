@@ -1,19 +1,13 @@
 import { ErrorHandlerService } from './../services/error.handler.service';
 import { LabelService } from './../services/label.service/label.service';
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Label } from '../model/Label';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
-import { NgFor } from '@angular/common';
+
 
 @Component({
   selector: 'app-label-list',
@@ -21,19 +15,17 @@ import { NgFor } from '@angular/common';
   styleUrls: ['./label-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgFor, MatIconButton, MatIcon]
+  imports: [MatIconButton, MatIcon]
 })
 export class LabelListComponent {
+  private labelService = inject(LabelService);
+  private errorHandlerService = inject(ErrorHandlerService);
+  dialog = inject(MatDialog);
+
   @Input() labels: Label[] = [];
   @Output() labelDeletedEvent = new EventEmitter<number>();
 
   private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
-
-  constructor(
-    private labelService: LabelService,
-    private errorHandlerService: ErrorHandlerService,
-    public dialog: MatDialog
-  ) {}
 
   public openDeleteLabelDialog(labelId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {

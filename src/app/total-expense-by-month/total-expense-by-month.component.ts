@@ -1,5 +1,5 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
@@ -26,14 +26,14 @@ import { Label } from './../model/Label';
     MatSelect,
     FormsModule,
     ReactiveFormsModule,
-    NgFor,
     MatOption,
-    NgIf,
     MatIconButton,
     MatIcon
-  ]
+]
 })
 export class TotalExpenseByMonthComponent implements OnInit {
+  private expenseService = inject(ExpenseService);
+
   @Input() public labels: Label[] = [];
 
   readonly noLabelIdSelected = 0;
@@ -51,7 +51,7 @@ export class TotalExpenseByMonthComponent implements OnInit {
 
   private selectedLabelId = this.noLabelIdSelected;
 
-  constructor(private expenseService: ExpenseService) {
+  constructor() {
     this.labelControl.valueChanges.subscribe((newValue) => {
       this.selectLabel(newValue ?? this.noLabelIdSelected);
     });

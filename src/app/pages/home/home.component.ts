@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Label } from '../../model/Label';
 import { ErrorHandlerService } from '../../services/error.handler.service';
 import { LabelService } from '../../services/label.service/label.service';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LabelListComponent } from '../../label-list/label-list.component';
 import { MatButton } from '@angular/material/button';
@@ -34,6 +34,9 @@ import { HeaderComponent } from '../../header/header.component';
   ]
 })
 export class HomeComponent implements OnInit {
+  private labelService = inject(LabelService);
+  private errorHandlerService = inject(ErrorHandlerService);
+
   @Output() insertedLabelEvent = new EventEmitter<Label>();
 
   public labels: Label[] = [];
@@ -42,11 +45,6 @@ export class HomeComponent implements OnInit {
 
   private ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
   private ERROR_GETTING_LABELS = 'Erreur lors de la récupération des labels.';
-
-  constructor(
-    private labelService: LabelService,
-    private errorHandlerService: ErrorHandlerService
-  ) {}
 
   public ngOnInit(): void {
     this.getLabels();

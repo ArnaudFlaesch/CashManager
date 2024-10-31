@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Label } from '../../model/Label';
 import { environment } from '../../../environments/environment';
@@ -7,7 +7,8 @@ import authorizationBearer from '../authorizationBearer/authorizationBearer';
 
 @Injectable()
 export class LabelService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   public getLabels(): Observable<Label[]> {
     return this.http.get<Label[]>(`${environment.backend_url}/label/`, {
