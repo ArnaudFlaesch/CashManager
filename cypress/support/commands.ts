@@ -32,10 +32,11 @@ Cypress.Commands.add('loginAsUser', (): Cypress.Chainable<Response> => {
   return loginAs('usertest', 'userpassword');
 });
 
-function loginAs(
-  username: string,
-  password: string
-): Cypress.Chainable<Response> {
+Cypress.Commands.add('shouldDisplayErrorMessage', (errorMessage: string): Cypress.Chainable => {
+  return shouldDisplayErrorMessage(errorMessage);
+});
+
+function loginAs(username: string, password: string): Cypress.Chainable<Response> {
   return cy
     .request('POST', `${Cypress.env('backend_url')}/auth/login`, {
       username: username,
@@ -44,5 +45,14 @@ function loginAs(
     .its('body')
     .then((response) => {
       window.localStorage.setItem('user', JSON.stringify(response));
+    });
+}
+
+function shouldDisplayErrorMessage(errorMessage: string): Cypress.Chainable {
+  return cy
+    .get('.mat-mdc-simple-snack-bar')
+    .invoke('text')
+    .then((text) => {
+      expect(text.trim()).equal(errorMessage);
     });
 }

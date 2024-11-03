@@ -1,14 +1,10 @@
 {
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "assignees": ["ArnaudFlaesch"],
   "packageRules": [
     {
       "groupName": "angular",
-      "matchPackagePatterns": [
-        "^@angular/",
-        "^@angular-devkit/",
-        "zone.js/",
-      ]
+      "matchPackageNames": ["/^@angular//", "/^@angular-devkit//", "/zone.js//"]
     }
   ],
   "schedule": ["at 2:00 pm on Fri"]

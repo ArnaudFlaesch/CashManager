@@ -16,13 +16,7 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './import-config-modal.component.html',
   styleUrls: ['./import-config-modal.component.scss'],
   standalone: true,
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose
-  ]
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {
   private configService = inject(ConfigService);
@@ -30,8 +24,7 @@ export class ImportConfigModalComponent {
   dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
 
   public fileToUpload: File | null = null;
-  private ERROR_IMPORT_CONFIGURATION =
-    "Erreur lors de l'import de la configuration.";
+  private ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public selectFile(event: any): void {
@@ -44,10 +37,7 @@ export class ImportConfigModalComponent {
     if (this.fileToUpload) {
       this.configService.importConfig(this.fileToUpload).subscribe({
         error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(
-            error,
-            this.ERROR_IMPORT_CONFIGURATION
-          ),
+          this.errorHandlerService.handleError(error, this.ERROR_IMPORT_CONFIGURATION),
         complete: () => {
           this.dialogRef.close();
           window.location.reload();

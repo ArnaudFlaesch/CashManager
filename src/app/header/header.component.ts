@@ -34,7 +34,7 @@ import { MatMiniFabButton } from '@angular/material/button';
     FormsModule,
     ReactiveFormsModule,
     MatDivider
-]
+  ]
 })
 export class HeaderComponent implements OnInit {
   private authService = inject(AuthService);
@@ -48,8 +48,7 @@ export class HeaderComponent implements OnInit {
 
   public dashApplicationUrl = 'https://arnaudflaesch.github.io/Dash-Web/';
 
-  private ERROR_EXPORT_CONFIGURATION =
-    "Erreur lors de l'export de la configuration.";
+  private ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
 
   ngOnInit(): void {
     this.toggleControl.setValue(this.themeService.isPreferredThemeDarkMode());
@@ -67,10 +66,7 @@ export class HeaderComponent implements OnInit {
         link.click();
       },
       error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(
-          error,
-          this.ERROR_EXPORT_CONFIGURATION
-        )
+        this.errorHandlerService.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
     });
   }
 

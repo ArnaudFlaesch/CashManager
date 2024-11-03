@@ -1,4 +1,3 @@
-
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
@@ -29,7 +28,7 @@ import { Label } from './../model/Label';
     MatOption,
     MatIconButton,
     MatIcon
-]
+  ]
 })
 export class TotalExpenseByMonthComponent implements OnInit {
   private expenseService = inject(ExpenseService);
@@ -37,8 +36,7 @@ export class TotalExpenseByMonthComponent implements OnInit {
   @Input() public labels: Label[] = [];
 
   readonly noLabelIdSelected = 0;
-  public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined =
-    undefined;
+  public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined = undefined;
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
@@ -71,11 +69,9 @@ export class TotalExpenseByMonthComponent implements OnInit {
       if (this.selectedLabelId === this.noLabelIdSelected) {
         this.getTotalExpensesByMonth();
       } else {
-        this.expenseService
-          .getTotalExpensesByMonthByLabelId(this.selectedLabelId)
-          .subscribe({
-            next: (data) => this.refreshChart(data)
-          });
+        this.expenseService.getTotalExpensesByMonthByLabelId(this.selectedLabelId).subscribe({
+          next: (data) => this.refreshChart(data)
+        });
       }
     }
   }

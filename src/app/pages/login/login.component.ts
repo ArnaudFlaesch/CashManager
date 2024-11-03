@@ -24,8 +24,7 @@ export class LoginComponent {
   public inputUsername = '';
   public inputPassword = '';
 
-  private ERROR_AUTHENTICATING_USER =
-    "Erreur lors de la connexion de l'utilisateur.";
+  private ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 
   public handleLogin(): void {
     if (this.inputUsername && this.inputPassword) {
@@ -33,16 +32,11 @@ export class LoginComponent {
       this.authService.login(this.inputUsername, this.inputPassword).subscribe({
         next: () => {
           this.isLoading = false;
-          this.router
-            .navigate(['home'])
-            .catch((error) => console.log(error.message));
+          this.router.navigate(['home']).catch((error) => console.log(error.message));
         },
         error: (error: HttpErrorResponse) => {
           this.isLoading = false;
-          this.errorHandlerService.handleLoginError(
-            error,
-            this.ERROR_AUTHENTICATING_USER
-          );
+          this.errorHandlerService.handleLoginError(error, this.ERROR_AUTHENTICATING_USER);
         },
         complete: () => (this.isLoading = false)
       });

@@ -53,11 +53,10 @@ export class AuthService {
     let result = false;
     if (authenticatedUser?.accessToken) {
       try {
-        result =
-          Date.now() <
-          jwtDecode<IJwt>(authenticatedUser.accessToken).exp * 1000;
+        result = Date.now() < jwtDecode<IJwt>(authenticatedUser.accessToken).exp * 1000;
       } catch (error) {
         result = false;
+        console.log(error);
       }
     }
     return result;

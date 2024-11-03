@@ -17,7 +17,7 @@
 import './commands';
 import 'cypress-wait-until';
 
-import addContext = require('mochawesome/addContext');
+import addContext from 'mochawesome/addContext';
 
 import { Suite, Test } from 'mocha';
 // Alternatively you can use CommonJS syntax:
@@ -40,21 +40,5 @@ Cypress.on('test:after:run', (test, runnable) => {
     const imageUrl = `screenshots/${Cypress.spec.relative.replace('cypress/e2e/', '')}/${fullTestName} (failed).png`;
 
     addContext({ test }, imageUrl);
-  }
-
-  Cypress.Commands.add(
-    'shouldDisplayErrorMessage',
-    (errorMessage: string): Cypress.Chainable => {
-      return shouldDisplayErrorMessage(errorMessage);
-    }
-  );
-
-  function shouldDisplayErrorMessage(errorMessage: string): Cypress.Chainable {
-    return cy
-      .get('.mat-mdc-simple-snack-bar')
-      .invoke('text')
-      .then((text) => {
-        expect(text.trim()).equal(errorMessage);
-      });
   }
 });

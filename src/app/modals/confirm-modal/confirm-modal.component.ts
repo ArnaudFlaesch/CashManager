@@ -15,15 +15,9 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss'],
   standalone: true,
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose
-  ]
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
-export class ConfirmModalComponent {  dialogRef = inject<MatDialogRef<ConfirmModalComponent>>(MatDialogRef);
+export class ConfirmModalComponent {
+  dialogRef = inject<MatDialogRef<ConfirmModalComponent>>(MatDialogRef);
   data = inject<IConfirmDialogData>(MAT_DIALOG_DATA);
-
 }

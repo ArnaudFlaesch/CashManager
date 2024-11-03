@@ -1,7 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -31,12 +28,7 @@ describe('ExpenseListByMonthComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        MatSnackBarModule,
-        MatDialogModule
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, MatSnackBarModule, MatDialogModule],
       providers: [
         ErrorHandlerService,
         { provide: MatDialogRef, useValue: {} },
@@ -58,10 +50,7 @@ describe('ExpenseListByMonthComponent', () => {
 
   it('Should display two labels and three expenses, then change the month', () => {
     const currentMonth = new Date();
-    const startIntervalDate = format(
-      startOfMonth(mockedCurrentMonth),
-      dateFormat
-    );
+    const startIntervalDate = format(startOfMonth(mockedCurrentMonth), dateFormat);
     const endIntervalDate = format(endOfMonth(mockedCurrentMonth), dateFormat);
 
     const expectedExpenseData: Expense[] = [
@@ -82,14 +71,8 @@ describe('ExpenseListByMonthComponent', () => {
     expect(component.getTotalForMonth()).toEqual(457);
 
     const previousMonth = subMonths(mockedCurrentMonth, 1);
-    const startIntervalDatePreviousMonth = format(
-      startOfMonth(previousMonth),
-      dateFormat
-    );
-    const endIntervalDatePreviousMonth = format(
-      endOfMonth(previousMonth),
-      dateFormat
-    );
+    const startIntervalDatePreviousMonth = format(startOfMonth(previousMonth), dateFormat);
+    const endIntervalDatePreviousMonth = format(endOfMonth(previousMonth), dateFormat);
     component.selectPreviousMonth();
 
     const getPreviousMonthExpensesRequest = httpTestingController.expectOne(
@@ -106,9 +89,9 @@ describe('ExpenseListByMonthComponent', () => {
 
     component.labels = labelData;
     expect(component.getLabelFromId(99)).toEqual(undefined);
-    expect(
-      component.getLabelFromId(expectedExpenseData[0].labelId)?.label
-    ).toEqual(labelData[0].label);
+    expect(component.getLabelFromId(expectedExpenseData[0].labelId)?.label).toEqual(
+      labelData[0].label
+    );
 
     component.deleteLabel(labelData[1].id);
     const deleteLabelRequest = httpTestingController.expectOne(

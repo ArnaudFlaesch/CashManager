@@ -8,7 +8,6 @@ export class AuthGuard {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-
   canActivate(): boolean | UrlTree {
     if (this.authService.userHasValidToken()) {
       return this.router.parseUrl('login');

@@ -3,9 +3,7 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('Login tests', () => {
-  beforeEach(() =>
-    cy.intercept('POST', '/auth/login').as('login').visit('/login')
-  );
+  beforeEach(() => cy.intercept('POST', '/auth/login').as('login').visit('/login'));
 
   it('Should fail to login', () => {
     cy.get('#loginButton').should('be.disabled');
@@ -14,9 +12,7 @@ describe('Login tests', () => {
     cy.get('#loginButton').should('be.enabled').click();
     cy.wait('@login').then((request: Interception) => {
       expect(request.response.statusCode).to.equal(401);
-      cy.shouldDisplayErrorMessage(
-        "Erreur lors de la connexion de l'utilisateur."
-      );
+      cy.shouldDisplayErrorMessage("Erreur lors de la connexion de l'utilisateur.");
     });
   });
 

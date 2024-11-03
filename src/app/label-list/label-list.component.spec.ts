@@ -13,11 +13,7 @@ describe('LabelListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MatSnackBarModule, MatDialogModule, HttpClientTestingModule],
-      providers: [
-        ErrorHandlerService,
-        LabelService,
-        { provide: MatDialogRef, useValue: {} }
-      ]
+      providers: [ErrorHandlerService, LabelService, { provide: MatDialogRef, useValue: {} }]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(LabelListComponent);
