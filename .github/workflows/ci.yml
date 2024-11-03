@@ -104,7 +104,7 @@ jobs:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2.2.0
+        uses: SonarSource/sonarcloud-github-action@v3.1.0
         if: always() && steps.application-tests.outcome == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
