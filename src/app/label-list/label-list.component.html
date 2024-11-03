@@ -1,8 +1,10 @@
 <div id="label-list">
-  <div class="label-container" *ngFor="let label of this.labels">
-    <span class="label-name">{{ label.label }}</span>
-    <button mat-icon-button class="deleteLabelButton" (click)="this.openDeleteLabelDialog(label.id)">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
+  @for (label of this.labels; track label) {
+    <div class="label-container">
+      <span class="label-name">{{ label.label }}</span>
+      <button mat-icon-button class="deleteLabelButton" (click)="this.openDeleteLabelDialog(label.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  }
 </div>

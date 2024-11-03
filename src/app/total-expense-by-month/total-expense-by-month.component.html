@@ -1,13 +1,19 @@
 <mat-form-field>
   <mat-label>Étiquettes</mat-label>
   <mat-select [formControl]="labelControl">
-    <mat-option *ngFor="let label of this.labels" [value]="label.id">{{label.label}}</mat-option>
+    @for (label of this.labels; track label) {
+      <mat-option [value]="label.id">{{label.label}}</mat-option>
+    }
   </mat-select>
 </mat-form-field>
-<button *ngIf="this.isOneLabelSelected()" mat-icon-button
-  (click)="resetSelectedLabel()"><mat-icon>close</mat-icon></button>
+@if (this.isOneLabelSelected()) {
+  <button mat-icon-button
+    (click)="resetSelectedLabel()"><mat-icon>close</mat-icon></button>
+  }
 
-<div id="total-expenses-chart" *ngIf="this.totalExpensesByMonthChart">
-  <canvas baseChart [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"
-    (chartClick)="handleChartClickedEvent($event)"></canvas>
-</div>
+  @if (this.totalExpensesByMonthChart) {
+    <div id="total-expenses-chart">
+      <canvas baseChart [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"
+      (chartClick)="handleChartClickedEvent($event)"></canvas>
+    </div>
+  }

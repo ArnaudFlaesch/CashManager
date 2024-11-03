@@ -2,7 +2,9 @@
   <button mat-mini-fab matTooltip="Applications" [matMenuTriggerFor]="appsMenu" color="primary">
     <mat-icon>apps</mat-icon>
   </button>
-  <app-notifications *ngIf="this.canUserSeeNotifications()"></app-notifications>
+  @if (this.canUserSeeNotifications()) {
+    <app-notifications></app-notifications>
+  }
 
   <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu"
     color="primary">

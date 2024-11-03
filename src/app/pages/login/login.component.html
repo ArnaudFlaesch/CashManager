@@ -15,7 +15,9 @@
         (click)="handleLogin()" color="primary">
 
         <span id="login-button-label">
-          <mat-spinner diameter="30" *ngIf="isLoading"></mat-spinner>
+          @if (isLoading) {
+            <mat-spinner diameter="30"></mat-spinner>
+          }
           <span>Se connecter</span>
         </span>
       </button>

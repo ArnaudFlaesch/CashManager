@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDatepicker,
@@ -29,7 +29,7 @@ import { ExpenseService } from '../services/expense.service/expense.service';
 import { LabelService } from '../services/label.service/label.service';
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
 import { CreateExpenseComponent } from '../create-expense/create-expense.component';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatInput } from '@angular/material/input';
 import {
   MatFormField,
@@ -58,12 +58,15 @@ import { BaseChartDirective } from 'ng2-charts';
     MatDatepickerToggle,
     MatSuffix,
     MatDatepicker,
-    NgIf,
-    NgFor,
     CreateExpenseComponent
-  ]
+]
 })
 export class ExpenseListByMonthComponent implements OnInit {
+  dialog = inject(MatDialog);
+  private labelService = inject(LabelService);
+  private expenseService = inject(ExpenseService);
+  private errorHandlerService = inject(ErrorHandlerService);
+
   @Input()
   public labels: Label[] = [];
   public expenses: Expense[] = [];
@@ -90,13 +93,6 @@ export class ExpenseListByMonthComponent implements OnInit {
     'Erreur lors de la récupération des dépenses.';
 
   private EXPENSES_CHART_LABEL = 'Dépenses';
-
-  constructor(
-    public dialog: MatDialog,
-    private labelService: LabelService,
-    private expenseService: ExpenseService,
-    private errorHandlerService: ErrorHandlerService
-  ) {}
 
   public ngOnInit(): void {
     const startIntervalDate = this.currentSelectedMonth;

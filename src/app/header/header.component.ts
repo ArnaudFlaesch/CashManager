@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ImportConfigModalComponent } from '../modals/import-config-modal/import-config-modal.component';
@@ -11,7 +11,7 @@ import { ThemeService } from '../services/theme.service/theme.service';
 import { MatDivider } from '@angular/material/divider';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { NotificationsComponent } from '../notifications/notifications.component';
-import { NgIf } from '@angular/common';
+
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -27,7 +27,6 @@ import { MatMiniFabButton } from '@angular/material/button';
     MatTooltip,
     MatMenuTrigger,
     MatIcon,
-    NgIf,
     NotificationsComponent,
     MatMenu,
     MatMenuItem,
@@ -35,24 +34,22 @@ import { MatMiniFabButton } from '@angular/material/button';
     FormsModule,
     ReactiveFormsModule,
     MatDivider
-  ]
+]
 })
 export class HeaderComponent implements OnInit {
+  private authService = inject(AuthService);
+  private configService = inject(ConfigService);
+  private themeService = inject(ThemeService);
+  private errorHandlerService = inject(ErrorHandlerService);
+  dialog = inject(MatDialog);
+  private router = inject(Router);
+
   public toggleControl = new FormControl(false);
 
   public dashApplicationUrl = 'https://arnaudflaesch.github.io/Dash-Web/';
 
   private ERROR_EXPORT_CONFIGURATION =
     "Erreur lors de l'export de la configuration.";
-
-  constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
-    private themeService: ThemeService,
-    private errorHandlerService: ErrorHandlerService,
-    public dialog: MatDialog,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     this.toggleControl.setValue(this.themeService.isPreferredThemeDarkMode());

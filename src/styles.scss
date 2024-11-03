@@ -2,31 +2,24 @@
 @include mat.core;
 
 // Define a dark theme
-$dark-theme: mat.define-dark-theme(
+$dark-theme: mat.define-theme(
   (
     color: (
-      primary: mat.define-palette(mat.$pink-palette),
-      accent: mat.define-palette(mat.$blue-grey-palette)
-    ),
-    // Only include `typography` and `density` in the default dark theme.
-    typography: mat.define-typography-config(),
-    density: 0
-  )
-);
-
-// Define a light theme
-$light-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: mat.define-palette(mat.$indigo-palette),
-      accent: mat.define-palette(mat.$pink-palette)
+      theme-type: dark,
+      primary: mat.$red-palette
     )
   )
 );
 
-// Apply the light theme by default
-@include mat.core-theme($light-theme);
-@include mat.button-color($light-theme);
+// Define a light theme
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette
+    )
+  )
+);
 
 html,
 body {
@@ -35,6 +28,10 @@ body {
 
   // Dark mode
   --dark-mode-background-color: #282a33;
+
+  // Apply the light theme by default
+  @include mat.core-theme($light-theme);
+  @include mat.button-color($light-theme);
 
   height: 100%;
 }

@@ -2,30 +2,32 @@
   <mat-form-field appearance="fill" id="expenseAmount-container">
     <input id="expenseAmount" name="amount" type="number" step=".01" matInput [(ngModel)]="this.expenseToCreate.amount"
       placeholder="Saisissez le montant de la dépense" />
-  </mat-form-field>
+    </mat-form-field>
 
-  <mat-form-field appearance="fill" id="expenseDate-container">
-    <input [formControl]="dateFormControl" matInput id="expenseDate" [matDatepicker]="picker"
-      placeholder="Sélectionnez une date" readonly />
-    <mat-hint>DD/MM/YYYY</mat-hint>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field appearance="fill" id="expenseDate-container">
+      <input [formControl]="dateFormControl" matInput id="expenseDate" [matDatepicker]="picker"
+        placeholder="Sélectionnez une date" readonly />
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Étiquette</mat-label>
-    <input type="text" id="expense-label" placeholder="Renseignez un label" aria-label="Label" matInput
-      (change)="clearSelectedLabel()" [formControl]="labelControl" [matAutocomplete]="auto" />
+      <mat-form-field appearance="fill">
+        <mat-label>Étiquette</mat-label>
+        <input type="text" id="expense-label" placeholder="Renseignez un label" aria-label="Label" matInput
+          (change)="clearSelectedLabel()" [formControl]="labelControl" [matAutocomplete]="auto" />
 
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLabel($event.option.value)"
-      [displayWith]="displayLabel">
-      <mat-option class="label-autocomplete-option" *ngFor="let option of filteredOptions | async" [value]="option">
-        {{ option.label }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLabel($event.option.value)"
+            [displayWith]="displayLabel">
+            @for (option of filteredOptions | async; track option) {
+              <mat-option class="label-autocomplete-option" [value]="option">
+                {{ option.label }}
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
 
-  <button id="add-expense-button" [disabled]="!canCreateExpense()" mat-raised-button (click)="handleCreateExpense()">
-    Ajouter une dépense
-  </button>
-</div>
+        <button id="add-expense-button" [disabled]="!canCreateExpense()" mat-raised-button (click)="handleCreateExpense()">
+          Ajouter une dépense
+        </button>
+      </div>

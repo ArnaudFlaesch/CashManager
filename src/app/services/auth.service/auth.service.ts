@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,11 +16,11 @@ interface IJwt {
 
 @Injectable()
 export class AuthService {
+  private http = inject(HttpClient);
+
   private headers = {
     'Content-type': 'application/json'
   };
-
-  constructor(private http: HttpClient) {}
 
   public login(username: string, password: string): Observable<IUser> {
     return this.http

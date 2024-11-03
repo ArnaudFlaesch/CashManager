@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js 20
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20.9.0
+          node-version: 22.11.0
           cache: 'npm'
 
       - name: Cache node modules
@@ -57,18 +57,18 @@ jobs:
 
       - name: Start database image
         run: |
-          docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash postgres:13.2-alpine
+          docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash postgres:16.3-alpine3.20
 
       - name: Start backend image
         run: |
           [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${{github.ref_name}} | wc -l)" == 1 && ${{github.ref_name}} != 'main' ]] && tagName=${{github.ref_name}} || tagName=latest
-          docker run -p 8080:8080 -d --network="host" -e OPENWEATHERMAP_KEY=test -e STRAVA_CLIENT_ID=test -e STRAVA_CLIENT_SECRET=test -e STEAM_API_KEY=test -e AIRPARIF_API_TOKEN=test ghcr.io/arnaudflaesch/dash-webservices:$tagName
+          docker run -p 8080:8080 -d --network="host" -e POSTGRES_PASSWORD=postgres ghcr.io/arnaudflaesch/dash-webservices:$tagName
 
       - name: E2E Tests
         uses: cypress-io/github-action@v6
         id: e2e-tests
         with:
-          browser: firefox
+          browser: chrome
           config-file: cypress-test.config.ts
           start: npm start
           wait-on: 'http://localhost:4200'

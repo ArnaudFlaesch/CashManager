@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { ErrorHandlerService } from './../services/error.handler.service';
 import { ExpenseService } from './../services/expense.service/expense.service';
 import { MatButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
-import { NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   MatAutocompleteTrigger,
   MatAutocomplete
@@ -46,13 +46,16 @@ import {
     MatLabel,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
     MatButton,
     AsyncPipe
-  ]
+]
 })
 export class CreateExpenseComponent {
+  private expenseService = inject(ExpenseService);
+  private dateUtilsService = inject(DateUtilsService);
+  private errorHandlerService = inject(ErrorHandlerService);
+
   @Input()
   public labels: Label[] = [];
 
@@ -69,11 +72,7 @@ export class CreateExpenseComponent {
   private ERROR_CREATING_EXPENSE_MESSAGE =
     "Erreur lors de l'ajout de la dépense.";
 
-  constructor(
-    private expenseService: ExpenseService,
-    private dateUtilsService: DateUtilsService,
-    private errorHandlerService: ErrorHandlerService
-  ) {
+  constructor() {
     this.expenseToCreate = new InsertExpensePayload();
   }
 

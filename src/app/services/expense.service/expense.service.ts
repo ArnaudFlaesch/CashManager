@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { Expense } from '../../../app/model/Expense';
@@ -10,9 +10,9 @@ import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayloa
 
 @Injectable()
 export class ExpenseService {
-  private dateFormat = 'yyyy-MM-dd';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  private dateFormat = 'yyyy-MM-dd';
 
   public getExpensesAtMonth(
     startIntervalDate: Date,
