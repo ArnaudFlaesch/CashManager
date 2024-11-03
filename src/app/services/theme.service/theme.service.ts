@@ -16,17 +16,12 @@ export class ThemeService {
       } else {
         document.body.classList.remove(this.DARK_MODE_CLASS_NAME);
       }
-      localStorage.setItem(
-        this.PREFERRED_THEME_LOCALSTORAGE_KEY,
-        preferredTheme
-      );
+      localStorage.setItem(this.PREFERRED_THEME_LOCALSTORAGE_KEY, preferredTheme);
     }
   }
 
   public isPreferredThemeDarkMode(): boolean {
-    const preferredTheme = localStorage.getItem(
-      this.PREFERRED_THEME_LOCALSTORAGE_KEY
-    );
+    const preferredTheme = localStorage.getItem(this.PREFERRED_THEME_LOCALSTORAGE_KEY);
     return preferredTheme === 'dark';
   }
 }

@@ -11,22 +11,14 @@ import { ExpenseService } from './../services/expense.service/expense.service';
 import { MatButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { AsyncPipe } from '@angular/common';
-import {
-  MatAutocompleteTrigger,
-  MatAutocomplete
-} from '@angular/material/autocomplete';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import {
   MatDatepickerInput,
   MatDatepickerToggle,
   MatDatepicker
 } from '@angular/material/datepicker';
 import { MatInput } from '@angular/material/input';
-import {
-  MatFormField,
-  MatHint,
-  MatSuffix,
-  MatLabel
-} from '@angular/material/form-field';
+import { MatFormField, MatHint, MatSuffix, MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-create-expense',
@@ -49,7 +41,7 @@ import {
     MatOption,
     MatButton,
     AsyncPipe
-]
+  ]
 })
 export class CreateExpenseComponent {
   private expenseService = inject(ExpenseService);
@@ -69,8 +61,7 @@ export class CreateExpenseComponent {
 
   private selectedLabel: Label | null = null;
 
-  private ERROR_CREATING_EXPENSE_MESSAGE =
-    "Erreur lors de l'ajout de la dépense.";
+  private ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
 
   constructor() {
     this.expenseToCreate = new InsertExpensePayload();
@@ -114,10 +105,9 @@ export class CreateExpenseComponent {
     if (this.dateFormControl.value) {
       this.expenseToCreate.labelId = labelId;
 
-      this.expenseToCreate.expenseDate =
-        this.dateUtilsService.formatDateWithOffsetToUtc(
-          new Date(Date.parse(this.dateFormControl.value))
-        );
+      this.expenseToCreate.expenseDate = this.dateUtilsService.formatDateWithOffsetToUtc(
+        new Date(Date.parse(this.dateFormControl.value))
+      );
 
       this.expenseService.addExpense(this.expenseToCreate).subscribe({
         next: (createdExpense) => {
@@ -127,18 +117,13 @@ export class CreateExpenseComponent {
           this.labelControl.reset();
         },
         error: (error) =>
-          this.errorHandlerService.handleError(
-            error,
-            this.ERROR_CREATING_EXPENSE_MESSAGE
-          )
+          this.errorHandlerService.handleError(error, this.ERROR_CREATING_EXPENSE_MESSAGE)
       });
     }
   }
 
   private filterLabels(value: string): Label[] {
     const filterValue = value.toLowerCase();
-    return this.labels.filter((label) =>
-      label.label.toLowerCase().includes(filterValue)
-    );
+    return this.labels.filter((label) => label.label.toLowerCase().includes(filterValue));
   }
 }

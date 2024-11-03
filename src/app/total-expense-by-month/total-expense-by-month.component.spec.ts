@@ -1,7 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -25,17 +22,8 @@ describe('TotalExpenseByMonthComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        MatSnackBarModule,
-        MatDialogModule
-      ],
-      providers: [
-        ErrorHandlerService,
-        ExpenseService,
-        { provide: MatDialogRef, useValue: {} }
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, MatSnackBarModule, MatDialogModule],
+      providers: [ErrorHandlerService, ExpenseService, { provide: MatDialogRef, useValue: {} }]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(TotalExpenseByMonthComponent);
@@ -62,13 +50,10 @@ describe('TotalExpenseByMonthComponent', () => {
 
     const labelIdToSelect = component.labels[0].id;
     component.selectLabel(labelIdToSelect);
-    const getTotalExpenseByMonthByLabelIdRequest =
-      httpTestingController.expectOne(
-        `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`
-      );
-    getTotalExpenseByMonthByLabelIdRequest.flush(
-      expectedTotalExpenseByMonthByLabelIdData
+    const getTotalExpenseByMonthByLabelIdRequest = httpTestingController.expectOne(
+      `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`
     );
+    getTotalExpenseByMonthByLabelIdRequest.flush(expectedTotalExpenseByMonthByLabelIdData);
     expect(component.isOneLabelSelected()).toEqual(true);
     expect(component.totalExpensesByMonthChart).toEqual({
       datasets: [

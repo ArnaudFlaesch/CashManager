@@ -1,10 +1,7 @@
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { environment } from '../../environments/environment';
@@ -23,11 +20,7 @@ describe('CreateExpenseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatSnackBarModule,
-        MatAutocompleteModule,
-        HttpClientTestingModule
-      ],
+      imports: [MatSnackBarModule, MatAutocompleteModule, HttpClientTestingModule],
       providers: [
         AuthService,
         ExpenseService,
@@ -62,12 +55,7 @@ describe('CreateExpenseComponent', () => {
       `${environment.backend_url}${expensePath}addExpense`
     );
     getExpensesRequest.flush(
-      new Expense(
-        1,
-        component.expenseToCreate.amount,
-        component.expenseToCreate.expenseDate,
-        1
-      )
+      new Expense(1, component.expenseToCreate.amount, component.expenseToCreate.expenseDate, 1)
     );
   });
 

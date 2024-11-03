@@ -1,8 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -58,9 +55,7 @@ describe('LoginComponent', () => {
     component.inputUsername = 'username';
     component.inputPassword = 'password';
     component.handleLogin();
-    const request = httpTestingController.expectOne(
-      environment.backend_url + '/auth/login'
-    );
+    const request = httpTestingController.expectOne(environment.backend_url + '/auth/login');
     request.flush(userData);
     expect(loginSpy).toHaveBeenCalledWith('username', 'password');
   });

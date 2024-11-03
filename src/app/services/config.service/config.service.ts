@@ -8,18 +8,14 @@ import authorizationBearer from '../authorizationBearer/authorizationBearer';
 export class ConfigService {
   private http = inject(HttpClient);
 
-
   public exportConfig(): Observable<BlobPart> {
-    return this.http.get(
-      `${environment.backend_url}/cashManagerConfig/export`,
-      {
-        headers: {
-          Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
-        },
-        responseType: 'blob'
-      }
-    );
+    return this.http.get(`${environment.backend_url}/cashManagerConfig/export`, {
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
+      },
+      responseType: 'blob'
+    });
   }
 
   public importConfig(file: File): Observable<boolean> {

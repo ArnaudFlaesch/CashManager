@@ -12,11 +12,7 @@ describe('ImportConfigModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MatSnackBarModule, HttpClientTestingModule],
-      providers: [
-        ConfigService,
-        ErrorHandlerService,
-        { provide: MatDialogRef, useValue: {} }
-      ]
+      providers: [ConfigService, ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(ImportConfigModalComponent);

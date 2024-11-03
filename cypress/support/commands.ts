@@ -32,10 +32,7 @@ Cypress.Commands.add('loginAsUser', (): Cypress.Chainable<Response> => {
   return loginAs('usertest', 'userpassword');
 });
 
-function loginAs(
-  username: string,
-  password: string
-): Cypress.Chainable<Response> {
+function loginAs(username: string, password: string): Cypress.Chainable<Response> {
   return cy
     .request('POST', `${Cypress.env('backend_url')}/auth/login`, {
       username: username,

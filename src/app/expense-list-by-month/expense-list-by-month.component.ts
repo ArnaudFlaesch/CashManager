@@ -7,19 +7,8 @@ import {
   MatDatepickerToggle
 } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ChartConfiguration,
-  ChartData,
-  ChartEvent,
-  ChartTypeRegistry
-} from 'chart.js';
-import {
-  addMonths,
-  endOfMonth,
-  format,
-  startOfMonth,
-  subMonths
-} from 'date-fns';
+import { ChartConfiguration, ChartData, ChartEvent, ChartTypeRegistry } from 'chart.js';
+import { addMonths, endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
 
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
 import { Expense } from '../model/Expense';
@@ -31,11 +20,7 @@ import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
 import { CreateExpenseComponent } from '../create-expense/create-expense.component';
 
 import { MatInput } from '@angular/material/input';
-import {
-  MatFormField,
-  MatLabel,
-  MatSuffix
-} from '@angular/material/form-field';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { BaseChartDirective } from 'ng2-charts';
@@ -59,7 +44,7 @@ import { BaseChartDirective } from 'ng2-charts';
     MatSuffix,
     MatDatepicker,
     CreateExpenseComponent
-]
+  ]
 })
 export class ExpenseListByMonthComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -73,9 +58,8 @@ export class ExpenseListByMonthComponent implements OnInit {
   public monthsWithExpenses: string[] = [];
   public selectedMonthFormControl = new FormControl(startOfMonth(new Date()));
 
-  public expensesByLabelChart:
-    | ChartData<keyof ChartTypeRegistry, number[], string>
-    | undefined = undefined;
+  public expensesByLabelChart: ChartData<keyof ChartTypeRegistry, number[], string> | undefined =
+    undefined;
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -89,8 +73,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   private currentSelectedMonth = startOfMonth(new Date());
 
   private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
-  private ERROR_GETTING_EXPENSES =
-    'Erreur lors de la récupération des dépenses.';
+  private ERROR_GETTING_EXPENSES = 'Erreur lors de la récupération des dépenses.';
 
   private EXPENSES_CHART_LABEL = 'Dépenses';
 
@@ -105,9 +88,7 @@ export class ExpenseListByMonthComponent implements OnInit {
     this.labelService.deleteLabel(labelId).subscribe({
       next: () => {
         this.labels = this.labels.filter((label) => label.id !== labelId);
-        this.expenses = this.expenses.filter(
-          (expense) => expense.labelId !== labelId
-        );
+        this.expenses = this.expenses.filter((expense) => expense.labelId !== labelId);
         this.refreshExpensesChart();
       },
       error: (error: HttpErrorResponse) =>
@@ -168,10 +149,7 @@ export class ExpenseListByMonthComponent implements OnInit {
     this.selectMonth(addMonths(this.currentSelectedMonth, 1));
   }
 
-  public setMonthAndYear(
-    normalizedMonthAndYear: Date,
-    datepicker: MatDatepicker<Date>
-  ): void {
+  public setMonthAndYear(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>): void {
     const selectedMonth = new Date(
       normalizedMonthAndYear.getFullYear(),
       normalizedMonthAndYear.getMonth(),
@@ -193,24 +171,19 @@ export class ExpenseListByMonthComponent implements OnInit {
   private deleteExpense(expenseId: number) {
     this.expenseService.deleteExpense(expenseId).subscribe({
       next: () => {
-        this.expenses = this.expenses.filter(
-          (expense) => expense.id !== expenseId
-        );
+        this.expenses = this.expenses.filter((expense) => expense.id !== expenseId);
         this.refreshExpensesChart();
       }
     });
   }
 
   private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
-    return expenses.reduce(
-      (expensesByLabel: Record<string, number[]>, currentExpense: Expense) => {
-        const labelId = currentExpense.labelId;
-        expensesByLabel[labelId] = expensesByLabel[labelId] ?? [];
-        expensesByLabel[labelId].push(currentExpense.amount);
-        return expensesByLabel;
-      },
-      {}
-    );
+    return expenses.reduce((expensesByLabel: Record<string, number[]>, currentExpense: Expense) => {
+      const labelId = currentExpense.labelId;
+      expensesByLabel[labelId] = expensesByLabel[labelId] ?? [];
+      expensesByLabel[labelId].push(currentExpense.amount);
+      return expensesByLabel;
+    }, {});
   }
 
   private handleSelectExpensesForMonth(month: Date): void {
@@ -221,19 +194,14 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   private getExpenses(startIntervalDate: Date, endIntervalDate: Date) {
-    this.expenseService
-      .getExpensesAtMonth(startIntervalDate, endIntervalDate)
-      .subscribe({
-        next: (expenses) => {
-          this.expenses = expenses;
-          this.refreshExpensesChart();
-        },
-        error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(
-            error,
-            this.ERROR_GETTING_EXPENSES
-          )
-      });
+    this.expenseService.getExpensesAtMonth(startIntervalDate, endIntervalDate).subscribe({
+      next: (expenses) => {
+        this.expenses = expenses;
+        this.refreshExpensesChart();
+      },
+      error: (error: HttpErrorResponse) =>
+        this.errorHandlerService.handleError(error, this.ERROR_GETTING_EXPENSES)
+    });
   }
 
   private refreshExpensesChart() {
@@ -241,17 +209,13 @@ export class ExpenseListByMonthComponent implements OnInit {
     this.expensesByLabelChart = {
       labels: [this.EXPENSES_CHART_LABEL],
       datasets: Object.keys(expensesByLabel).map((labelId) => {
-        const labelName = this.labels.filter(
-          (label) => label.id.toString() === labelId
-        )[0];
+        const labelName = this.labels.filter((label) => label.id.toString() === labelId)[0];
         if (!labelId || labelName === undefined) {
           return { label: '', data: [] };
         }
         return {
           label: labelName.label,
-          data: [
-            expensesByLabel[labelId].reduce((total, amount) => total + amount)
-          ]
+          data: [expensesByLabel[labelId].reduce((total, amount) => total + amount)]
         };
       })
     };

@@ -59,10 +59,7 @@ export class HomeComponent implements OnInit {
           this.labelControl.setValue(null);
         },
         error: (error) =>
-          this.errorHandlerService.handleError(
-            error.message,
-            this.ERROR_CREATING_LABEL_MESSAGE
-          )
+          this.errorHandlerService.handleError(error.message, this.ERROR_CREATING_LABEL_MESSAGE)
       });
     }
   }
