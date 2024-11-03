@@ -1,7 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -49,9 +46,7 @@ describe('HomeComponent', () => {
 
   it('Should create component and get label list', () => {
     component.ngOnInit();
-    const getLabelsRequest = httpTestingController.expectOne(
-      environment.backend_url + labelPath
-    );
+    const getLabelsRequest = httpTestingController.expectOne(environment.backend_url + labelPath);
 
     getLabelsRequest.flush(labelData);
 

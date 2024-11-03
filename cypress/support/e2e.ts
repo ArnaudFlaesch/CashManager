@@ -42,12 +42,9 @@ Cypress.on('test:after:run', (test, runnable) => {
     addContext({ test }, imageUrl);
   }
 
-  Cypress.Commands.add(
-    'shouldDisplayErrorMessage',
-    (errorMessage: string): Cypress.Chainable => {
-      return shouldDisplayErrorMessage(errorMessage);
-    }
-  );
+  Cypress.Commands.add('shouldDisplayErrorMessage', (errorMessage: string): Cypress.Chainable => {
+    return shouldDisplayErrorMessage(errorMessage);
+  });
 
   function shouldDisplayErrorMessage(errorMessage: string): Cypress.Chainable {
     return cy

@@ -9,7 +9,6 @@ import authorizationBearer from '../authorizationBearer/authorizationBearer';
 export class LabelService {
   private http = inject(HttpClient);
 
-
   public getLabels(): Observable<Label[]> {
     return this.http.get<Label[]>(`${environment.backend_url}/label/`, {
       headers: {
@@ -33,14 +32,11 @@ export class LabelService {
   }
 
   public deleteLabel(id: number): Observable<void> {
-    return this.http.delete<void>(
-      `${environment.backend_url}/label/deleteLabel?labelId=${id}`,
-      {
-        headers: {
-          Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
-        }
+    return this.http.delete<void>(`${environment.backend_url}/label/deleteLabel?labelId=${id}`, {
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
       }
-    );
+    });
   }
 }

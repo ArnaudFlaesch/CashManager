@@ -32,7 +32,7 @@ import { MatMiniFabButton, MatIconButton } from '@angular/material/button';
     MatIconButton,
     NgClass,
     DateFormatPipe
-]
+  ]
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   private notificationService = inject(NotificationService);
@@ -45,8 +45,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<unknown> = new Subject();
 
-  private ERROR_MARKING_NOTIFICATION_AS_READ =
-    'Erreur lors du traitement de la requête.';
+  private ERROR_MARKING_NOTIFICATION_AS_READ = 'Erreur lors du traitement de la requête.';
 
   ngOnInit(): void {
     this.fetchNotificationsFromDatabase();
@@ -64,37 +63,26 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   public markAllNotificationsAsRead(event: Event): void {
     event.stopPropagation();
-    this.markNotificationsAsRead(
-      this.notificationsFromDatabase.map((notif) => notif.id)
-    );
+    this.markNotificationsAsRead(this.notificationsFromDatabase.map((notif) => notif.id));
   }
 
   private markNotificationsAsRead(notificationIds: number[]): void {
     this.notificationService.markNotificationAsRead(notificationIds).subscribe({
       next: (updatedNotifications) => {
         this.notificationsFromDatabase = this.notificationsFromDatabase.filter(
-          (notification) =>
-            !updatedNotifications
-              .map((notif) => notif.id)
-              .includes(notification.id)
+          (notification) => !updatedNotifications.map((notif) => notif.id).includes(notification.id)
         );
         this.notificationsFromDatabase = [
           ...this.notificationsFromDatabase,
           ...updatedNotifications
         ].sort((timeA, timeB) => {
           if (timeA === timeB) return 0;
-          return (
-            Date.parse(timeB.notificationDate) -
-            Date.parse(timeA.notificationDate)
-          );
+          return Date.parse(timeB.notificationDate) - Date.parse(timeA.notificationDate);
         });
         this.computeNotificationsToDisplay();
       },
       error: (error) =>
-        this.errorHandlerService.handleError(
-          error,
-          this.ERROR_MARKING_NOTIFICATION_AS_READ
-        )
+        this.errorHandlerService.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
     });
   }
 
@@ -108,21 +96,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   private computeNotificationsToDisplay(): void {
-    this.notificationsToDisplay = this.notificationsFromDatabase.map(
-      (notification) => {
-        return {
-          ...notification,
-          ...{
-            notificationDateToDisplay: this.computeDateToDisplay(
-              notification.notificationDate
-            ),
-            notificationTypeToDisplay: this.computeTypeToDisplay(
-              notification.notificationType
-            )
-          }
-        };
-      }
-    );
+    this.notificationsToDisplay = this.notificationsFromDatabase.map((notification) => {
+      return {
+        ...notification,
+        ...{
+          notificationDateToDisplay: this.computeDateToDisplay(notification.notificationDate),
+          notificationTypeToDisplay: this.computeTypeToDisplay(notification.notificationType)
+        }
+      };
+    });
     this.unreadNotificationsForBadge = this.computeUnreadNotificationsBadge();
   }
 
@@ -154,8 +136,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     const unreadNotificationsCount = this.notificationsFromDatabase.filter(
       (notif) => !notif.isRead
     ).length;
-    return unreadNotificationsCount > 0
-      ? unreadNotificationsCount.toString()
-      : '';
+    return unreadNotificationsCount > 0 ? unreadNotificationsCount.toString() : '';
   }
 }

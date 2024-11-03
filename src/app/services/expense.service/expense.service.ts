@@ -14,10 +14,7 @@ export class ExpenseService {
 
   private dateFormat = 'yyyy-MM-dd';
 
-  public getExpensesAtMonth(
-    startIntervalDate: Date,
-    endIntervalDate: Date
-  ): Observable<Expense[]> {
+  public getExpensesAtMonth(startIntervalDate: Date, endIntervalDate: Date): Observable<Expense[]> {
     return this.http.get<Expense[]>(`${environment.backend_url}/expense/`, {
       headers: {
         Authorization: authorizationBearer(),
@@ -42,9 +39,7 @@ export class ExpenseService {
     );
   }
 
-  public getTotalExpensesByMonthByLabelId(
-    labelId: number
-  ): Observable<ITotalExpenseByMonth[]> {
+  public getTotalExpensesByMonthByLabelId(labelId: number): Observable<ITotalExpenseByMonth[]> {
     return this.http.get<ITotalExpenseByMonth[]>(
       `${environment.backend_url}/expense/getTotalExpensesByMonthByLabelId?labelId=${labelId}`,
       {

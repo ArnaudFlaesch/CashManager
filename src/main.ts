@@ -1,20 +1,9 @@
 import { registerLocaleData } from '@angular/common';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import localeFr from '@angular/common/locales/fr';
-import {
-  enableProdMode,
-  importProvidersFrom,
-  inject,
-  isDevMode
-} from '@angular/core';
+import { enableProdMode, importProvidersFrom, inject, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatDateFnsModule,
-  provideDateFnsAdapter
-} from '@angular/material-date-fns-adapter';
+import { MatDateFnsModule, provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,8 +30,6 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AppComponent } from './app/app.component';
 import { AuthGuard } from './app/guards/auth.guard';
 
-
-
 import { AuthService } from './app/services/auth.service/auth.service';
 import { ConfigService } from './app/services/config.service/config.service';
 import { ErrorHandlerService } from './app/services/error.handler.service';
@@ -58,13 +45,19 @@ if (environment.production) {
 }
 
 const routes: Routes = [
-  { path: 'login', loadComponent: () => import('./app/pages/login/login.component').then(m => m.LoginComponent) },
+  {
+    path: 'login',
+    loadComponent: () => import('./app/pages/login/login.component').then((m) => m.LoginComponent)
+  },
   {
     path: 'home',
-    loadComponent: () => import('./app/pages/home/home.component').then(m => m.HomeComponent),
+    loadComponent: () => import('./app/pages/home/home.component').then((m) => m.HomeComponent),
     canActivate: [() => inject(AuthGuard)]
   },
-  { path: 'error', loadComponent: () => import('./app/pages/error/error.component').then(m => m.ErrorComponent) },
+  {
+    path: 'error',
+    loadComponent: () => import('./app/pages/error/error.component').then((m) => m.ErrorComponent)
+  },
   { path: '**', redirectTo: 'home' }
 ];
 

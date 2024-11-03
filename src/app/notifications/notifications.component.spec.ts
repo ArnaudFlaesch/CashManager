@@ -2,10 +2,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { startOfYesterday } from 'date-fns';
 
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { IPage } from '../../app/model/IPage';
 import { environment } from '../../environments/environment';
@@ -72,18 +69,10 @@ describe('NotificationsComponent', () => {
     );
     notificationsRequest.flush(notificationsData);
 
-    expect(component.notificationsFromDatabase).toEqual(
-      notificationsData.content
-    );
-    expect(
-      component.notificationsToDisplay[0].notificationTypeToDisplay
-    ).toEqual('warning');
-    expect(
-      component.notificationsToDisplay[1].notificationTypeToDisplay
-    ).toEqual('info');
-    expect(
-      component.notificationsToDisplay[1].notificationTypeToDisplay
-    ).toEqual('info');
+    expect(component.notificationsFromDatabase).toEqual(notificationsData.content);
+    expect(component.notificationsToDisplay[0].notificationTypeToDisplay).toEqual('warning');
+    expect(component.notificationsToDisplay[1].notificationTypeToDisplay).toEqual('info');
+    expect(component.notificationsToDisplay[1].notificationTypeToDisplay).toEqual('info');
     expect(component.unreadNotificationsForBadge).toEqual('2');
   });
 
