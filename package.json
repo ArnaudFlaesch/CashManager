@@ -51,7 +51,7 @@
     "@angular/cli": "18.2.11",
     "@angular/compiler-cli": "18.2.10",
     "@types/jest": "29.5.12",
-    "@types/node": "20.12.12",
+    "@types/node": "22.8.7",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
     "cypress": "13.10.0",
