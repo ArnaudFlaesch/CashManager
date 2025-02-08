@@ -90,7 +90,7 @@ jobs:
           path: cypress/reports/html
 
       - name: Report coverage for Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: always() && steps.application-tests.outcome == 'success'
         with:
           directory: coverage-jest
