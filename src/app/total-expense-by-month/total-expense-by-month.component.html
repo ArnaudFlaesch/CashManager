@@ -1,7 +1,7 @@
 <mat-form-field>
   <mat-label>Étiquettes</mat-label>
   <mat-select [formControl]="labelControl">
-    @for (label of this.labels; track label) {
+    @for (label of this.labels(); track label) {
       <mat-option [value]="label.id">{{label.label}}</mat-option>
     }
   </mat-select>

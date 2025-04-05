@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDatepicker,
@@ -26,25 +26,24 @@ import { MatIconButton } from '@angular/material/button';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
-  selector: 'app-expense-list-by-month',
-  templateUrl: './expense-list-by-month.component.html',
-  styleUrls: ['./expense-list-by-month.component.scss'],
-  standalone: true,
-  imports: [
-    BaseChartDirective,
-    MatIconButton,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatDatepickerInput,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
-    CreateExpenseComponent
-  ]
+    selector: 'app-expense-list-by-month',
+    templateUrl: './expense-list-by-month.component.html',
+    styleUrls: ['./expense-list-by-month.component.scss'],
+    imports: [
+        BaseChartDirective,
+        MatIconButton,
+        MatIcon,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDatepickerInput,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        CreateExpenseComponent
+    ]
 })
 export class ExpenseListByMonthComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -52,8 +51,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   private expenseService = inject(ExpenseService);
   private errorHandlerService = inject(ErrorHandlerService);
 
-  @Input()
-  public labels: Label[] = [];
+  public readonly labels = input<Label[]>([]);
   public expenses: Expense[] = [];
   public monthsWithExpenses: string[] = [];
   public selectedMonthFormControl = new FormControl(startOfMonth(new Date()));
@@ -87,7 +85,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   public deleteLabel(labelId: number): void {
     this.labelService.deleteLabel(labelId).subscribe({
       next: () => {
-        this.labels = this.labels.filter((label) => label.id !== labelId);
+        this.labels = this.labels().filter((label) => label.id !== labelId);
         this.expenses = this.expenses.filter((expense) => expense.labelId !== labelId);
         this.refreshExpensesChart();
       },
@@ -119,7 +117,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   public getLabelFromId(labelId: number): Label | undefined {
-    return this.labels.find((label) => label.id === labelId);
+    return this.labels().find((label) => label.id === labelId);
   }
 
   public getTotalForMonth(): number {
@@ -209,7 +207,7 @@ export class ExpenseListByMonthComponent implements OnInit {
     this.expensesByLabelChart = {
       labels: [this.EXPENSES_CHART_LABEL],
       datasets: Object.keys(expensesByLabel).map((labelId) => {
-        const labelName = this.labels.filter((label) => label.id.toString() === labelId)[0];
+        const labelName = this.labels().filter((label) => label.id.toString() === labelId)[0];
         if (!labelId || labelName === undefined) {
           return { label: '', data: [] };
         }

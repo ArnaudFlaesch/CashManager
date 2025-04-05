@@ -11,11 +11,10 @@ import { IConfirmDialogData } from './IConfirmDialogData';
 import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-confirm-modal.component',
-  templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss'],
-  standalone: true,
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
+    selector: 'app-confirm-modal.component',
+    templateUrl: './confirm-modal.component.html',
+    styleUrls: ['./confirm-modal.component.scss'],
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ConfirmModalComponent {
   dialogRef = inject<MatDialogRef<ConfirmModalComponent>>(MatDialogRef);

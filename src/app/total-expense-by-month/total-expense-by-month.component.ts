@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
@@ -14,26 +14,25 @@ import { ExpenseService } from '../services/expense.service/expense.service';
 import { Label } from './../model/Label';
 
 @Component({
-  selector: 'app-total-expense-by-month',
-  templateUrl: './total-expense-by-month.component.html',
-  styleUrls: ['./total-expense-by-month.component.scss'],
-  standalone: true,
-  imports: [
-    BaseChartDirective,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    FormsModule,
-    ReactiveFormsModule,
-    MatOption,
-    MatIconButton,
-    MatIcon
-  ]
+    selector: 'app-total-expense-by-month',
+    templateUrl: './total-expense-by-month.component.html',
+    styleUrls: ['./total-expense-by-month.component.scss'],
+    imports: [
+        BaseChartDirective,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        FormsModule,
+        ReactiveFormsModule,
+        MatOption,
+        MatIconButton,
+        MatIcon
+    ]
 })
 export class TotalExpenseByMonthComponent implements OnInit {
   private expenseService = inject(ExpenseService);
 
-  @Input() public labels: Label[] = [];
+  public readonly labels = input<Label[]>([]);
 
   readonly noLabelIdSelected = 0;
   public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined = undefined;

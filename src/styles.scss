@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
-@include mat.core;
+@include mat.elevation-classes;
+@include mat.app-background;
 
 // Define a dark theme
 $dark-theme: mat.define-theme(
@@ -30,7 +31,8 @@ body {
   --dark-mode-background-color: #282a33;
 
   // Apply the light theme by default
-  @include mat.core-theme($light-theme);
+  @include mat.elevation-classes;
+  @include mat.app-background;
   @include mat.button-color($light-theme);
 
   height: 100%;
@@ -42,7 +44,8 @@ body {
   background-color: var(--light-mode-background-color);
 
   &.dark-mode {
-    @include mat.core-color($dark-theme);
+    @include mat.elevation-classes;
+    @include mat.app-background;
     @include mat.button-color($dark-theme);
 
     background-color: var(--dark-mode-background-color);
