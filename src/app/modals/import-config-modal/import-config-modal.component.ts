@@ -12,11 +12,10 @@ import { ConfigService } from '../../../app/services/config.service/config.servi
 import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-import-config-modal',
-  templateUrl: './import-config-modal.component.html',
-  styleUrls: ['./import-config-modal.component.scss'],
-  standalone: true,
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
+    selector: 'app-import-config-modal',
+    templateUrl: './import-config-modal.component.html',
+    styleUrls: ['./import-config-modal.component.scss'],
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {
   private configService = inject(ConfigService);

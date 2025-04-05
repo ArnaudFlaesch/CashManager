@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Label } from '../../model/Label';
 import { ErrorHandlerService } from '../../services/error.handler.service';
 import { LabelService } from '../../services/label.service/label.service';
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, OnInit, inject, output, model } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LabelListComponent } from '../../label-list/label-list.component';
 import { MatButton } from '@angular/material/button';
@@ -14,32 +14,31 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { HeaderComponent } from '../../header/header.component';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    MatTabGroup,
-    MatTab,
-    ExpenseListByMonthComponent,
-    TotalExpenseByMonthComponent,
-    FormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    ReactiveFormsModule,
-    MatButton,
-    LabelListComponent
-  ]
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [
+        HeaderComponent,
+        MatTabGroup,
+        MatTab,
+        ExpenseListByMonthComponent,
+        TotalExpenseByMonthComponent,
+        FormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatButton,
+        LabelListComponent
+    ]
 })
 export class HomeComponent implements OnInit {
   private labelService = inject(LabelService);
   private errorHandlerService = inject(ErrorHandlerService);
 
-  @Output() insertedLabelEvent = new EventEmitter<Label>();
+  readonly insertedLabelEvent = output<Label>();
 
-  public labels: Label[] = [];
+  public labels = model<Label[]>([]);
 
   labelControl = new FormControl<string>('');
 
@@ -54,7 +53,7 @@ export class HomeComponent implements OnInit {
     if (this.labelControl.value) {
       this.labelService.addLabel(this.labelControl.value).subscribe({
         next: (insertedLabel) => {
-          this.labels = [...this.labels, insertedLabel];
+          this.labels.update(labels => [...labels, insertedLabel])
           this.insertedLabelEvent.emit(insertedLabel);
           this.labelControl.setValue(null);
         },
@@ -65,13 +64,13 @@ export class HomeComponent implements OnInit {
   }
 
   public onDeleteLabel(labelId: number): void {
-    this.labels = this.labels.filter((label) => label.id !== labelId);
+    this.labels.update(labels =>labels.filter((label) => label.id !== labelId) );
   }
 
   private getLabels() {
     this.labelService.getLabels().subscribe({
       next: (labels) => {
-        this.labels = labels;
+        this.labels.set(labels);
       },
       error: (error: HttpErrorResponse) =>
         this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)

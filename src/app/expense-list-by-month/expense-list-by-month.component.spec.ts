@@ -87,7 +87,7 @@ describe('ExpenseListByMonthComponent', () => {
     );
     getNextMonthExpensesRequest.flush(expectedExpenseData);
 
-    component.labels = labelData;
+    component.labels.set(labelData);
     expect(component.getLabelFromId(99)).toEqual(undefined);
     expect(component.getLabelFromId(expectedExpenseData[0].labelId)?.label).toEqual(
       labelData[0].label
@@ -98,6 +98,6 @@ describe('ExpenseListByMonthComponent', () => {
       `${environment.backend_url}/label/deleteLabel?labelId=${labelData[1].id}`
     );
     deleteLabelRequest.flush({});
-    expect(component.labels).toEqual([labelData[0]]);
+    expect(component.labels()).toEqual([labelData[0]]);
   });
 });

@@ -9,9 +9,11 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { ExpenseService } from '../services/expense.service/expense.service';
 import { ITotalExpenseByMonth } from './../model/ITotalExpenseByMonth';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month.component';
+import { ComponentRef } from '@angular/core';
 
 describe('TotalExpenseByMonthComponent', () => {
   let component: TotalExpenseByMonthComponent;
+  let componentRef: ComponentRef<TotalExpenseByMonthComponent>;
   let httpTestingController: HttpTestingController;
 
   const expensePath = '/expense/';
@@ -28,6 +30,7 @@ describe('TotalExpenseByMonthComponent', () => {
 
     const fixture = TestBed.createComponent(TotalExpenseByMonthComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -36,7 +39,7 @@ describe('TotalExpenseByMonthComponent', () => {
   });
 
   it('Should display the total with two labels', () => {
-    component.labels = labelData;
+    componentRef.setInput("labels", labelData);
     component.ngOnInit();
     const getTotalExpenseByMonthRequest = httpTestingController.expectOne(
       `${environment.backend_url}${expensePath}getTotalExpensesByMonth`
@@ -48,7 +51,7 @@ describe('TotalExpenseByMonthComponent', () => {
       { date: '2022-03-01', total: 100 }
     ] as ITotalExpenseByMonth[];
 
-    const labelIdToSelect = component.labels[0].id;
+    const labelIdToSelect = component.labels()[0].id;
     component.selectLabel(labelIdToSelect);
     const getTotalExpenseByMonthByLabelIdRequest = httpTestingController.expectOne(
       `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`

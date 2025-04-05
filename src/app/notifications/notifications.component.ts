@@ -18,21 +18,20 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatMiniFabButton, MatIconButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss'],
-  standalone: true,
-  imports: [
-    MatMiniFabButton,
-    MatTooltip,
-    MatMenuTrigger,
-    MatIcon,
-    MatBadge,
-    MatMenu,
-    MatIconButton,
-    NgClass,
-    DateFormatPipe
-  ]
+    selector: 'app-notifications',
+    templateUrl: './notifications.component.html',
+    styleUrls: ['./notifications.component.scss'],
+    imports: [
+        MatMiniFabButton,
+        MatTooltip,
+        MatMenuTrigger,
+        MatIcon,
+        MatBadge,
+        MatMenu,
+        MatIconButton,
+        NgClass,
+        DateFormatPipe
+    ]
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   private notificationService = inject(NotificationService);

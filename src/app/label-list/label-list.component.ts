@@ -1,13 +1,6 @@
 import { ErrorHandlerService } from './../services/error.handler.service';
 import { LabelService } from './../services/label.service/label.service';
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  inject
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, output } from '@angular/core';
 import { Label } from '../model/Label';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
@@ -20,7 +13,6 @@ import { MatIconButton } from '@angular/material/button';
   templateUrl: './label-list.component.html',
   styleUrls: ['./label-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [MatIconButton, MatIcon]
 })
 export class LabelListComponent {
@@ -28,8 +20,8 @@ export class LabelListComponent {
   private errorHandlerService = inject(ErrorHandlerService);
   dialog = inject(MatDialog);
 
-  @Input() labels: Label[] = [];
-  @Output() labelDeletedEvent = new EventEmitter<number>();
+  readonly labels = model.required<Label[]>();
+  readonly labelDeletedEvent = output<number>();
 
   private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
 
@@ -53,7 +45,7 @@ export class LabelListComponent {
   private deleteLabel(labelId: number): void {
     this.labelService.deleteLabel(labelId).subscribe({
       next: () => {
-        this.labels = this.labels.filter((label) => label.id !== labelId);
+        this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
         this.labelDeletedEvent.emit(labelId);
       },
       error: (error) => this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)

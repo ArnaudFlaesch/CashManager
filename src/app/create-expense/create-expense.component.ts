@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 
@@ -21,37 +21,35 @@ import { MatInput } from '@angular/material/input';
 import { MatFormField, MatHint, MatSuffix, MatLabel } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-create-expense',
-  templateUrl: './create-expense.component.html',
-  styleUrls: ['./create-expense.component.scss'],
-  standalone: true,
-  imports: [
-    MatFormField,
-    FormsModule,
-    MatInput,
-    MatDatepickerInput,
-    ReactiveFormsModule,
-    MatHint,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
-    MatLabel,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
-    MatButton,
-    AsyncPipe
-  ]
+    selector: 'app-create-expense',
+    templateUrl: './create-expense.component.html',
+    styleUrls: ['./create-expense.component.scss'],
+    imports: [
+        MatFormField,
+        FormsModule,
+        MatInput,
+        MatDatepickerInput,
+        ReactiveFormsModule,
+        MatHint,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        MatLabel,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        MatButton,
+        AsyncPipe
+    ]
 })
 export class CreateExpenseComponent {
   private expenseService = inject(ExpenseService);
   private dateUtilsService = inject(DateUtilsService);
   private errorHandlerService = inject(ErrorHandlerService);
 
-  @Input()
-  public labels: Label[] = [];
+  public readonly labels = input<Label[]>([]);
 
-  @Output() insertedExpenseEvent = new EventEmitter<Expense>();
+  readonly insertedExpenseEvent = output<Expense>();
 
   labelControl = new FormControl<Label | string>('');
   dateFormControl = new FormControl<string | null>(null);
@@ -71,7 +69,7 @@ export class CreateExpenseComponent {
     this.filteredOptions = this.labelControl.valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : '')),
-      map((name) => (name ? this.filterLabels(name) : this.labels.slice()))
+      map((name) => (name ? this.filterLabels(name) : this.labels().slice()))
     );
   }
 
@@ -124,6 +122,6 @@ export class CreateExpenseComponent {
 
   private filterLabels(value: string): Label[] {
     const filterValue = value.toLowerCase();
-    return this.labels.filter((label) => label.label.toLowerCase().includes(filterValue));
+    return this.labels().filter((label) => label.label.toLowerCase().includes(filterValue));
   }
 }
