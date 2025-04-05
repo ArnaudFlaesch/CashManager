@@ -49,8 +49,7 @@ describe('HomeComponent', () => {
     const getLabelsRequest = httpTestingController.expectOne(environment.backend_url + labelPath);
 
     getLabelsRequest.flush(labelData);
-
-    expect(component.labels).toEqual(labelData);
+    expect(component.labels()).toEqual(labelData);
 
     component.labelControl.setValue('New label');
     component.handleCreateLabel();
@@ -60,6 +59,6 @@ describe('HomeComponent', () => {
 
     const newLabel = { id: 2, label: 'New label' } as Label;
     createLabelRequest.flush(newLabel);
-    expect(component.labels).toEqual([...labelData, newLabel]);
+    expect(component.labels()).toEqual([...labelData, newLabel]);
   });
 });

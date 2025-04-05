@@ -4,10 +4,10 @@
 
 <mat-tab-group>
   <mat-tab label="Affichage des dépenses par mois"> <app-expense-list-by-month
-      [labels]="this.labels"></app-expense-list-by-month>
+      [(labels)]="this.labels"></app-expense-list-by-month>
   </mat-tab>
   <mat-tab label="Affichage du total par mois"> <app-total-expense-by-month
-      [labels]="this.labels"></app-total-expense-by-month>
+      [labels]="this.labels()"></app-total-expense-by-month>
   </mat-tab>
   <mat-tab label="Affichage de la liste des labels">
     <form id="create-label-form">
@@ -22,6 +22,6 @@
       </button>
     </form>
 
-    <app-label-list [labels]="this.labels" (labelDeletedEvent)="onDeleteLabel($event)"></app-label-list>
+    <app-label-list [(labels)]="this.labels" (labelDeletedEvent)="onDeleteLabel($event)"></app-label-list>
   </mat-tab>
 </mat-tab-group>

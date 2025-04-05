@@ -7,6 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "changeDetection": "OnPush",
           "style": "scss"
         },
         "@schematics/angular:application": {
@@ -18,18 +19,19 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
-            "outputPath": {
-              "base": "public"
-            },
+            "outputPath": "public",
             "index": "src/index.html",
-            "polyfills": [
-              "zone.js"
-            ],
+            "main": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.webmanifest"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
@@ -38,8 +40,8 @@
               "includePaths": ["src/styles"]
             },
             "scripts": [],
-            "serviceWorker": "ngsw-config.json",
-            "browser": "src/main.ts"
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -51,8 +53,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "8kb"
+                  "maximumWarning": "6kb"
                 }
               ],
               "fileReplacements": [
@@ -74,14 +75,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "CashManager:build:production"
@@ -94,12 +94,6 @@
             }
           },
           "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
-          "options": {
-            "buildTarget": "CashManager:build"
-          }
         }
       }
     }
