@@ -104,6 +104,7 @@ export class TotalExpenseByMonthComponent implements OnInit {
       if (dateA.getTime() === dateB.getTime()) return 0;
       return isBefore(dateA, dateB) ? -1 : 1;
     });
+    const average = data.reduce((total, totalByMonth) => totalByMonth.total + total, 0) / data.length
     this.totalExpensesByMonthChart = {
       labels: data.map((totalByMonth) =>
         format(new Date(totalByMonth.date), 'MMMM yyyy', { locale: fr })
@@ -112,6 +113,10 @@ export class TotalExpenseByMonthComponent implements OnInit {
         {
           label: 'Total des dépenses',
           data: data.map((totalByMonth) => totalByMonth.total)
+        },
+        {
+          label: "Moyenne",
+          data: Array(data.length).fill(average)
         }
       ]
     };

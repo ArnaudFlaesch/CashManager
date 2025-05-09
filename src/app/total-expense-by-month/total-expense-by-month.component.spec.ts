@@ -39,7 +39,7 @@ describe('TotalExpenseByMonthComponent', () => {
   });
 
   it('Should display the total with two labels', () => {
-    componentRef.setInput("labels", labelData);
+    componentRef.setInput('labels', labelData);
     component.ngOnInit();
     const getTotalExpenseByMonthRequest = httpTestingController.expectOne(
       `${environment.backend_url}${expensePath}getTotalExpensesByMonth`
@@ -63,6 +63,10 @@ describe('TotalExpenseByMonthComponent', () => {
         {
           data: [100, 400],
           label: 'Total des dépenses'
+        },
+        {
+          data: [250, 250],
+          label: 'Moyenne'
         }
       ],
       labels: ['mars 2022', 'avril 2022']
