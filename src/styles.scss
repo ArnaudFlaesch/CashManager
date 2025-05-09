@@ -24,6 +24,8 @@ $light-theme: mat.define-theme(
 
 html,
 body {
+  height: 100%;
+
   // Light mode
   --light-mode-background-color: #4e4945;
 
@@ -34,8 +36,6 @@ body {
   @include mat.elevation-classes;
   @include mat.app-background;
   @include mat.button-color($light-theme);
-
-  height: 100%;
 }
 
 body {
@@ -44,10 +44,10 @@ body {
   background-color: var(--light-mode-background-color);
 
   &.dark-mode {
+    background-color: var(--dark-mode-background-color);
+
     @include mat.elevation-classes;
     @include mat.app-background;
     @include mat.button-color($dark-theme);
-
-    background-color: var(--dark-mode-background-color);
   }
 }
