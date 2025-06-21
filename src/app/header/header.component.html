@@ -3,7 +3,7 @@
     <mat-icon>apps</mat-icon>
   </button>
   @if (this.canUserSeeNotifications()) {
-    <app-notifications></app-notifications>
+    <app-notifications />
   }
 
   <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu"

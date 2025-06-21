@@ -13,7 +13,6 @@
 
   @if (this.totalExpensesByMonthChart) {
     <div id="total-expenses-chart">
-      <canvas baseChart [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"
-      (chartClick)="handleChartClickedEvent($event)"></canvas>
+      <canvas baseChart [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"></canvas>
     </div>
   }

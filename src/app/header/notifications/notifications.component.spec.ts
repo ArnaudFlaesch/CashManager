@@ -4,12 +4,12 @@ import { startOfYesterday } from 'date-fns';
 
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { IPage } from '../../app/model/IPage';
-import { environment } from '../../environments/environment';
-import { INotification, NotificationTypeEnum } from '../model/INotification';
-import { ErrorHandlerService } from '../services/error.handler.service';
+import { IPage } from '../../model/IPage';
+import { environment } from '../../../environments/environment';
+import { INotification, NotificationTypeEnum } from '../../model/INotification';
+import { ErrorHandlerService } from '../../services/error.handler.service';
 import { NotificationsComponent } from './notifications.component';
-import { NotificationService } from '../services/notification.service/NotificationService';
+import { NotificationService } from '../../services/notification.service/NotificationService';
 
 describe('NotificationsComponent', () => {
   let component: NotificationsComponent;

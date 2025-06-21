@@ -4,14 +4,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { environment } from '../../environments/environment';
-import { Label } from '../model/Label';
-import { InsertExpensePayload } from '../model/payloads/InsertExpensePayload';
-import { AuthService } from '../services/auth.service/auth.service';
-import { ErrorHandlerService } from '../services/error.handler.service';
-import { ExpenseService } from '../services/expense.service/expense.service';
-import { DateUtilsService } from '../utils/date.utils.service';
-import { Expense } from './../model/Expense';
+import { environment } from '../../../../environments/environment';
+import { Label } from '../../../model/Label';
+import { InsertExpensePayload } from '../../../model/payloads/InsertExpensePayload';
+import { AuthService } from '../../../services/auth.service/auth.service';
+import { ErrorHandlerService } from '../../../services/error.handler.service';
+import { ExpenseService } from '../../../services/expense.service/expense.service';
+import { DateUtilsService } from '../../../utils/date.utils.service';
+import { Expense } from '../../../model/Expense';
 import { CreateExpenseComponent } from './create-expense.component';
 
 describe('CreateExpenseComponent', () => {

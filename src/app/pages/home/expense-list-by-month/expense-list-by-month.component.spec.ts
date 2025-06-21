@@ -8,14 +8,14 @@ import { advanceTo } from 'jest-date-mock';
 
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { environment } from '../../environments/environment';
-import { Expense } from '../model/Expense';
-import { Label } from '../model/Label';
-import { ErrorHandlerService } from '../services/error.handler.service';
-import { DateUtilsService } from '../utils/date.utils.service';
+import { environment } from '../../../../environments/environment';
+import { Expense } from '../../../model/Expense';
+import { Label } from '../../../model/Label';
+import { ErrorHandlerService } from '../../../services/error.handler.service';
+import { DateUtilsService } from '../../../utils/date.utils.service';
 import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
-import { LabelService } from '../services/label.service/label.service';
-import { ExpenseService } from '../services/expense.service/expense.service';
+import { LabelService } from '../../../services/label.service/label.service';
+import { ExpenseService } from '../../../services/expense.service/expense.service';
 
 describe('ExpenseListByMonthComponent', () => {
   let component: ExpenseListByMonthComponent;

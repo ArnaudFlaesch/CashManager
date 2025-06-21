@@ -1,14 +1,14 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 
-import { AuthService } from '../services/auth.service/auth.service';
+import { AuthService } from '@services/auth.service/auth.service';
 
 @Injectable()
 export class AuthGuard {
-  private router = inject(Router);
-  private authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
-  canActivate(): boolean | UrlTree {
+  public canActivate(): boolean | UrlTree {
     if (this.authService.userHasValidToken()) {
       return this.router.parseUrl('login');
     } else {

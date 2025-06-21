@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
-import { environment } from '../../environments/environment';
-import { Label } from '../model/Label';
-import { ErrorHandlerService } from '../services/error.handler.service';
-import { ExpenseService } from '../services/expense.service/expense.service';
-import { ITotalExpenseByMonth } from './../model/ITotalExpenseByMonth';
+import { environment } from '../../../../environments/environment';
+import { Label } from '../../../model/Label';
+import { ErrorHandlerService } from '../../../services/error.handler.service';
+import { ExpenseService } from '../../../services/expense.service/expense.service';
+import { ITotalExpenseByMonth } from '../../../model/ITotalExpenseByMonth';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month.component';
 import { ComponentRef } from '@angular/core';
 

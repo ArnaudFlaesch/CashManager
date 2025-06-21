@@ -7,8 +7,8 @@
     "npm": "11.x"
   },
   "scripts": {
-    "start": "ng serve --host=127.0.0.1",
-    "start:dev": "ng serve -c=dev",
+    "start": "ng serve --host=127.0.0.1 -o",
+    "start:dev": "ng serve -c=dev -o",
     "build": "ng build",
     "test": "jest --config jest-config.js",
     "test:watch": "npm run test -- --watch",
@@ -43,8 +43,7 @@
     "jwt-decode": "4.0.0",
     "ng2-charts": "8.0.0",
     "rxjs": "7.8.2",
-    "tslib": "2.8.1",
-    "zone.js": "0.15.1"
+    "tslib": "2.8.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "20.0.0",

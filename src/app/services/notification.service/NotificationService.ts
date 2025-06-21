@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
-import { INotification } from '../../../app/model/INotification';
-import { IPage } from '../../../app/model/IPage';
+import { INotification } from '@model/INotification';
+import { IPage } from '@model/IPage';
 
 @Injectable()
 export class NotificationService {

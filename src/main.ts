@@ -1,7 +1,14 @@
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import localeFr from '@angular/common/locales/fr';
-import { enableProdMode, importProvidersFrom, inject, isDevMode } from '@angular/core';
+import {
+  enableProdMode,
+  importProvidersFrom,
+  inject,
+  isDevMode,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDateFnsModule, provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -21,22 +28,22 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { Routes, provideRouter } from '@angular/router';
+import { provideRouter, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { fr } from 'date-fns/locale/fr';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AppComponent } from './app/app.component';
 import { AuthGuard } from './app/guards/auth.guard';
 
-import { AuthService } from './app/services/auth.service/auth.service';
-import { ConfigService } from './app/services/config.service/config.service';
-import { ErrorHandlerService } from './app/services/error.handler.service';
-import { ExpenseService } from './app/services/expense.service/expense.service';
-import { LabelService } from './app/services/label.service/label.service';
-import { NotificationService } from './app/services/notification.service/NotificationService';
-import { ThemeService } from './app/services/theme.service/theme.service';
+import { AuthService } from '@services/auth.service/auth.service';
+import { ConfigService } from '@services/config.service/config.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
+import { ExpenseService } from '@services/expense.service/expense.service';
+import { LabelService } from '@services/label.service/label.service';
+import { NotificationService } from '@services/notification.service/NotificationService';
+import { ThemeService } from '@services/theme.service/theme.service';
 import { DateUtilsService } from './app/utils/date.utils.service';
 import { environment } from './environments/environment';
 
@@ -52,7 +59,7 @@ const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./app/pages/home/home.component').then((m) => m.HomeComponent),
-    canActivate: [() => inject(AuthGuard)]
+    canActivate: [(): AuthGuard => inject(AuthGuard)]
   },
   {
     path: 'error',
@@ -108,6 +115,8 @@ bootstrapApplication(AppComponent, {
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    provideZonelessChangeDetection(),
+    provideBrowserGlobalErrorListeners()
   ]
 }).catch((err) => console.error(err));

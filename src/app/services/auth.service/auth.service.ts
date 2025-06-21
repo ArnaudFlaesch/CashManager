@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../../environments/environment';
-import { RoleEnum } from './../../model/RoleEnum';
-import { IUser } from './../../model/User';
+import { RoleEnum } from '@model/RoleEnum';
+import { IUser } from '@model/User';
 
 interface IJwt {
   sub: string;

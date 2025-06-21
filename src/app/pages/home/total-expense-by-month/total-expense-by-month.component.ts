@@ -1,40 +1,36 @@
-import { Component, OnInit, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatSelect } from '@angular/material/select';
-import { ChartConfiguration, ChartEvent } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { format, isBefore } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 import { BaseChartDirective } from 'ng2-charts';
-import { ITotalExpenseByMonth } from '../model/ITotalExpenseByMonth';
-import { ExpenseService } from '../services/expense.service/expense.service';
-import { Label } from './../model/Label';
+import { ITotalExpenseByMonth } from '@model/ITotalExpenseByMonth';
+import { ExpenseService } from '@services/expense.service/expense.service';
+import { Label } from '@model/Label';
 
 @Component({
-    selector: 'app-total-expense-by-month',
-    templateUrl: './total-expense-by-month.component.html',
-    styleUrls: ['./total-expense-by-month.component.scss'],
-    imports: [
-        BaseChartDirective,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        FormsModule,
-        ReactiveFormsModule,
-        MatOption,
-        MatIconButton,
-        MatIcon
-    ]
+  selector: 'app-total-expense-by-month',
+  templateUrl: './total-expense-by-month.component.html',
+  imports: [
+    BaseChartDirective,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    ReactiveFormsModule,
+    MatOption,
+    MatIconButton,
+    MatIcon
+  ]
 })
 export class TotalExpenseByMonthComponent implements OnInit {
-  private expenseService = inject(ExpenseService);
-
   public readonly labels = input<Label[]>([]);
-
-  readonly noLabelIdSelected = 0;
+  public readonly noLabelIdSelected = 0;
   public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined = undefined;
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -45,10 +41,10 @@ export class TotalExpenseByMonthComponent implements OnInit {
     }
   };
   public labelControl = new FormControl<number>(this.noLabelIdSelected);
-
   private selectedLabelId = this.noLabelIdSelected;
+  private expenseService = inject(ExpenseService);
 
-  constructor() {
+  public constructor() {
     this.labelControl.valueChanges.subscribe((newValue) => {
       this.selectLabel(newValue ?? this.noLabelIdSelected);
     });
@@ -75,16 +71,6 @@ export class TotalExpenseByMonthComponent implements OnInit {
     }
   }
 
-  public handleChartClickedEvent({
-    event,
-    active
-  }: {
-    event?: ChartEvent;
-    active?: object[];
-  }): void {
-    console.log(event, active);
-  }
-
   public isOneLabelSelected(): boolean {
     return this.selectedLabelId !== this.noLabelIdSelected;
   }
@@ -97,16 +83,17 @@ export class TotalExpenseByMonthComponent implements OnInit {
     });
   }
 
-  private refreshChart(data: ITotalExpenseByMonth[]) {
-    data.sort((dataA, dataB) => {
+  private refreshChart(data: ITotalExpenseByMonth[]): void {
+    const chartData = data.toSorted((dataA, dataB) => {
       const dateA = new Date(dataA.date);
       const dateB = new Date(dataB.date);
       if (dateA.getTime() === dateB.getTime()) return 0;
       return isBefore(dateA, dateB) ? -1 : 1;
     });
-    const average = data.reduce((total, totalByMonth) => totalByMonth.total + total, 0) / data.length
+    const average =
+      chartData.reduce((total, totalByMonth) => totalByMonth.total + total, 0) / chartData.length;
     this.totalExpensesByMonthChart = {
-      labels: data.map((totalByMonth) =>
+      labels: chartData.map((totalByMonth) =>
         format(new Date(totalByMonth.date), 'MMMM yyyy', { locale: fr })
       ),
       datasets: [
@@ -115,8 +102,8 @@ export class TotalExpenseByMonthComponent implements OnInit {
           data: data.map((totalByMonth) => totalByMonth.total)
         },
         {
-          label: "Moyenne",
-          data: Array(data.length).fill(average)
+          label: 'Moyenne',
+          data: Array(chartData.length).fill(average)
         }
       ]
     };

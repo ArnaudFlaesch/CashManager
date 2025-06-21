@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { format } from 'date-fns';
 import { Observable } from 'rxjs';
-import { Expense } from '../../../app/model/Expense';
+import { Expense } from '@model/Expense';
 import { environment } from '../../../environments/environment';
-import { ITotalExpenseByMonth } from '../../model/ITotalExpenseByMonth';
+import { ITotalExpenseByMonth } from '@model/ITotalExpenseByMonth';
 import authorizationBearer from '../authorizationBearer/authorizationBearer';
-import { InsertExpensePayload } from './../../model/payloads/InsertExpensePayload';
+import { InsertExpensePayload } from '@model/payloads/InsertExpensePayload';
 
 @Injectable()
 export class ExpenseService {
