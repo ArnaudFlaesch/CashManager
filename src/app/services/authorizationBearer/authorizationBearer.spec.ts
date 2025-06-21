@@ -1,5 +1,7 @@
 import authorizationBearer from './authorizationBearer';
 
+import { describe, expect, it } from 'vitest';
+
 describe('Authorization bearer tests', () => {
   it('Should not retrieve a token when it does not exists', () => {
     expect(authorizationBearer()).toEqual('');

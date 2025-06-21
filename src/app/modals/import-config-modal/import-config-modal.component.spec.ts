@@ -1,18 +1,31 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfigService } from '../../../app/services/config.service/config.service';
 import { ErrorHandlerService } from './../../services/error.handler.service';
 import { ImportConfigModalComponent } from './import-config-modal.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { beforeEach, describe, expect, it } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('ImportConfigModalComponent', () => {
   let component: ImportConfigModalComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, HttpClientTestingModule],
-      providers: [ConfigService, ErrorHandlerService, { provide: MatDialogRef, useValue: {} }]
+      imports: [ImportConfigModalComponent],
+      providers: [
+        ConfigService,
+        ErrorHandlerService,
+        {
+          provide: MatDialogRef,
+          useValue: {}
+        },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideZonelessChangeDetection()
+      ]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(ImportConfigModalComponent);

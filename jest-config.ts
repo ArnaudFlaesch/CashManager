@@ -1,10 +1,9 @@
-import presets from 'jest-preset-angular/presets';
-import { type JestConfigWithTsJest, pathsToModuleNameMapper } from 'ts-jest';
+import { pathsToModuleNameMapper } from 'ts-jest';
 
 import { compilerOptions } from './tsconfig.json';
 
-export default {
-  ...presets.createCjsPreset(),
+const jestConfig = {
+  preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testPathIgnorePatterns: ['./cypress/', 'node_modules/date-fns'],
   collectCoverage: true,
@@ -14,4 +13,6 @@ export default {
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>' })
   },
   coverageDirectory: 'coverage-jest/'
-} satisfies JestConfigWithTsJest;
+};
+
+export default jestConfig;

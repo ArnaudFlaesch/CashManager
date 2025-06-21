@@ -1,18 +1,20 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
-import { Label } from '../../model/Label';
-import { AuthService } from '../../services/auth.service/auth.service';
-import { ConfigService } from '../../services/config.service/config.service';
-import { ErrorHandlerService } from '../../services/error.handler.service';
-import { LabelService } from '../../services/label.service/label.service';
-import { ExpenseService } from '../../services/expense.service/expense.service';
-import { ThemeService } from '../../services/theme.service/theme.service';
+import { Label } from '@model/Label';
+import { AuthService } from '@services/auth.service/auth.service';
+import { ConfigService } from '@services/config.service/config.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
+import { LabelService } from '@services/label.service/label.service';
+import { ExpenseService } from '@services/expense.service/expense.service';
+import { ThemeService } from '@services/theme.service/theme.service';
 import { DateUtilsService } from '../../utils/date.utils.service';
 import { HomeComponent } from './home.component';
 import { provideHttpClient } from '@angular/common/http';
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('HomeComponent', () => {
   const labelData = [
@@ -34,7 +36,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, provideHttpClient(), provideHttpClientTesting()],
+      imports: [HomeComponent],
       providers: [
         LabelService,
         ErrorHandlerService,
@@ -43,7 +45,10 @@ describe('HomeComponent', () => {
         ThemeService,
         ExpenseService,
         DateUtilsService,
-        provideDateFnsAdapter()
+        provideDateFnsAdapter(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideZonelessChangeDetection()
       ]
     }).compileComponents();
 

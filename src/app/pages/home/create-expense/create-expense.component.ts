@@ -51,10 +51,10 @@ export class CreateExpenseComponent implements OnInit {
   protected readonly insertedExpenseEvent = output<Expense>();
 
   private selectedLabel: Label | null = null;
-  private ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
-  private expenseService = inject(ExpenseService);
-  private dateUtilsService = inject(DateUtilsService);
-  private errorHandlerService = inject(ErrorHandlerService);
+  private readonly ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
+  private readonly expenseService = inject(ExpenseService);
+  private readonly dateUtilsService = inject(DateUtilsService);
+  private readonly errorHandlerService = inject(ErrorHandlerService);
 
   public constructor() {
     this.expenseToCreate = new InsertExpensePayload();

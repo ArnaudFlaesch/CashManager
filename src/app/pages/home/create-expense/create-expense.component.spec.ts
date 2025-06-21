@@ -1,18 +1,17 @@
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { environment } from '../../../../environments/environment';
-import { InsertExpensePayload } from '../../../model/payloads/InsertExpensePayload';
-import { AuthService } from '../../../services/auth.service/auth.service';
-import { ErrorHandlerService } from '../../../services/error.handler.service';
-import { ExpenseService } from '../../../services/expense.service/expense.service';
+import { InsertExpensePayload } from '@model/payloads/InsertExpensePayload';
+import { AuthService } from '@services/auth.service/auth.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
+import { ExpenseService } from '@services/expense.service/expense.service';
 import { DateUtilsService } from '../../../utils/date.utils.service';
 import { CreateExpenseComponent } from './create-expense.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideZonelessChangeDetection } from '@angular/core';
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 describe('CreateExpenseComponent', () => {
   let component: CreateExpenseComponent;
@@ -20,19 +19,16 @@ describe('CreateExpenseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatSnackBarModule,
-        MatAutocompleteModule,
-        provideZonelessChangeDetection(),
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ],
+      imports: [CreateExpenseComponent],
       providers: [
         AuthService,
         ExpenseService,
         ErrorHandlerService,
         DateUtilsService,
-        provideDateFnsAdapter()
+        provideDateFnsAdapter(),
+        provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

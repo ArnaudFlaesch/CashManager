@@ -7,6 +7,8 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection
 } from '@angular/core';
+import localeFr from '@angular/common/locales/fr';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDateFnsModule, provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -44,6 +46,7 @@ import { NotificationService } from '@services/notification.service/Notification
 import { ThemeService } from '@services/theme.service/theme.service';
 import { DateUtilsService } from './app/utils/date.utils.service';
 import { environment } from './environments/environment';
+import { registerLocaleData } from '@angular/common';
 
 if (environment.production) {
   enableProdMode();
@@ -65,6 +68,8 @@ export const routes: Routes = [
   },
   { path: '**', redirectTo: 'home' }
 ];
+
+registerLocaleData(localeFr);
 
 bootstrapApplication(AppComponent, {
   providers: [

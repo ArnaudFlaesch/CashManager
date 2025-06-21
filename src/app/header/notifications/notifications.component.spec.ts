@@ -1,15 +1,17 @@
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { startOfYesterday } from 'date-fns';
 
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { IPage } from '../../model/IPage';
+import { IPage } from '@model/IPage';
 import { environment } from '../../../environments/environment';
-import { INotification, NotificationTypeEnum } from '../../model/INotification';
-import { ErrorHandlerService } from '../../services/error.handler.service';
+import { INotification, NotificationTypeEnum } from '@model/INotification';
+import { ErrorHandlerService } from '@services/error.handler.service';
 import { NotificationsComponent } from './notifications.component';
-import { NotificationService } from '../../services/notification.service/NotificationService';
+import { NotificationService } from '@services/notification.service/NotificationService';
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('NotificationsComponent', () => {
   let component: NotificationsComponent;
@@ -17,8 +19,14 @@ describe('NotificationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, MatMenuModule, HttpClientTestingModule],
-      providers: [ErrorHandlerService, NotificationService]
+      imports: [NotificationsComponent],
+      providers: [
+        ErrorHandlerService,
+        NotificationService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideZonelessChangeDetection()
+      ]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(NotificationsComponent);
@@ -69,11 +77,11 @@ describe('NotificationsComponent', () => {
     );
     notificationsRequest.flush(notificationsData);
 
-    expect(component.notificationsFromDatabase).toEqual(notificationsData.content);
-    expect(component.notificationsToDisplay[0].notificationTypeToDisplay).toEqual('warning');
-    expect(component.notificationsToDisplay[1].notificationTypeToDisplay).toEqual('info');
-    expect(component.notificationsToDisplay[1].notificationTypeToDisplay).toEqual('info');
-    expect(component.unreadNotificationsForBadge).toEqual('2');
+    expect(component.notificationsFromDatabase()).toEqual(notificationsData.content);
+    expect(component.notificationsToDisplay()[0].notificationTypeToDisplay).toEqual('warning');
+    expect(component.notificationsToDisplay()[1].notificationTypeToDisplay).toEqual('info');
+    expect(component.notificationsToDisplay()[1].notificationTypeToDisplay).toEqual('info');
+    expect(component.unreadNotificationsForBadge()).toEqual('2');
   });
 
   it('Should mark all notifications as read', () => {
@@ -93,6 +101,6 @@ describe('NotificationsComponent', () => {
     });
     markNotificationAsReadRequest.flush(updatedNotificationsData);
 
-    expect(component.unreadNotificationsForBadge).toEqual('');
+    expect(component.unreadNotificationsForBadge()).toEqual('');
   });
 });
