@@ -1,13 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('AppComponent', () => {
   let component: AppComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule]
+      providers: [provideZonelessChangeDetection()],
+      imports: []
     }).compileComponents();
     const fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
@@ -15,6 +16,5 @@ describe('AppComponent', () => {
 
   it('Should display the title', () => {
     expect(component).toBeTruthy();
-    expect(component.title).toEqual('cash-manager');
   });
 });

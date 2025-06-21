@@ -1,8 +1,6 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterTestingModule } from '@angular/router/testing';
+import { MatDialogRef } from '@angular/material/dialog';
 import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
 import { advanceTo } from 'jest-date-mock';
 
@@ -10,25 +8,36 @@ import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { environment } from '../../../../environments/environment';
 import { Expense } from '../../../model/Expense';
-import { Label } from '../../../model/Label';
 import { ErrorHandlerService } from '../../../services/error.handler.service';
 import { DateUtilsService } from '../../../utils/date.utils.service';
 import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
 import { LabelService } from '../../../services/label.service/label.service';
 import { ExpenseService } from '../../../services/expense.service/expense.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from '../../../../main';
 
 describe('ExpenseListByMonthComponent', () => {
   let component: ExpenseListByMonthComponent;
   let httpTestingController: HttpTestingController;
   const mockedCurrentMonth = new Date(1644882400);
   advanceTo(mockedCurrentMonth); // 15/02/2022
-  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
+  const labelData = [
+    { id: 1, label: 'Courses', userId: 1 },
+    { id: 2, label: 'Restaurant', userId: 1 }
+  ];
   const dateFormat = 'yyyy-MM-dd';
   const expensePath = '/expense/';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, MatSnackBarModule, MatDialogModule],
+      imports: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideZonelessChangeDetection(),
+        provideRouter(routes)
+      ],
       providers: [
         ErrorHandlerService,
         { provide: MatDialogRef, useValue: {} },
@@ -54,9 +63,9 @@ describe('ExpenseListByMonthComponent', () => {
     const endIntervalDate = format(endOfMonth(mockedCurrentMonth), dateFormat);
 
     const expectedExpenseData: Expense[] = [
-      new Expense(1, 323, currentMonth, labelData[0].id),
-      new Expense(2, 130, currentMonth, labelData[1].id),
-      new Expense(3, 4, currentMonth, labelData[1].id)
+      { id: 1, amount: 323, expenseDate: currentMonth, labelId: labelData[0].id },
+      { id: 2, amount: 130, expenseDate: currentMonth, labelId: labelData[1].id },
+      { id: 3, amount: 4, expenseDate: currentMonth, labelId: labelData[1].id }
     ];
 
     component.ngOnInit();

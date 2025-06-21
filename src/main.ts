@@ -1,6 +1,4 @@
-import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import localeFr from '@angular/common/locales/fr';
 import {
   enableProdMode,
   importProvidersFrom,
@@ -51,7 +49,7 @@ if (environment.production) {
   enableProdMode();
 }
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./app/pages/login/login.component').then((m) => m.LoginComponent)
@@ -67,8 +65,6 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: 'home' }
 ];
-
-registerLocaleData(localeFr);
 
 bootstrapApplication(AppComponent, {
   providers: [

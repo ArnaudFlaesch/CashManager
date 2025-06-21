@@ -1,8 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from '../../../../environments/environment';
 import { Label } from '../../../model/Label';
 import { ErrorHandlerService } from '../../../services/error.handler.service';
@@ -10,6 +9,9 @@ import { ExpenseService } from '../../../services/expense.service/expense.servic
 import { ITotalExpenseByMonth } from '../../../model/ITotalExpenseByMonth';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month.component';
 import { ComponentRef } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { routes } from '../../../../main';
 
 describe('TotalExpenseByMonthComponent', () => {
   let component: TotalExpenseByMonthComponent;
@@ -17,14 +19,23 @@ describe('TotalExpenseByMonthComponent', () => {
   let httpTestingController: HttpTestingController;
 
   const expensePath = '/expense/';
-  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
+  const labelData = [
+    { id: 1, label: 'Courses', userId: 1 },
+    { id: 2, label: 'Restaurant', userId: 1 }
+  ] as Label[];
   const expectedTotalExpenseByMonthData = [
     { date: '2022-04-01', total: 200 }
   ] as ITotalExpenseByMonth[];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, MatSnackBarModule, MatDialogModule],
+      imports: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter(routes),
+        MatSnackBarModule,
+        MatDialogModule
+      ],
       providers: [ErrorHandlerService, ExpenseService, { provide: MatDialogRef, useValue: {} }]
     }).compileComponents();
 

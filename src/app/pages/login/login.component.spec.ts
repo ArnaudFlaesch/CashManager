@@ -1,13 +1,12 @@
-import { HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service/auth.service';
 import { ErrorHandlerService } from '../../services/error.handler.service';
 import { LoginComponent } from './login.component';
+import { provideRouter } from '@angular/router';
+import { routes } from '../../../main';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,13 +14,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        FormsModule,
-        MatSnackBarModule,
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
+      imports: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()],
       providers: [AuthService, ErrorHandlerService]
     }).compileComponents();
 

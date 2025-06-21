@@ -46,8 +46,8 @@ export class CreateExpenseComponent implements OnInit {
   public expenseToCreate: InsertExpensePayload;
   public filteredOptions: Observable<Label[]> = of([]);
   public readonly labels = input<Label[]>([]);
+  public dateFormControl = new FormControl<string | null>(null);
   protected labelControl = new FormControl<Label | string>('');
-  protected dateFormControl = new FormControl<string | null>(null);
   protected readonly insertedExpenseEvent = output<Expense>();
 
   private selectedLabel: Label | null = null;
