@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Label } from '@model/Label';
 import { ErrorHandlerService } from '@services/error.handler.service';
 import { LabelService } from '@services/label.service/label.service';
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, output, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LabelListComponent } from './label-list/label-list.component';
 import { MatButton } from '@angular/material/button';
@@ -17,6 +17,7 @@ import { HeaderComponent } from '../../header/header.component';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     HeaderComponent,
     MatTabGroup,
