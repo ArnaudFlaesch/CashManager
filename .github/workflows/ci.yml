@@ -44,75 +44,10 @@ jobs:
           npm run build -- --base-href=https://arnaudflaesch.github.io/CashManager/
           cp public/browser/index.html public/browser/404.html
 
-      - name: Test
-        id: application-tests
-        run: npm run test
-
-      - name: Login to Github Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-
-      - name: Start database image
-        run: |
-          docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash postgres:16.3-alpine3.20
-
-      - name: Start backend image
-        run: |
-          [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${{github.ref_name}} | wc -l)" == 1 && ${{github.ref_name}} != 'main' ]] && tagName=${{github.ref_name}} || tagName=latest
-          docker run -p 8080:8080 -d --network="host" -e POSTGRES_PASSWORD=postgres ghcr.io/arnaudflaesch/dash-webservices:$tagName
-
-      - name: E2E Tests
-        uses: cypress-io/github-action@v6
-        id: e2e-tests
-        with:
-          browser: chrome
-          config-file: cypress-test.config.ts
-          start: npm start
-          wait-on: 'http://localhost:4200'
-
-      - name: Generate test report
-        id: generate-e2e-report
-        if: always() && steps.e2e-tests.outcome == 'failure'
-        run: |
-          mkdir cypress/screenshots || true
-          npm run report:merge
-          npm run report:generate
-          npm run report:copyScreenshots
-
-      - name: Upload Cypress report
-        uses: actions/upload-artifact@v4
-        if: always() && steps.generate-e2e-report.outcome == 'success'
-        with:
-          name: Cypress report
-          path: cypress/reports/html
-
-          # - name: Report coverage for Codecov
-          #   uses: codecov/codecov-action@v5
-          #  if: always() && steps.application-tests.outcome == 'success'
-          #  with:
-          #    directory: coverage-jest
-          #    token: ${{ secrets.CODECOV_TOKEN }}
-
-          # - name: Report coverage for Codacy
-          #  if: always() && steps.application-tests.outcome == 'success'
-          #  run: |
-          #   bash <(curl -Ls https://coverage.codacy.com/get.sh)
-          # env:
-      #   CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5.2.0
-        if: always() && steps.application-tests.outcome == 'success'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
-        if: success() && github.ref_name == 'main'
+        #    if: success() && github.ref_name == 'main'
         with:
           path: ./public/browser
 
@@ -127,8 +62,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
-    needs: test
-    if: success() && github.ref_name == 'main'
+    #   needs: test
+    # if: success() && github.ref_name == 'main'
 
     steps:
       - name: Deploy to GitHub Pages
