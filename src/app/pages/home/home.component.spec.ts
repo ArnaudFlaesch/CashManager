@@ -1,20 +1,34 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
-import { Label } from '../../model/Label';
-import { AuthService } from '../../services/auth.service/auth.service';
-import { ConfigService } from '../../services/config.service/config.service';
-import { ErrorHandlerService } from '../../services/error.handler.service';
-import { LabelService } from '../../services/label.service/label.service';
-import { ExpenseService } from './../../services/expense.service/expense.service';
-import { ThemeService } from './../../services/theme.service/theme.service';
-import { DateUtilsService } from './../../utils/date.utils.service';
+import { Label } from '@model/Label';
+import { AuthService } from '@services/auth.service/auth.service';
+import { ConfigService } from '@services/config.service/config.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
+import { LabelService } from '@services/label.service/label.service';
+import { ExpenseService } from '@services/expense.service/expense.service';
+import { ThemeService } from '@services/theme.service/theme.service';
+import { DateUtilsService } from '../../utils/date.utils.service';
 import { HomeComponent } from './home.component';
+import { provideHttpClient } from '@angular/common/http';
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('HomeComponent', () => {
-  const labelData = [new Label(1, 'Courses', 1), new Label(2, 'Restaurant', 1)];
+  const labelData = [
+    {
+      id: 1,
+      label: 'Courses',
+      userId: 1
+    },
+    {
+      id: 2,
+      label: 'Restaurant',
+      userId: 1
+    }
+  ];
   const labelPath = '/label/';
 
   let component: HomeComponent;
@@ -22,7 +36,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, HttpClientTestingModule],
+      imports: [HomeComponent],
       providers: [
         LabelService,
         ErrorHandlerService,
@@ -31,7 +45,10 @@ describe('HomeComponent', () => {
         ThemeService,
         ExpenseService,
         DateUtilsService,
-        provideDateFnsAdapter()
+        provideDateFnsAdapter(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideZonelessChangeDetection()
       ]
     }).compileComponents();
 

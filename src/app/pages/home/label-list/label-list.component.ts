@@ -1,10 +1,10 @@
-import { ErrorHandlerService } from './../services/error.handler.service';
-import { LabelService } from './../services/label.service/label.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
+import { LabelService } from '@services/label.service/label.service';
 import { ChangeDetectionStrategy, Component, inject, model, output } from '@angular/core';
-import { Label } from '../model/Label';
+import { Label } from '@model/Label';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
-import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../utils/Constants';
+import { ConfirmModalComponent } from '../../../modals/confirm-modal/confirm-modal.component';
+import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../../../utils/Constants';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 
@@ -16,14 +16,13 @@ import { MatIconButton } from '@angular/material/button';
   imports: [MatIconButton, MatIcon]
 })
 export class LabelListComponent {
-  private labelService = inject(LabelService);
-  private errorHandlerService = inject(ErrorHandlerService);
-  dialog = inject(MatDialog);
+  public readonly labels = model.required<Label[]>();
+  protected readonly labelDeletedEvent = output<number>();
 
-  readonly labels = model.required<Label[]>();
-  readonly labelDeletedEvent = output<number>();
-
-  private ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
+  private readonly ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
+  private readonly labelService = inject(LabelService);
+  private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly dialog = inject(MatDialog);
 
   public openDeleteLabelDialog(labelId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {

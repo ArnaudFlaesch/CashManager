@@ -1,5 +1,5 @@
 <div id="label-list">
-  @for (label of this.labels(); track label) {
+  @for (label of this.labels(); track label.id) {
     <div class="label-container">
       <span class="label-name">{{ label.label }}</span>
       <button mat-icon-button class="deleteLabelButton" (click)="this.openDeleteLabelDialog(label.id)">

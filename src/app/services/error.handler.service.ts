@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -36,7 +36,7 @@ export class ErrorHandlerService {
     this.displayErrorMessage(error.message, messageToDisplay);
   }
 
-  private displayErrorMessage(errorMessage: string, messageToDisplay: string) {
+  private displayErrorMessage(errorMessage: string, messageToDisplay: string): void {
     console.error(errorMessage);
     this.snackbar.open(messageToDisplay, undefined, { duration: 3000 });
   }

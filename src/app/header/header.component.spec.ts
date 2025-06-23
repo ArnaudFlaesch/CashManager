@@ -1,15 +1,18 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterTestingModule } from '@angular/router/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { TestBed } from '@angular/core/testing';
-import { AuthService } from '../services/auth.service/auth.service';
-import { ConfigService } from '../services/config.service/config.service';
-import { ErrorHandlerService } from '../services/error.handler.service';
-import { ThemeService } from '../services/theme.service/theme.service';
+import { AuthService } from '@services/auth.service/auth.service';
+import { ConfigService } from '@services/config.service/config.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
+import { ThemeService } from '@services/theme.service/theme.service';
 import { HeaderComponent } from './header.component';
+import { provideRouter } from '@angular/router';
+import { routes } from '../../main';
+import { provideHttpClient } from '@angular/common/http';
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -17,19 +20,17 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        MatSnackBarModule,
-        MatMenuModule,
-        MatDialogModule
-      ],
+      imports: [HeaderComponent],
       providers: [
         ConfigService,
         AuthService,
         ErrorHandlerService,
         ThemeService,
-        { provide: MatDialogRef, useValue: {} }
+        { provide: MatDialogRef, useValue: {} },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter(routes),
+        provideZonelessChangeDetection()
       ]
     }).compileComponents();
 

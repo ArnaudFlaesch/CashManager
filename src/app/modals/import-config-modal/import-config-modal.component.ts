@@ -1,28 +1,28 @@
-import { ErrorHandlerService } from './../../services/error.handler.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
 import { Component, inject } from '@angular/core';
 import {
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
   MatDialogActions,
-  MatDialogClose
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
 } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ConfigService } from '../../../app/services/config.service/config.service';
+import { ConfigService } from '@services/config.service/config.service';
 import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-import-config-modal',
-    templateUrl: './import-config-modal.component.html',
-    styleUrls: ['./import-config-modal.component.scss'],
-    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
+  selector: 'app-import-config-modal',
+  templateUrl: './import-config-modal.component.html',
+  styleUrls: ['./import-config-modal.component.scss'],
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {
-  private configService = inject(ConfigService);
-  private errorHandlerService = inject(ErrorHandlerService);
-  dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
-
   public fileToUpload: File | null = null;
+
+  private readonly configService = inject(ConfigService);
+  private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
   private ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

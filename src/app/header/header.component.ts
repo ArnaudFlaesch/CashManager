@@ -1,55 +1,52 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ImportConfigModalComponent } from '../modals/import-config-modal/import-config-modal.component';
-import { AuthService } from '../services/auth.service/auth.service';
-import { ConfigService } from '../services/config.service/config.service';
-import { ErrorHandlerService } from '../services/error.handler.service';
+import { AuthService } from '@services/auth.service/auth.service';
+import { ConfigService } from '@services/config.service/config.service';
+import { ErrorHandlerService } from '@services/error.handler.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ThemeService } from '../services/theme.service/theme.service';
+import { ThemeService } from '@services/theme.service/theme.service';
 import { MatDivider } from '@angular/material/divider';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { NotificationsComponent } from '../notifications/notifications.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 import { MatIcon } from '@angular/material/icon';
-import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    imports: [
-        MatMiniFabButton,
-        MatTooltip,
-        MatMenuTrigger,
-        MatIcon,
-        NotificationsComponent,
-        MatMenu,
-        MatMenuItem,
-        MatSlideToggle,
-        FormsModule,
-        ReactiveFormsModule,
-        MatDivider
-    ]
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  imports: [
+    MatMiniFabButton,
+    MatTooltip,
+    MatMenuTrigger,
+    MatIcon,
+    NotificationsComponent,
+    MatMenu,
+    MatMenuItem,
+    MatSlideToggle,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDivider
+  ]
 })
 export class HeaderComponent implements OnInit {
-  private authService = inject(AuthService);
-  private configService = inject(ConfigService);
-  private themeService = inject(ThemeService);
-  private errorHandlerService = inject(ErrorHandlerService);
-  dialog = inject(MatDialog);
-  private router = inject(Router);
-
   public toggleControl = new FormControl(false);
+  public readonly dashApplicationUrl = 'https://arnaudflaesch.github.io/Dash-Web/';
+  private readonly ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
+  private readonly dialog = inject(MatDialog);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly configService = inject(ConfigService);
+  private readonly themeService = inject(ThemeService);
+  private readonly errorHandlerService = inject(ErrorHandlerService);
 
-  public dashApplicationUrl = 'https://arnaudflaesch.github.io/Dash-Web/';
-
-  private ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.toggleControl.setValue(this.themeService.isPreferredThemeDarkMode());
   }
 

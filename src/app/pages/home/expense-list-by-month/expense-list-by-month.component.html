@@ -17,15 +17,15 @@
 
 <div id="expenses-container">
   <div id="chart-container">
-    <canvas baseChart [data]="this.expensesByLabelChart" [options]="barChartOptions" [type]="'bar'"
-    (chartClick)="handleChartClickedEvent($event)"></canvas>
+    <canvas baseChart [data]="this.expensesByLabelChart()" [options]="barChartOptions" [type]="'bar'"
+    ></canvas>
   </div>
 
   <div id="expenses-detail">
     <h3 id="expenses-total">Total ce mois : {{ getTotalForMonth() }}€</h3>
     @if (this.expenses.length) {
       <div id="expenses-list">
-        @for (expense of this.expenses; track expense; let index = $index) {
+        @for (expense of this.expenses(); track expense.id) {
           <div>
             <span>{{formatExpenseDate(expense.expenseDate)}} : {{ expense.amount }}€
             {{ getLabelFromId(expense.labelId)?.label }}</span>

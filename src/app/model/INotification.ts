@@ -1,15 +1,15 @@
-export interface INotification {
+export type INotification = {
   id: number;
   message: string;
   notificationDate: string;
   notificationType: NotificationTypeEnum;
   isRead: boolean;
-}
+};
 
-export interface INotificationToDisplay extends INotification {
+export type INotificationToDisplay = INotification & {
   notificationDateToDisplay: string;
   notificationTypeToDisplay: string;
-}
+};
 
 export enum NotificationTypeEnum {
   INFO = 'INFO',

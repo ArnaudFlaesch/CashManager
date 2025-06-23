@@ -1,4 +1,4 @@
-export interface IConfirmDialogData {
+export type IConfirmDialogData = {
   title: string;
   message: string;
-}
+};
