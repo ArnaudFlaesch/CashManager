@@ -3,7 +3,6 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import pluginCypress from 'eslint-plugin-cypress/flat';
 import eslintConfigPrettier from 'eslint-config-prettier';
-//jest
 
 export default [
   { files: ['**/*.{js,mjs,cjs,ts}'] },

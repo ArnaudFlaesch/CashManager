@@ -17,7 +17,7 @@ describe('Home page tests', () => {
   });
 
   it('Should add a new expense related to an existing label', () => {
-    cy.clock(Date.parse('2022-04-20'));
+    cy.clock(Date.parse('2025-04-20'));
     cy.get('#expenseAmount').clear();
     cy.get('#expenseAmount').type('120');
     cy.get('#expense-label').type('Cou');

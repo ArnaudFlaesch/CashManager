@@ -30,10 +30,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "assets"
-              },
+              "src/favicon.ico",
+              "src/assets",
               "src/manifest.webmanifest"
             ],
             "styles": [
@@ -41,7 +39,9 @@
               "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
+              "includePaths": [
+                "src/styles"
+              ]
             },
             "scripts": [],
             "serviceWorker": "ngsw-config.json"
