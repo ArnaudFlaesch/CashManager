@@ -7,7 +7,7 @@
     <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl">
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker startView="multi-year" (monthSelected)="setMonthAndYear($event, picker)"
-    [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
+                    [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
   </mat-form-field>
 
   <button (click)="selectNextMonth()" mat-icon-button>
@@ -23,12 +23,12 @@
 
   <div id="expenses-detail">
     <h3 id="expenses-total">Total ce mois : {{ getTotalForMonth() }}€</h3>
-    @if (this.expenses.length) {
+    @if (this.expenses().length) {
       <div id="expenses-list">
         @for (expense of this.expenses(); track expense.id) {
           <div>
-            <span>{{formatExpenseDate(expense.expenseDate)}} : {{ expense.amount }}€
-            {{ getLabelFromId(expense.labelId)?.label }}</span>
+            <span>{{ formatExpenseDate(expense.expenseDate) }} : {{ expense.amount }}€
+              {{ getLabelFromId(expense.labelId)?.label }}</span>
             @if (false) {
               <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
                 <mat-icon>delete</mat-icon>
@@ -41,4 +41,5 @@
   </div>
 </div>
 
-<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="this.labels()"></app-create-expense>
+<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)"
+                    [labels]="this.labels()"></app-create-expense>
