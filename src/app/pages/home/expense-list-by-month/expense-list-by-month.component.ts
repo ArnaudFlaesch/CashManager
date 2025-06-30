@@ -1,5 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  model,
+  OnInit,
+  signal
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDatepicker,
@@ -29,6 +37,7 @@ import { BaseChartDirective } from 'ng2-charts';
   selector: 'app-expense-list-by-month',
   templateUrl: './expense-list-by-month.component.html',
   styleUrls: ['./expense-list-by-month.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     BaseChartDirective,
     MatIconButton,

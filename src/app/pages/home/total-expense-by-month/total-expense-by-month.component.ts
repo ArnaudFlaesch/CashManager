@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
@@ -16,6 +16,7 @@ import { Label } from '@model/Label';
 @Component({
   selector: 'app-total-expense-by-month',
   templateUrl: './total-expense-by-month.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     BaseChartDirective,
     MatFormField,

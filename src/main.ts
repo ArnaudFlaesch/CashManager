@@ -1,37 +1,17 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
   enableProdMode,
-  importProvidersFrom,
   inject,
   isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection
 } from '@angular/core';
 import localeFr from '@angular/common/locales/fr';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDateFnsModule, provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, Routes } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { provideServiceWorker } from '@angular/service-worker';
 import { fr } from 'date-fns/locale/fr';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AppComponent } from './app/app.component';
@@ -47,6 +27,7 @@ import { ThemeService } from '@services/theme.service/theme.service';
 import { DateUtilsService } from './app/utils/date.utils.service';
 import { environment } from './environments/environment';
 import { registerLocaleData } from '@angular/common';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 if (environment.production) {
   enableProdMode();
@@ -73,35 +54,10 @@ registerLocaleData(localeFr);
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(
-      BrowserModule,
-      FormsModule,
-      MatAutocompleteModule,
-      MatButtonModule,
-      MatDatepickerModule,
-      MatDividerModule,
-      MatMenuModule,
-      MatDialogModule,
-      MatIconModule,
-      MatInputModule,
-      MatFormFieldModule,
-      MatNativeDateModule,
-      MatProgressSpinnerModule,
-      MatBadgeModule,
-      MatDateFnsModule,
-      MatTooltipModule,
-      MatSlideToggleModule,
-      MatSelectModule,
-      MatTabsModule,
-      MatSnackBarModule,
-      ReactiveFormsModule,
-      ServiceWorkerModule.register('ngsw-worker.js', {
-        enabled: !isDevMode(),
-        // Register the ServiceWorker as soon as the application is stable
-        // or after 30 seconds (whichever comes first).
-        registrationStrategy: 'registerWhenStable:30000'
-      })
-    ),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     AuthGuard,
     AuthService,
     LabelService,
@@ -115,7 +71,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
-    provideAnimations(),
+    provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners()
