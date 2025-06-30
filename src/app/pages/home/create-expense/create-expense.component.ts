@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 
@@ -24,6 +24,7 @@ import { MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/fo
   selector: 'app-create-expense',
   templateUrl: './create-expense.component.html',
   styleUrls: ['./create-expense.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormField,
     FormsModule,

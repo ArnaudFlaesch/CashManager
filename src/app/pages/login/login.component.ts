@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@services/auth.service/auth.service';
 import { ErrorHandlerService } from '@services/error.handler.service';
@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, FormsModule, MatButton, MatProgressSpinner]
 })
 export class LoginComponent {

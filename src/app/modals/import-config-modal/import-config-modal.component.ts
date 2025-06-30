@@ -1,5 +1,5 @@
 import { ErrorHandlerService } from '@services/error.handler.service';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -15,6 +15,7 @@ import { MatButton } from '@angular/material/button';
   selector: 'app-import-config-modal',
   templateUrl: './import-config-modal.component.html',
   styleUrls: ['./import-config-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {

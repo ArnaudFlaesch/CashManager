@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal
+} from '@angular/core';
 import { isToday } from 'date-fns';
 
 import { INotification, INotificationToDisplay, NotificationTypeEnum } from '@model/INotification';
@@ -16,6 +23,7 @@ import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatMiniFabButton,
     MatTooltip,
