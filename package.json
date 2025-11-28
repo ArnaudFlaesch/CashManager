@@ -58,13 +58,13 @@
     "globals": "16.5.0",
     "jsdom": "27.2.0",
     "mochawesome": "7.1.4",
-    "mochawesome-merge": "5.0.0",
+    "mochawesome-merge": "5.1.0",
     "mochawesome-report-generator": "6.3.2",
-    "prettier": "3.6.2",
-    "stylelint": "16.25.0",
+    "prettier": "3.7.1",
+    "stylelint": "16.26.1",
     "stylelint-config-standard-scss": "16.0.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.47.0",
+    "typescript-eslint": "8.48.0",
     "vitest": "4.0.14"
   }
 }
