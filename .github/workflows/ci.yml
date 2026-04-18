@@ -83,7 +83,7 @@ jobs:
           npm run report:copyScreenshots
 
       - name: Upload Cypress report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always() && steps.generate-e2e-report.outcome == 'success'
         with:
           name: Cypress report
