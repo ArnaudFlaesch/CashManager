@@ -45,7 +45,7 @@
     "tslib": "2.8.1"
   },
   "devDependencies": {
-    "@angular/build": "21.0.4",
+    "@angular/build": "21.2.7",
     "@angular/cli": "21.0.4",
     "@angular/compiler-cli": "21.0.6",
     "@eslint/js": "9.39.4",
