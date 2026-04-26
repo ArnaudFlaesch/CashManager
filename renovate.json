@@ -4,7 +4,15 @@
   "packageRules": [
     {
       "groupName": "angular",
-      "matchPackageNames": ["/^@angular//", "/^@angular-devkit//", "/zone.js//"]
+      "matchPackageNames": ["/^@angular//", "/^@angular-devkit//"]
+    },
+    {
+      "groupName": "eslint-tslint",
+      "matchPackageNames": ["/^eslint/", "/^@eslint/", "/typescript-eslint/"]
+    },
+    {
+      "groupName": "stylelint",
+      "matchPackageNames": ["/^stylelint/"]
     }
   ],
   "schedule": ["at 2:00 pm on Fri"]
