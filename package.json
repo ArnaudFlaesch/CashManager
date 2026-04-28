@@ -61,7 +61,7 @@
     "mochawesome-merge": "5.1.1",
     "mochawesome-report-generator": "6.3.2",
     "prettier": "3.8.3",
-    "stylelint": "17.9.0",
+    "stylelint": "17.9.1",
     "stylelint-config-standard-scss": "17.0.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.59.0",
