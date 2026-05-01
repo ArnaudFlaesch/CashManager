@@ -7,12 +7,11 @@ import { ErrorHandlerService } from '@services/error.handler.service';
 import { ExpenseService } from '@services/expense.service/expense.service';
 import { ITotalExpenseByMonth } from '@model/ITotalExpenseByMonth';
 import { TotalExpenseByMonthComponent } from './total-expense-by-month.component';
-import { ComponentRef, provideZonelessChangeDetection } from '@angular/core';
+import { ComponentRef } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { routes } from '../../../../main';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { AuthGuard } from '../../../guards/auth.guard';
 
 describe.skip('TotalExpenseByMonthComponent', () => {
@@ -39,8 +38,7 @@ describe.skip('TotalExpenseByMonthComponent', () => {
         { provide: MatDialogRef, useValue: {} },
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter(routes),
-        provideZonelessChangeDetection()
+        provideRouter(routes)
       ]
     }).compileComponents();
 

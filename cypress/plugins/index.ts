@@ -28,8 +28,7 @@ module.exports = (on, config): unknown => {
     }
 
     if (browser.name === 'firefox' && browser.isHeadless) {
-      launchOptions.args.push(`--width=${width}`);
-      launchOptions.args.push(`--height=${height}`);
+      launchOptions.args.push(`--width=${width}`, `--height=${height}`);
     }
 
     // IMPORTANT: return the updated browser launch options

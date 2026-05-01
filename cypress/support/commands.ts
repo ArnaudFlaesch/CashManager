@@ -24,28 +24,29 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('loginAsAdmin', (): Cypress.Chainable<Response> => {
-  return loginAs('admintest', 'adminpassword');
+Cypress.Commands.add("loginAsAdmin", (): Cypress.Chainable => {
+  return loginAs("admintest", "adminpassword");
 });
 
-Cypress.Commands.add('loginAsUser', (): Cypress.Chainable<Response> => {
-  return loginAs('usertest', 'userpassword');
+Cypress.Commands.add("loginAsUser", (): Cypress.Chainable => {
+  return loginAs("usertest", "userpassword");
 });
 
 Cypress.Commands.add('shouldDisplayErrorMessage', (errorMessage: string): Cypress.Chainable => {
   return shouldDisplayErrorMessage(errorMessage);
 });
 
-function loginAs(username: string, password: string): Cypress.Chainable<Response> {
-  return cy
-    .request('POST', `${Cypress.env('backend_url')}/auth/login`, {
+function loginAs(username: string, password: string): Cypress.Chainable {
+  return cy.env(["backend_url"]).then(({ backend_url }) => {
+    cy.request("POST", `${backend_url}/auth/login`, {
       username: username,
       password: password
     })
-    .its('body')
-    .then((response) => {
-      window.localStorage.setItem('user', JSON.stringify(response));
-    });
+      .its("body")
+      .then((response) => {
+        window.localStorage.setItem("user", JSON.stringify(response));
+      });
+  });
 }
 
 function shouldDisplayErrorMessage(errorMessage: string): Cypress.Chainable {

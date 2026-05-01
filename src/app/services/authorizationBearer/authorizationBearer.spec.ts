@@ -1,7 +1,5 @@
 import authorizationBearer from './authorizationBearer';
 
-import { describe, expect, it } from 'vitest';
-
 describe('Authorization bearer tests', () => {
   beforeEach(() => {
     window.localStorage.setItem('user', '{}');

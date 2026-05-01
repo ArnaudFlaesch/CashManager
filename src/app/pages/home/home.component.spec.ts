@@ -13,9 +13,6 @@ import { DateUtilsService } from '../../utils/date.utils.service';
 import { HomeComponent } from './home.component';
 import { provideHttpClient } from '@angular/common/http';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { provideZonelessChangeDetection } from '@angular/core';
-
 describe('HomeComponent', () => {
   const labelData = [
     {
@@ -47,8 +44,7 @@ describe('HomeComponent', () => {
         DateUtilsService,
         provideDateFnsAdapter(),
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideZonelessChangeDetection()
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

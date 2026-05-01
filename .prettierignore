@@ -2,4 +2,4 @@ package-lock.json
 .angular
 dist/
 public/
-coverage-jest/
+coverage/

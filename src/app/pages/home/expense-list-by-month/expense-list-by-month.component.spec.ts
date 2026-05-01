@@ -13,11 +13,8 @@ import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
 import { LabelService } from '@services/label.service/label.service';
 import { ExpenseService } from '@services/expense.service/expense.service';
 import { provideHttpClient } from '@angular/common/http';
-import { provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from '../../../../main';
-
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe.skip('ExpenseListByMonthComponent', () => {
   let component: ExpenseListByMonthComponent;
@@ -42,7 +39,7 @@ describe.skip('ExpenseListByMonthComponent', () => {
         provideDateFnsAdapter(),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideZonelessChangeDetection(),
+
         provideRouter(routes)
       ]
     }).compileComponents();

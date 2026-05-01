@@ -8,9 +8,6 @@ import { LoginComponent } from './login.component';
 import { provideRouter } from '@angular/router';
 import { routes } from '../../../main';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { provideZonelessChangeDetection } from '@angular/core';
-
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let httpTestingController: HttpTestingController;
@@ -23,8 +20,7 @@ describe('LoginComponent', () => {
         ErrorHandlerService,
         provideRouter(routes),
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideZonelessChangeDetection()
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

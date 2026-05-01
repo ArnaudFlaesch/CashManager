@@ -11,9 +11,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from '../../main';
 import { provideHttpClient } from '@angular/common/http';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { provideZonelessChangeDetection } from '@angular/core';
-
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let httpTestingController: HttpTestingController;
@@ -29,8 +26,7 @@ describe('HeaderComponent', () => {
         { provide: MatDialogRef, useValue: {} },
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter(routes),
-        provideZonelessChangeDetection()
+        provideRouter(routes)
       ]
     }).compileComponents();
 

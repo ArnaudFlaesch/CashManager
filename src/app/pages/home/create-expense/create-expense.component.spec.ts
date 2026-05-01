@@ -9,9 +9,6 @@ import { ExpenseService } from '@services/expense.service/expense.service';
 import { DateUtilsService } from '../../../utils/date.utils.service';
 import { CreateExpenseComponent } from './create-expense.component';
 import { provideHttpClient } from '@angular/common/http';
-import { provideZonelessChangeDetection } from '@angular/core';
-
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 describe('CreateExpenseComponent', () => {
   let component: CreateExpenseComponent;
@@ -26,7 +23,7 @@ describe('CreateExpenseComponent', () => {
         ErrorHandlerService,
         DateUtilsService,
         provideDateFnsAdapter(),
-        provideZonelessChangeDetection(),
+
         provideHttpClient(),
         provideHttpClientTesting()
       ]
