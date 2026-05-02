@@ -91,7 +91,7 @@ jobs:
           path: cypress/reports/html
 
       - name: Report coverage for Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         if: always() && steps.application-tests.outcome == 'success'
         with:
           directory: coverage/CashManager
