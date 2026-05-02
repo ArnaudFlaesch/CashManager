@@ -47,7 +47,7 @@ jobs:
 
       - name: Test
         id: application-tests
-        run: npm run test
+        run: npm run test:coverage
 
       - name: Login to Github Container Registry
         uses: docker/login-action@v4
@@ -94,13 +94,13 @@ jobs:
         uses: codecov/codecov-action@v5
         if: always() && steps.application-tests.outcome == 'success'
         with:
-          directory: coverage-jest
+          directory: coverage/CashManager
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Report coverage for Codacy
         if: always() && steps.application-tests.outcome == 'success'
         run: |
-           bash <(curl -Ls https://coverage.codacy.com/get.sh)
+           bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/CashManager/clover.xml
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
