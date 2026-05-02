@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import authorizationBearer from '../authorizationBearer/authorizationBearer';
-import { INotification } from '@model/INotification';
-import { IPage } from '@model/IPage';
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../../environments/environment";
+import authorizationBearer from "../authorizationBearer/authorizationBearer";
+import { INotification } from "@model/INotification";
+import { IPage } from "@model/IPage";
 
 @Injectable()
 export class NotificationService {
@@ -14,7 +14,7 @@ export class NotificationService {
     return this.http.get<IPage<INotification>>(`${environment.backend_url}/notifications/`, {
       headers: {
         Authorization: authorizationBearer(),
-        'Content-type': 'application/json'
+        "Content-type": "application/json"
       }
     });
   }
@@ -28,7 +28,7 @@ export class NotificationService {
       {
         headers: {
           Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
+          "Content-type": "application/json"
         }
       }
     );

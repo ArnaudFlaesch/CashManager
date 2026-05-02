@@ -1,29 +1,29 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { map, Observable, of, startWith } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from "@angular/core";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { map, Observable, of, startWith } from "rxjs";
 
-import { Expense } from '@model/Expense';
-import { DateUtilsService } from '../../../utils/date.utils.service';
-import { Label } from '@model/Label';
-import { InsertExpensePayload } from '@model/payloads/InsertExpensePayload';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { ExpenseService } from '@services/expense.service/expense.service';
-import { MatButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
-import { AsyncPipe } from '@angular/common';
-import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { Expense } from "@model/Expense";
+import { DateUtilsService } from "../../../utils/date.utils.service";
+import { Label } from "@model/Label";
+import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { ExpenseService } from "@services/expense.service/expense.service";
+import { MatButton } from "@angular/material/button";
+import { MatOption } from "@angular/material/core";
+import { AsyncPipe } from "@angular/common";
+import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle
-} from '@angular/material/datepicker';
-import { MatInput } from '@angular/material/input';
-import { MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
+} from "@angular/material/datepicker";
+import { MatInput } from "@angular/material/input";
+import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/form-field";
 
 @Component({
-  selector: 'app-create-expense',
-  templateUrl: './create-expense.component.html',
-  styleUrls: ['./create-expense.component.scss'],
+  selector: "app-create-expense",
+  templateUrl: "./create-expense.component.html",
+  styleUrls: ["./create-expense.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormField,
@@ -48,7 +48,7 @@ export class CreateExpenseComponent implements OnInit {
   public filteredOptions: Observable<Label[]> = of([]);
   public readonly labels = input<Label[]>([]);
   public dateFormControl = new FormControl<string | null>(null);
-  protected labelControl = new FormControl<Label | string>('');
+  protected labelControl = new FormControl<Label | string>("");
   protected readonly insertedExpenseEvent = output<Expense>();
 
   private selectedLabel: Label | null = null;
@@ -63,8 +63,8 @@ export class CreateExpenseComponent implements OnInit {
 
   public ngOnInit(): void {
     this.filteredOptions = this.labelControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : '')),
+      startWith(""),
+      map((value) => (typeof value === "string" ? value : "")),
       map((name) => (name ? this.filterLabels(name) : this.labels().slice()))
     );
   }
@@ -84,7 +84,7 @@ export class CreateExpenseComponent implements OnInit {
   }
 
   public displayLabel(label: Label): string {
-    return label?.label ? label.label : '';
+    return label?.label ? label.label : "";
   }
 
   public canCreateExpense(): boolean {

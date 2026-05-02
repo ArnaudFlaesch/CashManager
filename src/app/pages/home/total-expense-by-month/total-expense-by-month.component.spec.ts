@@ -1,31 +1,31 @@
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
-import { environment } from '../../../../environments/environment';
-import { Label } from '@model/Label';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { ExpenseService } from '@services/expense.service/expense.service';
-import { ITotalExpenseByMonth } from '@model/ITotalExpenseByMonth';
-import { TotalExpenseByMonthComponent } from './total-expense-by-month.component';
-import { ComponentRef } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
-import { routes } from '../../../../main';
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { MatDialogRef } from "@angular/material/dialog";
+import { environment } from "../../../../environments/environment";
+import { Label } from "@model/Label";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { ExpenseService } from "@services/expense.service/expense.service";
+import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
+import { TotalExpenseByMonthComponent } from "./total-expense-by-month.component";
+import { ComponentRef } from "@angular/core";
+import { provideHttpClient } from "@angular/common/http";
+import { provideRouter } from "@angular/router";
+import { routes } from "../../../../main";
 
-import { AuthGuard } from '../../../guards/auth.guard';
+import { AuthGuard } from "../../../guards/auth.guard";
 
-describe.skip('TotalExpenseByMonthComponent', () => {
+describe.skip("TotalExpenseByMonthComponent", () => {
   let component: TotalExpenseByMonthComponent;
   let componentRef: ComponentRef<TotalExpenseByMonthComponent>;
   let httpTestingController: HttpTestingController;
 
-  const expensePath = '/expense/';
+  const expensePath = "/expense/";
   const labelData = [
-    { id: 1, label: 'Courses', userId: 1 },
-    { id: 2, label: 'Restaurant', userId: 1 }
+    { id: 1, label: "Courses", userId: 1 },
+    { id: 2, label: "Restaurant", userId: 1 }
   ] as Label[];
   const expectedTotalExpenseByMonthData = [
-    { date: '2022-04-01', total: 200 }
+    { date: "2022-04-01", total: 200 }
   ] as ITotalExpenseByMonth[];
 
   beforeEach(async () => {
@@ -52,8 +52,8 @@ describe.skip('TotalExpenseByMonthComponent', () => {
     httpTestingController.verify();
   });
 
-  it('Should display the total with two labels', () => {
-    componentRef.setInput('labels', labelData);
+  it("Should display the total with two labels", () => {
+    componentRef.setInput("labels", labelData);
     component.ngOnInit();
     const getTotalExpenseByMonthRequest = httpTestingController.expectOne(
       `${environment.backend_url}${expensePath}getTotalExpensesByMonth`
@@ -61,8 +61,8 @@ describe.skip('TotalExpenseByMonthComponent', () => {
     getTotalExpenseByMonthRequest.flush(expectedTotalExpenseByMonthData);
 
     const expectedTotalExpenseByMonthByLabelIdData = [
-      { date: '2022-04-01', total: 400 },
-      { date: '2022-03-01', total: 100 }
+      { date: "2022-04-01", total: 400 },
+      { date: "2022-03-01", total: 100 }
     ] as ITotalExpenseByMonth[];
 
     const labelIdToSelect = component.labels()[0].id;
@@ -76,14 +76,14 @@ describe.skip('TotalExpenseByMonthComponent', () => {
       datasets: [
         {
           data: [400, 100],
-          label: 'Total des dépenses'
+          label: "Total des dépenses"
         },
         {
           data: [250, 250],
-          label: 'Moyenne'
+          label: "Moyenne"
         }
       ],
-      labels: ['mars 2022', 'avril 2022']
+      labels: ["mars 2022", "avril 2022"]
     });
   });
 });

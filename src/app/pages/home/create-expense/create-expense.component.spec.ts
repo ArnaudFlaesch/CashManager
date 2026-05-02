@@ -1,16 +1,16 @@
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
-import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { environment } from '../../../../environments/environment';
-import { InsertExpensePayload } from '@model/payloads/InsertExpensePayload';
-import { AuthService } from '@services/auth.service/auth.service';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { ExpenseService } from '@services/expense.service/expense.service';
-import { DateUtilsService } from '../../../utils/date.utils.service';
-import { CreateExpenseComponent } from './create-expense.component';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
+import { environment } from "../../../../environments/environment";
+import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
+import { AuthService } from "@services/auth.service/auth.service";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { ExpenseService } from "@services/expense.service/expense.service";
+import { DateUtilsService } from "../../../utils/date.utils.service";
+import { CreateExpenseComponent } from "./create-expense.component";
+import { provideHttpClient } from "@angular/common/http";
 
-describe('CreateExpenseComponent', () => {
+describe("CreateExpenseComponent", () => {
   let component: CreateExpenseComponent;
   let httpTestingController: HttpTestingController;
 
@@ -37,13 +37,13 @@ describe('CreateExpenseComponent', () => {
     httpTestingController.verify();
   });
 
-  const expensePath = '/expense/';
+  const expensePath = "/expense/";
 
-  it('Should create an expense', () => {
-    const newLabelName = 'Vacances';
+  it("Should create an expense", () => {
+    const newLabelName = "Vacances";
     expect(component.canCreateExpense()).toEqual(false);
     component.selectLabel({ id: 1, label: newLabelName, userId: 1 });
-    component.dateFormControl.setValue('2022-3-5');
+    component.dateFormControl.setValue("2022-3-5");
     component.expenseToCreate = new InsertExpensePayload();
     component.expenseToCreate.amount = 23;
 
@@ -61,9 +61,9 @@ describe('CreateExpenseComponent', () => {
     });
   });
 
-  it('Should display the label', () => {
-    const label = { id: 1, label: 'Dépense 1', userId: 1 };
-    expect(component.displayLabel(label)).toEqual('Dépense 1');
+  it("Should display the label", () => {
+    const label = { id: 1, label: "Dépense 1", userId: 1 };
+    expect(component.displayLabel(label)).toEqual("Dépense 1");
     expect(label.userId).toEqual(1);
   });
 });

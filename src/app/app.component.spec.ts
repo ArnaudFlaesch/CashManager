@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { TestBed } from "@angular/core/testing";
+import { AppComponent } from "./app.component";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   let component: AppComponent;
 
   beforeEach(async () => {
@@ -13,7 +13,7 @@ describe('AppComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('Should display the title', () => {
+  it("Should display the title", () => {
     expect(component).toBeTruthy();
   });
 });

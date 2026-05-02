@@ -1,4 +1,4 @@
-import { RoleEnum } from './RoleEnum';
+import { RoleEnum } from "./RoleEnum";
 
 export type IUser = {
   id: number;

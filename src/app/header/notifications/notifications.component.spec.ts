@@ -1,17 +1,17 @@
-import { startOfYesterday } from 'date-fns';
+import { startOfYesterday } from "date-fns";
 
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
-import { IPage } from '@model/IPage';
-import { environment } from '../../../environments/environment';
-import { INotification, NotificationTypeEnum } from '@model/INotification';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { NotificationsComponent } from './notifications.component';
-import { NotificationService } from '@services/notification.service/NotificationService';
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { IPage } from "@model/IPage";
+import { environment } from "../../../environments/environment";
+import { INotification, NotificationTypeEnum } from "@model/INotification";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { NotificationsComponent } from "./notifications.component";
+import { NotificationService } from "@services/notification.service/NotificationService";
 
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient } from "@angular/common/http";
 
-describe('NotificationsComponent', () => {
+describe("NotificationsComponent", () => {
   let component: NotificationsComponent;
   let httpTestingController: HttpTestingController;
 
@@ -40,21 +40,21 @@ describe('NotificationsComponent', () => {
     content: [
       {
         id: 1,
-        message: 'username: Connexion utilisateur',
+        message: "username: Connexion utilisateur",
         notificationType: NotificationTypeEnum.WARN,
         notificationDate: notificationDate.toString(),
         isRead: false
       },
       {
         id: 2,
-        message: 'username: Action user',
+        message: "username: Action user",
         notificationType: NotificationTypeEnum.INFO,
         notificationDate: notificationDate.toString(),
         isRead: false
       },
       {
         id: 3,
-        message: 'username: Action user',
+        message: "username: Action user",
         notificationType: NotificationTypeEnum.INFO,
         notificationDate: startOfYesterday(),
         isRead: true
@@ -67,37 +67,37 @@ describe('NotificationsComponent', () => {
     number: 0
   } as IPage<INotification>;
 
-  it('should create component and get notifications', () => {
+  it("should create component and get notifications", () => {
     component.ngOnInit();
     const notificationsRequest = httpTestingController.expectOne(
-      environment.backend_url + '/notifications/'
+      environment.backend_url + "/notifications/"
     );
     notificationsRequest.flush(notificationsData);
 
     expect(component.notificationsFromDatabase()).toEqual(notificationsData.content);
-    expect(component.notificationsToDisplay()[0].notificationTypeToDisplay).toEqual('warning');
-    expect(component.notificationsToDisplay()[1].notificationTypeToDisplay).toEqual('info');
-    expect(component.notificationsToDisplay()[1].notificationTypeToDisplay).toEqual('info');
-    expect(component.unreadNotificationsForBadge()).toEqual('2');
+    expect(component.notificationsToDisplay()[0].notificationTypeToDisplay).toEqual("warning");
+    expect(component.notificationsToDisplay()[1].notificationTypeToDisplay).toEqual("info");
+    expect(component.notificationsToDisplay()[1].notificationTypeToDisplay).toEqual("info");
+    expect(component.unreadNotificationsForBadge()).toEqual("2");
   });
 
-  it('Should mark all notifications as read', () => {
+  it("Should mark all notifications as read", () => {
     component.ngOnInit();
     const notificationsRequest = httpTestingController.expectOne(
-      environment.backend_url + '/notifications/'
+      environment.backend_url + "/notifications/"
     );
     notificationsRequest.flush(notificationsData);
 
-    component.markAllNotificationsAsRead(new Event('click'));
+    component.markAllNotificationsAsRead(new Event("click"));
 
     const markNotificationAsReadRequest = httpTestingController.expectOne(
-      environment.backend_url + '/notifications/markNotificationAsRead'
+      environment.backend_url + "/notifications/markNotificationAsRead"
     );
     const updatedNotificationsData = notificationsData.content.map((notif) => {
       return { ...notif, ...{ isRead: true } };
     });
     markNotificationAsReadRequest.flush(updatedNotificationsData);
 
-    expect(component.unreadNotificationsForBadge()).toEqual('');
+    expect(component.unreadNotificationsForBadge()).toEqual("");
   });
 });
