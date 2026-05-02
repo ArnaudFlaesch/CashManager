@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable()
 export class ThemeService {
-  private readonly DARK_MODE_CLASS_NAME = 'dark-mode';
-  private readonly PREFERRED_THEME_LOCALSTORAGE_KEY = 'preferredTheme';
+  private readonly DARK_MODE_CLASS_NAME = "dark-mode";
+  private readonly PREFERRED_THEME_LOCALSTORAGE_KEY = "preferredTheme";
 
   private isDarkModeEnabled = false;
 
   public selectDarkMode(isDarkModeEnabled: boolean): void {
     if (this.isDarkModeEnabled !== isDarkModeEnabled) {
-      const preferredTheme = isDarkModeEnabled ? 'dark' : 'light';
+      const preferredTheme = isDarkModeEnabled ? "dark" : "light";
       this.isDarkModeEnabled = isDarkModeEnabled;
       if (isDarkModeEnabled) {
         document.body.classList.add(this.DARK_MODE_CLASS_NAME);
@@ -22,6 +22,6 @@ export class ThemeService {
 
   public isPreferredThemeDarkMode(): boolean {
     const preferredTheme = localStorage.getItem(this.PREFERRED_THEME_LOCALSTORAGE_KEY);
-    return preferredTheme === 'dark';
+    return preferredTheme === "dark";
   }
 }

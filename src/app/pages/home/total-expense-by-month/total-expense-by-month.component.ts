@@ -1,21 +1,21 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatSelect } from '@angular/material/select';
-import { ChartConfiguration } from 'chart.js';
-import { format, isBefore } from 'date-fns';
-import { fr } from 'date-fns/locale/fr';
-import { BaseChartDirective } from 'ng2-charts';
-import { ITotalExpenseByMonth } from '@model/ITotalExpenseByMonth';
-import { ExpenseService } from '@services/expense.service/expense.service';
-import { Label } from '@model/Label';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from "@angular/core";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatIconButton } from "@angular/material/button";
+import { MatOption } from "@angular/material/core";
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatSelect } from "@angular/material/select";
+import { ChartConfiguration } from "chart.js";
+import { format, isBefore } from "date-fns";
+import { fr } from "date-fns/locale/fr";
+import { BaseChartDirective } from "ng2-charts";
+import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
+import { ExpenseService } from "@services/expense.service/expense.service";
+import { Label } from "@model/Label";
 
 @Component({
-  selector: 'app-total-expense-by-month',
-  templateUrl: './total-expense-by-month.component.html',
+  selector: "app-total-expense-by-month",
+  templateUrl: "./total-expense-by-month.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     BaseChartDirective,
@@ -32,8 +32,8 @@ import { Label } from '@model/Label';
 export class TotalExpenseByMonthComponent implements OnInit {
   public readonly labels = input<Label[]>([]);
   public readonly noLabelIdSelected = 0;
-  public totalExpensesByMonthChart: ChartConfiguration['data'] | undefined = undefined;
-  public barChartOptions: ChartConfiguration['options'] = {
+  public totalExpensesByMonthChart: ChartConfiguration["data"] | undefined = undefined;
+  public barChartOptions: ChartConfiguration["options"] = {
     responsive: true,
     plugins: {
       legend: {
@@ -95,15 +95,15 @@ export class TotalExpenseByMonthComponent implements OnInit {
       chartData.reduce((total, totalByMonth) => totalByMonth.total + total, 0) / chartData.length;
     this.totalExpensesByMonthChart = {
       labels: chartData.map((totalByMonth) =>
-        format(new Date(totalByMonth.date), 'MMMM yyyy', { locale: fr })
+        format(new Date(totalByMonth.date), "MMMM yyyy", { locale: fr })
       ),
       datasets: [
         {
-          label: 'Total des dépenses',
+          label: "Total des dépenses",
           data: data.map((totalByMonth) => totalByMonth.total)
         },
         {
-          label: 'Moyenne',
+          label: "Moyenne",
           data: Array(chartData.length).fill(average)
         }
       ]

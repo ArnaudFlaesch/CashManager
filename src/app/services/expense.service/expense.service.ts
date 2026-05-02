@@ -1,24 +1,24 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { format } from 'date-fns';
-import { Observable } from 'rxjs';
-import { Expense } from '@model/Expense';
-import { environment } from '../../../environments/environment';
-import { ITotalExpenseByMonth } from '@model/ITotalExpenseByMonth';
-import authorizationBearer from '../authorizationBearer/authorizationBearer';
-import { InsertExpensePayload } from '@model/payloads/InsertExpensePayload';
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { format } from "date-fns";
+import { Observable } from "rxjs";
+import { Expense } from "@model/Expense";
+import { environment } from "../../../environments/environment";
+import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
+import authorizationBearer from "../authorizationBearer/authorizationBearer";
+import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
 
 @Injectable()
 export class ExpenseService {
   private http = inject(HttpClient);
 
-  private dateFormat = 'yyyy-MM-dd';
+  private dateFormat = "yyyy-MM-dd";
 
   public getExpensesAtMonth(startIntervalDate: Date, endIntervalDate: Date): Observable<Expense[]> {
     return this.http.get<Expense[]>(`${environment.backend_url}/expense/`, {
       headers: {
         Authorization: authorizationBearer(),
-        'Content-type': 'application/json'
+        "Content-type": "application/json"
       },
       params: {
         startIntervalDate: format(startIntervalDate, this.dateFormat),
@@ -33,7 +33,7 @@ export class ExpenseService {
       {
         headers: {
           Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
+          "Content-type": "application/json"
         }
       }
     );
@@ -45,7 +45,7 @@ export class ExpenseService {
       {
         headers: {
           Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
+          "Content-type": "application/json"
         }
       }
     );
@@ -58,7 +58,7 @@ export class ExpenseService {
       {
         headers: {
           Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
+          "Content-type": "application/json"
         }
       }
     );
@@ -70,7 +70,7 @@ export class ExpenseService {
       {
         headers: {
           Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
+          "Content-type": "application/json"
         }
       }
     );

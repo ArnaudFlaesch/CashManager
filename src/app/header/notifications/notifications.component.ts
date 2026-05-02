@@ -5,24 +5,24 @@ import {
   inject,
   OnInit,
   signal
-} from '@angular/core';
-import { isToday } from 'date-fns';
+} from "@angular/core";
+import { isToday } from "date-fns";
 
-import { INotification, INotificationToDisplay, NotificationTypeEnum } from '@model/INotification';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { NotificationService } from '@services/notification.service/NotificationService';
-import { DateFormatPipe } from '../../pipes/date-format.pipe';
-import { NgClass } from '@angular/common';
-import { MatBadge } from '@angular/material/badge';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { INotification, INotificationToDisplay, NotificationTypeEnum } from "@model/INotification";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { NotificationService } from "@services/notification.service/NotificationService";
+import { DateFormatPipe } from "../../pipes/date-format.pipe";
+import { NgClass } from "@angular/common";
+import { MatBadge } from "@angular/material/badge";
+import { MatIcon } from "@angular/material/icon";
+import { MatMenu, MatMenuTrigger } from "@angular/material/menu";
+import { MatTooltip } from "@angular/material/tooltip";
+import { MatIconButton, MatMiniFabButton } from "@angular/material/button";
 
 @Component({
-  selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss'],
+  selector: "app-notifications",
+  templateUrl: "./notifications.component.html",
+  styleUrls: ["./notifications.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatMiniFabButton,
@@ -46,7 +46,7 @@ export class NotificationsComponent implements OnInit {
   );
   public readonly notificationTypeEnum = NotificationTypeEnum;
 
-  private readonly ERROR_MARKING_NOTIFICATION_AS_READ = 'Erreur lors du traitement de la requête.';
+  private readonly ERROR_MARKING_NOTIFICATION_AS_READ = "Erreur lors du traitement de la requête.";
   private readonly notificationService = inject(NotificationService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
 
@@ -94,14 +94,14 @@ export class NotificationsComponent implements OnInit {
   private computeDateToDisplay(date: string): string {
     const parsedDate = new Date(Date.parse(date));
     if (isToday(parsedDate)) {
-      return parsedDate.toLocaleTimeString('fr', {
-        hour: '2-digit',
-        minute: '2-digit'
+      return parsedDate.toLocaleTimeString("fr", {
+        hour: "2-digit",
+        minute: "2-digit"
       });
     } else {
-      return parsedDate.toLocaleString('fr', {
-        day: '2-digit',
-        month: '2-digit'
+      return parsedDate.toLocaleString("fr", {
+        day: "2-digit",
+        month: "2-digit"
       });
     }
   }
@@ -109,9 +109,9 @@ export class NotificationsComponent implements OnInit {
   private computeTypeToDisplay(notificationType: NotificationTypeEnum): string {
     switch (notificationType) {
       case NotificationTypeEnum.INFO:
-        return 'info';
+        return "info";
       case NotificationTypeEnum.WARN:
-        return 'warning';
+        return "warning";
     }
   }
 
@@ -133,6 +133,6 @@ export class NotificationsComponent implements OnInit {
     const unreadNotificationsCount = notificationsFromDatabase.filter(
       (notif) => !notif.isRead
     ).length;
-    return unreadNotificationsCount > 0 ? unreadNotificationsCount.toString() : '';
+    return unreadNotificationsCount > 0 ? unreadNotificationsCount.toString() : "";
   }
 }

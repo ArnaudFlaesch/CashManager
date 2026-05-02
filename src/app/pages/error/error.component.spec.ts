@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { ErrorComponent } from './error.component';
+import { TestBed } from "@angular/core/testing";
+import { ErrorComponent } from "./error.component";
 
-describe('ErrorComponent', () => {
+describe("ErrorComponent", () => {
   let component: ErrorComponent;
 
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('ErrorComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     expect(component).toBeTruthy();
   });
 });

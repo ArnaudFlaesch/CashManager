@@ -1,17 +1,17 @@
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { LabelService } from '@services/label.service/label.service';
-import { ChangeDetectionStrategy, Component, inject, model, output } from '@angular/core';
-import { Label } from '@model/Label';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmModalComponent } from '../../../modals/confirm-modal/confirm-modal.component';
-import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../../../utils/Constants';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { LabelService } from "@services/label.service/label.service";
+import { ChangeDetectionStrategy, Component, inject, model, output } from "@angular/core";
+import { Label } from "@model/Label";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-modal.component";
+import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
+import { MatIcon } from "@angular/material/icon";
+import { MatIconButton } from "@angular/material/button";
 
 @Component({
-  selector: 'app-label-list',
-  templateUrl: './label-list.component.html',
-  styleUrls: ['./label-list.component.scss'],
+  selector: "app-label-list",
+  templateUrl: "./label-list.component.html",
+  styleUrls: ["./label-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIconButton, MatIcon]
 })
@@ -19,7 +19,7 @@ export class LabelListComponent {
   public readonly labels = model.required<Label[]>();
   protected readonly labelDeletedEvent = output<number>();
 
-  private readonly ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
+  private readonly ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
   private readonly labelService = inject(LabelService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly dialog = inject(MatDialog);
@@ -30,12 +30,12 @@ export class LabelListComponent {
       width: DIALOG_SMALL_WIDTH,
       data: {
         title: "Suppression d'un label",
-        message: 'Êtes-vous sûr de vouloir supprimer ce label ?'
+        message: "Êtes-vous sûr de vouloir supprimer ce label ?"
       }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'validate') {
+      if (result === "validate") {
         this.deleteLabel(labelId);
       }
     });

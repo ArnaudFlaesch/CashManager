@@ -6,8 +6,13 @@
     <app-notifications />
   }
 
-  <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-mini-fab [matMenuTriggerFor]="cashManagerMenu"
-    color="primary">
+  <button
+    id="cashmanager-menu"
+    matTooltip="Menu utilisateur"
+    mat-mini-fab
+    [matMenuTriggerFor]="cashManagerMenu"
+    color="primary"
+  >
     <mat-icon>account_circle</mat-icon>
   </button>
 
@@ -22,8 +27,7 @@
     <div mat-menu-item>
       <div id="toggle-mode-container">
         <mat-icon>light_mode</mat-icon>
-        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formControl]="toggleControl">
-        </mat-slide-toggle>
+        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formControl]="toggleControl"> </mat-slide-toggle>
         <mat-icon>dark_mode</mat-icon>
       </div>
     </div>

@@ -1,6 +1,6 @@
 name: Node.js CI
 
-on: [ 'push', 'workflow_dispatch' ]
+on: ["push", "workflow_dispatch"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.15.0
-          cache: 'npm'
+          cache: "npm"
 
       - name: Cache node modules
         uses: actions/cache@v5
@@ -72,7 +72,7 @@ jobs:
           browser: chrome
           config-file: cypress-test.config.ts
           start: npm start
-          wait-on: 'http://localhost:4200'
+          wait-on: "http://localhost:4200"
 
       - name: Generate test report
         id: generate-e2e-report
@@ -100,7 +100,7 @@ jobs:
       - name: Report coverage for Codacy
         if: always() && steps.application-tests.outcome == 'success'
         run: |
-           bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/CashManager/clover.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/CashManager/clover.xml
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 

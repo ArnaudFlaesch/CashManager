@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from "@angular/common/http";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,36 +7,36 @@ import {
   model,
   OnInit,
   signal
-} from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+} from "@angular/core";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle
-} from '@angular/material/datepicker';
-import { MatDialog } from '@angular/material/dialog';
-import { ChartConfiguration } from 'chart.js';
-import { addMonths, endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
+} from "@angular/material/datepicker";
+import { MatDialog } from "@angular/material/dialog";
+import { ChartConfiguration } from "chart.js";
+import { addMonths, endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 
-import { ConfirmModalComponent } from '../../../modals/confirm-modal/confirm-modal.component';
-import { Expense } from '@model/Expense';
-import { Label } from '@model/Label';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { ExpenseService } from '@services/expense.service/expense.service';
-import { LabelService } from '@services/label.service/label.service';
-import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from '../../../utils/Constants';
-import { CreateExpenseComponent } from '../create-expense/create-expense.component';
+import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-modal.component";
+import { Expense } from "@model/Expense";
+import { Label } from "@model/Label";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { ExpenseService } from "@services/expense.service/expense.service";
+import { LabelService } from "@services/label.service/label.service";
+import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
+import { CreateExpenseComponent } from "../create-expense/create-expense.component";
 
-import { MatInput } from '@angular/material/input';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
-import { BaseChartDirective } from 'ng2-charts';
+import { MatInput } from "@angular/material/input";
+import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatIconButton } from "@angular/material/button";
+import { BaseChartDirective } from "ng2-charts";
 
 @Component({
-  selector: 'app-expense-list-by-month',
-  templateUrl: './expense-list-by-month.component.html',
-  styleUrls: ['./expense-list-by-month.component.scss'],
+  selector: "app-expense-list-by-month",
+  templateUrl: "./expense-list-by-month.component.html",
+  styleUrls: ["./expense-list-by-month.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     BaseChartDirective,
@@ -64,7 +64,7 @@ export class ExpenseListByMonthComponent implements OnInit {
       datasets: Object.keys(expensesByLabel).map((labelId) => {
         const labelName = this.labels().filter((label) => label.id.toString() === labelId)[0];
         if (!labelId || labelName === undefined) {
-          return { label: '', data: [] };
+          return { label: "", data: [] };
         }
         return {
           label: labelName.label,
@@ -75,7 +75,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   });
   public selectedMonthFormControl = new FormControl(startOfMonth(new Date()));
 
-  public barChartOptions: ChartConfiguration['options'] = {
+  public barChartOptions: ChartConfiguration["options"] = {
     responsive: true,
     plugins: {
       legend: {
@@ -85,9 +85,9 @@ export class ExpenseListByMonthComponent implements OnInit {
   };
 
   private readonly currentSelectedMonth = signal(startOfMonth(new Date()));
-  private readonly ERROR_DELETING_LABEL = 'Erreur lors de la suppression du label.';
-  private readonly ERROR_GETTING_EXPENSES = 'Erreur lors de la récupération des dépenses.';
-  private readonly EXPENSES_CHART_LABEL = 'Dépenses';
+  private readonly ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
+  private readonly ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
+  private readonly EXPENSES_CHART_LABEL = "Dépenses";
   private readonly dialog = inject(MatDialog);
   private readonly labelService = inject(LabelService);
   private readonly expenseService = inject(ExpenseService);
@@ -123,12 +123,12 @@ export class ExpenseListByMonthComponent implements OnInit {
       width: DIALOG_SMALL_WIDTH,
       data: {
         title: "Suppression d'une dépense",
-        message: 'Êtes-vous sûr de vouloir supprimer cette dépense ?'
+        message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
       }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'validate') {
+      if (result === "validate") {
         this.deleteExpense(expenseId);
       }
     });
@@ -166,7 +166,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   public formatExpenseDate(expenseDate: Date): string {
-    return format(expenseDate, 'dd/MM');
+    return format(expenseDate, "dd/MM");
   }
 
   private selectMonth(selectedMonth: Date): void {

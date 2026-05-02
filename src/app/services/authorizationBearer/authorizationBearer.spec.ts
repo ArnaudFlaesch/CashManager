@@ -1,36 +1,36 @@
-import authorizationBearer from './authorizationBearer';
+import authorizationBearer from "./authorizationBearer";
 
-describe('Authorization bearer tests', () => {
+describe("Authorization bearer tests", () => {
   beforeEach(() => {
-    window.localStorage.setItem('user', '{}');
+    window.localStorage.setItem("user", "{}");
   });
 
-  it('Should not retrieve a token when it does not exists', () => {
-    expect(authorizationBearer()).toEqual('');
+  it("Should not retrieve a token when it does not exists", () => {
+    expect(authorizationBearer()).toEqual("");
   });
 
-  it('Should get the token', () => {
+  it("Should get the token", () => {
     const userData = {
-      accessToken: 'accessToken',
+      accessToken: "accessToken",
       id: 2,
-      username: 'admintest',
-      email: 'admin@email.com',
-      roles: ['ROLE_ADMIN'],
-      tokenType: 'Bearer'
+      username: "admintest",
+      email: "admin@email.com",
+      roles: ["ROLE_ADMIN"],
+      tokenType: "Bearer"
     };
-    window.localStorage.setItem('user', JSON.stringify(userData));
+    window.localStorage.setItem("user", JSON.stringify(userData));
     expect(authorizationBearer()).toEqual(`Bearer ${userData.accessToken}`);
   });
 
-  it('Should not get the token when cookie exists but accessToken does not', () => {
+  it("Should not get the token when cookie exists but accessToken does not", () => {
     const userData = {
       id: 2,
-      username: 'admintest',
-      email: 'admin@email.com',
-      roles: ['ROLE_ADMIN'],
-      tokenType: 'Bearer'
+      username: "admintest",
+      email: "admin@email.com",
+      roles: ["ROLE_ADMIN"],
+      tokenType: "Bearer"
     };
-    window.localStorage.setItem('user', JSON.stringify(userData));
-    expect(authorizationBearer()).toEqual('');
+    window.localStorage.setItem("user", JSON.stringify(userData));
+    expect(authorizationBearer()).toEqual("");
   });
 });

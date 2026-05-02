@@ -1,31 +1,31 @@
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 
-import { MatDialogRef } from '@angular/material/dialog';
-import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
+import { MatDialogRef } from "@angular/material/dialog";
+import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 
-import { TestBed } from '@angular/core/testing';
-import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { environment } from '../../../../environments/environment';
-import { Expense } from '@model/Expense';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { DateUtilsService } from '../../../utils/date.utils.service';
-import { ExpenseListByMonthComponent } from './expense-list-by-month.component';
-import { LabelService } from '@services/label.service/label.service';
-import { ExpenseService } from '@services/expense.service/expense.service';
-import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
-import { routes } from '../../../../main';
+import { TestBed } from "@angular/core/testing";
+import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
+import { environment } from "../../../../environments/environment";
+import { Expense } from "@model/Expense";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { DateUtilsService } from "../../../utils/date.utils.service";
+import { ExpenseListByMonthComponent } from "./expense-list-by-month.component";
+import { LabelService } from "@services/label.service/label.service";
+import { ExpenseService } from "@services/expense.service/expense.service";
+import { provideHttpClient } from "@angular/common/http";
+import { provideRouter } from "@angular/router";
+import { routes } from "../../../../main";
 
-describe.skip('ExpenseListByMonthComponent', () => {
+describe.skip("ExpenseListByMonthComponent", () => {
   let component: ExpenseListByMonthComponent;
   let httpTestingController: HttpTestingController;
   const mockedCurrentMonth = new Date(2022, 1, 15);
   const labelData = [
-    { id: 1, label: 'Courses', userId: 1 },
-    { id: 2, label: 'Restaurant', userId: 1 }
+    { id: 1, label: "Courses", userId: 1 },
+    { id: 2, label: "Restaurant", userId: 1 }
   ];
-  const dateFormat = 'yyyy-MM-dd';
-  const expensePath = '/expense/';
+  const dateFormat = "yyyy-MM-dd";
+  const expensePath = "/expense/";
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -55,7 +55,7 @@ describe.skip('ExpenseListByMonthComponent', () => {
     vi.useRealTimers();
   });
 
-  it('Should display two labels and three expenses, then change the month', () => {
+  it("Should display two labels and three expenses, then change the month", () => {
     vi.setSystemTime(mockedCurrentMonth);
     const currentMonth = new Date();
     const startIntervalDate = format(startOfMonth(mockedCurrentMonth), dateFormat);

@@ -1,24 +1,24 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '@services/auth.service/auth.service';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { HttpErrorResponse } from "@angular/common/http";
+import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+import { AuthService } from "@services/auth.service/auth.service";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
-import { MatButton } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { MatButton } from "@angular/material/button";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, FormsModule, MatButton, MatProgressSpinner]
 })
 export class LoginComponent {
   public isLoading = signal(false);
-  public inputUsername = '';
-  public inputPassword = '';
+  public inputUsername = "";
+  public inputPassword = "";
   public readonly authService = inject(AuthService);
 
   private readonly ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
@@ -31,7 +31,7 @@ export class LoginComponent {
       this.authService.login(this.inputUsername, this.inputPassword).subscribe({
         next: () => {
           this.isLoading.set(false);
-          this.router.navigate(['home']).catch((error) => console.log(error.message));
+          this.router.navigate(["home"]).catch((error) => console.log(error.message));
         },
         error: (error: HttpErrorResponse) => {
           this.isLoading.set(false);

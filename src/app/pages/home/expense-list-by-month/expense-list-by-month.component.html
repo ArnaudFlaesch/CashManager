@@ -4,10 +4,14 @@
   </button>
   <mat-form-field appearance="fill">
     <mat-label>Sélectionnez un mois</mat-label>
-    <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl">
+    <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl" />
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker startView="multi-year" (monthSelected)="setMonthAndYear($event, picker)"
-                    [startAt]="this.selectedMonthFormControl.value"></mat-datepicker>
+    <mat-datepicker
+      #picker
+      startView="multi-year"
+      (monthSelected)="setMonthAndYear($event, picker)"
+      [startAt]="this.selectedMonthFormControl.value"
+    ></mat-datepicker>
   </mat-form-field>
 
   <button (click)="selectNextMonth()" mat-icon-button>
@@ -17,8 +21,7 @@
 
 <div id="expenses-container">
   <div id="chart-container">
-    <canvas baseChart [data]="this.expensesByLabelChart()" [options]="barChartOptions" [type]="'bar'"
-    ></canvas>
+    <canvas baseChart [data]="this.expensesByLabelChart()" [options]="barChartOptions" [type]="'bar'"></canvas>
   </div>
 
   <div id="expenses-detail">
@@ -27,8 +30,10 @@
       <div id="expenses-list">
         @for (expense of this.expenses(); track expense.id) {
           <div>
-            <span>{{ formatExpenseDate(expense.expenseDate) }} : {{ expense.amount }}€
-              {{ getLabelFromId(expense.labelId)?.label }}</span>
+            <span
+              >{{ formatExpenseDate(expense.expenseDate) }} : {{ expense.amount }}€
+              {{ getLabelFromId(expense.labelId)?.label }}</span
+            >
             @if (false) {
               <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
                 <mat-icon>delete</mat-icon>
@@ -41,5 +46,7 @@
   </div>
 </div>
 
-<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)"
-                    [labels]="this.labels()"></app-create-expense>
+<app-create-expense
+  (insertedExpenseEvent)="handleExpenseCreation($event)"
+  [labels]="this.labels()"
+></app-create-expense>

@@ -1,14 +1,14 @@
-import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
-import { environment } from '../../../environments/environment';
-import { AuthService } from '@services/auth.service/auth.service';
-import { ErrorHandlerService } from '@services/error.handler.service';
-import { LoginComponent } from './login.component';
-import { provideRouter } from '@angular/router';
-import { routes } from '../../../main';
+import { provideHttpClient } from "@angular/common/http";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { environment } from "../../../environments/environment";
+import { AuthService } from "@services/auth.service/auth.service";
+import { ErrorHandlerService } from "@services/error.handler.service";
+import { LoginComponent } from "./login.component";
+import { provideRouter } from "@angular/router";
+import { routes } from "../../../main";
 
-describe('LoginComponent', () => {
+describe("LoginComponent", () => {
   let component: LoginComponent;
   let httpTestingController: HttpTestingController;
 
@@ -33,25 +33,25 @@ describe('LoginComponent', () => {
     httpTestingController.verify();
   });
 
-  it('Should prevent login', () => {
-    expect(component.inputUsername).toBe('');
-    expect(component.inputPassword).toBe('');
+  it("Should prevent login", () => {
+    expect(component.inputUsername).toBe("");
+    expect(component.inputPassword).toBe("");
     component.handleLogin();
   });
 
-  it('Should login', () => {
+  it("Should login", () => {
     const userData = {
-      accessToken: 'accessToken',
+      accessToken: "accessToken",
       id: 2,
-      username: 'admintest',
-      email: 'admin@email.com',
-      roles: ['ROLE_ADMIN'],
-      tokenType: 'Bearer'
+      username: "admintest",
+      email: "admin@email.com",
+      roles: ["ROLE_ADMIN"],
+      tokenType: "Bearer"
     };
-    component.inputUsername = 'username';
-    component.inputPassword = 'password';
+    component.inputUsername = "username";
+    component.inputPassword = "password";
     component.handleLogin();
-    const request = httpTestingController.expectOne(environment.backend_url + '/auth/login');
+    const request = httpTestingController.expectOne(environment.backend_url + "/auth/login");
     request.flush(userData);
   });
 });

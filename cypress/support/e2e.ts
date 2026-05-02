@@ -14,17 +14,17 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands';
+import "./commands";
 
-import addContext from 'mochawesome/addContext';
+import addContext from "mochawesome/addContext";
 
-import { Suite, Test } from 'mocha';
+import { Suite, Test } from "mocha";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
 // https://medium.com/egnyte-engineering/3-steps-to-awesome-test-reports-with-cypress-f4fe915bc246
-Cypress.on('test:after:run', (test, runnable) => {
-  if (test.state === 'failed') {
+Cypress.on("test:after:run", (test, runnable) => {
+  if (test.state === "failed") {
     let item: Test | Suite = runnable;
     const nameParts = [runnable.title];
 
@@ -34,9 +34,9 @@ Cypress.on('test:after:run', (test, runnable) => {
       item = item.parent;
     }
 
-    const fullTestName = nameParts.filter(Boolean).join(' -- '); // this is how cypress joins the test title fragments
+    const fullTestName = nameParts.filter(Boolean).join(" -- "); // this is how cypress joins the test title fragments
 
-    const imageUrl = `screenshots/${Cypress.spec.relative.replace('cypress/e2e/', '')}/${fullTestName} (failed).png`;
+    const imageUrl = `screenshots/${Cypress.spec.relative.replace("cypress/e2e/", "")}/${fullTestName} (failed).png`;
 
     addContext({ test }, imageUrl);
   }
