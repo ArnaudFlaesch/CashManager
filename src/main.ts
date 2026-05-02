@@ -3,8 +3,7 @@ import {
   enableProdMode,
   inject,
   isDevMode,
-  provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection
+  provideBrowserGlobalErrorListeners
 } from '@angular/core';
 import localeFr from '@angular/common/locales/fr';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
@@ -27,7 +26,6 @@ import { ThemeService } from '@services/theme.service/theme.service';
 import { DateUtilsService } from './app/utils/date.utils.service';
 import { environment } from './environments/environment';
 import { registerLocaleData } from '@angular/common';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 if (environment.production) {
   enableProdMode();
@@ -71,9 +69,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
-    provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners()
   ]
 }).catch((err) => console.error(err));

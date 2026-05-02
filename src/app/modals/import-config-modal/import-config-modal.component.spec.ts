@@ -4,10 +4,8 @@ import { ConfigService } from '../../../app/services/config.service/config.servi
 import { ErrorHandlerService } from './../../services/error.handler.service';
 import { ImportConfigModalComponent } from './import-config-modal.component';
 
-import { beforeEach, describe, expect, it } from 'vitest';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('ImportConfigModalComponent', () => {
   let component: ImportConfigModalComponent;
@@ -23,8 +21,7 @@ describe('ImportConfigModalComponent', () => {
           useValue: {}
         },
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideZonelessChangeDetection()
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

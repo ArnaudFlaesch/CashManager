@@ -7,10 +7,11 @@
     "npm": "11.x"
   },
   "scripts": {
-    "start": "ng serve --host=127.0.0.1 -o",
+    "start": "ng serve -o",
     "start:dev": "ng serve -c=dev -o",
     "build": "ng build",
     "test": "ng test",
+    "test:coverage": "ng test --coverage",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:verify": "cypress verify",
@@ -22,10 +23,10 @@
     "report:merge": "npx mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
     "report:generate": "npx mochawesome-report-generator tests-report.json -o cypress/reports/html",
     "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+    "code:check": "prettier . --check",
+    "code:format": "prettier --write ."
   },
   "dependencies": {
-    "@angular/animations": "21.2.11",
     "@angular/common": "21.2.11",
     "@angular/compiler": "21.2.11",
     "@angular/core": "21.2.11",
@@ -33,11 +34,9 @@
     "@angular/material": "21.2.9",
     "@angular/material-date-fns-adapter": "21.2.9",
     "@angular/platform-browser": "21.2.11",
-    "@angular/platform-browser-dynamic": "21.2.11",
     "@angular/router": "21.2.11",
     "@angular/service-worker": "21.2.11",
     "chart.js": "4.5.1",
-    "cypress-wait-until": "3.0.2",
     "date-fns": "4.1.0",
     "jwt-decode": "4.0.0",
     "ng2-charts": "10.0.0",
@@ -49,7 +48,7 @@
     "@angular/cli": "21.2.9",
     "@angular/compiler-cli": "21.2.11",
     "@eslint/js": "10.0.1",
-    "@types/node": "24.12.2",
+    "@vitest/coverage-v8": "4.1.5",
     "cypress": "15.14.2",
     "cypress-multi-reporters": "2.0.5",
     "eslint": "10.3.0",

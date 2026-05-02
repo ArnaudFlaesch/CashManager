@@ -9,9 +9,7 @@ import { ErrorHandlerService } from '@services/error.handler.service';
 import { NotificationsComponent } from './notifications.component';
 import { NotificationService } from '@services/notification.service/NotificationService';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { provideHttpClient } from '@angular/common/http';
-import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('NotificationsComponent', () => {
   let component: NotificationsComponent;
@@ -24,8 +22,7 @@ describe('NotificationsComponent', () => {
         ErrorHandlerService,
         NotificationService,
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideZonelessChangeDetection()
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

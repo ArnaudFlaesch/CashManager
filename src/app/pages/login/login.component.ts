@@ -21,7 +21,7 @@ export class LoginComponent {
   public inputPassword = '';
   public readonly authService = inject(AuthService);
 
-  private ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
+  private readonly ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly router = inject(Router);
 

@@ -6,9 +6,7 @@ import { LabelListComponent } from './label-list.component';
 import { LabelService } from '@services/label.service/label.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { beforeEach, describe, expect, it } from 'vitest';
 import { provideHttpClient } from '@angular/common/http';
-import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('LabelListComponent', () => {
   let component: LabelListComponent;
@@ -23,8 +21,7 @@ describe('LabelListComponent', () => {
           useValue: {}
         },
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideZonelessChangeDetection()
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

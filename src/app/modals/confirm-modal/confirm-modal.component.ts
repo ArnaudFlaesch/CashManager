@@ -12,7 +12,6 @@ import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-confirm-modal.component',
   templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
