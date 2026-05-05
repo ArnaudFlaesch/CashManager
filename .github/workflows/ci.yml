@@ -66,7 +66,7 @@ jobs:
           docker run -p 8080:8080 -d --network="host" -e POSTGRES_PASSWORD=postgres ghcr.io/arnaudflaesch/dash-webservices:$tagName
 
       - name: E2E Tests
-        uses: cypress-io/github-action@v7.1.10
+        uses: cypress-io/github-action@v7.2.0
         id: e2e-tests
         with:
           browser: chrome
