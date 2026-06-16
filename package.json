@@ -35,7 +35,7 @@
     "@angular/material-date-fns-adapter": "21.2.14",
     "@angular/platform-browser": "21.2.16",
     "@angular/router": "21.2.16",
-    "@angular/service-worker": "21.2.16",
+    "@angular/service-worker": "21.2.17",
     "chart.js": "4.5.1",
     "date-fns": "4.4.0",
     "jwt-decode": "4.0.0",
