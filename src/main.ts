@@ -1,4 +1,4 @@
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import {
   enableProdMode,
   inject,
@@ -69,7 +69,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     provideBrowserGlobalErrorListeners()
   ]
 }).catch((err) => console.error(err));
