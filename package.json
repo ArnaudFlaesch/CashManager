@@ -55,7 +55,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-cypress": "6.4.3",
     "globals": "17.7.0",
-    "jsdom": "29.1.1",
+    "jsdom": "30.0.0",
     "mochawesome": "7.1.4",
     "mochawesome-merge": "5.1.1",
     "mochawesome-report-generator": "6.3.2",
