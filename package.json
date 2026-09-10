@@ -48,7 +48,7 @@
     "@angular/cli": "22.1.8",
     "@angular/compiler-cli": "22.1.6",
     "@eslint/js": "10.0.1",
-    "@vitest/coverage-v8": "4.1.11",
+    "@vitest/coverage-v8": "5.0.0",
     "cypress": "16.0.0",
     "cypress-multi-reporters": "2.0.5",
     "eslint": "10.10.0",
@@ -64,6 +64,6 @@
     "stylelint-config-standard-scss": "17.0.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.70.0",
-    "vitest": "4.1.11"
+    "vitest": "5.0.0"
   }
 }
