@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   OnInit,
   signal
 } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { isToday } from "date-fns";
 
 import { INotification, INotificationToDisplay, NotificationTypeEnum } from "@model/INotification";
@@ -49,6 +51,7 @@ export class NotificationsComponent implements OnInit {
   private readonly ERROR_MARKING_NOTIFICATION_AS_READ = "Erreur lors du traitement de la requête.";
   private readonly notificationService = inject(NotificationService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this.fetchNotificationsFromDatabase();
@@ -65,30 +68,36 @@ export class NotificationsComponent implements OnInit {
   }
 
   private markNotificationsAsRead(notificationIds: number[]): void {
-    this.notificationService.markNotificationAsRead(notificationIds).subscribe({
-      next: (updatedNotifications) => {
-        this.notificationsFromDatabase.update((notifications) =>
-          [
-            ...notifications.filter(
-              (notification) =>
-                !updatedNotifications.map((notif) => notif.id).includes(notification.id)
-            ),
-            ...updatedNotifications
-          ].sort((timeA, timeB) => {
-            if (timeA === timeB) return 0;
-            return Date.parse(timeB.notificationDate) - Date.parse(timeA.notificationDate);
-          })
-        );
-      },
-      error: (error) =>
-        this.errorHandlerService.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
-    });
+    this.notificationService
+      .markNotificationAsRead(notificationIds)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updatedNotifications) => {
+          this.notificationsFromDatabase.update((notifications) =>
+            [
+              ...notifications.filter(
+                (notification) =>
+                  !updatedNotifications.map((notif) => notif.id).includes(notification.id)
+              ),
+              ...updatedNotifications
+            ].sort((timeA, timeB) => {
+              if (timeA === timeB) return 0;
+              return Date.parse(timeB.notificationDate) - Date.parse(timeA.notificationDate);
+            })
+          );
+        },
+        error: (error) =>
+          this.errorHandlerService.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
+      });
   }
 
   private fetchNotificationsFromDatabase(): void {
-    this.notificationService.getNotifications().subscribe({
-      next: (notifications) => this.notificationsFromDatabase.set(notifications.content)
-    });
+    this.notificationService
+      .getNotifications()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (notifications) => this.notificationsFromDatabase.set(notifications.content)
+      });
   }
 
   private computeDateToDisplay(date: string): string {

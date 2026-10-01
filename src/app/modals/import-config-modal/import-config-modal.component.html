@@ -4,5 +4,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button id="closeImportConfigModal" mat-dialog-close>Annuler</button>
-  <button mat-raised-button id="uploadFileButton" disabled="{{ !fileToUpload }}" (click)="upload()">Upload</button>
+  <button mat-raised-button id="uploadFileButton" [disabled]="!fileToUpload()" (click)="upload()">Upload</button>
 </mat-dialog-actions>

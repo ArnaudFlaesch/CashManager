@@ -1,5 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit } from "@angular/core";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  signal
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FormField, form } from "@angular/forms/signals";
 import { MatIconButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
@@ -22,8 +31,7 @@ import { Label } from "@model/Label";
     MatFormField,
     MatLabel,
     MatSelect,
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatOption,
     MatIconButton,
     MatIcon
@@ -32,7 +40,7 @@ import { Label } from "@model/Label";
 export class TotalExpenseByMonthComponent implements OnInit {
   public readonly labels = input<Label[]>([]);
   public readonly noLabelIdSelected = 0;
-  public totalExpensesByMonthChart: ChartConfiguration["data"] | undefined = undefined;
+  public totalExpensesByMonthChart = signal<ChartConfiguration["data"] | undefined>(undefined);
   public barChartOptions: ChartConfiguration["options"] = {
     responsive: true,
     plugins: {
@@ -41,47 +49,46 @@ export class TotalExpenseByMonthComponent implements OnInit {
       }
     }
   };
-  public labelControl = new FormControl<number>(this.noLabelIdSelected);
-  private selectedLabelId = this.noLabelIdSelected;
-  private expenseService = inject(ExpenseService);
-
-  public constructor() {
-    this.labelControl.valueChanges.subscribe((newValue) => {
-      this.selectLabel(newValue ?? this.noLabelIdSelected);
-    });
-  }
+  public readonly labelModel = signal({ labelId: this.noLabelIdSelected });
+  public readonly labelForm = form(this.labelModel);
+  private readonly expenseService = inject(ExpenseService);
+  private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this.getTotalExpensesByMonth();
   }
 
   public resetSelectedLabel(): void {
-    this.labelControl.setValue(this.noLabelIdSelected);
+    this.selectLabel(this.noLabelIdSelected);
   }
 
   public selectLabel(labelId: number): void {
-    if (this.selectedLabelId !== labelId) {
-      this.selectedLabelId = labelId;
-      if (this.selectedLabelId === this.noLabelIdSelected) {
-        this.getTotalExpensesByMonth();
-      } else {
-        this.expenseService.getTotalExpensesByMonthByLabelId(this.selectedLabelId).subscribe({
+    this.labelModel.update((model) => ({ ...model, labelId }));
+    if (labelId === this.noLabelIdSelected) {
+      this.getTotalExpensesByMonth();
+    } else {
+      this.expenseService
+        .getTotalExpensesByMonthByLabelId(labelId)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
           next: (data) => this.refreshChart(data)
         });
-      }
     }
   }
 
   public isOneLabelSelected(): boolean {
-    return this.selectedLabelId !== this.noLabelIdSelected;
+    return this.labelModel().labelId !== this.noLabelIdSelected;
   }
 
   private getTotalExpensesByMonth(): void {
-    this.expenseService.getTotalExpensesByMonth().subscribe({
-      next: (data: ITotalExpenseByMonth[]) => {
-        this.refreshChart(data);
-      }
-    });
+    this.expenseService
+      .getTotalExpensesByMonth()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data: ITotalExpenseByMonth[]) => {
+          this.refreshChart(data);
+        }
+      });
   }
 
   private refreshChart(data: ITotalExpenseByMonth[]): void {
@@ -93,7 +100,7 @@ export class TotalExpenseByMonthComponent implements OnInit {
     });
     const average =
       chartData.reduce((total, totalByMonth) => totalByMonth.total + total, 0) / chartData.length;
-    this.totalExpensesByMonthChart = {
+    this.totalExpensesByMonthChart.set({
       labels: chartData.map((totalByMonth) =>
         format(new Date(totalByMonth.date), "MMMM yyyy", { locale: fr })
       ),
@@ -107,6 +114,6 @@ export class TotalExpenseByMonthComponent implements OnInit {
           data: Array(chartData.length).fill(average)
         }
       ]
-    };
+    });
   }
 }
