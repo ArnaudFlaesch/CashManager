@@ -7,7 +7,8 @@
       [min]="0"
       step=".01"
       matInput
-      [(ngModel)]="this.expenseToCreate.amount"
+      [ngModel]="this.expenseToCreate().amount"
+      (ngModelChange)="setExpenseAmount($event)"
       placeholder="Saisissez le montant de la dépense"
     />
   </mat-form-field>

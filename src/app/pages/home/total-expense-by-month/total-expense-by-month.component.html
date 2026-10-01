@@ -10,8 +10,8 @@
   <button mat-icon-button (click)="resetSelectedLabel()"><mat-icon>close</mat-icon></button>
 }
 
-@if (this.totalExpensesByMonthChart) {
+@if (this.totalExpensesByMonthChart()) {
   <div id="total-expenses-chart">
-    <canvas baseChart [data]="this.totalExpensesByMonthChart" [options]="barChartOptions" [type]="'line'"></canvas>
+    <canvas baseChart [data]="this.totalExpensesByMonthChart()" [options]="barChartOptions" [type]="'line'"></canvas>
   </div>
 }

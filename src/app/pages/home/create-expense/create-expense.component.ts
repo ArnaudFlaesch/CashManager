@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { map, Observable, of, startWith } from "rxjs";
 
@@ -44,22 +54,19 @@ import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/fo
   ]
 })
 export class CreateExpenseComponent implements OnInit {
-  public expenseToCreate: InsertExpensePayload;
+  public expenseToCreate = signal(new InsertExpensePayload());
   public filteredOptions: Observable<Label[]> = of([]);
   public readonly labels = input<Label[]>([]);
   public dateFormControl = new FormControl<string | null>(null);
   protected labelControl = new FormControl<Label | string>("");
   protected readonly insertedExpenseEvent = output<Expense>();
 
-  private selectedLabel: Label | null = null;
+  private readonly selectedLabel = signal<Label | null>(null);
   private readonly ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
   private readonly expenseService = inject(ExpenseService);
   private readonly dateUtilsService = inject(DateUtilsService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
-
-  public constructor() {
-    this.expenseToCreate = new InsertExpensePayload();
-  }
+  private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this.filteredOptions = this.labelControl.valueChanges.pipe(
@@ -70,17 +77,18 @@ export class CreateExpenseComponent implements OnInit {
   }
 
   public handleCreateExpense(): void {
-    if (this.selectedLabel) {
-      this.insertExpense(this.selectedLabel.id);
+    const selectedLabel = this.selectedLabel();
+    if (selectedLabel) {
+      this.insertExpense(selectedLabel.id);
     }
   }
 
   public selectLabel(label: Label): void {
-    this.selectedLabel = label;
+    this.selectedLabel.set(label);
   }
 
   public clearSelectedLabel(): void {
-    this.selectedLabel = null;
+    this.selectedLabel.set(null);
   }
 
   public displayLabel(label: Label): string {
@@ -89,31 +97,39 @@ export class CreateExpenseComponent implements OnInit {
 
   public canCreateExpense(): boolean {
     return (
-      this.expenseToCreate.amount > 0 &&
-      this.selectedLabel !== null &&
+      this.expenseToCreate().amount > 0 &&
+      this.selectedLabel() !== null &&
       this.dateFormControl.value !== null
     );
   }
 
   private insertExpense(labelId: number): void {
     if (this.dateFormControl.value) {
-      this.expenseToCreate.labelId = labelId;
-
-      this.expenseToCreate.expenseDate = this.dateUtilsService.formatDateWithOffsetToUtc(
+      const expenseToCreate = new InsertExpensePayload();
+      expenseToCreate.amount = this.expenseToCreate().amount;
+      expenseToCreate.labelId = labelId;
+      expenseToCreate.expenseDate = this.dateUtilsService.formatDateWithOffsetToUtc(
         new Date(Date.parse(this.dateFormControl.value))
       );
 
-      this.expenseService.addExpense(this.expenseToCreate).subscribe({
-        next: (createdExpense) => {
-          this.insertedExpenseEvent.emit(createdExpense);
-          this.expenseToCreate.amount = 0;
-          this.clearSelectedLabel();
-          this.labelControl.reset();
-        },
-        error: (error) =>
-          this.errorHandlerService.handleError(error, this.ERROR_CREATING_EXPENSE_MESSAGE)
-      });
+      this.expenseService
+        .addExpense(expenseToCreate)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (createdExpense) => {
+            this.insertedExpenseEvent.emit(createdExpense);
+            this.expenseToCreate.update((expense) => ({ ...expense, amount: 0 }));
+            this.clearSelectedLabel();
+            this.labelControl.reset();
+          },
+          error: (error) =>
+            this.errorHandlerService.handleError(error, this.ERROR_CREATING_EXPENSE_MESSAGE)
+        });
     }
+  }
+
+  public setExpenseAmount(amount: number): void {
+    this.expenseToCreate.update((expense) => ({ ...expense, amount }));
   }
 
   private filterLabels(value: string): Label[] {

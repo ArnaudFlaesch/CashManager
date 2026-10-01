@@ -7,14 +7,25 @@
       <h1 id="login-page-title">CashManager</h1>
     </div>
     <div id="login-form">
-      <input id="inputUsername" placeholder="Username" [(ngModel)]="inputUsername" />
+      <input
+        id="inputUsername"
+        placeholder="Username"
+        [ngModel]="inputUsername()"
+        (ngModelChange)="inputUsername.set($event)"
+      />
 
-      <input id="inputPassword" placeholder="Password" [(ngModel)]="inputPassword" type="password" />
+      <input
+        id="inputPassword"
+        placeholder="Password"
+        [ngModel]="inputPassword()"
+        (ngModelChange)="inputPassword.set($event)"
+        type="password"
+      />
 
       <button
         mat-raised-button
         id="loginButton"
-        [disabled]="!this.inputUsername || !inputPassword || isLoading()"
+        [disabled]="!inputUsername() || !inputPassword() || isLoading()"
         (click)="handleLogin()"
         color="primary"
       >

@@ -3,11 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   model,
   OnInit,
   signal
 } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatDatepicker,
@@ -92,6 +94,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   private readonly labelService = inject(LabelService);
   private readonly expenseService = inject(ExpenseService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     const startIntervalDate = this.currentSelectedMonth();
@@ -101,16 +104,19 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   public deleteLabel(labelId: number): void {
-    this.labelService.deleteLabel(labelId).subscribe({
-      next: () => {
-        this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
-        this.expenses.update((expenses) =>
-          expenses.filter((expense) => expense.labelId !== labelId)
-        );
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
-    });
+    this.labelService
+      .deleteLabel(labelId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
+          this.expenses.update((expenses) =>
+            expenses.filter((expense) => expense.labelId !== labelId)
+          );
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
+      });
   }
 
   public handleExpenseCreation(newExpense: Expense): void {
@@ -127,11 +133,14 @@ export class ExpenseListByMonthComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === "validate") {
-        this.deleteExpense(expenseId);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result === "validate") {
+          this.deleteExpense(expenseId);
+        }
+      });
   }
 
   public getLabelFromId(labelId: number): Label | undefined {
@@ -175,10 +184,13 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   private deleteExpense(expenseId: number): void {
-    this.expenseService.deleteExpense(expenseId).subscribe({
-      next: () =>
-        this.expenses.update((expenses) => expenses.filter((expense) => expense.id !== expenseId))
-    });
+    this.expenseService
+      .deleteExpense(expenseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () =>
+          this.expenses.update((expenses) => expenses.filter((expense) => expense.id !== expenseId))
+      });
   }
 
   private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
@@ -198,12 +210,15 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   private getExpenses(startIntervalDate: Date, endIntervalDate: Date): void {
-    this.expenseService.getExpensesAtMonth(startIntervalDate, endIntervalDate).subscribe({
-      next: (expenses) => {
-        this.expenses.set(expenses);
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(error, this.ERROR_GETTING_EXPENSES)
-    });
+    this.expenseService
+      .getExpensesAtMonth(startIntervalDate, endIntervalDate)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (expenses) => {
+          this.expenses.set(expenses);
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorHandlerService.handleError(error, this.ERROR_GETTING_EXPENSES)
+      });
   }
 }

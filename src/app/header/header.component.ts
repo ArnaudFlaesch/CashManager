@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { ImportConfigModalComponent } from "../modals/import-config-modal/import-config-modal.component";
@@ -41,6 +42,7 @@ export class HeaderComponent implements OnInit {
   public readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
   private readonly ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly configService = inject(ConfigService);
@@ -52,19 +54,22 @@ export class HeaderComponent implements OnInit {
   }
 
   public downloadConfig(): void {
-    this.configService.exportConfig().subscribe({
-      next: (response) => {
-        console.info("Configuration exportée");
-        const url = window.URL.createObjectURL(new Blob([response]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "cashManagerData.json");
-        document.body.appendChild(link);
-        link.click();
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
-    });
+    this.configService
+      .exportConfig()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          console.info("Configuration exportée");
+          const url = window.URL.createObjectURL(new Blob([response]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "cashManagerData.json");
+          document.body.appendChild(link);
+          link.click();
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorHandlerService.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
+      });
   }
 
   public openImportConfigModal(): void {

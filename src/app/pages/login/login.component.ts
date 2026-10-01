@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "@services/auth.service/auth.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
@@ -17,28 +18,32 @@ import { FormsModule } from "@angular/forms";
 })
 export class LoginComponent {
   public isLoading = signal(false);
-  public inputUsername = "";
-  public inputPassword = "";
+  public inputUsername = signal("");
+  public inputPassword = signal("");
   public readonly authService = inject(AuthService);
 
   private readonly ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   public handleLogin(): void {
-    if (this.inputUsername && this.inputPassword) {
+    if (this.inputUsername() && this.inputPassword()) {
       this.isLoading.set(true);
-      this.authService.login(this.inputUsername, this.inputPassword).subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          this.router.navigate(["home"]).catch((error) => console.log(error.message));
-        },
-        error: (error: HttpErrorResponse) => {
-          this.isLoading.set(false);
-          this.errorHandlerService.handleLoginError(error, this.ERROR_AUTHENTICATING_USER);
-        },
-        complete: () => this.isLoading.set(false)
-      });
+      this.authService
+        .login(this.inputUsername(), this.inputPassword())
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.isLoading.set(false);
+            this.router.navigate(["home"]).catch((error) => console.log(error.message));
+          },
+          error: (error: HttpErrorResponse) => {
+            this.isLoading.set(false);
+            this.errorHandlerService.handleLoginError(error, this.ERROR_AUTHENTICATING_USER);
+          },
+          complete: () => this.isLoading.set(false)
+        });
     } else {
       this.isLoading.set(false);
     }

@@ -2,7 +2,16 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Label } from "@model/Label";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { LabelService } from "@services/label.service/label.service";
-import { ChangeDetectionStrategy, Component, inject, OnInit, output, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  output,
+  signal
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LabelListComponent } from "./label-list/label-list.component";
 import { MatButton } from "@angular/material/button";
@@ -42,6 +51,7 @@ export class HomeComponent implements OnInit {
   private readonly ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
   private readonly labelService = inject(LabelService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this.getLabels();
@@ -49,15 +59,18 @@ export class HomeComponent implements OnInit {
 
   public handleCreateLabel(): void {
     if (this.labelControl.value) {
-      this.labelService.addLabel(this.labelControl.value).subscribe({
-        next: (insertedLabel) => {
-          this.labels.update((labels) => [...labels, insertedLabel]);
-          this.insertedLabelEvent.emit(insertedLabel);
-          this.labelControl.setValue(null);
-        },
-        error: (error) =>
-          this.errorHandlerService.handleError(error.message, this.ERROR_CREATING_LABEL_MESSAGE)
-      });
+      this.labelService
+        .addLabel(this.labelControl.value)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (insertedLabel) => {
+            this.labels.update((labels) => [...labels, insertedLabel]);
+            this.insertedLabelEvent.emit(insertedLabel);
+            this.labelControl.setValue(null);
+          },
+          error: (error) =>
+            this.errorHandlerService.handleError(error.message, this.ERROR_CREATING_LABEL_MESSAGE)
+        });
     }
   }
 
@@ -66,12 +79,15 @@ export class HomeComponent implements OnInit {
   }
 
   private getLabels(): void {
-    this.labelService.getLabels().subscribe({
-      next: (labels) => {
-        this.labels.set(labels);
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)
-    });
+    this.labelService
+      .getLabels()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (labels) => {
+          this.labels.set(labels);
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorHandlerService.handleError(error, this.ERROR_GETTING_LABELS)
+      });
   }
 }

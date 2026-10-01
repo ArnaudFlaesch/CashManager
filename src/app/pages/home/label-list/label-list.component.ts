@@ -1,6 +1,14 @@
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { LabelService } from "@services/label.service/label.service";
-import { ChangeDetectionStrategy, Component, inject, model, output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  model,
+  output
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Label } from "@model/Label";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-modal.component";
@@ -23,6 +31,7 @@ export class LabelListComponent {
   private readonly labelService = inject(LabelService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
   public openDeleteLabelDialog(labelId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -34,20 +43,26 @@ export class LabelListComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === "validate") {
-        this.deleteLabel(labelId);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result === "validate") {
+          this.deleteLabel(labelId);
+        }
+      });
   }
 
   private deleteLabel(labelId: number): void {
-    this.labelService.deleteLabel(labelId).subscribe({
-      next: () => {
-        this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
-        this.labelDeletedEvent.emit(labelId);
-      },
-      error: (error) => this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
-    });
+    this.labelService
+      .deleteLabel(labelId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
+          this.labelDeletedEvent.emit(labelId);
+        },
+        error: (error) => this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
+      });
   }
 }
