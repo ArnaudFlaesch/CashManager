@@ -1,12 +1,20 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { ImportConfigModalComponent } from "../modals/import-config-modal/import-config-modal.component";
 import { AuthService } from "@services/auth.service/auth.service";
 import { ConfigService } from "@services/config.service/config.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormField, form } from "@angular/forms/signals";
 import { ThemeService } from "@services/theme.service/theme.service";
 import { MatDivider } from "@angular/material/divider";
 import { MatSlideToggle } from "@angular/material/slide-toggle";
@@ -31,16 +39,17 @@ import { MatMiniFabButton } from "@angular/material/button";
     MatMenu,
     MatMenuItem,
     MatSlideToggle,
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatDivider
   ]
 })
 export class HeaderComponent implements OnInit {
-  public toggleControl = new FormControl(false);
+  public readonly themeModel = signal({ darkMode: false });
+  public readonly themeForm = form(this.themeModel);
   public readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
   private readonly ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly configService = inject(ConfigService);
@@ -48,23 +57,26 @@ export class HeaderComponent implements OnInit {
   private readonly errorHandlerService = inject(ErrorHandlerService);
 
   public ngOnInit(): void {
-    this.toggleControl.setValue(this.themeService.isPreferredThemeDarkMode());
+    this.themeModel.update(() => ({ darkMode: this.themeService.isPreferredThemeDarkMode() }));
   }
 
   public downloadConfig(): void {
-    this.configService.exportConfig().subscribe({
-      next: (response) => {
-        console.info("Configuration exportée");
-        const url = window.URL.createObjectURL(new Blob([response]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "cashManagerData.json");
-        document.body.appendChild(link);
-        link.click();
-      },
-      error: (error: HttpErrorResponse) =>
-        this.errorHandlerService.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
-    });
+    this.configService
+      .exportConfig()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          console.info("Configuration exportée");
+          const url = window.URL.createObjectURL(new Blob([response]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "cashManagerData.json");
+          document.body.appendChild(link);
+          link.click();
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorHandlerService.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
+      });
   }
 
   public openImportConfigModal(): void {

@@ -34,8 +34,7 @@ describe("LoginComponent", () => {
   });
 
   it("Should prevent login", () => {
-    expect(component.inputUsername).toBe("");
-    expect(component.inputPassword).toBe("");
+    expect(component.loginModel()).toEqual({ username: "", password: "" });
     component.handleLogin();
   });
 
@@ -48,8 +47,7 @@ describe("LoginComponent", () => {
       roles: ["ROLE_ADMIN"],
       tokenType: "Bearer"
     };
-    component.inputUsername = "username";
-    component.inputPassword = "password";
+    component.loginModel.set({ username: "username", password: "password" });
     component.handleLogin();
     const request = httpTestingController.expectOne(environment.backend_url + "/auth/login");
     request.flush(userData);

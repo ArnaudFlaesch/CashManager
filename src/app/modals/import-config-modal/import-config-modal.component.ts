@@ -1,5 +1,6 @@
 import { ErrorHandlerService } from "@services/error.handler.service";
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
   MatDialogActions,
   MatDialogClose,
@@ -19,30 +20,35 @@ import { MatButton } from "@angular/material/button";
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {
-  public fileToUpload: File | null = null;
+  public fileToUpload = signal<File | null>(null);
 
   private readonly configService = inject(ConfigService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
   private ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public selectFile(event: any): void {
     if (event.target.files?.[0]) {
-      this.fileToUpload = event.target.files[0];
+      this.fileToUpload.set(event.target.files[0]);
     }
   }
 
   public upload(): void {
-    if (this.fileToUpload) {
-      this.configService.importConfig(this.fileToUpload).subscribe({
-        error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(error, this.ERROR_IMPORT_CONFIGURATION),
-        complete: () => {
-          this.dialogRef.close();
-          window.location.reload();
-        }
-      });
+    const fileToUpload = this.fileToUpload();
+    if (fileToUpload) {
+      this.configService
+        .importConfig(fileToUpload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          error: (error: HttpErrorResponse) =>
+            this.errorHandlerService.handleError(error, this.ERROR_IMPORT_CONFIGURATION),
+          complete: () => {
+            this.dialogRef.close();
+            window.location.reload();
+          }
+        });
     }
   }
 }

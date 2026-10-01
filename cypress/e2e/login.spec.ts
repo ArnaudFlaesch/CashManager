@@ -22,14 +22,12 @@ describe("Login tests", () => {
     cy.get("#loginButton").should("be.enabled").click();
     cy.wait("@login").then((request: Interception) => {
       expect(request.response.statusCode).to.equal(200);
-      cy.url().should("be.equal", `${Cypress.config("baseUrl")}home`);
-      cy.get("#cashmanager-menu").click();
-      cy.get("#logoutButton").click();
-      cy.get("#login-page-title")
-        .should("have.text", "CashManager")
-        .url()
-        .should("be.equal", `${Cypress.config("baseUrl")}login`);
-      expect(localStorage.getItem("user")).to.equal(null);
     });
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}home`);
+    cy.get("#cashmanager-menu").click();
+    cy.get("#logoutButton").click();
+    cy.get("#login-page-title").should("have.text", "CashManager");
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}login`);
+    cy.window().its("localStorage").invoke("getItem", "user").should("be.null");
   });
 });

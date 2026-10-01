@@ -64,7 +64,7 @@ describe("HomeComponent", () => {
     getLabelsRequest.flush(labelData);
     expect(component.labels()).toEqual(labelData);
 
-    component.labelControl.setValue("New label");
+    component.labelModel.update((model) => ({ ...model, label: "New label" }));
     component.handleCreateLabel();
     const createLabelRequest = httpTestingController.expectOne(
       environment.backend_url + labelPath + "addLabel"

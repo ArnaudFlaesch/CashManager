@@ -2,19 +2,17 @@
   <mat-form-field appearance="fill" id="expenseAmount-container">
     <input
       id="expenseAmount"
-      name="amount"
       type="number"
-      [min]="0"
       step=".01"
       matInput
-      [(ngModel)]="this.expenseToCreate.amount"
+      [formField]="expenseForm.amount"
       placeholder="Saisissez le montant de la dépense"
     />
   </mat-form-field>
 
   <mat-form-field appearance="fill" id="expenseDate-container">
     <input
-      [formControl]="dateFormControl"
+      [formField]="expenseForm.date"
       matInput
       id="expenseDate"
       [matDatepicker]="picker"
@@ -23,7 +21,7 @@
     />
     <mat-hint>DD/MM/YYYY</mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <mat-datepicker #picker />
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -34,17 +32,13 @@
       placeholder="Renseignez un label"
       aria-label="Label"
       matInput
-      (change)="clearSelectedLabel()"
-      [formControl]="labelControl"
+      (input)="clearSelectedLabel()"
+      [formField]="expenseForm.labelQuery"
       [matAutocomplete]="auto"
     />
 
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      (optionSelected)="selectLabel($event.option.value)"
-      [displayWith]="displayLabel"
-    >
-      @for (option of filteredOptions | async; track option) {
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLabel($event.option.value)">
+      @for (option of filteredOptions(); track option) {
         <mat-option class="label-autocomplete-option" [value]="option">
           {{ option.label }}
         </mat-option>

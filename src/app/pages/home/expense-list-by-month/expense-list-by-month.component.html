@@ -4,14 +4,14 @@
   </button>
   <mat-form-field appearance="fill">
     <mat-label>Sélectionnez un mois</mat-label>
-    <input matInput [matDatepicker]="picker" [formControl]="selectedMonthFormControl" />
+    <input matInput [matDatepicker]="picker" [formField]="selectedMonthForm.selectedMonth" />
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker
       #picker
       startView="multi-year"
       (monthSelected)="setMonthAndYear($event, picker)"
-      [startAt]="this.selectedMonthFormControl.value"
-    ></mat-datepicker>
+      [startAt]="this.selectedMonthModel().selectedMonth"
+    />
   </mat-form-field>
 
   <button (click)="selectNextMonth()" mat-icon-button>
@@ -46,7 +46,4 @@
   </div>
 </div>
 
-<app-create-expense
-  (insertedExpenseEvent)="handleExpenseCreation($event)"
-  [labels]="this.labels()"
-></app-create-expense>
+<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="this.labels()" />
