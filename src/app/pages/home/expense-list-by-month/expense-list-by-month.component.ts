@@ -10,7 +10,7 @@ import {
   signal
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormField, form } from "@angular/forms/signals";
 import {
   MatDatepicker,
   MatDatepickerInput,
@@ -48,8 +48,7 @@ import { BaseChartDirective } from "ng2-charts";
     MatLabel,
     MatInput,
     MatDatepickerInput,
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatDatepickerToggle,
     MatSuffix,
     MatDatepicker,
@@ -75,7 +74,8 @@ export class ExpenseListByMonthComponent implements OnInit {
       })
     };
   });
-  public selectedMonthFormControl = new FormControl(startOfMonth(new Date()));
+  public readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
+  public readonly selectedMonthForm = form(this.selectedMonthModel);
 
   public barChartOptions: ChartConfiguration["options"] = {
     responsive: true,
@@ -179,7 +179,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   private selectMonth(selectedMonth: Date): void {
-    this.selectedMonthFormControl.setValue(selectedMonth);
+    this.selectedMonthModel.update((model) => ({ ...model, selectedMonth }));
     this.handleSelectExpensesForMonth(selectedMonth);
   }
 

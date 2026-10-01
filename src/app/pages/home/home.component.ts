@@ -12,7 +12,7 @@ import {
   signal
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormField, form } from "@angular/forms/signals";
 import { LabelListComponent } from "./label-list/label-list.component";
 import { MatButton } from "@angular/material/button";
 import { MatInput } from "@angular/material/input";
@@ -33,17 +33,17 @@ import { HeaderComponent } from "../../header/header.component";
     MatTab,
     ExpenseListByMonthComponent,
     TotalExpenseByMonthComponent,
-    FormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatInput,
-    ReactiveFormsModule,
     MatButton,
     LabelListComponent
   ]
 })
 export class HomeComponent implements OnInit {
-  public labelControl = new FormControl<string>("");
+  public readonly labelModel = signal({ label: "" });
+  public readonly labelForm = form(this.labelModel);
   public labels = signal<Label[]>([]);
   protected readonly insertedLabelEvent = output<Label>();
 
@@ -58,15 +58,16 @@ export class HomeComponent implements OnInit {
   }
 
   public handleCreateLabel(): void {
-    if (this.labelControl.value) {
+    const label = this.labelModel().label;
+    if (label) {
       this.labelService
-        .addLabel(this.labelControl.value)
+        .addLabel(label)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (insertedLabel) => {
             this.labels.update((labels) => [...labels, insertedLabel]);
             this.insertedLabelEvent.emit(insertedLabel);
-            this.labelControl.setValue(null);
+            this.labelModel.update((model) => ({ ...model, label: "" }));
           },
           error: (error) =>
             this.errorHandlerService.handleError(error.message, this.ERROR_CREATING_LABEL_MESSAGE)

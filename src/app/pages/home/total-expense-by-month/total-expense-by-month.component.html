@@ -1,6 +1,6 @@
 <mat-form-field>
   <mat-label>Étiquettes</mat-label>
-  <mat-select [formControl]="labelControl">
+  <mat-select [formField]="labelForm.labelId" (selectionChange)="selectLabel($event.value)">
     @for (label of this.labels(); track label) {
       <mat-option [value]="label.id">{{ label.label }}</mat-option>
     }

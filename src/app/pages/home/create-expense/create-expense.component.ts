@@ -1,16 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   input,
-  OnInit,
   output,
   signal
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { map, Observable, of, startWith } from "rxjs";
+import { FormField, form, min } from "@angular/forms/signals";
 
 import { Expense } from "@model/Expense";
 import { DateUtilsService } from "../../../utils/date.utils.service";
@@ -20,7 +19,6 @@ import { ErrorHandlerService } from "@services/error.handler.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
 import { MatButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
-import { AsyncPipe } from "@angular/common";
 import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import {
   MatDatepicker,
@@ -37,10 +35,9 @@ import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/fo
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormField,
-    FormsModule,
+    FormField,
     MatInput,
     MatDatepickerInput,
-    ReactiveFormsModule,
     MatHint,
     MatDatepickerToggle,
     MatSuffix,
@@ -49,16 +46,25 @@ import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/fo
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
-    MatButton,
-    AsyncPipe
+    MatButton
   ]
 })
-export class CreateExpenseComponent implements OnInit {
-  public expenseToCreate = signal(new InsertExpensePayload());
-  public filteredOptions: Observable<Label[]> = of([]);
+export class CreateExpenseComponent {
+  public readonly expenseModel = signal({
+    amount: 0,
+    date: null as string | null,
+    labelQuery: ""
+  });
+  public readonly expenseForm = form(this.expenseModel, (schema) => {
+    min(schema.amount, 0);
+  });
+  public readonly filteredOptions = computed(() => {
+    const filterValue = this.expenseModel().labelQuery.toLowerCase();
+    return filterValue
+      ? this.labels().filter((label) => label.label.toLowerCase().includes(filterValue))
+      : this.labels().slice();
+  });
   public readonly labels = input<Label[]>([]);
-  public dateFormControl = new FormControl<string | null>(null);
-  protected labelControl = new FormControl<Label | string>("");
   protected readonly insertedExpenseEvent = output<Expense>();
 
   private readonly selectedLabel = signal<Label | null>(null);
@@ -67,14 +73,6 @@ export class CreateExpenseComponent implements OnInit {
   private readonly dateUtilsService = inject(DateUtilsService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly destroyRef = inject(DestroyRef);
-
-  public ngOnInit(): void {
-    this.filteredOptions = this.labelControl.valueChanges.pipe(
-      startWith(""),
-      map((value) => (typeof value === "string" ? value : "")),
-      map((name) => (name ? this.filterLabels(name) : this.labels().slice()))
-    );
-  }
 
   public handleCreateExpense(): void {
     const selectedLabel = this.selectedLabel();
@@ -85,6 +83,7 @@ export class CreateExpenseComponent implements OnInit {
 
   public selectLabel(label: Label): void {
     this.selectedLabel.set(label);
+    this.expenseModel.update((model) => ({ ...model, labelQuery: label.label }));
   }
 
   public clearSelectedLabel(): void {
@@ -97,19 +96,19 @@ export class CreateExpenseComponent implements OnInit {
 
   public canCreateExpense(): boolean {
     return (
-      this.expenseToCreate().amount > 0 &&
+      this.expenseModel().amount > 0 &&
       this.selectedLabel() !== null &&
-      this.dateFormControl.value !== null
+      this.expenseModel().date !== null
     );
   }
-
   private insertExpense(labelId: number): void {
-    if (this.dateFormControl.value) {
+    const { amount, date } = this.expenseModel();
+    if (date) {
       const expenseToCreate = new InsertExpensePayload();
-      expenseToCreate.amount = this.expenseToCreate().amount;
+      expenseToCreate.amount = amount;
       expenseToCreate.labelId = labelId;
       expenseToCreate.expenseDate = this.dateUtilsService.formatDateWithOffsetToUtc(
-        new Date(Date.parse(this.dateFormControl.value))
+        new Date(Date.parse(date))
       );
 
       this.expenseService
@@ -118,22 +117,13 @@ export class CreateExpenseComponent implements OnInit {
         .subscribe({
           next: (createdExpense) => {
             this.insertedExpenseEvent.emit(createdExpense);
-            this.expenseToCreate.update((expense) => ({ ...expense, amount: 0 }));
+            this.expenseModel.update((model) => ({ ...model, amount: 0 }));
             this.clearSelectedLabel();
-            this.labelControl.reset();
+            this.expenseModel.update((model) => ({ ...model, labelQuery: "" }));
           },
           error: (error) =>
             this.errorHandlerService.handleError(error, this.ERROR_CREATING_EXPENSE_MESSAGE)
         });
     }
-  }
-
-  public setExpenseAmount(amount: number): void {
-    this.expenseToCreate.update((expense) => ({ ...expense, amount }));
-  }
-
-  private filterLabels(value: string): Label[] {
-    const filterValue = value.toLowerCase();
-    return this.labels().filter((label) => label.label.toLowerCase().includes(filterValue));
   }
 }

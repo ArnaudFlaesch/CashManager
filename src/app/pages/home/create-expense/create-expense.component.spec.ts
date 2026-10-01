@@ -2,7 +2,6 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { environment } from "../../../../environments/environment";
-import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
 import { AuthService } from "@services/auth.service/auth.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
@@ -43,9 +42,11 @@ describe("CreateExpenseComponent", () => {
     const newLabelName = "Vacances";
     expect(component.canCreateExpense()).toEqual(false);
     component.selectLabel({ id: 1, label: newLabelName, userId: 1 });
-    component.dateFormControl.setValue("2022-3-5");
-    component.expenseToCreate = new InsertExpensePayload();
-    component.expenseToCreate.amount = 23;
+    component.expenseModel.update((model) => ({
+      ...model,
+      date: "2022-3-5",
+      amount: 23
+    }));
 
     expect(component.canCreateExpense()).toEqual(true);
     component.handleCreateExpense();
@@ -55,8 +56,8 @@ describe("CreateExpenseComponent", () => {
     );
     getExpensesRequest.flush({
       id: 1,
-      amount: component.expenseToCreate.amount,
-      expenseDate: component.expenseToCreate.expenseDate,
+      amount: component.expenseModel().amount,
+      expenseDate: new Date("2022-03-05"),
       labelId: 1
     });
   });

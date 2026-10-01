@@ -8,7 +8,7 @@ import {
   signal
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormField, form } from "@angular/forms/signals";
 import { MatIconButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
@@ -31,8 +31,7 @@ import { Label } from "@model/Label";
     MatFormField,
     MatLabel,
     MatSelect,
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatOption,
     MatIconButton,
     MatIcon
@@ -50,45 +49,35 @@ export class TotalExpenseByMonthComponent implements OnInit {
       }
     }
   };
-  public labelControl = new FormControl<number>(this.noLabelIdSelected);
-  private readonly selectedLabelId = signal(this.noLabelIdSelected);
+  public readonly labelModel = signal({ labelId: this.noLabelIdSelected });
+  public readonly labelForm = form(this.labelModel);
   private readonly expenseService = inject(ExpenseService);
   private readonly destroyRef = inject(DestroyRef);
-
-  public constructor() {
-    this.labelControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((newValue) => {
-        this.selectLabel(newValue ?? this.noLabelIdSelected);
-      });
-  }
 
   public ngOnInit(): void {
     this.getTotalExpensesByMonth();
   }
 
   public resetSelectedLabel(): void {
-    this.labelControl.setValue(this.noLabelIdSelected);
+    this.selectLabel(this.noLabelIdSelected);
   }
 
   public selectLabel(labelId: number): void {
-    if (this.selectedLabelId() !== labelId) {
-      this.selectedLabelId.set(labelId);
-      if (this.selectedLabelId() === this.noLabelIdSelected) {
-        this.getTotalExpensesByMonth();
-      } else {
-        this.expenseService
-          .getTotalExpensesByMonthByLabelId(this.selectedLabelId())
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (data) => this.refreshChart(data)
-          });
-      }
+    this.labelModel.update((model) => ({ ...model, labelId }));
+    if (labelId === this.noLabelIdSelected) {
+      this.getTotalExpensesByMonth();
+    } else {
+      this.expenseService
+        .getTotalExpensesByMonthByLabelId(labelId)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (data) => this.refreshChart(data)
+        });
     }
   }
 
   public isOneLabelSelected(): boolean {
-    return this.selectedLabelId() !== this.noLabelIdSelected;
+    return this.labelModel().labelId !== this.noLabelIdSelected;
   }
 
   private getTotalExpensesByMonth(): void {

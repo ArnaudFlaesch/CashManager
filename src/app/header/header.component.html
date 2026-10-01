@@ -27,7 +27,7 @@
     <div mat-menu-item>
       <div id="toggle-mode-container">
         <mat-icon>light_mode</mat-icon>
-        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formControl]="toggleControl"> </mat-slide-toggle>
+        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formField]="themeForm.darkMode" />
         <mat-icon>dark_mode</mat-icon>
       </div>
     </div>
