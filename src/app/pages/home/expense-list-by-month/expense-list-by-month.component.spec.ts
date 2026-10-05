@@ -14,7 +14,8 @@ import { LabelService } from "@services/label.service/label.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
 import { provideHttpClient } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
-import { routes } from "../../../../main";
+import { routes } from "../../../app.routes";
+import { AuthGuard } from "../../../guards/auth.guard";
 
 describe.skip("ExpenseListByMonthComponent", () => {
   let component: ExpenseListByMonthComponent;
@@ -31,6 +32,7 @@ describe.skip("ExpenseListByMonthComponent", () => {
     await TestBed.configureTestingModule({
       imports: [ExpenseListByMonthComponent],
       providers: [
+        AuthGuard,
         ErrorHandlerService,
         { provide: MatDialogRef, useValue: {} },
         DateUtilsService,

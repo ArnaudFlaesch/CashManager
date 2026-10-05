@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
   public readonly labelModel = signal({ label: "" });
   public readonly labelForm = form(this.labelModel);
   public labels = signal<Label[]>([]);
-  protected readonly insertedLabelEvent = output<Label>();
+  public readonly insertedLabelEvent = output<Label>();
 
   private readonly ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
   private readonly ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
@@ -69,8 +69,8 @@ export class HomeComponent implements OnInit {
             this.insertedLabelEvent.emit(insertedLabel);
             this.labelModel.update((model) => ({ ...model, label: "" }));
           },
-          error: (error) =>
-            this.errorHandlerService.handleError(error.message, this.ERROR_CREATING_LABEL_MESSAGE)
+          error: (error: HttpErrorResponse) =>
+            this.errorHandlerService.handleError(error, this.ERROR_CREATING_LABEL_MESSAGE)
         });
     }
   }
