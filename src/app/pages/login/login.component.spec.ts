@@ -6,7 +6,8 @@ import { AuthService } from "@services/auth.service/auth.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { LoginComponent } from "./login.component";
 import { provideRouter } from "@angular/router";
-import { routes } from "../../../main";
+import { routes } from "../../app.routes";
+import { AuthGuard } from "../../guards/auth.guard";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -16,6 +17,7 @@ describe("LoginComponent", () => {
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
+        AuthGuard,
         AuthService,
         ErrorHandlerService,
         provideRouter(routes),

@@ -10,7 +10,7 @@ import { TotalExpenseByMonthComponent } from "./total-expense-by-month.component
 import { ComponentRef } from "@angular/core";
 import { provideHttpClient } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
-import { routes } from "../../../../main";
+import { routes } from "../../../app.routes";
 
 import { AuthGuard } from "../../../guards/auth.guard";
 

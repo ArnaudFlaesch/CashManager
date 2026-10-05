@@ -8,7 +8,7 @@ import { ErrorHandlerService } from "@services/error.handler.service";
 import { ThemeService } from "@services/theme.service/theme.service";
 import { HeaderComponent } from "./header.component";
 import { provideRouter } from "@angular/router";
-import { routes } from "../../main";
+import { routes } from "../app.routes";
 import { provideHttpClient } from "@angular/common/http";
 
 describe("HeaderComponent", () => {
