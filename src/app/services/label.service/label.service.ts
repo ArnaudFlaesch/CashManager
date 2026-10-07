@@ -7,7 +7,7 @@ import authorizationBearer from "../authorizationBearer/authorizationBearer";
 
 @Injectable()
 export class LabelService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   public getLabels(): Observable<Label[]> {
     return this.http.get<Label[]>(`${environment.backend_url}/label/`, {

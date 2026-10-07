@@ -130,10 +130,8 @@ export class NotificationsComponent implements OnInit {
     return notificationsFromDatabase.map((notification) => {
       return {
         ...notification,
-        ...{
-          notificationDateToDisplay: this.computeDateToDisplay(notification.notificationDate),
-          notificationTypeToDisplay: this.computeTypeToDisplay(notification.notificationType)
-        }
+        notificationDateToDisplay: this.computeDateToDisplay(notification.notificationDate),
+        notificationTypeToDisplay: this.computeTypeToDisplay(notification.notificationType)
       };
     });
   }

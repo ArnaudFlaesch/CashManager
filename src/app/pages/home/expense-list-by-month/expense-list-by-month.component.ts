@@ -63,13 +63,13 @@ export class ExpenseListByMonthComponent implements OnInit {
     return {
       labels: [this.EXPENSES_CHART_LABEL],
       datasets: Object.keys(expensesByLabel).map((labelId) => {
-        const labelName = this.labels().filter((label) => label.id.toString() === labelId)[0];
+        const labelName = this.labels().find((label) => label.id.toString() === labelId);
         if (!labelId || labelName === undefined) {
           return { label: "", data: [] };
         }
         return {
           label: labelName.label,
-          data: [expensesByLabel[labelId].reduce((total, amount) => total + amount)]
+          data: [expensesByLabel[labelId].reduce((total, amount) => total + amount, 0)]
         };
       })
     };
@@ -148,7 +148,7 @@ export class ExpenseListByMonthComponent implements OnInit {
   }
 
   public getTotalForMonth(): number {
-    return parseFloat(
+    return Number.parseFloat(
       this.expenses()
         .map((expense) => expense.amount)
         .reduce((total, amount) => total + amount, 0)

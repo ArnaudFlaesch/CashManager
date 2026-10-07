@@ -5,12 +5,12 @@ import { Router } from "@angular/router";
 
 @Injectable()
 export class ErrorHandlerService {
-  private router = inject(Router);
-  private snackbar = inject(MatSnackBar);
+  private readonly router = inject(Router);
+  private readonly snackbar = inject(MatSnackBar);
 
-  private ERROR_UNAUTHORIZED_CODE =
+  private readonly ERROR_UNAUTHORIZED_CODE =
     "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
-  private ERROR_FORBIDDEN_CODE =
+  private readonly ERROR_FORBIDDEN_CODE =
     "Vous n'avez pas les droits nécessaires pour effectuer cette opération.";
 
   public handleError(error: HttpErrorResponse, messageToDisplay: string): void {

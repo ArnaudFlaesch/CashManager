@@ -16,9 +16,9 @@ interface IJwt {
 
 @Injectable()
 export class AuthService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  private headers = {
+  private readonly headers = {
     "Content-type": "application/json"
   };
 

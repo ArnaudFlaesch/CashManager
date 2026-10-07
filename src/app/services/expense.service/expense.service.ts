@@ -10,9 +10,9 @@ import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
 
 @Injectable()
 export class ExpenseService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  private dateFormat = "yyyy-MM-dd";
+  private readonly dateFormat = "yyyy-MM-dd";
 
   public getExpensesAtMonth(startIntervalDate: Date, endIntervalDate: Date): Observable<Expense[]> {
     return this.http.get<Expense[]>(`${environment.backend_url}/expense/`, {

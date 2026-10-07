@@ -26,7 +26,7 @@ export class ImportConfigModalComponent {
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
-  private ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
+  private readonly ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public selectFile(event: any): void {
