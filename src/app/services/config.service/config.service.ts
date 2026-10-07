@@ -6,7 +6,7 @@ import authorizationBearer from "../authorizationBearer/authorizationBearer";
 
 @Injectable()
 export class ConfigService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   public exportConfig(): Observable<BlobPart> {
     return this.http.get(`${environment.backend_url}/cashManagerConfig/export`, {

@@ -111,7 +111,7 @@ export class TotalExpenseByMonthComponent implements OnInit {
         },
         {
           label: "Moyenne",
-          data: Array(chartData.length).fill(average)
+          data: new Array(chartData.length).fill(average)
         }
       ]
     });

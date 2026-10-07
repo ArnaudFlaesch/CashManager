@@ -52,6 +52,7 @@ describe("LoginComponent", () => {
     component.loginModel.set({ username: "username", password: "password" });
     component.handleLogin();
     const request = httpTestingController.expectOne(environment.backend_url + "/auth/login");
+    expect(request.request.method).toBe("POST");
     request.flush(userData);
   });
 });

@@ -100,7 +100,7 @@ jobs:
       - name: Report coverage for Codacy
         if: always() && steps.application-tests.outcome == 'success'
         run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/CashManager/clover.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/CashManager/lcov.info
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
@@ -150,20 +150,11 @@ jobs:
 
       # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
       - name: Run Codacy Analysis CLI
-        uses: codacy/codacy-analysis-cli-action@v4.4
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          verbose: true
-          output: results.sarif
-          format: sarif
-          # Adjust severity of non-security issues
-          gh-code-scanning-compat: true
-          # Force 0 exit code to allow SARIF file generation
-          # This will handover control about PR rejection to the GitHub side
-          max-allowed-issues: 2147483647
-
-      # Upload the SARIF file generated in the previous step
-      - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: results.sarif
+        run: |
+          curl -Ls https://raw.githubusercontent.com/codacy/codacy-cli-v2/main/codacy-cli.sh -o codacy-cli
+          chmod +x codacy-cli
+          ./codacy-cli init --project-token ${{ secrets.CODACY_PROJECT_TOKEN }} --provider gh --organization ArnaudFlaesch --repository CashManager
+          ./codacy-cli config discover .
+          ./codacy-cli install
+          ./codacy-cli analyze --format sarif -o results.sarif
+          ./codacy-cli upload -s results.sarif -c ${{ github.sha }} -t ${{ secrets.CODACY_PROJECT_TOKEN }}

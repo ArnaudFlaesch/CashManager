@@ -7,9 +7,9 @@
       <h1 id="login-page-title">CashManager</h1>
     </div>
     <div id="login-form">
-      <input id="inputUsername" placeholder="Username" [formField]="loginForm.username" />
+      <input id="inputUsername" placeholder="Username" aria-label="Username" [formField]="loginForm.username" />
 
-      <input id="inputPassword" placeholder="Password" [formField]="loginForm.password" type="password" />
+      <input id="inputPassword" placeholder="Password" aria-label="Password" [formField]="loginForm.password" type="password" />
 
       <button
         mat-raised-button

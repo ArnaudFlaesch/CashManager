@@ -1,5 +1,6 @@
 <div id="create-expense-form">
   <mat-form-field appearance="fill" id="expenseAmount-container">
+    <mat-label>Montant</mat-label>
     <input
       id="expenseAmount"
       type="number"
@@ -7,16 +8,19 @@
       matInput
       [formField]="expenseForm.amount"
       placeholder="Saisissez le montant de la dépense"
+      aria-label="Montant"
     />
   </mat-form-field>
 
   <mat-form-field appearance="fill" id="expenseDate-container">
+    <mat-label>Date</mat-label>
     <input
       [formField]="expenseForm.date"
       matInput
       id="expenseDate"
       [matDatepicker]="picker"
       placeholder="Sélectionnez une date"
+      aria-label="Date"
       readonly
     />
     <mat-hint>DD/MM/YYYY</mat-hint>
