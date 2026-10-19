@@ -1,16 +1,14 @@
-<div id="header">
-  <app-header />
-</div>
+<app-header id="header" />
 
 <mat-tab-group>
   <mat-tab label="Affichage des dépenses par mois">
-    <app-expense-list-by-month [(labels)]="labels" />
+    <app-expense-list-by-month [labels]="labels.value()" />
   </mat-tab>
   <mat-tab label="Affichage du total par mois">
-    <app-total-expense-by-month [labels]="labels()" />
+    <app-total-expense-by-month [labels]="labels.value()" />
   </mat-tab>
   <mat-tab label="Affichage de la liste des labels">
-    <form id="create-label-form">
+    <form id="create-label-form" [formRoot]="labelForm">
       <mat-form-field appearance="fill">
         <mat-label>Étiquette</mat-label>
         <input
@@ -23,11 +21,11 @@
         />
       </mat-form-field>
 
-      <button id="create-label-button" type="button" mat-raised-button (click)="handleCreateLabel()">
+      <button id="create-label-button" type="submit" mat-raised-button [disabled]="labelForm().submitting()">
         Ajouter une étiquette
       </button>
     </form>
 
-    <app-label-list [(labels)]="labels" (labelDeletedEvent)="onDeleteLabel($event)" />
+    <app-label-list [labels]="labels.value()" (labelDeleted)="onDeleteLabel($event)" />
   </mat-tab>
 </mat-tab-group>

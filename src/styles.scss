@@ -1,53 +1,32 @@
 @use "@angular/material" as mat;
-@include mat.elevation-classes;
-@include mat.app-background;
 
-// Define a dark theme
-$dark-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: dark,
-      primary: mat.$red-palette
-    )
-  )
-);
-
-// Define a light theme
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette
-    )
-  )
-);
-
-html,
-body {
+html {
   height: 100%;
+  color-scheme: light;
 
-  // Light mode
-  --light-mode-background-color: #4e4945;
-
-  // Dark mode
-  --dark-mode-background-color: #282a33;
-
-  // Apply the light theme by default
-  @include mat.elevation-classes;
-  @include mat.app-background;
-  @include mat.button-color($light-theme);
+  @include mat.theme(
+    (
+      color: mat.$azure-palette,
+      typography: Roboto,
+      density: 0
+    )
+  );
 }
 
 body {
+  height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: var(--light-mode-background-color);
+  font: var(--mat-sys-body-medium);
+  background-color: #4e4945;
 
   &.dark-mode {
-    background-color: var(--dark-mode-background-color);
+    color-scheme: dark;
+    background-color: #282a33;
 
-    @include mat.elevation-classes;
-    @include mat.app-background;
-    @include mat.button-color($dark-theme);
+    @include mat.theme(
+      (
+        color: mat.$red-palette
+      )
+    );
   }
 }

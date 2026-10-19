@@ -2,7 +2,7 @@
   <button mat-mini-fab matTooltip="Applications" [matMenuTriggerFor]="appsMenu" color="primary">
     <mat-icon>apps</mat-icon>
   </button>
-  @if (this.canUserSeeNotifications()) {
+  @if (canUserSeeNotifications()) {
     <app-notifications />
   }
 
@@ -17,7 +17,7 @@
   </button>
 
   <mat-menu #appsMenu="matMenu">
-    <a [href]="dashApplicationUrl">
+    <a mat-menu-item [href]="dashApplicationUrl">
       <mat-icon>dashboard</mat-icon>
       <span>Dash</span>
     </a>
@@ -27,20 +27,20 @@
     <div mat-menu-item>
       <div id="toggle-mode-container">
         <mat-icon>light_mode</mat-icon>
-        <mat-slide-toggle (change)="toggleTheme($event.checked)" [formField]="themeForm.darkMode" />
+        <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" />
         <mat-icon>dark_mode</mat-icon>
       </div>
     </div>
-    <mat-divider></mat-divider>
-    <button mat-menu-item (click)="this.downloadConfig()" id="downloadConfigButton">
+    <mat-divider />
+    <button mat-menu-item (click)="downloadConfig()" id="downloadConfigButton">
       <mat-icon>download</mat-icon>
       <span>Télécharger la configuration</span>
     </button>
-    <button mat-menu-item (click)="this.openImportConfigModal()" id="openImportConfigModal">
+    <button mat-menu-item (click)="openImportConfigModal()" id="openImportConfigModal">
       <mat-icon>upload</mat-icon>
       <span>Importer une configuration</span>
     </button>
-    <mat-divider></mat-divider>
+    <mat-divider />
     <button mat-menu-item (click)="logout()" id="logoutButton">
       <mat-icon>logout</mat-icon>
       <span>Déconnexion</span>

@@ -2,10 +2,6 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { MatDialogRef } from "@angular/material/dialog";
 
 import { TestBed } from "@angular/core/testing";
-import { AuthService } from "@services/auth.service/auth.service";
-import { ConfigService } from "@services/config.service/config.service";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { ThemeService } from "@services/theme.service/theme.service";
 import { HeaderComponent } from "./header.component";
 import { provideRouter } from "@angular/router";
 import { routes } from "../app.routes";
@@ -19,10 +15,6 @@ describe("HeaderComponent", () => {
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
       providers: [
-        ConfigService,
-        AuthService,
-        ErrorHandlerService,
-        ThemeService,
         { provide: MatDialogRef, useValue: {} },
         provideHttpClient(),
         provideHttpClientTesting(),

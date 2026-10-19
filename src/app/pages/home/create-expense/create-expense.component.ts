@@ -1,20 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  DestroyRef,
-  inject,
-  input,
-  output,
-  signal
-} from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormField, form, min } from "@angular/forms/signals";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Component, computed, inject, input, output, signal } from "@angular/core";
+import { form, FormField, FormRoot, min, required, submit, validate } from "@angular/forms/signals";
+import { firstValueFrom } from "rxjs";
 
 import { Expense } from "@model/Expense";
-import { DateUtilsService } from "../../../utils/date.utils.service";
+import { formatDateWithOffsetToUtc } from "../../../utils/date.utils";
 import { Label } from "@model/Label";
-import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
 import { MatButton } from "@angular/material/button";
@@ -28,13 +19,22 @@ import {
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/form-field";
 
+const ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
+
+type ExpenseModel = {
+  amount: number;
+  date: Date | null;
+  /** Text typed in the autocomplete, or the selected label. */
+  label: Label | string;
+};
+
 @Component({
   selector: "app-create-expense",
   templateUrl: "./create-expense.component.html",
-  styleUrls: ["./create-expense.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: "./create-expense.component.scss",
   imports: [
     MatFormField,
+    FormRoot,
     FormField,
     MatInput,
     MatDatepickerInput,
@@ -50,80 +50,66 @@ import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/fo
   ]
 })
 export class CreateExpenseComponent {
-  public readonly expenseModel = signal({
-    amount: 0,
-    date: null as string | null,
-    labelQuery: ""
-  });
-  public readonly expenseForm = form(this.expenseModel, (schema) => {
-    min(schema.amount, 0);
-  });
-  public readonly filteredOptions = computed(() => {
-    const filterValue = this.expenseModel().labelQuery.toLowerCase();
-    return filterValue
-      ? this.labels().filter((label) => label.label.toLowerCase().includes(filterValue))
-      : this.labels().slice();
-  });
   public readonly labels = input<Label[]>([]);
-  protected readonly insertedExpenseEvent = output<Expense>();
+  public readonly insertedExpenseEvent = output<Expense>();
 
-  private readonly selectedLabel = signal<Label | null>(null);
-  private readonly ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
-  private readonly expenseService = inject(ExpenseService);
-  private readonly dateUtilsService = inject(DateUtilsService);
-  private readonly errorHandlerService = inject(ErrorHandlerService);
-  private readonly destroyRef = inject(DestroyRef);
-
-  public handleCreateExpense(): void {
-    const selectedLabel = this.selectedLabel();
-    if (selectedLabel) {
-      this.insertExpense(selectedLabel.id);
+  public readonly expenseModel = signal<ExpenseModel>({ amount: 0, date: null, label: "" });
+  public readonly expenseForm = form(
+    this.expenseModel,
+    (schema) => {
+      min(schema.amount, 0.01);
+      required(schema.date);
+      validate(schema.label, ({ value }) =>
+        typeof value() === "string" ? { kind: "labelNotSelected" } : undefined
+      );
+    },
+    {
+      submission: {
+        action: async (expenseForm) => {
+          const { amount, date, label } = expenseForm().value();
+          try {
+            const createdExpense = await firstValueFrom(
+              this.expenseService.addExpense({
+                amount,
+                labelId: (label as Label).id,
+                expenseDate: formatDateWithOffsetToUtc(date as Date)
+              })
+            );
+            this.insertedExpenseEvent.emit(createdExpense);
+            this.expenseModel.update((model) => ({ ...model, amount: 0, label: "" }));
+          } catch (error) {
+            this.errorHandlerService.handleError(
+              error as HttpErrorResponse,
+              ERROR_CREATING_EXPENSE_MESSAGE
+            );
+          }
+          return undefined;
+        }
+      }
     }
+  );
+
+  public readonly canCreateExpense = computed(
+    () => this.expenseForm().valid() && !this.expenseForm().submitting()
+  );
+  public readonly filteredOptions = computed(() => {
+    const label = this.expenseModel().label;
+    const filterValue = (typeof label === "string" ? label : label.label).toLowerCase();
+    return this.labels().filter((option) => option.label.toLowerCase().includes(filterValue));
+  });
+
+  private readonly expenseService = inject(ExpenseService);
+  private readonly errorHandlerService = inject(ErrorHandlerService);
+
+  public handleCreateExpense(): Promise<boolean> {
+    return submit(this.expenseForm);
   }
 
   public selectLabel(label: Label): void {
-    this.selectedLabel.set(label);
-    this.expenseModel.update((model) => ({ ...model, labelQuery: label.label }));
+    this.expenseForm.label().value.set(label);
   }
 
-  public clearSelectedLabel(): void {
-    this.selectedLabel.set(null);
-  }
-
-  public displayLabel(label: Label): string {
-    return label?.label ? label.label : "";
-  }
-
-  public canCreateExpense(): boolean {
-    return (
-      this.expenseModel().amount > 0 &&
-      this.selectedLabel() !== null &&
-      this.expenseModel().date !== null
-    );
-  }
-  private insertExpense(labelId: number): void {
-    const { amount, date } = this.expenseModel();
-    if (date) {
-      const expenseToCreate = new InsertExpensePayload();
-      expenseToCreate.amount = amount;
-      expenseToCreate.labelId = labelId;
-      expenseToCreate.expenseDate = this.dateUtilsService.formatDateWithOffsetToUtc(
-        new Date(Date.parse(date))
-      );
-
-      this.expenseService
-        .addExpense(expenseToCreate)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (createdExpense) => {
-            this.insertedExpenseEvent.emit(createdExpense);
-            this.expenseModel.update((model) => ({ ...model, amount: 0 }));
-            this.clearSelectedLabel();
-            this.expenseModel.update((model) => ({ ...model, labelQuery: "" }));
-          },
-          error: (error) =>
-            this.errorHandlerService.handleError(error, this.ERROR_CREATING_EXPENSE_MESSAGE)
-        });
-    }
+  public displayLabel(label: Label | string | null): string {
+    return typeof label === "string" ? label : (label?.label ?? "");
   }
 }

@@ -1,17 +1,15 @@
 <mat-form-field>
   <mat-label>Étiquettes</mat-label>
-  <mat-select [formField]="labelForm.labelId" (selectionChange)="selectLabel($event.value)">
-    @for (label of this.labels(); track label) {
+  <mat-select [formField]="labelForm.labelId">
+    @for (label of labels(); track label.id) {
       <mat-option [value]="label.id">{{ label.label }}</mat-option>
     }
   </mat-select>
 </mat-form-field>
-@if (this.isOneLabelSelected()) {
+@if (isOneLabelSelected()) {
   <button mat-icon-button (click)="resetSelectedLabel()"><mat-icon>close</mat-icon></button>
 }
 
-@if (this.totalExpensesByMonthChart()) {
-  <div id="total-expenses-chart">
-    <canvas baseChart [data]="this.totalExpensesByMonthChart()" [options]="barChartOptions" [type]="'line'"></canvas>
-  </div>
-}
+<div id="total-expenses-chart">
+  <canvas baseChart [data]="totalExpensesByMonthChart()" [options]="chartOptions" type="line"></canvas>
+</div>

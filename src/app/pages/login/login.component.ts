@@ -1,52 +1,53 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Component, inject, signal } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
-import { FormField, form } from "@angular/forms/signals";
+import { form, FormField, FormRoot, required, submit } from "@angular/forms/signals";
+import { firstValueFrom } from "rxjs";
 import { AuthService } from "@services/auth.service/auth.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-
 import { MatButton } from "@angular/material/button";
+
+const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, FormField, MatButton, MatProgressSpinner]
+  styleUrl: "./login.component.scss",
+  imports: [RouterLink, FormRoot, FormField, MatButton, MatProgressSpinner]
 })
 export class LoginComponent {
-  public isLoading = signal(false);
   public readonly loginModel = signal({ username: "", password: "" });
-  public readonly loginForm = form(this.loginModel);
-  public readonly authService = inject(AuthService);
+  public readonly loginForm = form(
+    this.loginModel,
+    (schema) => {
+      required(schema.username);
+      required(schema.password);
+    },
+    {
+      submission: {
+        action: async (loginForm) => {
+          const { username, password } = loginForm().value();
+          try {
+            await firstValueFrom(this.authService.login(username, password));
+            await this.router.navigate(["home"]);
+          } catch (error) {
+            this.errorHandlerService.handleLoginError(
+              error as HttpErrorResponse,
+              ERROR_AUTHENTICATING_USER
+            );
+          }
+          return undefined;
+        }
+      }
+    }
+  );
 
-  private readonly ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
+  private readonly authService = inject(AuthService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
 
-  public handleLogin(): void {
-    const { username, password } = this.loginModel();
-    if (username && password) {
-      this.isLoading.set(true);
-      this.authService
-        .login(username, password)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: () => {
-            this.isLoading.set(false);
-            this.router.navigate(["home"]).catch((error) => console.log(error.message));
-          },
-          error: (error: HttpErrorResponse) => {
-            this.isLoading.set(false);
-            this.errorHandlerService.handleLoginError(error, this.ERROR_AUTHENTICATING_USER);
-          },
-          complete: () => this.isLoading.set(false)
-        });
-    } else {
-      this.isLoading.set(false);
-    }
+  public handleLogin(): Promise<boolean> {
+    return submit(this.loginForm);
   }
 }

@@ -1,5 +1,5 @@
-export class InsertExpensePayload {
-  public amount = 0;
-  public expenseDate = new Date();
-  public labelId = 0;
-}
+export type InsertExpensePayload = {
+  amount: number;
+  expenseDate: Date;
+  labelId: number;
+};

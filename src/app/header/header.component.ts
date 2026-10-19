@@ -1,12 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal
-} from "@angular/core";
+import { Component, computed, DestroyRef, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
@@ -14,7 +7,6 @@ import { ImportConfigModalComponent } from "../modals/import-config-modal/import
 import { AuthService } from "@services/auth.service/auth.service";
 import { ConfigService } from "@services/config.service/config.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
-import { FormField, form } from "@angular/forms/signals";
 import { ThemeService } from "@services/theme.service/theme.service";
 import { MatDivider } from "@angular/material/divider";
 import { MatSlideToggle } from "@angular/material/slide-toggle";
@@ -25,11 +17,12 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatMiniFabButton } from "@angular/material/button";
 
+const ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
+
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: "./header.component.scss",
   imports: [
     MatMiniFabButton,
     MatTooltip,
@@ -39,15 +32,15 @@ import { MatMiniFabButton } from "@angular/material/button";
     MatMenu,
     MatMenuItem,
     MatSlideToggle,
-    FormField,
     MatDivider
   ]
 })
-export class HeaderComponent implements OnInit {
-  public readonly themeModel = signal({ darkMode: false });
-  public readonly themeForm = form(this.themeModel);
+export class HeaderComponent {
   public readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
-  private readonly ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
+
+  public readonly isDarkMode = computed(() => this.themeService.isDarkMode());
+  public readonly canUserSeeNotifications = computed(() => this.authService.isUserAdmin());
+
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
@@ -56,26 +49,22 @@ export class HeaderComponent implements OnInit {
   private readonly themeService = inject(ThemeService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
 
-  public ngOnInit(): void {
-    this.themeModel.update(() => ({ darkMode: this.themeService.isPreferredThemeDarkMode() }));
-  }
-
   public downloadConfig(): void {
     this.configService
       .exportConfig()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response) => {
+        next: (config) => {
           console.info("Configuration exportée");
-          const url = window.URL.createObjectURL(new Blob([response]));
+          const url = URL.createObjectURL(config);
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "cashManagerData.json");
-          document.body.appendChild(link);
+          link.download = "cashManagerData.json";
           link.click();
+          URL.revokeObjectURL(url);
         },
         error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
+          this.errorHandlerService.handleError(error, ERROR_EXPORT_CONFIGURATION)
       });
   }
 
@@ -88,10 +77,6 @@ export class HeaderComponent implements OnInit {
 
   public toggleTheme(isToggleChecked: boolean): void {
     this.themeService.selectDarkMode(isToggleChecked);
-  }
-
-  public canUserSeeNotifications(): boolean {
-    return this.authService.isUserAdmin();
   }
 
   public async logout(): Promise<void> {

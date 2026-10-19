@@ -1,11 +1,9 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
+import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { fr } from "date-fns/locale/fr";
 import { environment } from "../../../../environments/environment";
-import { AuthService } from "@services/auth.service/auth.service";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { ExpenseService } from "@services/expense.service/expense.service";
-import { DateUtilsService } from "../../../utils/date.utils.service";
 import { CreateExpenseComponent } from "./create-expense.component";
 import { provideHttpClient } from "@angular/common/http";
 
@@ -17,12 +15,8 @@ describe("CreateExpenseComponent", () => {
     await TestBed.configureTestingModule({
       imports: [CreateExpenseComponent],
       providers: [
-        AuthService,
-        ExpenseService,
-        ErrorHandlerService,
-        DateUtilsService,
         provideDateFnsAdapter(),
-
+        { provide: MAT_DATE_LOCALE, useValue: fr },
         provideHttpClient(),
         provideHttpClientTesting()
       ]
@@ -38,28 +32,32 @@ describe("CreateExpenseComponent", () => {
 
   const expensePath = "/expense/";
 
-  it("Should create an expense", () => {
+  it("Should create an expense", async () => {
     const newLabelName = "Vacances";
     expect(component.canCreateExpense()).toEqual(false);
     component.selectLabel({ id: 1, label: newLabelName, userId: 1 });
     component.expenseModel.update((model) => ({
       ...model,
-      date: "2022-3-5",
+      date: new Date(2022, 2, 5),
       amount: 23
     }));
 
     expect(component.canCreateExpense()).toEqual(true);
-    component.handleCreateExpense();
+    const submitted = component.handleCreateExpense();
 
     const getExpensesRequest = httpTestingController.expectOne(
       `${environment.backend_url}${expensePath}addExpense`
     );
     getExpensesRequest.flush({
       id: 1,
-      amount: component.expenseModel().amount,
+      amount: 23,
       expenseDate: new Date("2022-03-05"),
       labelId: 1
     });
+    expect(await submitted).toEqual(true);
+    expect(component.expenseModel().amount).toEqual(0);
+    expect(component.expenseModel().label).toEqual("");
+    expect(component.canCreateExpense()).toEqual(false);
   });
 
   it("Should display the label", () => {

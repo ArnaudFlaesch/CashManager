@@ -1,21 +1,13 @@
 .notification-container {
   display: flex;
-  flex-direction: row;
-  place-items: center center;
+  align-items: center;
+  gap: 0.5rem;
 
-  &.unread-notification {
-    .mark-action-as-read-button,
-    .notification-date,
-    .mark-notification-as-read-button {
-      margin-left: 0.5rem;
-    }
+  &.unread-notification.info {
+    background-color: lightblue;
+  }
 
-    &.info {
-      background-color: lightblue;
-    }
-
-    &.warn {
-      background-color: orange;
-    }
+  &.unread-notification.warn {
+    background-color: orange;
   }
 }
