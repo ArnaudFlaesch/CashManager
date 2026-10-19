@@ -19,7 +19,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "cm",
+      "prefix": "cash-manager",
       "architect": {
         "build": {
           "builder": "@angular/build:application",

@@ -20,7 +20,7 @@ import { MatMiniFabButton } from "@angular/material/button";
 const ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
 
 @Component({
-  selector: "app-header",
+  selector: "cash-manager-header",
   templateUrl: "./header.component.html",
   styleUrl: "./header.component.scss",
   imports: [

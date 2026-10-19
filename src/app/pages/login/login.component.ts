@@ -11,7 +11,7 @@ import { MatButton } from "@angular/material/button";
 const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 
 @Component({
-  selector: "app-login",
+  selector: "cash-manager-login",
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
   imports: [RouterLink, FormRoot, FormField, MatButton, MatProgressSpinner]

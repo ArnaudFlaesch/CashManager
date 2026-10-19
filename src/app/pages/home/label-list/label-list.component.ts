@@ -13,7 +13,7 @@ import { MatIconButton } from "@angular/material/button";
 const ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
 
 @Component({
-  selector: "app-label-list",
+  selector: "cash-manager-label-list",
   templateUrl: "./label-list.component.html",
   styleUrl: "./label-list.component.scss",
   imports: [MatIconButton, MatIcon]

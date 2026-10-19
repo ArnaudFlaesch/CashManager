@@ -15,7 +15,7 @@ import { MatButton } from "@angular/material/button";
 const ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
 @Component({
-  selector: "app-import-config-modal",
+  selector: "cash-manager-import-config-modal",
   templateUrl: "./import-config-modal.component.html",
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })

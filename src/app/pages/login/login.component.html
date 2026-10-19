@@ -1,10 +1,10 @@
-<div id="login-page">
-  <div id="login-container">
-    <a routerLink="/home" id="logo-container">
-      <img src="assets/logo.png" id="cash-manager-logo" alt="cash manager logo" />
+<div class="login-page">
+  <div class="login-card stack">
+    <a routerLink="/home" class="logo">
+      <img src="assets/logo.png" alt="cash manager logo" />
     </a>
-    <h1 id="login-page-title">CashManager</h1>
-    <form id="login-form" [formRoot]="loginForm">
+    <h1 id="login-page-title" class="title">CashManager</h1>
+    <form class="login-form stack" [formRoot]="loginForm">
       <input id="inputUsername" placeholder="Username" aria-label="Username" [formField]="loginForm.username" />
 
       <input
@@ -22,7 +22,7 @@
         [disabled]="loginForm().invalid() || loginForm().submitting()"
         color="primary"
       >
-        <span id="login-button-label">
+        <span class="row">
           @if (loginForm().submitting()) {
             <mat-spinner diameter="30" />
           }

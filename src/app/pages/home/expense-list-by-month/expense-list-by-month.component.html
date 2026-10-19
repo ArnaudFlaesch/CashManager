@@ -1,4 +1,4 @@
-<div>
+<div class="row">
   <button (click)="selectPreviousMonth()" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -19,15 +19,15 @@
   </button>
 </div>
 
-<div id="expenses-container">
-  <div id="chart-container">
+<div class="expenses-layout">
+  <div class="chart chart-container">
     <canvas baseChart [data]="expensesByLabelChart()" [options]="chartOptions" type="bar"></canvas>
   </div>
 
-  <div id="expenses-detail">
-    <h3 id="expenses-total">Total ce mois : {{ totalForMonth() }}€</h3>
+  <div class="details stack">
+    <h3>Total ce mois : {{ totalForMonth() }}€</h3>
     @if (expenses.value().length) {
-      <div id="expenses-list">
+      <div class="expenses-list grid">
         @for (expense of expenses.value(); track expense.id) {
           <div>
             <span>
@@ -46,4 +46,4 @@
   </div>
 </div>
 
-<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="labels()" />
+<cash-manager-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="labels()" />

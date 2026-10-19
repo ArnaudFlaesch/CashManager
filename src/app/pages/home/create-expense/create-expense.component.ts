@@ -29,7 +29,7 @@ type ExpenseModel = {
 };
 
 @Component({
-  selector: "app-create-expense",
+  selector: "cash-manager-create-expense",
   templateUrl: "./create-expense.component.html",
   styleUrl: "./create-expense.component.scss",
   imports: [

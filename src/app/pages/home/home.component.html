@@ -1,14 +1,14 @@
-<app-header id="header" />
+<cash-manager-header class="page-header" />
 
 <mat-tab-group>
   <mat-tab label="Affichage des dépenses par mois">
-    <app-expense-list-by-month [labels]="labels.value()" />
+    <cash-manager-expense-list-by-month [labels]="labels.value()" />
   </mat-tab>
   <mat-tab label="Affichage du total par mois">
-    <app-total-expense-by-month [labels]="labels.value()" />
+    <cash-manager-total-expense-by-month [labels]="labels.value()" />
   </mat-tab>
   <mat-tab label="Affichage de la liste des labels">
-    <form id="create-label-form" [formRoot]="labelForm">
+    <form class="create-label-form row" [formRoot]="labelForm">
       <mat-form-field appearance="fill">
         <mat-label>Étiquette</mat-label>
         <input
@@ -26,6 +26,6 @@
       </button>
     </form>
 
-    <app-label-list [labels]="labels.value()" (labelDeleted)="onDeleteLabel($event)" />
+    <cash-manager-label-list [labels]="labels.value()" (labelDeleted)="onDeleteLabel($event)" />
   </mat-tab>
 </mat-tab-group>

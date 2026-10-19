@@ -1,36 +1,22 @@
-#expenses-container {
+.expenses-layout {
   display: flex;
-  gap: 1em 2em;
-  margin-bottom: 1em;
+  gap: var(--space-m) var(--space-l);
+  margin-bottom: var(--space-m);
 
   @media (width <= 640px) {
     flex-direction: column;
   }
 }
 
-#chart-container {
-  display: flex;
+.chart {
   flex: 1 0 70%;
-
-  canvas {
-    flex: 1;
-    height: 100% !important;
-  }
 }
 
-#expenses-detail {
-  display: flex;
-  flex-direction: column;
+.details {
   flex: 0 1 30%;
-  row-gap: 0.5em;
 }
 
-#expenses-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1em 2em;
-
-  @media (width <= 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.expenses-list {
+  --columns: 3;
+  --gap: var(--space-m) var(--space-l);
 }

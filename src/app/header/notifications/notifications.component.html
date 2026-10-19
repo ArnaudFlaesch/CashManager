@@ -24,7 +24,7 @@
 
   @for (notification of notificationsToDisplay(); track notification.id) {
     <div
-      class="notification-container"
+      class="notification row"
       [class.unread-notification]="!notification.isRead"
       [class.info]="notification.notificationType === 'INFO'"
       [class.warn]="notification.notificationType === 'WARN'"

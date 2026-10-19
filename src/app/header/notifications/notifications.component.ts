@@ -21,7 +21,7 @@ const NOTIFICATION_TYPE_ICONS: Record<NotificationTypeEnum, string> = {
 };
 
 @Component({
-  selector: "app-notifications",
+  selector: "cash-manager-notifications",
   templateUrl: "./notifications.component.html",
   styleUrl: "./notifications.component.scss",
   imports: [

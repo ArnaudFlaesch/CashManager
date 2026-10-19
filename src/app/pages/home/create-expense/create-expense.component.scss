@@ -1,14 +1,10 @@
-#create-expense-form {
-  display: flex;
-  column-gap: 0.5em;
-  align-items: center;
-
+.expense-form {
   @media (width <= 650px) {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
 }
 
-#add-expense-button {
-  width: fit-content;
+.submit-button {
+  justify-self: start;
 }

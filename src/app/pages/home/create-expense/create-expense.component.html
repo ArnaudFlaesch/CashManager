@@ -1,4 +1,4 @@
-<form id="create-expense-form" [formRoot]="expenseForm">
+<form class="expense-form row" [formRoot]="expenseForm">
   <mat-form-field appearance="fill" id="expenseAmount-container">
     <mat-label>Montant</mat-label>
     <input
@@ -49,7 +49,13 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <button id="add-expense-button" type="submit" [disabled]="!canCreateExpense()" mat-raised-button>
+  <button
+    id="add-expense-button"
+    class="submit-button"
+    type="submit"
+    [disabled]="!canCreateExpense()"
+    mat-raised-button
+  >
     Ajouter une dépense
   </button>
 </form>

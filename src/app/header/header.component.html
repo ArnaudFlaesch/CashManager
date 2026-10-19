@@ -1,9 +1,9 @@
-<div id="action-bar-buttons">
+<div class="actions row">
   <button mat-mini-fab matTooltip="Applications" [matMenuTriggerFor]="appsMenu" color="primary">
     <mat-icon>apps</mat-icon>
   </button>
   @if (canUserSeeNotifications()) {
-    <app-notifications />
+    <cash-manager-notifications />
   }
 
   <button
@@ -25,7 +25,7 @@
 
   <mat-menu #cashManagerMenu="matMenu">
     <div mat-menu-item>
-      <div id="toggle-mode-container">
+      <div class="row">
         <mat-icon>light_mode</mat-icon>
         <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" />
         <mat-icon>dark_mode</mat-icon>

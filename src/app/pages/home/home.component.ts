@@ -19,7 +19,7 @@ const ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
 const ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
 
 @Component({
-  selector: "app-home",
+  selector: "cash-manager-home",
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
   imports: [

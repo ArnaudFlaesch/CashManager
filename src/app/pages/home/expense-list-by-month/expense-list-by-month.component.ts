@@ -30,7 +30,7 @@ const ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses."
 const EXPENSES_CHART_LABEL = "Dépenses";
 
 @Component({
-  selector: "app-expense-list-by-month",
+  selector: "cash-manager-expense-list-by-month",
   templateUrl: "./expense-list-by-month.component.html",
   styleUrl: "./expense-list-by-month.component.scss",
   imports: [

@@ -10,7 +10,7 @@ import { IConfirmDialogData } from "./IConfirmDialogData";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: "app-confirm-modal",
+  selector: "cash-manager-confirm-modal",
   templateUrl: "./confirm-modal.component.html",
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })

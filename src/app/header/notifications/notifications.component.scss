@@ -1,13 +1,9 @@
-.notification-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &.unread-notification.info {
+.notification.unread-notification {
+  &.info {
     background-color: lightblue;
   }
 
-  &.unread-notification.warn {
+  &.warn {
     background-color: orange;
   }
 }

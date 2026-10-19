@@ -20,7 +20,7 @@ const NO_LABEL_ID_SELECTED = 0;
 const ERROR_GETTING_TOTAL_EXPENSES = "Erreur lors de la récupération du total des dépenses.";
 
 @Component({
-  selector: "app-total-expense-by-month",
+  selector: "cash-manager-total-expense-by-month",
   templateUrl: "./total-expense-by-month.component.html",
   imports: [
     BaseChartDirective,
