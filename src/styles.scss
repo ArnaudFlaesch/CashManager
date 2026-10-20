@@ -1,53 +1,72 @@
 @use "@angular/material" as mat;
-@include mat.elevation-classes;
-@include mat.app-background;
 
-// Define a dark theme
-$dark-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: dark,
-      primary: mat.$red-palette
-    )
-  )
-);
+// Theme
 
-// Define a light theme
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette
-    )
-  )
-);
-
-html,
-body {
+html {
   height: 100%;
+  color-scheme: light;
 
-  // Light mode
-  --light-mode-background-color: #4e4945;
+  @include mat.theme(
+    (
+      color: mat.$azure-palette,
+      typography: Roboto,
+      density: 0
+    )
+  );
 
-  // Dark mode
-  --dark-mode-background-color: #282a33;
-
-  // Apply the light theme by default
-  @include mat.elevation-classes;
-  @include mat.app-background;
-  @include mat.button-color($light-theme);
+  --app-background: #4e4945;
+  --space-xs: 0.375rem;
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 2rem;
 }
 
 body {
+  height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: var(--light-mode-background-color);
+  font: var(--mat-sys-body-medium);
+  background-color: var(--app-background);
 
   &.dark-mode {
-    background-color: var(--dark-mode-background-color);
+    color-scheme: dark;
 
-    @include mat.elevation-classes;
-    @include mat.app-background;
-    @include mat.button-color($dark-theme);
+    --app-background: #282a33;
+
+    @include mat.theme(
+      (
+        color: mat.$red-palette
+      )
+    );
   }
+}
+
+// Layout helpers. Spacing can be tuned per usage with the `--gap` custom property.
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap, var(--space-s));
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, var(--space-s));
+}
+
+// Grid with `--columns` columns, and `--columns-mobile` (default 2) on small screens.
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 2), minmax(0, 1fr));
+  gap: var(--gap, var(--space-m));
+
+  @media (width <= 640px) {
+    grid-template-columns: repeat(var(--columns-mobile, 2), minmax(0, 1fr));
+  }
+}
+
+// Chart.js sizes the canvas from its container (see Chart.js "Responsive Charts").
+.chart-container {
+  position: relative;
+  min-width: 0;
 }

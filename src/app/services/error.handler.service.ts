@@ -1,35 +1,41 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Service } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { catchError, of, OperatorFunction } from "rxjs";
 
-@Injectable()
+const ERROR_UNAUTHORIZED_CODE =
+  "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
+const ERROR_FORBIDDEN_CODE =
+  "Vous n'avez pas les droits nécessaires pour effectuer cette opération.";
+
+@Service()
 export class ErrorHandlerService {
   private readonly router = inject(Router);
   private readonly snackbar = inject(MatSnackBar);
 
-  private readonly ERROR_UNAUTHORIZED_CODE =
-    "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
-  private readonly ERROR_FORBIDDEN_CODE =
-    "Vous n'avez pas les droits nécessaires pour effectuer cette opération.";
-
   public handleError(error: HttpErrorResponse, messageToDisplay: string): void {
     switch (error.status) {
-      case 401: {
+      case 401:
         this.router
           .navigate(["login"])
-          .then(() => this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED_CODE))
-          .catch((error) => console.log(error.message));
+          .then(() => this.displayErrorMessage(error.message, ERROR_UNAUTHORIZED_CODE))
+          .catch((navigationError) => console.log(navigationError.message));
         break;
-      }
-      case 403: {
-        this.displayErrorMessage(error.message, this.ERROR_FORBIDDEN_CODE);
+      case 403:
+        this.displayErrorMessage(error.message, ERROR_FORBIDDEN_CODE);
         break;
-      }
-      default: {
+      default:
         this.displayErrorMessage(error.message, messageToDisplay);
-      }
     }
+  }
+
+  /** Handles the error and falls back to a default value, so that a resource never ends up in error. */
+  public catchError<T>(messageToDisplay: string, fallbackValue: T): OperatorFunction<T, T> {
+    return catchError((error: HttpErrorResponse) => {
+      this.handleError(error, messageToDisplay);
+      return of(fallbackValue);
+    });
   }
 
   public handleLoginError(error: HttpErrorResponse, messageToDisplay: string): void {

@@ -1,16 +1,16 @@
-<div>
+<div class="row">
   <button (click)="selectPreviousMonth()" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <mat-form-field appearance="fill">
     <mat-label>Sélectionnez un mois</mat-label>
     <input matInput [matDatepicker]="picker" [formField]="selectedMonthForm.selectedMonth" />
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
     <mat-datepicker
       #picker
       startView="multi-year"
       (monthSelected)="setMonthAndYear($event, picker)"
-      [startAt]="this.selectedMonthModel().selectedMonth"
+      [startAt]="selectedMonthModel().selectedMonth"
     />
   </mat-form-field>
 
@@ -19,23 +19,23 @@
   </button>
 </div>
 
-<div id="expenses-container">
-  <div id="chart-container">
-    <canvas baseChart [data]="this.expensesByLabelChart()" [options]="barChartOptions" [type]="'bar'"></canvas>
+<div class="expenses-layout">
+  <div class="chart chart-container">
+    <canvas baseChart [data]="expensesByLabelChart()" [options]="chartOptions" type="bar"></canvas>
   </div>
 
-  <div id="expenses-detail">
-    <h3 id="expenses-total">Total ce mois : {{ getTotalForMonth() }}€</h3>
-    @if (this.expenses().length) {
-      <div id="expenses-list">
-        @for (expense of this.expenses(); track expense.id) {
+  <div class="details stack">
+    <h3>Total ce mois : {{ totalForMonth() }}€</h3>
+    @if (expenses.value().length) {
+      <div class="expenses-list grid">
+        @for (expense of expenses.value(); track expense.id) {
           <div>
-            <span
-              >{{ formatExpenseDate(expense.expenseDate) }} : {{ expense.amount }}€
-              {{ getLabelFromId(expense.labelId)?.label }}</span
-            >
+            <span>
+              {{ expense.expenseDate | date: "dd/MM" }} : {{ expense.amount }}€
+              {{ labelNames().get(expense.labelId) }}
+            </span>
             @if (false) {
-              <button mat-icon-button (click)="this.openDeleteExpenseModal(expense.id)">
+              <button mat-icon-button (click)="openDeleteExpenseModal(expense.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             }
@@ -46,4 +46,4 @@
   </div>
 </div>
 
-<app-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="this.labels()" />
+<cash-manager-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="labels()" />

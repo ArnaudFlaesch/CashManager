@@ -1,36 +1,22 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Service } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
-import authorizationBearer from "../authorizationBearer/authorizationBearer";
 import { INotification } from "@model/INotification";
 import { IPage } from "@model/IPage";
 
-@Injectable()
+@Service()
 export class NotificationService {
   private readonly http = inject(HttpClient);
+  private readonly notificationsUrl = `${environment.backend_url}/notifications`;
 
   public getNotifications(): Observable<IPage<INotification>> {
-    return this.http.get<IPage<INotification>>(`${environment.backend_url}/notifications/`, {
-      headers: {
-        Authorization: authorizationBearer(),
-        "Content-type": "application/json"
-      }
-    });
+    return this.http.get<IPage<INotification>>(`${this.notificationsUrl}/`);
   }
 
   public markNotificationAsRead(notificationIds: number[]): Observable<INotification[]> {
-    return this.http.put<INotification[]>(
-      `${environment.backend_url}/notifications/markNotificationAsRead`,
-      {
-        notificationIds: notificationIds
-      },
-      {
-        headers: {
-          Authorization: authorizationBearer(),
-          "Content-type": "application/json"
-        }
-      }
-    );
+    return this.http.put<INotification[]>(`${this.notificationsUrl}/markNotificationAsRead`, {
+      notificationIds
+    });
   }
 }

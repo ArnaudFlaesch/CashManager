@@ -1,6 +1,13 @@
 <h1 mat-dialog-title>Importer la configuration</h1>
 <mat-dialog-content>
-  <input type="file" id="file" name="file" aria-label="Sélectionner un fichier de configuration" (change)="selectFile($event)" />
+  <input
+    type="file"
+    id="file"
+    name="file"
+    aria-label="Sélectionner un fichier de configuration"
+    #fileInput
+    (change)="selectFile(fileInput)"
+  />
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button id="closeImportConfigModal" mat-dialog-close>Annuler</button>

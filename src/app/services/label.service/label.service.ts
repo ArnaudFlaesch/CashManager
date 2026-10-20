@@ -1,42 +1,23 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Service } from "@angular/core";
 import { Observable } from "rxjs";
 import { Label } from "@model/Label";
 import { environment } from "../../../environments/environment";
-import authorizationBearer from "../authorizationBearer/authorizationBearer";
 
-@Injectable()
+@Service()
 export class LabelService {
   private readonly http = inject(HttpClient);
+  private readonly labelUrl = `${environment.backend_url}/label`;
 
   public getLabels(): Observable<Label[]> {
-    return this.http.get<Label[]>(`${environment.backend_url}/label/`, {
-      headers: {
-        Authorization: authorizationBearer(),
-        "Content-type": "application/json"
-      }
-    });
+    return this.http.get<Label[]>(`${this.labelUrl}/`);
   }
 
   public addLabel(label: string): Observable<Label> {
-    return this.http.post<Label>(
-      `${environment.backend_url}/label/addLabel`,
-      { newLabel: label },
-      {
-        headers: {
-          Authorization: authorizationBearer(),
-          "Content-type": "application/json"
-        }
-      }
-    );
+    return this.http.post<Label>(`${this.labelUrl}/addLabel`, { newLabel: label });
   }
 
-  public deleteLabel(id: number): Observable<void> {
-    return this.http.delete<void>(`${environment.backend_url}/label/deleteLabel?labelId=${id}`, {
-      headers: {
-        Authorization: authorizationBearer(),
-        "Content-type": "application/json"
-      }
-    });
+  public deleteLabel(labelId: number): Observable<void> {
+    return this.http.delete<void>(`${this.labelUrl}/deleteLabel`, { params: { labelId } });
   }
 }

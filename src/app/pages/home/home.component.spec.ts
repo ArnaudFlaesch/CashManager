@@ -1,15 +1,10 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
-import { TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
+import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { fr } from "date-fns/locale/fr";
 import { environment } from "../../../environments/environment";
 import { Label } from "@model/Label";
-import { AuthService } from "@services/auth.service/auth.service";
-import { ConfigService } from "@services/config.service/config.service";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { LabelService } from "@services/label.service/label.service";
-import { ExpenseService } from "@services/expense.service/expense.service";
-import { ThemeService } from "@services/theme.service/theme.service";
-import { DateUtilsService } from "../../utils/date.utils.service";
 import { HomeComponent } from "./home.component";
 import { provideHttpClient } from "@angular/common/http";
 
@@ -29,26 +24,21 @@ describe("HomeComponent", () => {
   const labelPath = "/label/";
 
   let component: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
-        LabelService,
-        ErrorHandlerService,
-        AuthService,
-        ConfigService,
-        ThemeService,
-        ExpenseService,
-        DateUtilsService,
         provideDateFnsAdapter(),
+        { provide: MAT_DATE_LOCALE, useValue: fr },
         provideHttpClient(),
         provideHttpClientTesting()
       ]
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -57,21 +47,27 @@ describe("HomeComponent", () => {
     httpTestingController.verify();
   });
 
-  it("Should create component and get label list", () => {
-    component.ngOnInit();
+  it("Should create component and get label list", async () => {
+    TestBed.tick();
     const getLabelsRequest = httpTestingController.expectOne(environment.backend_url + labelPath);
 
     getLabelsRequest.flush(labelData);
-    expect(component.labels()).toEqual(labelData);
+    httpTestingController
+      .match((request) => request.url.includes("/expense/"))
+      .forEach((request) => request.flush([]));
+    await fixture.whenStable();
+    expect(component.labels.value()).toEqual(labelData);
 
     component.labelModel.update((model) => ({ ...model, label: "New label" }));
-    component.handleCreateLabel();
+    const submitted = component.handleCreateLabel();
     const createLabelRequest = httpTestingController.expectOne(
       environment.backend_url + labelPath + "addLabel"
     );
 
     const newLabel = { id: 2, label: "New label" } as Label;
     createLabelRequest.flush(newLabel);
-    expect(component.labels()).toEqual([...labelData, newLabel]);
+    expect(await submitted).toEqual(true);
+    expect(component.labels.value()).toEqual([...labelData, newLabel]);
+    expect(component.labelModel().label).toEqual("");
   });
 });

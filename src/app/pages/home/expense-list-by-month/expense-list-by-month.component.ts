@@ -1,32 +1,23 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  DestroyRef,
-  inject,
-  model,
-  OnInit,
-  signal
-} from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormField, form } from "@angular/forms/signals";
+import { DatePipe } from "@angular/common";
+import { Component, computed, DestroyRef, inject, input, signal } from "@angular/core";
+import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { form, FormField } from "@angular/forms/signals";
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle
 } from "@angular/material/datepicker";
 import { MatDialog } from "@angular/material/dialog";
-import { ChartConfiguration } from "chart.js";
-import { addMonths, endOfMonth, format, startOfMonth, subMonths } from "date-fns";
+import { ChartData } from "chart.js";
+import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
+import { filter, switchMap } from "rxjs";
 
 import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-modal.component";
 import { Expense } from "@model/Expense";
 import { Label } from "@model/Label";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
-import { LabelService } from "@services/label.service/label.service";
-import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
+import { CHART_OPTIONS, DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
 import { CreateExpenseComponent } from "../create-expense/create-expense.component";
 
 import { MatInput } from "@angular/material/input";
@@ -35,13 +26,16 @@ import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
 import { BaseChartDirective } from "ng2-charts";
 
+const ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
+const EXPENSES_CHART_LABEL = "Dépenses";
+
 @Component({
-  selector: "app-expense-list-by-month",
+  selector: "cash-manager-expense-list-by-month",
   templateUrl: "./expense-list-by-month.component.html",
-  styleUrls: ["./expense-list-by-month.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: "./expense-list-by-month.component.scss",
   imports: [
     BaseChartDirective,
+    DatePipe,
     MatIconButton,
     MatIcon,
     MatFormField,
@@ -55,170 +49,101 @@ import { BaseChartDirective } from "ng2-charts";
     CreateExpenseComponent
   ]
 })
-export class ExpenseListByMonthComponent implements OnInit {
-  public readonly labels = model<Label[]>([]);
-  public readonly expenses = signal<Expense[]>([]);
-  public readonly expensesByLabelChart = computed(() => {
-    const expensesByLabel = this.getExpensesByLabel(this.expenses());
-    return {
-      labels: [this.EXPENSES_CHART_LABEL],
-      datasets: Object.keys(expensesByLabel).map((labelId) => {
-        const labelName = this.labels().find((label) => label.id.toString() === labelId);
-        if (!labelId || labelName === undefined) {
-          return { label: "", data: [] };
-        }
-        return {
-          label: labelName.label,
-          data: [expensesByLabel[labelId].reduce((total, amount) => total + amount, 0)]
-        };
-      })
-    };
-  });
+export class ExpenseListByMonthComponent {
+  public readonly labels = input<Label[]>([]);
+  public readonly chartOptions = CHART_OPTIONS;
+
   public readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
   public readonly selectedMonthForm = form(this.selectedMonthModel);
 
-  public barChartOptions: ChartConfiguration["options"] = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true
-      }
-    }
-  };
+  public readonly expenses = rxResource({
+    params: () => this.selectedMonth(),
+    stream: ({ params: month }) =>
+      this.expenseService
+        .getExpensesAtMonth(month, endOfMonth(month))
+        .pipe(this.errorHandlerService.catchError<Expense[]>(ERROR_GETTING_EXPENSES, [])),
+    defaultValue: []
+  });
 
-  private readonly currentSelectedMonth = signal(startOfMonth(new Date()));
-  private readonly ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
-  private readonly ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
-  private readonly EXPENSES_CHART_LABEL = "Dépenses";
+  public readonly labelNames = computed(
+    () => new Map(this.labels().map((label) => [label.id, label.label]))
+  );
+
+  public readonly totalForMonth = computed(() =>
+    Number.parseFloat(
+      this.expenses
+        .value()
+        .reduce((total, expense) => total + expense.amount, 0)
+        .toFixed(10)
+    )
+  );
+
+  public readonly expensesByLabelChart = computed<ChartData<"bar">>(() => {
+    const totalByLabel = new Map<number, number>();
+    for (const { labelId, amount } of this.expenses.value()) {
+      totalByLabel.set(labelId, (totalByLabel.get(labelId) ?? 0) + amount);
+    }
+    return {
+      labels: [EXPENSES_CHART_LABEL],
+      datasets: [...totalByLabel].map(([labelId, total]) => {
+        const labelName = this.labelNames().get(labelId);
+        return labelName === undefined
+          ? { label: "", data: [] }
+          : { label: labelName, data: [total] };
+      })
+    };
+  });
+
+  private readonly selectedMonth = computed(
+    () => startOfMonth(this.selectedMonthModel().selectedMonth),
+    { equal: (monthA, monthB) => monthA.getTime() === monthB.getTime() }
+  );
   private readonly dialog = inject(MatDialog);
-  private readonly labelService = inject(LabelService);
   private readonly expenseService = inject(ExpenseService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly destroyRef = inject(DestroyRef);
 
-  public ngOnInit(): void {
-    const startIntervalDate = this.currentSelectedMonth();
-    const endIntervalDate = endOfMonth(this.currentSelectedMonth());
-    this.getExpenses(startIntervalDate, endIntervalDate);
-    // Get total expenses, et switch avec la liste des expense par mois
-  }
-
-  public deleteLabel(labelId: number): void {
-    this.labelService
-      .deleteLabel(labelId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
-          this.expenses.update((expenses) =>
-            expenses.filter((expense) => expense.labelId !== labelId)
-          );
-        },
-        error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
-      });
-  }
-
   public handleExpenseCreation(newExpense: Expense): void {
-    this.expenses.update((expenses) => [...expenses, newExpense]);
+    this.expenses.value.update((expenses) => [...expenses, newExpense]);
   }
 
   public openDeleteExpenseModal(expenseId: number): void {
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      height: DIALOG_SMALL_HEIGHT,
-      width: DIALOG_SMALL_WIDTH,
-      data: {
-        title: "Suppression d'une dépense",
-        message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
-      }
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result === "validate") {
-          this.deleteExpense(expenseId);
+    this.dialog
+      .open(ConfirmModalComponent, {
+        height: DIALOG_SMALL_HEIGHT,
+        width: DIALOG_SMALL_WIDTH,
+        data: {
+          title: "Suppression d'une dépense",
+          message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
         }
-      });
-  }
-
-  public getLabelFromId(labelId: number): Label | undefined {
-    return this.labels().find((label) => label.id === labelId);
-  }
-
-  public getTotalForMonth(): number {
-    return Number.parseFloat(
-      this.expenses()
-        .map((expense) => expense.amount)
-        .reduce((total, amount) => total + amount, 0)
-        .toFixed(10)
-    );
+      })
+      .afterClosed()
+      .pipe(
+        filter((result) => result === "validate"),
+        switchMap(() => this.expenseService.deleteExpense(expenseId)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() =>
+        this.expenses.value.update((expenses) =>
+          expenses.filter((expense) => expense.id !== expenseId)
+        )
+      );
   }
 
   public selectPreviousMonth(): void {
-    this.selectMonth(subMonths(this.currentSelectedMonth(), 1));
+    this.selectMonth(subMonths(this.selectedMonth(), 1));
   }
 
   public selectNextMonth(): void {
-    this.selectMonth(addMonths(this.currentSelectedMonth(), 1));
+    this.selectMonth(addMonths(this.selectedMonth(), 1));
   }
 
   public setMonthAndYear(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>): void {
-    const selectedMonth = new Date(
-      normalizedMonthAndYear.getFullYear(),
-      normalizedMonthAndYear.getMonth(),
-      1
-    );
-    this.selectMonth(selectedMonth);
+    this.selectMonth(normalizedMonthAndYear);
     datepicker.close();
   }
 
-  public formatExpenseDate(expenseDate: Date): string {
-    return format(expenseDate, "dd/MM");
-  }
-
-  private selectMonth(selectedMonth: Date): void {
-    this.selectedMonthModel.update((model) => ({ ...model, selectedMonth }));
-    this.handleSelectExpensesForMonth(selectedMonth);
-  }
-
-  private deleteExpense(expenseId: number): void {
-    this.expenseService
-      .deleteExpense(expenseId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () =>
-          this.expenses.update((expenses) => expenses.filter((expense) => expense.id !== expenseId))
-      });
-  }
-
-  private getExpensesByLabel(expenses: Expense[]): Record<string, number[]> {
-    return expenses.reduce((expensesByLabel: Record<string, number[]>, currentExpense: Expense) => {
-      const labelId = currentExpense.labelId;
-      expensesByLabel[labelId] = expensesByLabel[labelId] ?? [];
-      expensesByLabel[labelId].push(currentExpense.amount);
-      return expensesByLabel;
-    }, {});
-  }
-
-  private handleSelectExpensesForMonth(month: Date): void {
-    if (this.currentSelectedMonth().getTime() !== startOfMonth(month).getTime()) {
-      this.currentSelectedMonth.set(startOfMonth(month));
-      this.getExpenses(this.currentSelectedMonth(), endOfMonth(month));
-    }
-  }
-
-  private getExpenses(startIntervalDate: Date, endIntervalDate: Date): void {
-    this.expenseService
-      .getExpensesAtMonth(startIntervalDate, endIntervalDate)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (expenses) => {
-          this.expenses.set(expenses);
-        },
-        error: (error: HttpErrorResponse) =>
-          this.errorHandlerService.handleError(error, this.ERROR_GETTING_EXPENSES)
-      });
+  private selectMonth(month: Date): void {
+    this.selectedMonthForm.selectedMonth().value.set(startOfMonth(month));
   }
 }

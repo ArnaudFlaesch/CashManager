@@ -1,11 +1,11 @@
-#header {
-  margin: 0.5em 1em 1em;
+.page-header {
+  display: block;
+  margin: var(--space-s) var(--space-m) var(--space-m);
 }
 
-#create-label-form {
-  display: flex;
-  flex-direction: row;
-  column-gap: 1em;
+.create-label-form {
+  --gap: var(--space-m);
+
   align-items: baseline;
   justify-content: center;
 }

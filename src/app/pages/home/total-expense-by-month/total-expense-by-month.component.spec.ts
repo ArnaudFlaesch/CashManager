@@ -1,10 +1,8 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
-import { TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialogRef } from "@angular/material/dialog";
 import { environment } from "../../../../environments/environment";
 import { Label } from "@model/Label";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { ExpenseService } from "@services/expense.service/expense.service";
 import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
 import { TotalExpenseByMonthComponent } from "./total-expense-by-month.component";
 import { ComponentRef } from "@angular/core";
@@ -12,10 +10,9 @@ import { provideHttpClient } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { routes } from "../../../app.routes";
 
-import { AuthGuard } from "../../../guards/auth.guard";
-
-describe.skip("TotalExpenseByMonthComponent", () => {
+describe("TotalExpenseByMonthComponent", () => {
   let component: TotalExpenseByMonthComponent;
+  let fixture: ComponentFixture<TotalExpenseByMonthComponent>;
   let componentRef: ComponentRef<TotalExpenseByMonthComponent>;
   let httpTestingController: HttpTestingController;
 
@@ -32,9 +29,6 @@ describe.skip("TotalExpenseByMonthComponent", () => {
     await TestBed.configureTestingModule({
       imports: [TotalExpenseByMonthComponent],
       providers: [
-        AuthGuard,
-        ErrorHandlerService,
-        ExpenseService,
         { provide: MatDialogRef, useValue: {} },
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -42,7 +36,7 @@ describe.skip("TotalExpenseByMonthComponent", () => {
       ]
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(TotalExpenseByMonthComponent);
+    fixture = TestBed.createComponent(TotalExpenseByMonthComponent);
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -52,13 +46,14 @@ describe.skip("TotalExpenseByMonthComponent", () => {
     httpTestingController.verify();
   });
 
-  it("Should display the total with two labels", () => {
+  it("Should display the total with two labels", async () => {
     componentRef.setInput("labels", labelData);
-    component.ngOnInit();
-    const getTotalExpenseByMonthRequest = httpTestingController.expectOne(
-      `${environment.backend_url}${expensePath}getTotalExpensesByMonth`
-    );
-    getTotalExpenseByMonthRequest.flush(expectedTotalExpenseByMonthData);
+    TestBed.tick();
+    httpTestingController
+      .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
+      .flush(expectedTotalExpenseByMonthData);
+    await fixture.whenStable();
+    expect(component.isOneLabelSelected()).toEqual(false);
 
     const expectedTotalExpenseByMonthByLabelIdData = [
       { date: "2022-04-01", total: 400 },
@@ -67,21 +62,18 @@ describe.skip("TotalExpenseByMonthComponent", () => {
 
     const labelIdToSelect = component.labels()[0].id;
     component.selectLabel(labelIdToSelect);
-    const getTotalExpenseByMonthByLabelIdRequest = httpTestingController.expectOne(
-      `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`
-    );
-    getTotalExpenseByMonthByLabelIdRequest.flush(expectedTotalExpenseByMonthByLabelIdData);
+    TestBed.tick();
+    httpTestingController
+      .expectOne(
+        `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelIdToSelect}`
+      )
+      .flush(expectedTotalExpenseByMonthByLabelIdData);
+    await fixture.whenStable();
     expect(component.isOneLabelSelected()).toEqual(true);
-    expect(component.totalExpensesByMonthChart).toEqual({
+    expect(component.totalExpensesByMonthChart()).toEqual({
       datasets: [
-        {
-          data: [400, 100],
-          label: "Total des dépenses"
-        },
-        {
-          data: [250, 250],
-          label: "Moyenne"
-        }
+        { data: [100, 400], label: "Total des dépenses" },
+        { data: [250, 250], label: "Moyenne" }
       ],
       labels: ["mars 2022", "avril 2022"]
     });

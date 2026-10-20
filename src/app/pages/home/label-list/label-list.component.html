@@ -1,8 +1,8 @@
-<div id="label-list">
-  @for (label of this.labels(); track label.id) {
+<div id="label-list" class="label-list grid">
+  @for (label of labels(); track label.id) {
     <div class="label-container">
       <span class="label-name">{{ label.label }}</span>
-      <button mat-icon-button class="deleteLabelButton" (click)="this.openDeleteLabelDialog(label.id)">
+      <button mat-icon-button class="deleteLabelButton" (click)="openDeleteLabelDialog(label.id)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

@@ -1,56 +1,39 @@
-#login-page {
-  display: flex;
+.login-page {
+  display: grid;
+  place-items: center;
   height: 100vh;
+}
 
-  #login-container {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem 4rem;
-    background-color: rgb(255 255 255);
-    border-color: rgb(0 0 0);
-    border-width: 2px;
-    border-radius: 0.25rem;
-    align-items: center;
-    margin: auto;
+.login-card {
+  --gap: 0;
 
-    #logo-container {
-      width: 75%;
-      display: inline-block;
-      margin: 1rem;
+  align-items: center;
+  padding: 1.5rem 4rem;
+  background-color: white;
+  border-radius: 0.25rem;
+}
 
-      #cash-manager-logo {
-        display: flex;
-        margin: 0 auto;
-      }
-    }
+.logo {
+  width: 75%;
+  margin: var(--space-m);
 
-    #login-page-title {
-      font-size: 2rem;
-      line-height: 1;
-    }
+  img {
+    display: block;
+    margin-inline: auto;
+  }
+}
 
-    #login-form {
-      display: flex;
-      flex-direction: column;
-      margin-top: 2.5rem;
+.title {
+  font-size: 2rem;
+  line-height: 1;
+}
 
-      > :not([hidden]) ~ :not([hidden]) {
-        margin-top: 1.25rem;
-      }
+.login-form {
+  --gap: 1.25rem;
 
-      #login-button-label {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+  margin-top: 2.5rem;
 
-        mat-spinner {
-          margin-right: 1.25rem;
-
-          span {
-            margin: 0 auto;
-          }
-        }
-      }
-    }
+  .row {
+    --gap: 1.25rem;
   }
 }

@@ -1,68 +1,51 @@
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { LabelService } from "@services/label.service/label.service";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  model,
-  output
-} from "@angular/core";
+import { Component, DestroyRef, inject, input, output } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Label } from "@model/Label";
 import { MatDialog } from "@angular/material/dialog";
+import { filter, switchMap } from "rxjs";
 import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-modal.component";
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
 import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
 
+const ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
+
 @Component({
-  selector: "app-label-list",
+  selector: "cash-manager-label-list",
   templateUrl: "./label-list.component.html",
-  styleUrls: ["./label-list.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: "./label-list.component.scss",
   imports: [MatIconButton, MatIcon]
 })
 export class LabelListComponent {
-  public readonly labels = model.required<Label[]>();
-  protected readonly labelDeletedEvent = output<number>();
+  public readonly labels = input<Label[]>([]);
+  public readonly labelDeleted = output<number>();
 
-  private readonly ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
   private readonly labelService = inject(LabelService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
 
   public openDeleteLabelDialog(labelId: number): void {
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      height: DIALOG_SMALL_HEIGHT,
-      width: DIALOG_SMALL_WIDTH,
-      data: {
-        title: "Suppression d'un label",
-        message: "Êtes-vous sûr de vouloir supprimer ce label ?"
-      }
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result === "validate") {
-          this.deleteLabel(labelId);
+    this.dialog
+      .open(ConfirmModalComponent, {
+        height: DIALOG_SMALL_HEIGHT,
+        width: DIALOG_SMALL_WIDTH,
+        data: {
+          title: "Suppression d'un label",
+          message: "Êtes-vous sûr de vouloir supprimer ce label ?"
         }
-      });
-  }
-
-  private deleteLabel(labelId: number): void {
-    this.labelService
-      .deleteLabel(labelId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      })
+      .afterClosed()
+      .pipe(
+        filter((result) => result === "validate"),
+        switchMap(() => this.labelService.deleteLabel(labelId)),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
-        next: () => {
-          this.labels.update((labels) => labels.filter((label) => label.id !== labelId));
-          this.labelDeletedEvent.emit(labelId);
-        },
-        error: (error) => this.errorHandlerService.handleError(error, this.ERROR_DELETING_LABEL)
+        next: () => this.labelDeleted.emit(labelId),
+        error: (error) => this.errorHandlerService.handleError(error, ERROR_DELETING_LABEL)
       });
   }
 }

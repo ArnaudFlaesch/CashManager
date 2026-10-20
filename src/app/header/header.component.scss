@@ -1,10 +1,5 @@
-#action-bar-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 0.375rem;
-  justify-content: flex-end;
-}
+.actions {
+  --gap: var(--space-xs);
 
-#toggle-mode-container {
-  display: flex;
+  justify-content: flex-end;
 }
