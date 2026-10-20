@@ -9,9 +9,12 @@ export default defineConfig({
   screenshotOnRunFailure: true,
   video: false,
   videoCompression: false,
-  reporter: "cypress-multi-reporters",
+  reporter: "mochawesome",
   reporterOptions: {
-    configFile: "reporter-e2e-config.json"
+    reportDir: "cypress/results/mochawesome-report",
+    overwrite: false,
+    html: false,
+    json: true
   },
   env: {
     backend_url: "localhost:8080"
