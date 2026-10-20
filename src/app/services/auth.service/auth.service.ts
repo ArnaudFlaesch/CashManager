@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { computed, inject, Service, signal } from "@angular/core";
 import { Observable, tap } from "rxjs";
 
-import { jwtDecode } from "jwt-decode";
 import { environment } from "../../../environments/environment";
 import { RoleEnum } from "@model/RoleEnum";
 import { IUser } from "@model/User";
@@ -14,6 +13,11 @@ interface IJwt {
 }
 
 const USER_LOCALSTORAGE_KEY = "user";
+
+function decodeJwtPayload<T>(token: string): T {
+  const payload = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+  return JSON.parse(atob(payload)) as T;
+}
 
 @Service()
 export class AuthService {
@@ -48,7 +52,7 @@ export class AuthService {
       return false;
     }
     try {
-      return Date.now() < jwtDecode<IJwt>(accessToken).exp * 1000;
+      return Date.now() < decodeJwtPayload<IJwt>(accessToken).exp * 1000;
     } catch (error) {
       console.log(error);
       return false;
