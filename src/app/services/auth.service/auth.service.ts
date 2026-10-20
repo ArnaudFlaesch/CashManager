@@ -15,7 +15,7 @@ interface IJwt {
 const USER_LOCALSTORAGE_KEY = "user";
 
 function decodeJwtPayload<T>(token: string): T {
-  const payload = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+  const payload = token.split(".")[1].replaceAll("-", "+").replaceAll("_", "/");
   return JSON.parse(atob(payload)) as T;
 }
 
