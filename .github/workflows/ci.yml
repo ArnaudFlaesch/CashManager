@@ -19,9 +19,6 @@ jobs:
           node-version: 26.13.0
           cache: "npm"
 
-      - name: Use npm 12
-        run: npm install -g npm@12.2.1
-
       - name: Cache node modules
         uses: actions/cache@v6
         env:
