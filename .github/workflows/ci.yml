@@ -13,11 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Use Node.js 24
+      - name: Use Node.js 26
         uses: actions/setup-node@v7
         with:
-          node-version: 26.12.1
+          node-version: 26.13.0
           cache: "npm"
+
+      - name: Use npm 12
+        run: npm install -g npm@12.2.1
 
       - name: Cache node modules
         uses: actions/cache@v6
