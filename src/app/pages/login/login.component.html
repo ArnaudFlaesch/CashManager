@@ -12,7 +12,7 @@
         <mat-icon matPrefix>person</mat-icon>
         <input
           matInput
-          id="inputUsername"
+          id="input-username"
           autocomplete="username"
           aria-label="Username"
           [formField]="loginForm.username"
@@ -24,7 +24,7 @@
         <mat-icon matPrefix>lock</mat-icon>
         <input
           matInput
-          id="inputPassword"
+          id="input-password"
           autocomplete="current-password"
           aria-label="Password"
           [formField]="loginForm.password"
@@ -43,7 +43,7 @@
 
       <button
         mat-flat-button
-        id="loginButton"
+        id="login-button"
         type="submit"
         [disabled]="loginForm().invalid() || loginForm().submitting()"
       >

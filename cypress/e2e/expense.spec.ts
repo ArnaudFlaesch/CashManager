@@ -21,11 +21,11 @@ describe("Home page tests", () => {
 
       cy.get("#mat-tab-label-0-0").click();
 
-      cy.get("#expenseAmount").clear();
-      cy.get("#expenseAmount").type("120");
-      cy.get("#expenseDate-container .mat-datepicker-toggle").click();
+      cy.get("#expense-amount").clear();
+      cy.get("#expense-amount").type("120");
+      cy.get("#expense-date-container .mat-datepicker-toggle").click();
       cy.get(".mat-calendar-body-today").click();
-      cy.get("#expenseDate").should("have.value", "15/05/2023");
+      cy.get("#expense-date").should("have.value", "15/05/2023");
       cy.get("body").click();
       cy.get("#expense-label").type("Vac");
       cy.get(".label-autocomplete-option")
@@ -40,8 +40,8 @@ describe("Home page tests", () => {
 
       cy.get("#mat-tab-label-0-2").click();
       cy.intercept("DELETE", "/label/deleteLabel?labelId=*").as("deleteLabel");
-      cy.get(".deleteLabelButton:nth(2)").click();
-      cy.get("#validateAction").click();
+      cy.get(".delete-label-button:nth(2)").click();
+      cy.get("#validate-action").click();
 
       cy.wait("@deleteLabel").then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
