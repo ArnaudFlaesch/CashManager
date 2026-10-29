@@ -1,4 +1,4 @@
-import { DatePipe } from "@angular/common";
+import { CurrencyPipe, DatePipe } from "@angular/common";
 import { Component, computed, DestroyRef, inject, input, signal } from "@angular/core";
 import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { form, FormField } from "@angular/forms/signals";
@@ -16,14 +16,16 @@ import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-mod
 import { Expense } from "@model/Expense";
 import { Label } from "@model/Label";
 import { ErrorHandlerService } from "@services/error.handler.service";
+import { ThemeService } from "@services/theme.service/theme.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
-import { CHART_OPTIONS, DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
+import { getChartOptions, DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
 import { CreateExpenseComponent } from "../create-expense/create-expense.component";
 
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
+import { MatTooltip } from "@angular/material/tooltip";
 import { BaseChartDirective } from "ng2-charts";
 
 const ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
@@ -35,7 +37,9 @@ const EXPENSES_CHART_LABEL = "Dépenses";
   styleUrl: "./expense-list-by-month.component.scss",
   imports: [
     BaseChartDirective,
+    CurrencyPipe,
     DatePipe,
+    MatTooltip,
     MatIconButton,
     MatIcon,
     MatFormField,
@@ -51,7 +55,7 @@ const EXPENSES_CHART_LABEL = "Dépenses";
 })
 export class ExpenseListByMonthComponent {
   public readonly labels = input<Label[]>([]);
-  public readonly chartOptions = CHART_OPTIONS;
+  public readonly chartOptions = computed(() => getChartOptions(this.themeService.isDarkMode()));
 
   public readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
   public readonly selectedMonthForm = form(this.selectedMonthModel);
@@ -101,6 +105,7 @@ export class ExpenseListByMonthComponent {
   private readonly dialog = inject(MatDialog);
   private readonly expenseService = inject(ExpenseService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly themeService = inject(ThemeService);
   private readonly destroyRef = inject(DestroyRef);
 
   public handleExpenseCreation(newExpense: Expense): void {

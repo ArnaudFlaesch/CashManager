@@ -1,31 +1,59 @@
-<cash-manager-header class="page-header" />
+<cash-manager-header />
 
-<mat-tab-group>
-  <mat-tab label="Affichage des dépenses par mois">
-    <cash-manager-expense-list-by-month [labels]="labels.value()" />
-  </mat-tab>
-  <mat-tab label="Affichage du total par mois">
-    <cash-manager-total-expense-by-month [labels]="labels.value()" />
-  </mat-tab>
-  <mat-tab label="Affichage de la liste des labels">
-    <form class="create-label-form row" [formRoot]="labelForm">
-      <mat-form-field appearance="fill">
-        <mat-label>Étiquette</mat-label>
-        <input
-          type="text"
-          id="label-form"
-          placeholder="Renseignez un label"
-          aria-label="Label"
-          matInput
-          [formField]="labelForm.label"
-        />
-      </mat-form-field>
+<main class="page-content">
+  <mat-tab-group class="home-tabs" mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="200ms">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">receipt_long</mat-icon>
+        <span class="tab-label">Dépenses du mois</span>
+      </ng-template>
+      <div class="tab-content">
+        <cash-manager-expense-list-by-month [labels]="labels.value()" />
+      </div>
+    </mat-tab>
 
-      <button id="create-label-button" type="submit" mat-raised-button [disabled]="labelForm().submitting()">
-        Ajouter une étiquette
-      </button>
-    </form>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">show_chart</mat-icon>
+        <span class="tab-label">Total par mois</span>
+      </ng-template>
+      <div class="tab-content">
+        <cash-manager-total-expense-by-month [labels]="labels.value()" />
+      </div>
+    </mat-tab>
 
-    <cash-manager-label-list [labels]="labels.value()" (labelDeleted)="onDeleteLabel($event)" />
-  </mat-tab>
-</mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">sell</mat-icon>
+        <span class="tab-label">Étiquettes</span>
+      </ng-template>
+      <section class="tab-content card">
+        <h2 class="card-title">
+          <mat-icon>sell</mat-icon>
+          Étiquettes
+        </h2>
+
+        <form class="create-label-form row" [formRoot]="labelForm">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Nouvelle étiquette</mat-label>
+            <input
+              type="text"
+              id="label-form"
+              placeholder="Renseignez un label"
+              aria-label="Label"
+              matInput
+              [formField]="labelForm.label"
+            />
+          </mat-form-field>
+
+          <button id="create-label-button" type="submit" mat-flat-button [disabled]="labelForm().submitting()">
+            <mat-icon>add</mat-icon>
+            Ajouter
+          </button>
+        </form>
+
+        <cash-manager-label-list [labels]="labels.value()" (labelDeleted)="onDeleteLabel($event)" />
+      </section>
+    </mat-tab>
+  </mat-tab-group>
+</main>

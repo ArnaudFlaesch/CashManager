@@ -1,18 +1,18 @@
+<div class="brand row">
+  <img src="assets/logo.png" alt="" class="brand-logo app-logo" />
+  <span class="brand-name">CashManager</span>
+</div>
+
 <div class="actions row">
-  <button mat-mini-fab matTooltip="Applications" [matMenuTriggerFor]="appsMenu" color="primary">
-    <mat-icon>apps</mat-icon>
-  </button>
   @if (canUserSeeNotifications()) {
     <cash-manager-notifications />
   }
 
-  <button
-    id="cashmanager-menu"
-    matTooltip="Menu utilisateur"
-    mat-mini-fab
-    [matMenuTriggerFor]="cashManagerMenu"
-    color="primary"
-  >
+  <button mat-icon-button matTooltip="Applications" [matMenuTriggerFor]="appsMenu">
+    <mat-icon>apps</mat-icon>
+  </button>
+
+  <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-icon-button [matMenuTriggerFor]="cashManagerMenu">
     <mat-icon>account_circle</mat-icon>
   </button>
 
@@ -27,7 +27,7 @@
     <div mat-menu-item>
       <div class="row">
         <mat-icon>light_mode</mat-icon>
-        <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" />
+        <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" aria-label="Thème sombre" />
         <mat-icon>dark_mode</mat-icon>
       </div>
     </div>

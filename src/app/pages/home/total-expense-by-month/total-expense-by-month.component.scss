@@ -1,0 +1,19 @@
+@use "variables" as *;
+
+.total-header {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: $space-m;
+
+  .card-title {
+    margin: 0;
+  }
+
+  .label-filter {
+    gap: $space-xs;
+
+    mat-form-field {
+      width: 14rem;
+    }
+  }
+}

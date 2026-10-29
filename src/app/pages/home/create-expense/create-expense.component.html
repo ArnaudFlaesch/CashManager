@@ -1,6 +1,7 @@
-<form class="expense-form row" [formRoot]="expenseForm">
-  <mat-form-field appearance="fill" id="expenseAmount-container">
+<form class="expense-form" [formRoot]="expenseForm">
+  <mat-form-field appearance="outline" id="expenseAmount-container">
     <mat-label>Montant</mat-label>
+    <mat-icon matPrefix>euro</mat-icon>
     <input
       id="expenseAmount"
       type="number"
@@ -12,7 +13,7 @@
     />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" id="expenseDate-container">
+  <mat-form-field appearance="outline" id="expenseDate-container">
     <mat-label>Date</mat-label>
     <input
       [formField]="expenseForm.date"
@@ -28,7 +29,7 @@
     <mat-datepicker #picker />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Étiquette</mat-label>
     <input
       type="text"
@@ -49,13 +50,8 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <button
-    id="add-expense-button"
-    class="submit-button"
-    type="submit"
-    [disabled]="!canCreateExpense()"
-    mat-raised-button
-  >
-    Ajouter une dépense
+  <button id="add-expense-button" class="submit-button" type="submit" [disabled]="!canCreateExpense()" mat-flat-button>
+    <mat-icon>add</mat-icon>
+    Ajouter
   </button>
 </form>

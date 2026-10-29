@@ -1,9 +1,22 @@
-.notification.unread-notification {
-  &.info {
-    background-color: lightblue;
-  }
+@use "sass:color";
+@use "variables" as *;
 
-  &.warn {
-    background-color: orange;
+.notification {
+  gap: $space-s;
+  padding: $space-xs $space-m;
+  border-left: 3px solid transparent;
+
+  &.unread-notification {
+    font-weight: 500;
+
+    &.info {
+      border-left-color: $color-accent;
+      background-color: $color-accent-soft;
+    }
+
+    &.warn {
+      border-left-color: $color-warning;
+      background-color: color.change($color-warning, $alpha: 0.15);
+    }
   }
 }

@@ -1,39 +1,62 @@
+@use "variables" as *;
+
 .login-page {
   display: grid;
   place-items: center;
-  height: 100vh;
+  min-height: 100dvh;
+  padding: $space-m;
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at 15% 20%, rgb(37 99 235 / 18%), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgb(16 185 129 / 16%), transparent 45%), $color-background;
 }
 
 .login-card {
-  --gap: 0;
-
+  gap: 0;
   align-items: center;
-  padding: 1.5rem 4rem;
-  background-color: white;
-  border-radius: 0.25rem;
-}
+  width: 100%;
+  max-width: 24rem;
+  padding: $space-l;
+  border: 1px solid $color-border;
+  border-radius: $radius-l;
+  background-color: $color-surface;
+  box-shadow: $shadow-hover;
+  box-sizing: border-box;
 
-.logo {
-  width: 75%;
-  margin: var(--space-m);
+  @media (width <= $breakpoint-sm) {
+    padding: $space-l $space-m;
+  }
 
-  img {
+  .logo img {
     display: block;
+    height: 4.5rem;
     margin-inline: auto;
+  }
+
+  .title {
+    margin: $space-s 0 0;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    margin: $space-xs 0 0;
+    color: $color-muted-text;
   }
 }
 
-.title {
-  font-size: 2rem;
-  line-height: 1;
-}
-
 .login-form {
-  --gap: 1.25rem;
+  gap: 0;
+  width: 100%;
+  margin-top: $space-l;
 
-  margin-top: 2.5rem;
+  mat-form-field {
+    width: 100%;
+  }
 
-  .row {
-    --gap: 1.25rem;
+  button[type="submit"] {
+    height: 2.75rem;
+    margin-top: $space-s;
   }
 }

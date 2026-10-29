@@ -1,5 +1,39 @@
-.actions {
-  --gap: var(--space-xs);
+@use "variables" as *;
 
-  justify-content: flex-end;
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-s;
+  padding: $space-s $space-m;
+  border-bottom: 1px solid $color-border;
+  background-color: color-mix(in srgb, #{$color-surface} 85%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  min-width: 0;
+
+  &-logo {
+    height: 2rem;
+    width: 2rem;
+    object-fit: contain;
+  }
+
+  &-name {
+    overflow: hidden;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.actions {
+  flex: 0 0 auto;
+  gap: 0;
 }

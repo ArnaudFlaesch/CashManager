@@ -1,11 +1,52 @@
-.page-header {
+@use "@angular/material" as mat;
+@use "variables" as *;
+
+:host {
   display: block;
-  margin: var(--space-s) var(--space-m) var(--space-m);
+  min-height: 100%;
+}
+
+.page-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $space-s $space-m $space-l;
+
+  @media (width <= $breakpoint-sm) {
+    padding-inline: $space-s;
+  }
+}
+
+.home-tabs {
+  @include mat.tabs-overrides(
+    (
+      divider-color: $color-border
+    )
+  );
+}
+
+.tab {
+  // Room is kept around the content for the shadows of the cards
+  &-content {
+    margin: $space-s 2px $space-m;
+  }
+
+  &-icon {
+    margin-right: $space-s;
+  }
+
+  // Only the icons of the tabs are kept on phones
+  &-label {
+    @media (width <= $breakpoint-xs) {
+      display: none;
+    }
+  }
 }
 
 .create-label-form {
-  --gap: var(--space-m);
+  gap: $space-s;
+  margin-bottom: $space-m;
 
-  align-items: baseline;
-  justify-content: center;
+  mat-form-field {
+    flex: 0 1 20rem;
+  }
 }

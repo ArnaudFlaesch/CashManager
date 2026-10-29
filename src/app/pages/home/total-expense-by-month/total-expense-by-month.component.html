@@ -1,17 +1,28 @@
-<div class="row">
-  <mat-form-field>
-    <mat-label>Étiquettes</mat-label>
-    <mat-select [formField]="labelForm.labelId">
-      @for (label of labels(); track label.id) {
-        <mat-option [value]="label.id">{{ label.label }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  @if (isOneLabelSelected()) {
-    <button mat-icon-button (click)="resetSelectedLabel()"><mat-icon>close</mat-icon></button>
-  }
-</div>
+<section class="card">
+  <div class="total-header row">
+    <h2 class="card-title">
+      <mat-icon>show_chart</mat-icon>
+      Total des dépenses par mois
+    </h2>
 
-<div class="chart-container">
-  <canvas baseChart [data]="totalExpensesByMonthChart()" [options]="chartOptions" type="line"></canvas>
-</div>
+    <div class="label-filter row">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Étiquettes</mat-label>
+        <mat-select [formField]="labelForm.labelId">
+          @for (label of labels(); track label.id) {
+            <mat-option [value]="label.id">{{ label.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (isOneLabelSelected()) {
+        <button mat-icon-button matTooltip="Toutes les étiquettes" (click)="resetSelectedLabel()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas baseChart [data]="totalExpensesByMonthChart()" [options]="chartOptions()" type="line"></canvas>
+  </div>
+</section>

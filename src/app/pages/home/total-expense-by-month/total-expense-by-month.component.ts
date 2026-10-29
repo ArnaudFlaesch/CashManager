@@ -5,6 +5,7 @@ import { MatIconButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
+import { MatTooltip } from "@angular/material/tooltip";
 import { MatSelect } from "@angular/material/select";
 import { ChartData } from "chart.js";
 import { format } from "date-fns";
@@ -12,9 +13,10 @@ import { fr } from "date-fns/locale/fr";
 import { BaseChartDirective } from "ng2-charts";
 import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
 import { ErrorHandlerService } from "@services/error.handler.service";
+import { ThemeService } from "@services/theme.service/theme.service";
 import { ExpenseService } from "@services/expense.service/expense.service";
 import { Label } from "@model/Label";
-import { CHART_OPTIONS } from "../../../utils/Constants";
+import { getChartOptions } from "../../../utils/Constants";
 
 const NO_LABEL_ID_SELECTED = 0;
 const ERROR_GETTING_TOTAL_EXPENSES = "Erreur lors de la récupération du total des dépenses.";
@@ -22,6 +24,7 @@ const ERROR_GETTING_TOTAL_EXPENSES = "Erreur lors de la récupération du total 
 @Component({
   selector: "cash-manager-total-expense-by-month",
   templateUrl: "./total-expense-by-month.component.html",
+  styleUrl: "./total-expense-by-month.component.scss",
   imports: [
     BaseChartDirective,
     MatFormField,
@@ -30,12 +33,13 @@ const ERROR_GETTING_TOTAL_EXPENSES = "Erreur lors de la récupération du total 
     FormField,
     MatOption,
     MatIconButton,
-    MatIcon
+    MatIcon,
+    MatTooltip
   ]
 })
 export class TotalExpenseByMonthComponent {
   public readonly labels = input<Label[]>([]);
-  public readonly chartOptions = CHART_OPTIONS;
+  public readonly chartOptions = computed(() => getChartOptions(this.themeService.isDarkMode()));
 
   public readonly labelModel = signal({ labelId: NO_LABEL_ID_SELECTED });
   public readonly labelForm = form(this.labelModel);
@@ -77,6 +81,7 @@ export class TotalExpenseByMonthComponent {
 
   private readonly expenseService = inject(ExpenseService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly themeService = inject(ThemeService);
 
   public selectLabel(labelId: number): void {
     this.labelForm.labelId().value.set(labelId);

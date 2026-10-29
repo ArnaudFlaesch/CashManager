@@ -1,0 +1,71 @@
+// Design tokens, available in every stylesheet with `@use "variables" as *;`
+
+// Spacing scale
+$space-xs: 0.375rem;
+$space-s: 0.5rem;
+$space-m: 1rem;
+$space-l: 2rem;
+
+// Corner radiuses
+$radius-s: 0.25rem;
+$radius-l: 0.75rem;
+$radius-pill: 999px;
+
+// Widths below which the layouts change
+$breakpoint-xs: 480px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 900px;
+$breakpoint-xl: 1024px;
+
+// Colors identical in both themes
+$color-danger: #dc2626;
+$color-warning: #f59e0b;
+
+// Colors of the light and dark themes. The theme is switched at runtime, so the colors are
+// declared once as custom properties (see styles.scss) and only used through these variables.
+$light-theme-colors: (
+  background: #eef1f6,
+  surface: #fff,
+  text: #1f2937,
+  muted-text: #6b7280,
+  border: #e2e6ee,
+  accent: #2563eb,
+  accent-soft: #dbe7ff,
+  shadow: (
+    0 1px 2px rgb(15 23 42 / 6%),
+    0 4px 16px rgb(15 23 42 / 6%)
+  ),
+  shadow-hover: (
+    0 2px 4px rgb(15 23 42 / 8%),
+    0 10px 28px rgb(15 23 42 / 12%)
+  )
+);
+$dark-theme-colors: (
+  background: #12141a,
+  surface: #1c1f27,
+  text: #e5e7eb,
+  muted-text: #9ca3af,
+  border: #2c313c,
+  accent: #60a5fa,
+  accent-soft: #1e3a5f,
+  shadow: (
+    0 1px 2px rgb(0 0 0 / 30%),
+    0 4px 16px rgb(0 0 0 / 25%)
+  ),
+  shadow-hover: (
+    0 2px 4px rgb(0 0 0 / 35%),
+    0 10px 28px rgb(0 0 0 / 40%)
+  )
+);
+
+// Colors of the current theme
+$color-background: var(--app-background);
+$color-surface: var(--app-surface);
+$color-text: var(--app-text);
+$color-muted-text: var(--app-muted-text);
+$color-border: var(--app-border);
+$color-accent: var(--app-accent);
+$color-accent-soft: var(--app-accent-soft);
+$shadow: var(--app-shadow);
+$shadow-hover: var(--app-shadow-hover);

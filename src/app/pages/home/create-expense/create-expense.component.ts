@@ -17,7 +17,14 @@ import {
   MatDatepickerToggle
 } from "@angular/material/datepicker";
 import { MatInput } from "@angular/material/input";
-import { MatFormField, MatHint, MatLabel, MatSuffix } from "@angular/material/form-field";
+import {
+  MatFormField,
+  MatHint,
+  MatLabel,
+  MatPrefix,
+  MatSuffix
+} from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
 
 const ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
 
@@ -40,7 +47,9 @@ type ExpenseModel = {
     MatDatepickerInput,
     MatHint,
     MatDatepickerToggle,
+    MatPrefix,
     MatSuffix,
+    MatIcon,
     MatDatepicker,
     MatLabel,
     MatAutocompleteTrigger,

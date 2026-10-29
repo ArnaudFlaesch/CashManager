@@ -1,8 +1,8 @@
-<div class="row">
-  <button (click)="selectPreviousMonth()" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
+<div class="month-navigation row">
+  <button (click)="selectPreviousMonth()" mat-icon-button matTooltip="Mois précédent">
+    <mat-icon>chevron_left</mat-icon>
   </button>
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="month-field">
     <mat-label>Sélectionnez un mois</mat-label>
     <input matInput [matDatepicker]="picker" [formField]="selectedMonthForm.selectedMonth" />
     <mat-datepicker-toggle matIconSuffix [for]="picker" />
@@ -14,36 +14,58 @@
     />
   </mat-form-field>
 
-  <button (click)="selectNextMonth()" mat-icon-button>
-    <mat-icon>arrow_forward</mat-icon>
+  <button (click)="selectNextMonth()" mat-icon-button matTooltip="Mois suivant">
+    <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
 
 <div class="expenses-layout">
-  <div class="chart chart-container">
-    <canvas baseChart [data]="expensesByLabelChart()" [options]="chartOptions" type="bar"></canvas>
-  </div>
-
-  <div class="details stack">
-    <h3>Total ce mois : {{ totalForMonth() }}€</h3>
+  <section class="card chart-card">
+    <h2 class="card-title">
+      <mat-icon>bar_chart</mat-icon>
+      Dépenses par étiquette
+    </h2>
     @if (expenses.value().length) {
-      <div class="expenses-list grid">
+      <div class="chart chart-container">
+        <canvas baseChart [data]="expensesByLabelChart()" [options]="chartOptions()" type="bar"></canvas>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Aucune dépense ce mois-ci.</span>
+      </div>
+    }
+  </section>
+
+  <section class="card details stack">
+    <div class="month-total stack">
+      <span class="month-total-label">Total ce mois</span>
+      <span class="month-total-value">{{ totalForMonth() | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
+    </div>
+
+    @if (expenses.value().length) {
+      <ul class="expenses-list">
         @for (expense of expenses.value(); track expense.id) {
-          <div>
-            <span>
-              {{ expense.expenseDate | date: "dd/MM" }} : {{ expense.amount }}€
-              {{ labelNames().get(expense.labelId) }}
-            </span>
+          <li class="expense-row row">
+            <span class="expense-date">{{ expense.expenseDate | date: "dd/MM" }}</span>
+            <span class="expense-label">{{ labelNames().get(expense.labelId) }}</span>
+            <span class="expense-amount">{{ expense.amount | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
             @if (false) {
               <button mat-icon-button (click)="openDeleteExpenseModal(expense.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             }
-          </div>
+          </li>
         }
-      </div>
+      </ul>
     }
-  </div>
+  </section>
 </div>
 
-<cash-manager-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="labels()" />
+<section class="card">
+  <h2 class="card-title">
+    <mat-icon>add_card</mat-icon>
+    Nouvelle dépense
+  </h2>
+  <cash-manager-create-expense (insertedExpenseEvent)="handleExpenseCreation($event)" [labels]="labels()" />
+</section>
