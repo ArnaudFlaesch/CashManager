@@ -1,0 +1,18 @@
+@use "@angular/material" as mat;
+@use "variables" as *;
+
+// Global styles of the home page: its element and its theme colors
+cash-manager-home {
+  display: block;
+  min-height: 100%;
+
+  #home-tabs {
+    @include themed {
+      @include mat.tabs-overrides(
+        (
+          divider-color: $color-border
+        )
+      );
+    }
+  }
+}

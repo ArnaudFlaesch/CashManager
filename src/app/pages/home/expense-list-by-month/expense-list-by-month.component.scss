@@ -1,20 +1,16 @@
 @use "variables" as *;
 
-:host {
-  display: flex;
-  flex-direction: column;
-  gap: $space-m;
-}
-
-.month-navigation {
+// The element of the component and the theme colors are styled in
+// _expense-list-by-month.theme.scss
+#month-navigation {
   gap: $space-xs;
 
-  .month-field {
+  #month-field {
     width: 14rem;
   }
 }
 
-.expenses-layout {
+#expenses-layout {
   display: flex;
   gap: $space-m;
 
@@ -22,40 +18,37 @@
     flex-direction: column;
   }
 
-  .chart-card {
+  #chart-card {
     flex: 1 1 65%;
     min-width: 0;
   }
 
-  .details {
+  #month-details {
     flex: 1 1 35%;
     min-width: 0;
     max-height: 32rem;
   }
 }
 
-.month-total {
+#month-total {
   gap: $space-xs;
   padding: $space-m;
   border-radius: $radius-l;
-  background-color: $color-accent-soft;
 
   &-label {
-    color: $color-muted-text;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
   &-value {
-    color: $color-accent;
     font-size: 2rem;
     font-weight: 600;
     line-height: 1.1;
   }
 }
 
-.expenses-list {
+#expenses-list {
   margin: 0;
   padding: 0;
   overflow-y: auto;
@@ -66,19 +59,12 @@
   &-row {
     gap: $space-s;
     padding: $space-s $space-xs;
-    border-bottom: 1px solid $color-border;
-
-    &:last-child {
-      border-bottom: none;
-    }
   }
 
   &-date {
     flex: 0 0 auto;
     padding: 0.1rem $space-s;
     border-radius: $radius-pill;
-    background-color: $color-background;
-    color: $color-muted-text;
     font-size: 0.8rem;
     font-variant-numeric: tabular-nums;
   }

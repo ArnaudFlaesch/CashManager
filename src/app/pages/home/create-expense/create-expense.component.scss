@@ -1,7 +1,7 @@
 @use "variables" as *;
 
 // Amount, date, label and submit button on one line, wrapped on smaller screens
-.expense-form {
+#expense-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) auto;
   gap: $space-s $space-m;
@@ -15,7 +15,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .submit-button {
+  #add-expense-button {
     justify-self: start;
     height: 3.5rem;
   }

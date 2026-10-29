@@ -1,12 +1,7 @@
-@use "@angular/material" as mat;
 @use "variables" as *;
 
-:host {
-  display: block;
-  min-height: 100%;
-}
-
-.page-content {
+// The element of the component and the theme colors are styled in _home.theme.scss
+#page-content {
   max-width: 1400px;
   margin: 0 auto;
   padding: $space-s $space-m $space-l;
@@ -14,14 +9,6 @@
   @media (width <= $breakpoint-sm) {
     padding-inline: $space-s;
   }
-}
-
-.home-tabs {
-  @include mat.tabs-overrides(
-    (
-      divider-color: $color-border
-    )
-  );
 }
 
 .tab {
@@ -42,7 +29,7 @@
   }
 }
 
-.create-label-form {
+#create-label-form {
   gap: $space-s;
   margin-bottom: $space-m;
 

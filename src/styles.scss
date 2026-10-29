@@ -1,12 +1,15 @@
+@use "sass:map";
 @use "@angular/material" as mat;
 @use "variables" as *;
 
-// Declares the colors of a theme, used through the $color-* variables
-@mixin theme-colors($colors) {
-  @each $name, $value in $colors {
-    --app-#{$name}: #{$value};
-  }
-}
+// Global styles of the components: their element and their theme colors
+@use "app/header/header.theme";
+@use "app/header/notifications/notifications.theme";
+@use "app/pages/error/error.theme";
+@use "app/pages/home/home.theme";
+@use "app/pages/home/expense-list-by-month/expense-list-by-month.theme";
+@use "app/pages/home/label-list/label-list.theme";
+@use "app/pages/login/login.theme";
 
 // Theme
 
@@ -21,21 +24,22 @@ html {
       density: 0
     )
   );
-  @include theme-colors($light-theme-colors);
 }
 
+// The dark-mode class is on the body itself, so its colors are not set with the `themed` mixin
 body {
   height: 100%;
   margin: 0;
-  font: var(--mat-sys-body-medium);
-  color: $color-text;
-  background-color: $color-background;
+  font: $font-body;
+  color: map.get($light-theme-colors, text);
+  background-color: map.get($light-theme-colors, background);
   transition: background-color 0.2s ease;
 
   &.dark-mode {
     color-scheme: dark;
+    color: map.get($dark-theme-colors, text);
+    background-color: map.get($dark-theme-colors, background);
 
-    @include theme-colors($dark-theme-colors);
     @include mat.theme(
       (
         color: mat.$azure-palette
@@ -55,14 +59,20 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid $color-accent;
   outline-offset: 2px;
+
+  @include themed {
+    outline: 2px solid $color-accent;
+  }
 }
 
 // Thin, discreet scrollbars
 * {
   scrollbar-width: thin;
-  scrollbar-color: $color-border transparent;
+
+  @include themed {
+    scrollbar-color: $color-border transparent;
+  }
 }
 
 // Dialogs never overflow small screens
@@ -99,11 +109,14 @@ a {
 // Raised surface containing a section of a page, with an optional title
 .card {
   padding: $space-m;
-  border: 1px solid $color-border;
   border-radius: $radius-l;
-  background-color: $color-surface;
-  box-shadow: $shadow;
   box-sizing: border-box;
+
+  @include themed {
+    border: 1px solid $color-border;
+    background-color: $color-surface;
+    box-shadow: $shadow;
+  }
 }
 
 .card-title {
@@ -111,10 +124,12 @@ a {
   align-items: center;
   gap: $space-s;
   margin: 0 0 $space-m;
-  font: var(--mat-sys-title-medium);
+  font: $font-title;
 
   mat-icon {
-    color: $color-accent;
+    @include themed {
+      color: $color-accent;
+    }
   }
 }
 
@@ -125,14 +140,20 @@ a {
   align-items: center;
   gap: $space-s;
   padding: $space-l $space-m;
-  color: $color-muted-text;
   text-align: center;
+
+  @include themed {
+    color: $color-muted-text;
+  }
 
   mat-icon {
     height: 2.5rem;
     width: 2.5rem;
     font-size: 2.5rem;
-    color: $color-border;
+
+    @include themed {
+      color: $color-border;
+    }
   }
 }
 

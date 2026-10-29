@@ -1,12 +1,12 @@
-<div class="login-page">
-  <div class="login-card stack">
-    <a routerLink="/home" class="logo">
+<div id="login-page">
+  <div id="login-card" class="stack">
+    <a routerLink="/home" id="login-logo">
       <img src="assets/logo.png" alt="cash manager logo" class="app-logo" />
     </a>
-    <h1 id="login-page-title" class="title">CashManager</h1>
-    <p class="subtitle">Suivez et analysez vos dépenses</p>
+    <h1 id="login-page-title">CashManager</h1>
+    <p id="login-page-subtitle">Suivez et analysez vos dépenses</p>
 
-    <form class="login-form stack" [formRoot]="loginForm">
+    <form id="login-form" class="stack" [formRoot]="loginForm">
       <mat-form-field appearance="outline">
         <mat-label>Nom d'utilisateur</mat-label>
         <mat-icon matPrefix>person</mat-icon>

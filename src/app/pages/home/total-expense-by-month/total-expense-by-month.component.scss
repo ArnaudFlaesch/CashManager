@@ -1,15 +1,15 @@
 @use "variables" as *;
 
-.total-header {
+#total-header {
   flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: $space-m;
 
-  .card-title {
+  #total-title {
     margin: 0;
   }
 
-  .label-filter {
+  #label-filter {
     gap: $space-xs;
 
     mat-form-field {

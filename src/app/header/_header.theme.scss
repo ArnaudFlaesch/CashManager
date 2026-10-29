@@ -1,0 +1,20 @@
+@use "sass:color";
+@use "variables" as *;
+
+// Global styles of the header: its element (sticky bar) and its theme colors
+cash-manager-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-s;
+  padding: $space-s $space-m;
+  backdrop-filter: blur(12px);
+
+  @include themed {
+    border-bottom: 1px solid $color-border;
+    background-color: color.change($color-surface, $alpha: 0.85);
+  }
+}

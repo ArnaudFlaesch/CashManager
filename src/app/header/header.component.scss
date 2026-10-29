@@ -1,20 +1,7 @@
 @use "variables" as *;
 
-:host {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-s;
-  padding: $space-s $space-m;
-  border-bottom: 1px solid $color-border;
-  background-color: color-mix(in srgb, #{$color-surface} 85%, transparent);
-  backdrop-filter: blur(12px);
-}
-
-.brand {
+// The element of the component and its colors are styled in _header.theme.scss
+#brand {
   min-width: 0;
 
   &-logo {
@@ -33,7 +20,7 @@
   }
 }
 
-.actions {
+#header-actions {
   flex: 0 0 auto;
   gap: 0;
 }

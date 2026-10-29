@@ -1,6 +1,7 @@
 @use "variables" as *;
 
-.label-list {
+// The theme colors are set in _label-list.theme.scss
+#label-list {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: $space-s;
 
@@ -16,7 +17,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .empty-state {
+  #no-label-message {
     grid-column: 1 / -1;
   }
 }
@@ -27,21 +28,14 @@
   gap: $space-s;
   min-width: 0;
   padding: $space-xs $space-xs $space-xs $space-m;
-  border: 1px solid $color-border;
   border-radius: $radius-pill;
-  background-color: $color-background;
   transition: border-color 0.15s ease;
-
-  &:hover {
-    border-color: $color-accent;
-  }
 
   .label-icon {
     flex: 0 0 auto;
     height: 1.125rem;
     width: 1.125rem;
     font-size: 1.125rem;
-    color: $color-accent;
   }
 
   .label-name {
@@ -55,10 +49,5 @@
 
   .delete-label-button {
     flex: 0 0 auto;
-    color: $color-muted-text;
-
-    &:hover {
-      color: $color-danger;
-    }
   }
 }

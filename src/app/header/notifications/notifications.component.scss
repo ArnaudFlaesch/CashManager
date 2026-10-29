@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "variables" as *;
 
+// The colors of the info notifications are set in _notifications.theme.scss
 .notification {
   gap: $space-s;
   padding: $space-xs $space-m;
@@ -8,11 +9,6 @@
 
   &.unread-notification {
     font-weight: 500;
-
-    &.info {
-      border-left-color: $color-accent;
-      background-color: $color-accent-soft;
-    }
 
     &.warn {
       border-left-color: $color-warning;

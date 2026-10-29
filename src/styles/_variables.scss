@@ -1,3 +1,6 @@
+@use "sass:list";
+@use "sass:map";
+
 // Design tokens, available in every stylesheet with `@use "variables" as *;`
 
 // Spacing scale
@@ -18,12 +21,15 @@ $breakpoint-md: 768px;
 $breakpoint-lg: 900px;
 $breakpoint-xl: 1024px;
 
+// Fonts of the Material 3 body-medium and title-medium styles
+$font-body: 400 list.slash(0.875rem, 1.25rem) Roboto;
+$font-title: 500 list.slash(1rem, 1.5rem) Roboto;
+
 // Colors identical in both themes
 $color-danger: #dc2626;
 $color-warning: #f59e0b;
 
-// Colors of the light and dark themes. The theme is switched at runtime, so the colors are
-// declared once as custom properties (see styles.scss) and only used through these variables.
+// Colors of the light and dark themes
 $light-theme-colors: (
   background: #eef1f6,
   surface: #fff,
@@ -59,13 +65,40 @@ $dark-theme-colors: (
   )
 );
 
-// Colors of the current theme
-$color-background: var(--app-background);
-$color-surface: var(--app-surface);
-$color-text: var(--app-text);
-$color-muted-text: var(--app-muted-text);
-$color-border: var(--app-border);
-$color-accent: var(--app-accent);
-$color-accent-soft: var(--app-accent-soft);
-$shadow: var(--app-shadow);
-$shadow-hover: var(--app-shadow-hover);
+// Colors of the current theme, set by the `themed` mixin (light theme by default)
+$color-background: map.get($light-theme-colors, background);
+$color-surface: map.get($light-theme-colors, surface);
+$color-text: map.get($light-theme-colors, text);
+$color-muted-text: map.get($light-theme-colors, muted-text);
+$color-border: map.get($light-theme-colors, border);
+$color-accent: map.get($light-theme-colors, accent);
+$color-accent-soft: map.get($light-theme-colors, accent-soft);
+$shadow: map.get($light-theme-colors, shadow);
+$shadow-hover: map.get($light-theme-colors, shadow-hover);
+
+@mixin -use-theme-colors($colors) {
+  $color-background: map.get($colors, background) !global;
+  $color-surface: map.get($colors, surface) !global;
+  $color-text: map.get($colors, text) !global;
+  $color-muted-text: map.get($colors, muted-text) !global;
+  $color-border: map.get($colors, border) !global;
+  $color-accent: map.get($colors, accent) !global;
+  $color-accent-soft: map.get($colors, accent-soft) !global;
+  $shadow: map.get($colors, shadow) !global;
+  $shadow-hover: map.get($colors, shadow-hover) !global;
+}
+
+// Writes the declarations of the content block with the colors of the light theme, then again
+// with the colors of the dark theme when the body has the `dark-mode` class.
+// Every declaration using a theme color ($color-*, $shadow*) must be inside this mixin.
+@mixin themed {
+  @include -use-theme-colors($light-theme-colors);
+  @content;
+
+  .dark-mode & {
+    @include -use-theme-colors($dark-theme-colors);
+    @content;
+  }
+
+  @include -use-theme-colors($light-theme-colors);
+}

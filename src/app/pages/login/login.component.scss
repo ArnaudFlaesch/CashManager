@@ -1,52 +1,46 @@
 @use "variables" as *;
 
-.login-page {
+// The theme colors are set in _login.theme.scss
+#login-page {
   display: grid;
   place-items: center;
   min-height: 100dvh;
   padding: $space-m;
   box-sizing: border-box;
-  background:
-    radial-gradient(circle at 15% 20%, rgb(37 99 235 / 18%), transparent 45%),
-    radial-gradient(circle at 85% 80%, rgb(16 185 129 / 16%), transparent 45%), $color-background;
 }
 
-.login-card {
+#login-card {
   gap: 0;
   align-items: center;
   width: 100%;
   max-width: 24rem;
   padding: $space-l;
-  border: 1px solid $color-border;
   border-radius: $radius-l;
-  background-color: $color-surface;
-  box-shadow: $shadow-hover;
   box-sizing: border-box;
 
   @media (width <= $breakpoint-sm) {
     padding: $space-l $space-m;
   }
 
-  .logo img {
+  #login-logo img {
     display: block;
     height: 4.5rem;
     margin-inline: auto;
   }
 
-  .title {
+  #login-page-title {
     margin: $space-s 0 0;
     font-size: 2rem;
     font-weight: 500;
     line-height: 1.2;
   }
 
-  .subtitle {
+  #login-page-subtitle {
     margin: $space-xs 0 0;
-    color: $color-muted-text;
   }
 }
 
-.login-form {
+#login-form {
   gap: 0;
   width: 100%;
   margin-top: $space-l;

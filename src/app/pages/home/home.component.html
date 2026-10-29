@@ -1,7 +1,7 @@
 <cash-manager-header />
 
-<main class="page-content">
-  <mat-tab-group class="home-tabs" mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="200ms">
+<main id="page-content">
+  <mat-tab-group id="home-tabs" mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="200ms">
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">receipt_long</mat-icon>
@@ -33,7 +33,7 @@
           Étiquettes
         </h2>
 
-        <form class="create-label-form row" [formRoot]="labelForm">
+        <form id="create-label-form" class="row" [formRoot]="labelForm">
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Nouvelle étiquette</mat-label>
             <input

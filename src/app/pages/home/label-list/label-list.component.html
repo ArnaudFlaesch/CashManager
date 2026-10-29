@@ -1,4 +1,4 @@
-<div id="label-list" class="label-list grid">
+<div id="label-list" class="grid">
   @for (label of labels(); track label.id) {
     <div class="label-container">
       <mat-icon class="label-icon">sell</mat-icon>
@@ -13,7 +13,7 @@
       </button>
     </div>
   } @empty {
-    <div class="empty-state">
+    <div id="no-label-message" class="empty-state">
       <mat-icon>sell</mat-icon>
       <span>Aucune étiquette pour le moment.</span>
     </div>
