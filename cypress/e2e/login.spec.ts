@@ -7,8 +7,10 @@ describe("Login tests", () => {
 
   it("Should fail to login", () => {
     cy.get("#login-button").should("be.disabled");
-    cy.get("#input-username").type("test");
-    cy.get("#input-password").type("test");
+    cy.contains("mat-label", "Nom d'utilisateur").click();
+    cy.get("#input-username").should("be.focused").type("test");
+    cy.contains("mat-label", "Mot de passe").click();
+    cy.get("#input-password").should("be.focused").type("test");
     cy.get("#login-button").should("be.enabled").click();
     cy.wait("@login").then((request: Interception) => {
       expect(request.response.statusCode).to.equal(401);
@@ -17,8 +19,10 @@ describe("Login tests", () => {
   });
 
   it("Should login and logout", () => {
-    cy.get("#input-username").type("admintest");
-    cy.get("#input-password").type("adminpassword");
+    cy.contains("mat-label", "Nom d'utilisateur").click();
+    cy.get("#input-username").should("be.focused").type("admintest");
+    cy.contains("mat-label", "Mot de passe").click();
+    cy.get("#input-password").should("be.focused").type("adminpassword");
     cy.get("#login-button").should("be.enabled").click();
     cy.wait("@login").then((request: Interception) => {
       expect(request.response.statusCode).to.equal(200);
