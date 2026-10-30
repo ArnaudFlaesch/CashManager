@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { getChartOptions } from "./Constants";
 
 describe("Constants", () => {
