@@ -91,7 +91,7 @@
           "options": {
             "setupFiles": ["src/test-setup.ts"],
             "coverageReporters": ["lcov", "text-summary"],
-            "coverageExclude": ["**/*.spec.ts"]
+            "coverageExclude": ["**/*.spec.ts", "src/environments/**"]
           }
         }
       }

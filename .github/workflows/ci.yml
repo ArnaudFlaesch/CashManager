@@ -53,7 +53,7 @@ jobs:
       - name: Start backend image
         run: |
           [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${{github.ref_name}} | wc -l)" == 1 && ${{github.ref_name}} != 'main' ]] && tagName=${{github.ref_name}} || tagName=latest
-          docker run -p 8080:8080 -d --network="host" -e POSTGRES_PASSWORD=postgres ghcr.io/arnaudflaesch/dash-webservices:$tagName
+          docker run -d --network="host" -e POSTGRES_PASSWORD=postgres ghcr.io/arnaudflaesch/dash-webservices:$tagName
 
       - name: E2E Tests
         uses: cypress-io/github-action@4ce68f262a3888d22cf3175d62010a145ba737ee # v7.4.8
