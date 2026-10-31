@@ -1,0 +1,9 @@
+@use "variables" as *;
+
+// Theme colors of the notifications, displayed in the overlay of the menu with this class
+.notifications-menu .notification.unread-notification.info {
+  @include themed {
+    border-left-color: $color-accent;
+    background-color: $color-accent-soft;
+  }
+}

@@ -1,16 +1,21 @@
 <button
   id="display-notifications-button"
   matTooltip="Notifications"
-  color="primary"
-  mat-mini-fab
+  mat-icon-button
   [matMenuTriggerFor]="notificationsMenu"
 >
-  <mat-icon [matBadge]="unreadNotificationsForBadge()" title="Notifications" aria-hidden="false">
+  <mat-icon
+    [matBadge]="unreadNotificationsForBadge()"
+    [matBadgeHidden]="!unreadNotificationsForBadge()"
+    matBadgeSize="small"
+    title="Notifications"
+    aria-hidden="false"
+  >
     notifications
   </mat-icon>
 </button>
 
-<mat-menu #notificationsMenu="matMenu">
+<mat-menu #notificationsMenu="matMenu" class="notifications-menu">
   @if (unreadNotificationsForBadge()) {
     <button
       id="mark-all-notifications-as-read-button"

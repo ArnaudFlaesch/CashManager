@@ -1,5 +1,26 @@
-.actions {
-  --gap: var(--space-xs);
+@use "variables" as *;
 
-  justify-content: flex-end;
+// The element of the component and its colors are styled in _header.theme.scss
+#brand {
+  min-width: 0;
+
+  &-logo {
+    height: 2rem;
+    width: 2rem;
+    object-fit: contain;
+  }
+
+  &-name {
+    overflow: hidden;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+#header-actions {
+  flex: 0 0 auto;
+  gap: 0;
 }

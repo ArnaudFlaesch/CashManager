@@ -6,7 +6,10 @@ import { firstValueFrom } from "rxjs";
 import { AuthService } from "@services/auth.service/auth.service";
 import { ErrorHandlerService } from "@services/error.handler.service";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { MatButton } from "@angular/material/button";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatFormField, MatLabel, MatPrefix, MatSuffix } from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
 
 const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 
@@ -14,9 +17,23 @@ const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.
   selector: "cash-manager-login",
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
-  imports: [RouterLink, FormRoot, FormField, MatButton, MatProgressSpinner]
+  imports: [
+    RouterLink,
+    FormRoot,
+    FormField,
+    MatButton,
+    MatIconButton,
+    MatFormField,
+    MatLabel,
+    MatPrefix,
+    MatSuffix,
+    MatIcon,
+    MatInput,
+    MatProgressSpinner
+  ]
 })
 export class LoginComponent {
+  public readonly isPasswordVisible = signal(false);
   public readonly loginModel = signal({ username: "", password: "" });
   public readonly loginForm = form(
     this.loginModel,

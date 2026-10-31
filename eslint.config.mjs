@@ -6,17 +6,7 @@ import pluginCypress from "eslint-plugin-cypress";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores([
-    ".angular",
-    "coverage",
-    "dist",
-    "cypress.config.ts",
-    "cypress-test.config.ts",
-    "node_modules",
-    "public",
-    "build",
-    "package-lock.json"
-  ]),
+  globalIgnores([".angular", "coverage", "dist", "node_modules", "build", "package-lock.json"]),
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
     plugins: { js },

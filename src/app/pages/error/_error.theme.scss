@@ -1,0 +1,11 @@
+@use "variables" as *;
+
+// Theme colors of the error page
+#error-page {
+  h1,
+  p {
+    @include themed {
+      color: $color-text;
+    }
+  }
+}

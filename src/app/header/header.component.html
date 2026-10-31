@@ -1,18 +1,18 @@
-<div class="actions row">
-  <button mat-mini-fab matTooltip="Applications" [matMenuTriggerFor]="appsMenu" color="primary">
-    <mat-icon>apps</mat-icon>
-  </button>
+<div id="brand" class="row">
+  <img src="assets/logo.png" alt="" id="brand-logo" class="app-logo" />
+  <span id="brand-name">CashManager</span>
+</div>
+
+<div id="header-actions" class="row">
   @if (canUserSeeNotifications()) {
     <cash-manager-notifications />
   }
 
-  <button
-    id="cashmanager-menu"
-    matTooltip="Menu utilisateur"
-    mat-mini-fab
-    [matMenuTriggerFor]="cashManagerMenu"
-    color="primary"
-  >
+  <button mat-icon-button matTooltip="Applications" [matMenuTriggerFor]="appsMenu">
+    <mat-icon>apps</mat-icon>
+  </button>
+
+  <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-icon-button [matMenuTriggerFor]="cashManagerMenu">
     <mat-icon>account_circle</mat-icon>
   </button>
 
@@ -27,21 +27,21 @@
     <div mat-menu-item>
       <div class="row">
         <mat-icon>light_mode</mat-icon>
-        <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" />
+        <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" aria-label="Thème sombre" />
         <mat-icon>dark_mode</mat-icon>
       </div>
     </div>
     <mat-divider />
-    <button mat-menu-item (click)="downloadConfig()" id="downloadConfigButton">
+    <button mat-menu-item (click)="downloadConfig()" id="download-config-button">
       <mat-icon>download</mat-icon>
       <span>Télécharger la configuration</span>
     </button>
-    <button mat-menu-item (click)="openImportConfigModal()" id="openImportConfigModal">
+    <button mat-menu-item (click)="openImportConfigModal()" id="open-import-config-modal">
       <mat-icon>upload</mat-icon>
       <span>Importer une configuration</span>
     </button>
     <mat-divider />
-    <button mat-menu-item (click)="logout()" id="logoutButton">
+    <button mat-menu-item (click)="logout()" id="logout-button">
       <mat-icon>logout</mat-icon>
       <span>Déconnexion</span>
     </button>

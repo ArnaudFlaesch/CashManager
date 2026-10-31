@@ -45,9 +45,9 @@ directement.
 Sinon, il est possible de récupérer le backend via Docker en commençant par sa
 base de données :
 
-> docker pull postgres:16.3-alpine3.20
+> docker pull postgres:18.6-alpine3.24
 > docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash
-> postgres:16.3-alpine3.20;
+> postgres:18.6-alpine3.24;
 
 et son image Docker :
 

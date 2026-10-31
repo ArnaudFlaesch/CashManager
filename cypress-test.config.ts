@@ -1,34 +1,15 @@
 import { defineConfig } from "cypress";
+import baseConfig from "./cypress.config";
 
+// Configuration used by the CI: longer timeouts, retries and screenshots of the failed tests
 export default defineConfig({
-  allowCypressEnv: false,
-  watchForFileChanges: false,
+  ...baseConfig,
   defaultCommandTimeout: 8000,
-  viewportWidth: 1920,
-  viewportHeight: 1080,
   screenshotOnRunFailure: true,
-  video: false,
-  videoCompression: false,
-  reporter: "mochawesome",
-  reporterOptions: {
-    reportDir: "cypress/results/mochawesome-report",
-    overwrite: false,
-    html: false,
-    json: true
-  },
-  env: {
-    backend_url: "localhost:8080"
-  },
   e2e: {
+    ...baseConfig.e2e,
     retries: {
       runMode: 3
-    },
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      return require("./cypress/plugins/index.ts")(on, config);
-    },
-    baseUrl: "http://localhost:4200/",
-    specPattern: "cypress/e2e/*.spec.ts"
+    }
   }
 });

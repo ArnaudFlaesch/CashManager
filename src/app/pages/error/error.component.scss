@@ -1,0 +1,19 @@
+@use "variables" as *;
+
+// The colors of the texts are set in _error.theme.scss
+#error-page {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: $space-m;
+  box-sizing: border-box;
+
+  #error-card {
+    max-width: 28rem;
+  }
+
+  h1,
+  p {
+    margin: 0;
+  }
+}

@@ -1,22 +1,85 @@
-.expenses-layout {
-  display: flex;
-  gap: var(--space-m) var(--space-l);
-  margin-bottom: var(--space-m);
+@use "variables" as *;
 
-  @media (width <= 640px) {
-    flex-direction: column;
+// The element of the component and the theme colors are styled in
+// _expense-list-by-month.theme.scss
+#month-navigation {
+  gap: $space-xs;
+
+  #month-field {
+    width: 14rem;
   }
 }
 
-.chart {
-  flex: 1 0 70%;
+#expenses-layout {
+  display: flex;
+  gap: $space-m;
+
+  @media (width <= $breakpoint-lg) {
+    flex-direction: column;
+  }
+
+  #chart-card {
+    flex: 1 1 65%;
+    min-width: 0;
+  }
+
+  #month-details {
+    flex: 1 1 35%;
+    min-width: 0;
+    max-height: 32rem;
+  }
 }
 
-.details {
-  flex: 0 1 30%;
+#month-total {
+  gap: $space-xs;
+  padding: $space-m;
+  border-radius: $radius-l;
+
+  &-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &-value {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
 }
 
-.expenses-list {
-  --columns: 3;
-  --gap: var(--space-m) var(--space-l);
+#expenses-list {
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.expense {
+  &-row {
+    gap: $space-s;
+    padding: $space-s $space-xs;
+  }
+
+  &-date {
+    flex: 0 0 auto;
+    padding: 0.1rem $space-s;
+    border-radius: $radius-pill;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-amount {
+    flex: 0 0 auto;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
 }

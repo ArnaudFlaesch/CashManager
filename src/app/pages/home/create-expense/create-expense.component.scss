@@ -1,10 +1,22 @@
-.expense-form {
-  @media (width <= 650px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
+@use "variables" as *;
 
-.submit-button {
-  justify-self: start;
+// Amount, date, label and submit button on one line, wrapped on smaller screens
+#expense-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) auto;
+  gap: $space-s $space-m;
+  align-items: start;
+
+  @media (width <= $breakpoint-lg) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (width <= $breakpoint-xs) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #add-expense-button {
+    justify-self: start;
+    height: 3.5rem;
+  }
 }

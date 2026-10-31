@@ -1,5 +1,5 @@
 {
-  "extends": ["config:recommended"],
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
   "assignees": ["ArnaudFlaesch"],
   "packageRules": [
     {

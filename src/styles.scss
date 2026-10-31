@@ -1,4 +1,15 @@
+@use "sass:map";
 @use "@angular/material" as mat;
+@use "variables" as *;
+
+// Global styles of the components: their element and their theme colors
+@use "app/header/header.theme";
+@use "app/header/notifications/notifications.theme";
+@use "app/pages/error/error.theme";
+@use "app/pages/home/home.theme";
+@use "app/pages/home/expense-list-by-month/expense-list-by-month.theme";
+@use "app/pages/home/label-list/label-list.theme";
+@use "app/pages/login/login.theme";
 
 // Theme
 
@@ -13,55 +24,136 @@ html {
       density: 0
     )
   );
-
-  --app-background: #4e4945;
-  --space-xs: 0.375rem;
-  --space-s: 0.5rem;
-  --space-m: 1rem;
-  --space-l: 2rem;
 }
 
+// The dark-mode class is on the body itself, so its colors are not set with the `themed` mixin
 body {
   height: 100%;
   margin: 0;
-  font: var(--mat-sys-body-medium);
-  background-color: var(--app-background);
+  font: $font-body;
+  color: map.get($light-theme-colors, text);
+  background-color: map.get($light-theme-colors, background);
+  transition: background-color 0.2s ease;
 
   &.dark-mode {
     color-scheme: dark;
-
-    --app-background: #282a33;
+    color: map.get($dark-theme-colors, text);
+    background-color: map.get($dark-theme-colors, background);
 
     @include mat.theme(
       (
-        color: mat.$red-palette
+        color: mat.$azure-palette
       )
     );
+
+    // The logo is dark, so it is lightened to stay visible
+    .app-logo {
+      filter: invert(1) brightness(1.4);
+    }
   }
 }
 
-// Layout helpers. Spacing can be tuned per usage with the `--gap` custom property.
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline-offset: 2px;
+
+  @include themed {
+    outline: 2px solid $color-accent;
+  }
+}
+
+// Thin, discreet scrollbars
+* {
+  scrollbar-width: thin;
+
+  @include themed {
+    scrollbar-color: $color-border transparent;
+  }
+}
+
+// Dialogs never overflow small screens
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+  max-width: calc(100vw - #{2 * $space-m}) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+// Layout helpers, their gap and columns are overridden in the components when needed
 
 .row {
   display: flex;
   align-items: center;
-  gap: var(--gap, var(--space-s));
+  gap: $space-s;
 }
 
 .stack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap, var(--space-s));
+  gap: $space-s;
 }
 
-// Grid with `--columns` columns, and `--columns-mobile` (default 2) on small screens.
 .grid {
   display: grid;
-  grid-template-columns: repeat(var(--columns, 2), minmax(0, 1fr));
-  gap: var(--gap, var(--space-m));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-m;
+}
 
-  @media (width <= 640px) {
-    grid-template-columns: repeat(var(--columns-mobile, 2), minmax(0, 1fr));
+// Raised surface containing a section of a page, with an optional title
+.card {
+  padding: $space-m;
+  border-radius: $radius-l;
+  box-sizing: border-box;
+
+  @include themed {
+    border: 1px solid $color-border;
+    background-color: $color-surface;
+    box-shadow: $shadow;
+  }
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: $space-s;
+  margin: 0 0 $space-m;
+  font: $font-title;
+
+  mat-icon {
+    @include themed {
+      color: $color-accent;
+    }
+  }
+}
+
+// Message displayed in place of an empty list or chart
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-s;
+  padding: $space-l $space-m;
+  text-align: center;
+
+  @include themed {
+    color: $color-muted-text;
+  }
+
+  mat-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    font-size: 2.5rem;
+
+    @include themed {
+      color: $color-border;
+    }
   }
 }
 
