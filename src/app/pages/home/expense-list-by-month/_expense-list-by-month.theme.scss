@@ -10,26 +10,17 @@ cash-manager-expense-list-by-month {
     #month-total {
       background-color: $color-accent-soft;
 
-      &-label {
-        color: $color-muted-text;
-      }
-
       &-value {
         color: $color-accent;
       }
     }
 
-    .expense-row {
+    .expense-row:not(:last-child) {
       border-bottom: 1px solid $color-border;
     }
 
     .expense-date {
       background-color: $color-background;
-      color: $color-muted-text;
     }
-  }
-
-  .expense-row:last-child {
-    border-bottom: none;
   }
 }

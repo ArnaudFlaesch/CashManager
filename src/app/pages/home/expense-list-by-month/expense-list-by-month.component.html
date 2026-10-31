@@ -39,7 +39,7 @@
 
   <section id="month-details" class="card stack">
     <div id="month-total" class="stack">
-      <span id="month-total-label">Total ce mois</span>
+      <span id="month-total-label" class="muted-text">Total ce mois</span>
       <span id="month-total-value">{{ totalForMonth() | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
     </div>
 
@@ -47,8 +47,8 @@
       <ul id="expenses-list">
         @for (expense of expenses.value(); track expense.id) {
           <li class="expense-row row">
-            <span class="expense-date">{{ expense.expenseDate | date: "dd/MM" }}</span>
-            <span class="expense-label">{{ labelNames().get(expense.labelId) }}</span>
+            <span class="expense-date muted-text">{{ expense.expenseDate | date: "dd/MM" }}</span>
+            <span class="expense-label ellipsis">{{ labelNames().get(expense.labelId) }}</span>
             <span class="expense-amount">{{ expense.amount | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
             @if (false) {
               <button mat-icon-button (click)="openDeleteExpenseModal(expense.id)">

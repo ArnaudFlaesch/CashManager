@@ -88,6 +88,13 @@ $shadow-hover: map.get($light-theme-colors, shadow-hover);
   $shadow-hover: map.get($colors, shadow-hover) !global;
 }
 
+// Square Material icon of the given size
+@mixin icon-size($size) {
+  height: $size;
+  width: $size;
+  font-size: $size;
+}
+
 // Writes the declarations of the content block with the colors of the light theme, then again
 // with the colors of the dark theme when the body has the `dark-mode` class.
 // Every declaration using a theme color ($color-*, $shadow*) must be inside this mixin.

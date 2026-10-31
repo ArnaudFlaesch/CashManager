@@ -1,11 +1,8 @@
 @use "variables" as *;
 
-// Theme colors of the error page
-#error-page {
-  h1,
-  p {
-    @include themed {
-      color: $color-text;
-    }
+// Theme colors of the error page: its texts are not muted like the ones of the other empty states
+#error-card {
+  @include themed {
+    color: $color-text;
   }
 }

@@ -32,19 +32,15 @@
   transition: border-color 0.15s ease;
 
   .label-icon {
+    @include icon-size(1.125rem);
+
     flex: 0 0 auto;
-    height: 1.125rem;
-    width: 1.125rem;
-    font-size: 1.125rem;
   }
 
   .label-name {
     flex: 1;
     min-width: 0;
-    overflow: hidden;
     font-weight: 500;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .delete-label-button {
