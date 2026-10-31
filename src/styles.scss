@@ -33,7 +33,8 @@ body {
   font: $font-body;
   color: map.get($light-theme-colors, text);
   background-color: map.get($light-theme-colors, background);
-  transition: background-color 0.2s ease;
+
+  @include transition(background-color 0.2s ease);
 
   &.dark-mode {
     color-scheme: dark;
@@ -72,17 +73,6 @@ a {
 
   @include themed {
     scrollbar-color: $color-border transparent;
-  }
-}
-
-// Dialogs never overflow small screens
-.cdk-overlay-pane.mat-mdc-dialog-panel {
-  max-width: calc(100vw - #{2 * $space-m}) !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
   }
 }
 

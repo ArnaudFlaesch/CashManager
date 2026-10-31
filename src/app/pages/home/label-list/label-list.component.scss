@@ -29,7 +29,8 @@
   min-width: 0;
   padding: $space-xs $space-xs $space-xs $space-m;
   border-radius: $radius-pill;
-  transition: border-color 0.15s ease;
+
+  @include transition(border-color 0.15s ease);
 
   .label-icon {
     @include icon-size(1.125rem);

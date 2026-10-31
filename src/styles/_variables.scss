@@ -1,5 +1,6 @@
 @use "sass:list";
 @use "sass:map";
+@use "sass:selector";
 
 // Design tokens, available in every stylesheet with `@use "variables" as *;`
 
@@ -95,6 +96,13 @@ $shadow-hover: map.get($light-theme-colors, shadow-hover);
   font-size: $size;
 }
 
+// Transition only played when the user has not asked to reduce motion
+@mixin transition($value) {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: $value;
+  }
+}
+
 // Writes the declarations of the content block with the colors of the light theme, then again
 // with the colors of the dark theme when the body has the `dark-mode` class.
 // Every declaration using a theme color ($color-*, $shadow*) must be inside this mixin.
@@ -102,7 +110,7 @@ $shadow-hover: map.get($light-theme-colors, shadow-hover);
   @include -use-theme-colors($light-theme-colors);
   @content;
 
-  .dark-mode & {
+  @at-root #{selector.nest(".dark-mode", &)} {
     @include -use-theme-colors($dark-theme-colors);
     @content;
   }
