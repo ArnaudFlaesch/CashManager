@@ -1,5 +1,3 @@
-import { registerLocaleData } from "@angular/common";
-import localeFr from "@angular/common/locales/fr";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
@@ -9,9 +7,6 @@ import { environment } from "../../../environments/environment";
 import { Label } from "@model/Label";
 import { HomeComponent } from "./home.component";
 import { provideHttpClient } from "@angular/common/http";
-
-// Registered in main.ts for the application
-registerLocaleData(localeFr);
 
 describe("HomeComponent", () => {
   const labelData = [

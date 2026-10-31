@@ -1,5 +1,3 @@
-import { registerLocaleData } from "@angular/common";
-import localeFr from "@angular/common/locales/fr";
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -20,9 +18,6 @@ import { ExpenseListByMonthComponent } from "./expense-list-by-month.component";
 import { provideHttpClient } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { routes } from "../../../app.routes";
-
-// Registered in main.ts for the application
-registerLocaleData(localeFr);
 
 describe("ExpenseListByMonthComponent", () => {
   let component: ExpenseListByMonthComponent;

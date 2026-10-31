@@ -1,0 +1,2 @@
+# Always check out text files with LF endings, as expected by Prettier
+* text=auto eol=lf

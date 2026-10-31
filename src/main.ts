@@ -1,5 +1,5 @@
 import { registerLocaleData } from "@angular/common";
-import { provideHttpClient, withInterceptors, withXhr } from "@angular/common/http";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import localeFr from "@angular/common/locales/fr";
 import { isDevMode, provideBrowserGlobalErrorListeners } from "@angular/core";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
@@ -25,7 +25,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
-    provideHttpClient(withXhr(), withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideBrowserGlobalErrorListeners()
   ]
 }).catch((err) => console.error(err));
