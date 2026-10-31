@@ -10,8 +10,6 @@ export default defineConfig([
     ".angular",
     "coverage",
     "dist",
-    "cypress.config.ts",
-    "cypress-test.config.ts",
     "node_modules",
     "public",
     "build",

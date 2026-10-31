@@ -16,7 +16,7 @@ describe("Home page tests", () => {
     cy.get("#label-form").type("Vacances");
     cy.get("#create-label-button").click();
     cy.wait("@addLabel").then((request: Interception) => {
-      expect(request.response.statusCode).to.equal(200);
+      expect(request.response?.statusCode).to.equal(200);
       cy.get("#label-list > .label-container").should("have.length", 3);
 
       cy.get("#mat-tab-label-0-0").click();
@@ -44,7 +44,7 @@ describe("Home page tests", () => {
       cy.get("#validate-action").click();
 
       cy.wait("@deleteLabel").then((request: Interception) => {
-        expect(request.response.statusCode).to.equal(200);
+        expect(request.response?.statusCode).to.equal(200);
         cy.get("#label-list").should("have.length", 2);
         cy.clock().then((clock) => {
           clock.restore();
