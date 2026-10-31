@@ -1,9 +1,10 @@
 import { registerLocaleData } from "@angular/common";
-import { provideHttpClient, withInterceptors, withXhr } from "@angular/common/http";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import localeFr from "@angular/common/locales/fr";
 import { isDevMode, provideBrowserGlobalErrorListeners } from "@angular/core";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from "@angular/material/dialog";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { provideRouter } from "@angular/router";
 import { provideServiceWorker } from "@angular/service-worker";
@@ -22,10 +23,15 @@ bootstrapApplication(AppComponent, {
       registrationStrategy: "registerWhenStable:30000"
     }),
     { provide: MAT_DATE_LOCALE, useValue: fr },
+    // Dialogs never overflow small screens
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: { ...new MatDialogConfig(), maxWidth: "calc(100vw - 2rem)" }
+    },
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     provideDateFnsAdapter(),
-    provideHttpClient(withXhr(), withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideBrowserGlobalErrorListeners()
   ]
 }).catch((err) => console.error(err));

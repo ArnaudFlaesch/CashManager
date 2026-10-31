@@ -1,10 +1,50 @@
-.label-list {
-  --columns: 5;
-  --gap: 0 var(--space-m);
+@use "variables" as *;
+
+// The theme colors are set in _label-list.theme.scss
+#label-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $space-s;
+
+  @media (width <= $breakpoint-xl) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (width <= $breakpoint-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (width <= $breakpoint-sm) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #no-label-message {
+    grid-column: 1 / -1;
+  }
 }
 
 .label-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   align-items: center;
+  gap: $space-s;
+  min-width: 0;
+  padding: $space-xs $space-xs $space-xs $space-m;
+  border-radius: $radius-pill;
+
+  @include transition(border-color 0.15s ease);
+
+  .label-icon {
+    @include icon-size(1.125rem);
+
+    flex: 0 0 auto;
+  }
+
+  .label-name {
+    flex: 1;
+    min-width: 0;
+    font-weight: 500;
+  }
+
+  .delete-label-button {
+    flex: 0 0 auto;
+  }
 }

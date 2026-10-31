@@ -1,9 +1,18 @@
-.notification.unread-notification {
-  &.info {
-    background-color: lightblue;
-  }
+@use "sass:color";
+@use "variables" as *;
 
-  &.warn {
-    background-color: orange;
+// The colors of the info notifications are set in _notifications.theme.scss
+.notification {
+  gap: $space-s;
+  padding: $space-xs $space-m;
+  border-left: 3px solid transparent;
+
+  &.unread-notification {
+    font-weight: 500;
+
+    &.warn {
+      border-left-color: $color-warning;
+      background-color: color.change($color-warning, $alpha: 0.15);
+    }
   }
 }

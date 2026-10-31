@@ -1,0 +1,26 @@
+@use "variables" as *;
+
+// Global styles of the expenses of the month: its element and its theme colors
+cash-manager-expense-list-by-month {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+
+  @include themed {
+    #month-total {
+      background-color: $color-accent-soft;
+
+      &-value {
+        color: $color-accent;
+      }
+    }
+
+    .expense-row:not(:last-child) {
+      border-bottom: 1px solid $color-border;
+    }
+
+    .expense-date {
+      background-color: $color-background;
+    }
+  }
+}

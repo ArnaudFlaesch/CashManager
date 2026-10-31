@@ -1,0 +1,9 @@
+// The color of the texts is set in _error.theme.scss
+#error-card {
+  max-width: 28rem;
+
+  h1,
+  p {
+    margin: 0;
+  }
+}

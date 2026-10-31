@@ -2,5 +2,4 @@ package-lock.json
 styleLintReport.json
 .angular
 dist/
-public/
 coverage/

@@ -17,5 +17,16 @@
         "files": ["/assets/**", "/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "fonts",
+      "urls": ["https://fonts.googleapis.com/**", "https://fonts.gstatic.com/**"],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 20,
+        "maxAge": "365d"
+      }
+    }
   ]
 }

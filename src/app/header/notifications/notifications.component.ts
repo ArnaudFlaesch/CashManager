@@ -11,7 +11,7 @@ import { MatBadge } from "@angular/material/badge";
 import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuTrigger } from "@angular/material/menu";
 import { MatTooltip } from "@angular/material/tooltip";
-import { MatIconButton, MatMiniFabButton } from "@angular/material/button";
+import { MatIconButton } from "@angular/material/button";
 
 const ERROR_MARKING_NOTIFICATION_AS_READ = "Erreur lors du traitement de la requête.";
 
@@ -24,16 +24,7 @@ const NOTIFICATION_TYPE_ICONS: Record<NotificationTypeEnum, string> = {
   selector: "cash-manager-notifications",
   templateUrl: "./notifications.component.html",
   styleUrl: "./notifications.component.scss",
-  imports: [
-    MatMiniFabButton,
-    MatTooltip,
-    MatMenuTrigger,
-    MatIcon,
-    MatBadge,
-    MatMenu,
-    MatIconButton,
-    DateFormatPipe
-  ]
+  imports: [MatTooltip, MatMenuTrigger, MatIcon, MatBadge, MatMenu, MatIconButton, DateFormatPipe]
 })
 export class NotificationsComponent {
   public readonly notifications = rxResource({

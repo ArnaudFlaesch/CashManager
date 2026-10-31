@@ -1,0 +1,18 @@
+@use "variables" as *;
+
+// Theme colors of the login page
+#login-page {
+  @include themed {
+    background:
+      radial-gradient(circle at 15% 20%, rgb(37 99 235 / 18%), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgb(16 185 129 / 16%), transparent 45%), $color-background;
+  }
+}
+
+#login-card {
+  @include themed {
+    border: 1px solid $color-border;
+    background-color: $color-surface;
+    box-shadow: $shadow-hover;
+  }
+}

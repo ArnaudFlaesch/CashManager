@@ -2,7 +2,6 @@
 
 # Compiled output
 /dist
-/public
 /tmp
 /out-tsc
 /bazel-out
@@ -41,8 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-public/
 
 .dccache
 cypress/screenshots

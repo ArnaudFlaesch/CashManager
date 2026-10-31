@@ -1,39 +1,48 @@
-.login-page {
-  display: grid;
-  place-items: center;
-  height: 100vh;
-}
+@use "variables" as *;
 
-.login-card {
-  --gap: 0;
-
+// The theme colors are set in _login.theme.scss
+#login-card {
+  gap: 0;
   align-items: center;
-  padding: 1.5rem 4rem;
-  background-color: white;
-  border-radius: 0.25rem;
-}
+  width: 100%;
+  max-width: 24rem;
+  padding: $space-l;
+  border-radius: $radius-l;
+  box-sizing: border-box;
 
-.logo {
-  width: 75%;
-  margin: var(--space-m);
+  @media (width <= $breakpoint-sm) {
+    padding: $space-l $space-m;
+  }
 
-  img {
+  #login-logo img {
     display: block;
+    height: 4.5rem;
     margin-inline: auto;
+  }
+
+  #login-page-title {
+    margin: $space-s 0 0;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  #login-page-subtitle {
+    margin: $space-xs 0 0;
   }
 }
 
-.title {
-  font-size: 2rem;
-  line-height: 1;
-}
+#login-form {
+  gap: 0;
+  width: 100%;
+  margin-top: $space-l;
 
-.login-form {
-  --gap: 1.25rem;
+  mat-form-field {
+    width: 100%;
+  }
 
-  margin-top: 2.5rem;
-
-  .row {
-    --gap: 1.25rem;
+  button[type="submit"] {
+    height: 2.75rem;
+    margin-top: $space-s;
   }
 }

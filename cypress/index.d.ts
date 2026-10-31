@@ -7,3 +7,7 @@ declare namespace Cypress {
     shouldDisplayErrorMessage(errorMessage: string): Chainable;
   }
 }
+
+declare module "mochawesome/addContext" {
+  export default function addContext(testContext: { test: unknown }, context: unknown): void;
+}

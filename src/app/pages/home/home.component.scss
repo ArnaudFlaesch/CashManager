@@ -1,11 +1,39 @@
-.page-header {
-  display: block;
-  margin: var(--space-s) var(--space-m) var(--space-m);
+@use "variables" as *;
+
+// The element of the component and the theme colors are styled in _home.theme.scss
+#page-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $space-s $space-m $space-l;
+
+  @media (width <= $breakpoint-sm) {
+    padding-inline: $space-s;
+  }
 }
 
-.create-label-form {
-  --gap: var(--space-m);
+.tab {
+  // Room is kept around the content for the shadows of the cards
+  &-content {
+    margin: $space-s 2px $space-m;
+  }
 
-  align-items: baseline;
-  justify-content: center;
+  &-icon {
+    margin-right: $space-s;
+  }
+
+  // Only the icons of the tabs are kept on phones
+  &-label {
+    @media (width <= $breakpoint-xs) {
+      display: none;
+    }
+  }
+}
+
+#create-label-form {
+  gap: $space-s;
+  margin-bottom: $space-m;
+
+  mat-form-field {
+    flex: 0 1 20rem;
+  }
 }

@@ -15,7 +15,7 @@ import { NotificationsComponent } from "./notifications/notifications.component"
 import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { MatTooltip } from "@angular/material/tooltip";
-import { MatMiniFabButton } from "@angular/material/button";
+import { MatIconButton } from "@angular/material/button";
 
 const ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
 
@@ -24,7 +24,7 @@ const ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.
   templateUrl: "./header.component.html",
   styleUrl: "./header.component.scss",
   imports: [
-    MatMiniFabButton,
+    MatIconButton,
     MatTooltip,
     MatMenuTrigger,
     MatIcon,
@@ -69,10 +69,7 @@ export class HeaderComponent {
   }
 
   public openImportConfigModal(): void {
-    this.dialog.open(ImportConfigModalComponent, {
-      height: "400px",
-      width: "600px"
-    });
+    this.dialog.open(ImportConfigModalComponent, { width: "640px" });
   }
 
   public toggleTheme(isToggleChecked: boolean): void {

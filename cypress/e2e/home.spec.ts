@@ -18,8 +18,8 @@ describe("Home page tests", () => {
 
   xit("Should add a new expense related to an existing label", () => {
     cy.clock(Date.parse("2025-04-20"));
-    cy.get("#expenseAmount").clear();
-    cy.get("#expenseAmount").type("120");
+    cy.get("#expense-amount").clear();
+    cy.get("#expense-amount").type("120");
     cy.get("#expense-label").type("Cou");
     cy.get(".label-autocomplete-option")
       .should("have.length", 1)
@@ -30,9 +30,9 @@ describe("Home page tests", () => {
       });
     cy.get(".label-autocomplete-option").eq(0).click();
     cy.get("#expense-label").should("have.value", "Courses");
-    cy.get("#expenseDate-container .mat-datepicker-toggle").click();
+    cy.get("#expense-date-container .mat-datepicker-toggle").click();
     cy.get(".mat-calendar-body-today").click();
-    cy.get("#expenseDate").should("have.value", "20/04/2022");
+    cy.get("#expense-date").should("have.value", "20/04/2022");
     cy.clock().then((clock) => {
       clock.restore();
     });

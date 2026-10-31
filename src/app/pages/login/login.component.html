@@ -1,30 +1,55 @@
-<div class="login-page">
-  <div class="login-card stack">
-    <a routerLink="/home" class="logo">
-      <img src="assets/logo.png" alt="cash manager logo" />
+<div id="login-page" class="centered-page">
+  <div id="login-card" class="stack">
+    <a routerLink="/home" id="login-logo">
+      <img src="assets/logo.png" alt="cash manager logo" class="app-logo" />
     </a>
-    <h1 id="login-page-title" class="title">CashManager</h1>
-    <form class="login-form stack" [formRoot]="loginForm">
-      <input id="inputUsername" placeholder="Username" aria-label="Username" [formField]="loginForm.username" />
+    <h1 id="login-page-title">CashManager</h1>
+    <p id="login-page-subtitle" class="muted-text">Suivez et analysez vos dépenses</p>
 
-      <input
-        id="inputPassword"
-        placeholder="Password"
-        aria-label="Password"
-        [formField]="loginForm.password"
-        type="password"
-      />
+    <form id="login-form" class="stack" [formRoot]="loginForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Nom d'utilisateur</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input
+          matInput
+          id="input-username"
+          autocomplete="username"
+          aria-label="Username"
+          [formField]="loginForm.username"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Mot de passe</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input
+          matInput
+          id="input-password"
+          autocomplete="current-password"
+          aria-label="Password"
+          [formField]="loginForm.password"
+          [type]="isPasswordVisible() ? 'text' : 'password'"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="isPasswordVisible.set(!isPasswordVisible())"
+          [attr.aria-label]="isPasswordVisible() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+        >
+          <mat-icon>{{ isPasswordVisible() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
 
       <button
-        mat-raised-button
-        id="loginButton"
+        mat-flat-button
+        id="login-button"
         type="submit"
         [disabled]="loginForm().invalid() || loginForm().submitting()"
-        color="primary"
       >
         <span class="row">
           @if (loginForm().submitting()) {
-            <mat-spinner diameter="30" />
+            <mat-spinner diameter="20" />
           }
           <span>Se connecter</span>
         </span>

@@ -12,7 +12,8 @@ import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { TotalExpenseByMonthComponent } from "./total-expense-by-month/total-expense-by-month.component";
 import { ExpenseListByMonthComponent } from "./expense-list-by-month/expense-list-by-month.component";
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { MatTab, MatTabGroup, MatTabLabel } from "@angular/material/tabs";
+import { MatIcon } from "@angular/material/icon";
 import { HeaderComponent } from "../../header/header.component";
 
 const ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
@@ -26,6 +27,8 @@ const ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
     HeaderComponent,
     MatTabGroup,
     MatTab,
+    MatTabLabel,
+    MatIcon,
     ExpenseListByMonthComponent,
     TotalExpenseByMonthComponent,
     FormRoot,

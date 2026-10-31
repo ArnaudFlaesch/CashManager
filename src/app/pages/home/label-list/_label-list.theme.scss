@@ -1,0 +1,21 @@
+@use "variables" as *;
+
+// Theme colors of the list of labels
+cash-manager-label-list .label-container {
+  @include themed {
+    border: 1px solid $color-border;
+    background-color: $color-background;
+
+    &:hover {
+      border-color: $color-accent;
+    }
+
+    .delete-label-button {
+      color: $color-muted-text;
+    }
+  }
+
+  .delete-label-button:hover {
+    color: $color-danger;
+  }
+}

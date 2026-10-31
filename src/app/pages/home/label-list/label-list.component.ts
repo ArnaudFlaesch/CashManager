@@ -9,6 +9,7 @@ import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-mod
 import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
 import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
+import { MatTooltip } from "@angular/material/tooltip";
 
 const ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
 
@@ -16,7 +17,7 @@ const ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
   selector: "cash-manager-label-list",
   templateUrl: "./label-list.component.html",
   styleUrl: "./label-list.component.scss",
-  imports: [MatIconButton, MatIcon]
+  imports: [MatIconButton, MatIcon, MatTooltip]
 })
 export class LabelListComponent {
   public readonly labels = input<Label[]>([]);
