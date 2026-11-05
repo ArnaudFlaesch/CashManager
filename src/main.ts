@@ -1,3 +1,4 @@
+/* global console */
 import { registerLocaleData } from "@angular/common";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import localeFr from "@angular/common/locales/fr";
