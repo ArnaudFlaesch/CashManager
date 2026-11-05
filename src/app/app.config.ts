@@ -7,7 +7,7 @@ import { provideRouter } from "@angular/router";
 import { provideServiceWorker } from "@angular/service-worker";
 import { fr } from "date-fns/locale/fr";
 import { provideCharts, withDefaultRegisterables } from "ng2-charts";
-import { authInterceptor } from "@core/auth/auth.interceptor";
+import { authInterceptor } from "@core/auth/auth-interceptor";
 import { routes } from "./app.routes";
 
 export const appConfig: ApplicationConfig = {
