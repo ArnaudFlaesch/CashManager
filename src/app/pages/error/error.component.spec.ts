@@ -17,4 +17,12 @@ describe("ErrorComponent", () => {
   it("should create the app", () => {
     expect(component).toBeTruthy();
   });
+
+  it("Should display the error and a link to the home page", async () => {
+    const fixture = TestBed.createComponent(ErrorComponent);
+    await fixture.whenStable();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelector("h1")?.textContent).toEqual("Une erreur est survenue");
+    expect(element.querySelector("a")?.getAttribute("href")).toEqual("/home");
+  });
 });

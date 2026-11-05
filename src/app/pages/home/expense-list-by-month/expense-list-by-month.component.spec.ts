@@ -5,6 +5,8 @@ import {
 } from "@angular/common/http/testing";
 
 import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { ErrorHandlerService } from "@services/error-handler.service";
 
 import { ComponentRef } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -14,7 +16,9 @@ import { fr } from "date-fns/locale/fr";
 import { environment } from "@environments/environment";
 import { Expense } from "@model/Expense";
 import { ExpenseListByMonthComponent } from "./expense-list-by-month.component";
-import { provideHttpClient } from "@angular/common/http";
+import { MatDatepicker } from "@angular/material/datepicker";
+import { of } from "rxjs";
+import { ConfirmModalComponent } from "@modals/confirm-modal/confirm-modal.component";
 
 describe("ExpenseListByMonthComponent", () => {
   let component: ExpenseListByMonthComponent;
@@ -42,7 +46,6 @@ describe("ExpenseListByMonthComponent", () => {
       providers: [
         provideDateFnsAdapter(),
         { provide: MAT_DATE_LOCALE, useValue: fr },
-        provideHttpClient(),
         provideHttpClientTesting()
       ]
     }).compileComponents();
@@ -90,5 +93,101 @@ describe("ExpenseListByMonthComponent", () => {
     expectExpensesRequest(mockedCurrentMonth).flush(expectedExpenseData);
     await fixture.whenStable();
     expect(component.expenses.value().length).toEqual(3);
+  });
+
+  it("Should display the empty state when there is no expense", async () => {
+    componentRef.setInput("expenseLabels", labelData);
+    TestBed.tick();
+    expectExpensesRequest(mockedCurrentMonth).flush([]);
+    await fixture.whenStable();
+
+    expect(component.totalForMonth()).toEqual(0);
+    expect(fixture.nativeElement.querySelector(".empty-state")).not.toBeNull();
+    expect(fixture.nativeElement.querySelector("#expenses-list")).toBeNull();
+  });
+
+  it("Should ignore in the chart the expenses of an unknown label", async () => {
+    TestBed.tick();
+    expectExpensesRequest(mockedCurrentMonth).flush([
+      { id: 1, amount: 10, expenseDate: mockedCurrentMonth, labelId: 99 }
+    ]);
+    await fixture.whenStable();
+
+    expect(component.expensesByLabelChart().datasets).toEqual([{ label: "", data: [] }]);
+  });
+
+  it("Should add the created expense to the list", async () => {
+    TestBed.tick();
+    expectExpensesRequest(mockedCurrentMonth).flush([]);
+    await fixture.whenStable();
+
+    const newExpense: Expense = {
+      id: 4,
+      amount: 20,
+      expenseDate: mockedCurrentMonth,
+      labelId: labelData[0].id
+    };
+    component.handleExpenseCreation(newExpense);
+    expect(component.expenses.value()).toEqual([newExpense]);
+    expect(component.totalForMonth()).toEqual(20);
+  });
+
+  it("Should select the month picked in the datepicker", async () => {
+    TestBed.tick();
+    expectExpensesRequest(mockedCurrentMonth).flush([]);
+    await fixture.whenStable();
+
+    const datepicker = { close: vi.fn() } as unknown as MatDatepicker<Date>;
+    const pickedMonth = new Date(2021, 5, 20);
+    component.setMonthAndYear(pickedMonth, datepicker);
+    TestBed.tick();
+    expectExpensesRequest(pickedMonth).flush([]);
+
+    expect(datepicker.close).toHaveBeenCalled();
+    expect(component.selectedMonthModel().selectedMonth).toEqual(startOfMonth(pickedMonth));
+  });
+
+  it("Should delete an expense once the deletion is confirmed", async () => {
+    const expense: Expense = { id: 1, amount: 10, expenseDate: mockedCurrentMonth, labelId: 1 };
+    TestBed.tick();
+    expectExpensesRequest(mockedCurrentMonth).flush([expense]);
+    await fixture.whenStable();
+    const openSpy = vi
+      .spyOn(TestBed.inject(MatDialog), "open")
+      .mockReturnValue({ afterClosed: () => of("validate") } as MatDialogRef<unknown>);
+
+    component.openDeleteExpenseModal(expense.id);
+    expect(openSpy).toHaveBeenCalledWith(
+      ConfirmModalComponent,
+      expect.objectContaining({
+        data: {
+          title: "Suppression d'une dépense",
+          message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
+        }
+      })
+    );
+    httpTestingController
+      .expectOne(`${environment.backend_url}${expensePath}deleteExpense/?expenseId=1`)
+      .flush(null);
+
+    expect(component.expenses.value()).toEqual([]);
+  });
+
+  it("Should display an error and no expense when they cannot be loaded", async () => {
+    const handleErrorSpy = vi
+      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .mockImplementation(() => undefined);
+    TestBed.tick();
+    expectExpensesRequest(mockedCurrentMonth).flush(null, {
+      status: 500,
+      statusText: "Server error"
+    });
+    await fixture.whenStable();
+
+    expect(handleErrorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 500 }),
+      "Erreur lors de la récupération des dépenses."
+    );
+    expect(component.expenses.value()).toEqual([]);
   });
 });

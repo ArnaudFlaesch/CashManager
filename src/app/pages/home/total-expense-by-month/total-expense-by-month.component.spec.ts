@@ -5,7 +5,7 @@ import { Label } from "@model/Label";
 import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
 import { TotalExpenseByMonthComponent } from "./total-expense-by-month.component";
 import { ComponentRef } from "@angular/core";
-import { provideHttpClient } from "@angular/common/http";
+import { ErrorHandlerService } from "@services/error-handler.service";
 
 describe("TotalExpenseByMonthComponent", () => {
   let component: TotalExpenseByMonthComponent;
@@ -24,7 +24,7 @@ describe("TotalExpenseByMonthComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TotalExpenseByMonthComponent);
@@ -68,5 +68,48 @@ describe("TotalExpenseByMonthComponent", () => {
       ],
       labels: ["mars 2022", "avril 2022"]
     });
+  });
+
+  it("Should display the total of all the labels again once the selected label is reset", async () => {
+    componentRef.setInput("expenseLabels", labelData);
+    TestBed.tick();
+    httpTestingController
+      .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
+      .flush(expectedTotalExpenseByMonthData);
+    component.selectLabel(labelData[0].id);
+    TestBed.tick();
+    httpTestingController
+      .expectOne(
+        `${environment.backend_url}${expensePath}getTotalExpensesByMonthByLabelId?labelId=${labelData[0].id}`
+      )
+      .flush([]);
+    await fixture.whenStable();
+
+    fixture.nativeElement.querySelector("#label-filter button").click();
+    TestBed.tick();
+    httpTestingController
+      .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
+      .flush(expectedTotalExpenseByMonthData);
+    await fixture.whenStable();
+
+    expect(component.isOneLabelSelected()).toEqual(false);
+    expect(fixture.nativeElement.querySelector("#label-filter button")).toBeNull();
+  });
+
+  it("Should display an error and an empty chart when the totals cannot be loaded", async () => {
+    const handleErrorSpy = vi
+      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .mockImplementation(() => undefined);
+    TestBed.tick();
+    httpTestingController
+      .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
+      .flush(null, { status: 500, statusText: "Server error" });
+    await fixture.whenStable();
+
+    expect(handleErrorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 500 }),
+      "Erreur lors de la récupération du total des dépenses."
+    );
+    expect(component.totalExpensesByMonthChart().labels).toEqual([]);
   });
 });
