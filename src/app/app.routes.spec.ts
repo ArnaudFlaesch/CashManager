@@ -1,8 +1,8 @@
 import { Route } from "@angular/router";
 import { routes } from "./app.routes";
-import { ErrorComponent } from "./pages/error/error.component";
-import { HomeComponent } from "./pages/home/home.component";
-import { LoginComponent } from "./pages/login/login.component";
+import { ErrorComponent } from "@features/error/error.component";
+import { HomeComponent } from "@features/home/home.component";
+import { LoginComponent } from "@features/login/login.component";
 
 describe("Routes", () => {
   function findRoute(path: string): Route | undefined {
