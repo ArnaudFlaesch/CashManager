@@ -1,12 +1,12 @@
 <div id="label-list" class="grid">
-  @for (label of labels(); track label.id) {
+  @for (label of expenseLabels(); track label.id) {
     <div class="label-container">
       <mat-icon class="label-icon accent-text">sell</mat-icon>
       <span class="label-name ellipsis">{{ label.label }}</span>
       <button
         mat-icon-button
         class="delete-label-button"
-        matTooltip="Supprimer l'étiquette"
+        [matTooltip]="labels.deleteLabel"
         (click)="openDeleteLabelDialog(label.id)"
       >
         <mat-icon>delete_outline</mat-icon>
@@ -15,7 +15,7 @@
   } @empty {
     <div id="no-label-message" class="empty-state">
       <mat-icon>sell</mat-icon>
-      <span>Aucune étiquette pour le moment.</span>
+      <span>{{ labels.noLabel }}</span>
     </div>
   }
 </div>

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Label } from "@model/Label";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { LabelService } from "@services/label.service/label.service";
+import { ErrorHandlerService } from "@services/error-handler.service";
+import { LabelService } from "@services/label.service";
 import { Component, inject, signal } from "@angular/core";
 import { rxResource } from "@angular/core/rxjs-interop";
 import { form, FormField, FormRoot, required, submit } from "@angular/forms/signals";
@@ -14,10 +14,7 @@ import { TotalExpenseByMonthComponent } from "./total-expense-by-month/total-exp
 import { ExpenseListByMonthComponent } from "./expense-list-by-month/expense-list-by-month.component";
 import { MatTab, MatTabGroup, MatTabLabel } from "@angular/material/tabs";
 import { MatIcon } from "@angular/material/icon";
-import { HeaderComponent } from "../../header/header.component";
-
-const ERROR_CREATING_LABEL_MESSAGE = "Erreur lors de l'ajout du label.";
-const ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
+import { HeaderComponent } from "@app/header/header.component";
 
 @Component({
   selector: "cash-manager-home",
@@ -41,11 +38,24 @@ const ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
   ]
 })
 export class HomeComponent {
-  public readonly labels = rxResource({
+  public readonly labels = {
+    monthExpenses: "Dépenses du mois",
+    totalByMonth: "Total par mois",
+    expenseLabels: "Étiquettes",
+    newLabel: "Nouvelle étiquette",
+    labelPlaceholder: "Renseignez un label",
+    labelAriaLabel: "Label",
+    add: "Ajouter"
+  };
+
+  private readonly ERROR_CREATING_LABEL = "Erreur lors de l'ajout du label.";
+  private readonly ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
+
+  public readonly expenseLabels = rxResource({
     stream: () =>
       this.labelService
         .getLabels()
-        .pipe(this.errorHandlerService.catchError<Label[]>(ERROR_GETTING_LABELS, [])),
+        .pipe(this.errorHandlerService.catchError<Label[]>(this.ERROR_GETTING_LABELS, [])),
     defaultValue: []
   });
 
@@ -57,12 +67,12 @@ export class HomeComponent {
           const insertedLabel = await firstValueFrom(
             this.labelService.addLabel(labelForm.label().value())
           );
-          this.labels.value.update((labels) => [...labels, insertedLabel]);
+          this.expenseLabels.value.update((labels) => [...labels, insertedLabel]);
           labelForm().reset({ label: "" });
         } catch (error) {
           this.errorHandlerService.handleError(
             error as HttpErrorResponse,
-            ERROR_CREATING_LABEL_MESSAGE
+            this.ERROR_CREATING_LABEL
           );
         }
         return undefined;
@@ -78,6 +88,6 @@ export class HomeComponent {
   }
 
   public onDeleteLabel(labelId: number): void {
-    this.labels.value.update((labels) => labels.filter((label) => label.id !== labelId));
+    this.expenseLabels.value.update((labels) => labels.filter((label) => label.id !== labelId));
   }
 }

@@ -3,7 +3,7 @@ import { TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
 import { fr } from "date-fns/locale/fr";
-import { environment } from "../../../../environments/environment";
+import { environment } from "@environments/environment";
 import { CreateExpenseComponent } from "./create-expense.component";
 import { provideHttpClient } from "@angular/common/http";
 
@@ -13,7 +13,6 @@ describe("CreateExpenseComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateExpenseComponent],
       providers: [
         provideDateFnsAdapter(),
         { provide: MAT_DATE_LOCALE, useValue: fr },

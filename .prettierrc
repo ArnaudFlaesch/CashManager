@@ -1,6 +1,4 @@
 {
-  "bracketSpacing": true,
-  "singleQuote": false,
   "trailingComma": "none",
   "overrides": [
     {

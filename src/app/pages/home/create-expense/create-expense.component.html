@@ -1,6 +1,6 @@
 <form id="expense-form" [formRoot]="expenseForm">
   <mat-form-field appearance="outline" id="expense-amount-container">
-    <mat-label>Montant</mat-label>
+    <mat-label>{{ labels.amount }}</mat-label>
     <mat-icon matPrefix>euro</mat-icon>
     <input
       id="expense-amount"
@@ -8,34 +8,34 @@
       step=".01"
       matInput
       [formField]="expenseForm.amount"
-      placeholder="Saisissez le montant de la dépense"
-      aria-label="Montant"
+      [placeholder]="labels.amountPlaceholder"
+      [attr.aria-label]="labels.amount"
     />
   </mat-form-field>
 
   <mat-form-field appearance="outline" id="expense-date-container">
-    <mat-label>Date</mat-label>
+    <mat-label>{{ labels.date }}</mat-label>
     <input
       [formField]="expenseForm.date"
       matInput
       id="expense-date"
       [matDatepicker]="picker"
-      placeholder="Sélectionnez une date"
-      aria-label="Date"
+      [placeholder]="labels.datePlaceholder"
+      [attr.aria-label]="labels.date"
       readonly
     />
-    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-hint>{{ labels.dateHint }}</mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker" />
     <mat-datepicker #picker />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Étiquette</mat-label>
+    <mat-label>{{ labels.label }}</mat-label>
     <input
       type="text"
       id="expense-label"
-      placeholder="Renseignez un label"
-      aria-label="Label"
+      [placeholder]="labels.labelPlaceholder"
+      [attr.aria-label]="labels.labelAriaLabel"
       matInput
       [formField]="expenseForm.label"
       [matAutocomplete]="auto"
@@ -52,6 +52,6 @@
 
   <button id="add-expense-button" type="submit" [disabled]="!canCreateExpense()" mat-flat-button>
     <mat-icon>add</mat-icon>
-    Ajouter
+    {{ labels.add }}
   </button>
 </form>

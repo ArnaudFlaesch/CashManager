@@ -1,10 +1,10 @@
 import { provideHttpClient } from "@angular/common/http";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
-import { environment } from "../../../environments/environment";
+import { environment } from "@environments/environment";
 import { LoginComponent } from "./login.component";
 import { provideRouter } from "@angular/router";
-import { routes } from "../../app.routes";
+import { routes } from "@app/app.routes";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -12,7 +12,6 @@ describe("LoginComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginComponent],
       providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
 

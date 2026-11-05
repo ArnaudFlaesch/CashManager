@@ -3,22 +3,22 @@ import { inject, Service } from "@angular/core";
 import { format } from "date-fns";
 import { Observable } from "rxjs";
 import { Expense } from "@model/Expense";
-import { environment } from "../../../environments/environment";
+import { environment } from "@environments/environment";
 import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
 import { InsertExpensePayload } from "@model/payloads/InsertExpensePayload";
 
-const DATE_FORMAT = "yyyy-MM-dd";
-
 @Service()
 export class ExpenseService {
+  private readonly DATE_FORMAT = "yyyy-MM-dd";
+
   private readonly http = inject(HttpClient);
   private readonly expenseUrl = `${environment.backend_url}/expense`;
 
   public getExpensesAtMonth(startIntervalDate: Date, endIntervalDate: Date): Observable<Expense[]> {
     return this.http.get<Expense[]>(`${this.expenseUrl}/`, {
       params: {
-        startIntervalDate: format(startIntervalDate, DATE_FORMAT),
-        endIntervalDate: format(endIntervalDate, DATE_FORMAT)
+        startIntervalDate: format(startIntervalDate, this.DATE_FORMAT),
+        endIntervalDate: format(endIntervalDate, this.DATE_FORMAT)
       }
     });
   }

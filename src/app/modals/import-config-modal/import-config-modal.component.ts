@@ -1,4 +1,4 @@
-import { ErrorHandlerService } from "@services/error.handler.service";
+import { ErrorHandlerService } from "@services/error-handler.service";
 import { Component, DestroyRef, inject, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
@@ -9,10 +9,8 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import { HttpErrorResponse } from "@angular/common/http";
-import { ConfigService } from "@services/config.service/config.service";
+import { ConfigService } from "@services/config.service";
 import { MatButton } from "@angular/material/button";
-
-const ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
 @Component({
   selector: "cash-manager-import-config-modal",
@@ -20,12 +18,20 @@ const ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModalComponent {
+  public readonly labels = {
+    title: "Importer la configuration",
+    selectFile: "Sélectionner un fichier de configuration",
+    cancel: "Annuler",
+    import: "Importer"
+  };
+
   public readonly fileToUpload = signal<File | null>(null);
 
   private readonly configService = inject(ConfigService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialogRef = inject<MatDialogRef<ImportConfigModalComponent>>(MatDialogRef);
+  private readonly ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
   public selectFile(input: HTMLInputElement): void {
     this.fileToUpload.set(input.files?.[0] ?? null);
@@ -39,7 +45,7 @@ export class ImportConfigModalComponent {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           error: (error: HttpErrorResponse) =>
-            this.errorHandlerService.handleError(error, ERROR_IMPORT_CONFIGURATION),
+            this.errorHandlerService.handleError(error, this.ERROR_IMPORT_CONFIGURATION),
           complete: () => {
             this.dialogRef.close();
             window.location.reload();

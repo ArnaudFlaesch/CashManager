@@ -2,20 +2,20 @@
   <div id="total-header" class="row">
     <h2 id="total-title" class="card-title">
       <mat-icon>show_chart</mat-icon>
-      Total des dépenses par mois
+      {{ labels.title }}
     </h2>
 
     <div id="label-filter" class="row">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Étiquettes</mat-label>
+        <mat-label>{{ labels.expenseLabels }}</mat-label>
         <mat-select [formField]="labelForm.labelId">
-          @for (label of labels(); track label.id) {
+          @for (label of expenseLabels(); track label.id) {
             <mat-option [value]="label.id">{{ label.label }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
       @if (isOneLabelSelected()) {
-        <button mat-icon-button matTooltip="Toutes les étiquettes" (click)="resetSelectedLabel()">
+        <button mat-icon-button [matTooltip]="labels.allLabels" (click)="resetSelectedLabel()">
           <mat-icon>close</mat-icon>
         </button>
       }

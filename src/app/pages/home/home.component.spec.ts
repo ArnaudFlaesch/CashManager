@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
 import { fr } from "date-fns/locale/fr";
-import { environment } from "../../../environments/environment";
+import { environment } from "@environments/environment";
 import { Label } from "@model/Label";
 import { HomeComponent } from "./home.component";
 import { provideHttpClient } from "@angular/common/http";
@@ -29,7 +29,6 @@ describe("HomeComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeComponent],
       providers: [
         provideDateFnsAdapter(),
         { provide: MAT_DATE_LOCALE, useValue: fr },
@@ -56,7 +55,7 @@ describe("HomeComponent", () => {
       .match((request) => request.url.includes("/expense/"))
       .forEach((request) => request.flush([]));
     await fixture.whenStable();
-    expect(component.labels.value()).toEqual(labelData);
+    expect(component.expenseLabels.value()).toEqual(labelData);
 
     component.labelModel.update((model) => ({ ...model, label: "New label" }));
     const submitted = component.handleCreateLabel();
@@ -67,7 +66,7 @@ describe("HomeComponent", () => {
     const newLabel = { id: 2, label: "New label" } as Label;
     createLabelRequest.flush(newLabel);
     expect(await submitted).toEqual(true);
-    expect(component.labels.value()).toEqual([...labelData, newLabel]);
+    expect(component.expenseLabels.value()).toEqual([...labelData, newLabel]);
     expect(component.labelModel().label).toEqual("");
   });
 });

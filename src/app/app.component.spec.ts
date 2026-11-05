@@ -4,11 +4,7 @@ import { AppComponent } from "./app.component";
 describe("AppComponent", () => {
   let component: AppComponent;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [],
-      imports: []
-    }).compileComponents();
+  beforeEach(() => {
     const fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
   });

@@ -10,7 +10,6 @@ describe("ImportConfigModalComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ImportConfigModalComponent],
       providers: [
         {
           provide: MatDialogRef,

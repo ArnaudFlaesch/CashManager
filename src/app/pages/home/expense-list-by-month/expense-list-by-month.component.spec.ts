@@ -4,7 +4,6 @@ import {
   TestRequest
 } from "@angular/common/http/testing";
 
-import { MatDialogRef } from "@angular/material/dialog";
 import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 
 import { ComponentRef } from "@angular/core";
@@ -12,12 +11,10 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
 import { fr } from "date-fns/locale/fr";
-import { environment } from "../../../../environments/environment";
+import { environment } from "@environments/environment";
 import { Expense } from "@model/Expense";
 import { ExpenseListByMonthComponent } from "./expense-list-by-month.component";
 import { provideHttpClient } from "@angular/common/http";
-import { provideRouter } from "@angular/router";
-import { routes } from "../../../app.routes";
 
 describe("ExpenseListByMonthComponent", () => {
   let component: ExpenseListByMonthComponent;
@@ -42,14 +39,11 @@ describe("ExpenseListByMonthComponent", () => {
     vi.setSystemTime(mockedCurrentMonth);
 
     await TestBed.configureTestingModule({
-      imports: [ExpenseListByMonthComponent],
       providers: [
-        { provide: MatDialogRef, useValue: {} },
         provideDateFnsAdapter(),
         { provide: MAT_DATE_LOCALE, useValue: fr },
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter(routes)
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 
@@ -71,7 +65,7 @@ describe("ExpenseListByMonthComponent", () => {
       { id: 3, amount: 4, expenseDate: mockedCurrentMonth, labelId: labelData[1].id }
     ];
 
-    componentRef.setInput("labels", labelData);
+    componentRef.setInput("expenseLabels", labelData);
     TestBed.tick();
     expectExpensesRequest(mockedCurrentMonth).flush(expectedExpenseData);
     await fixture.whenStable();

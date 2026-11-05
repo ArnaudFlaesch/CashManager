@@ -12,8 +12,13 @@
     "target": "ES2024",
     "module": "preserve",
     "paths": {
+      "@app/*": ["./src/app/*"],
+      "@environments/*": ["./src/environments/*"],
+      "@modals/*": ["./src/app/modals/*"],
       "@model/*": ["./src/app/model/*"],
-      "@services/*": ["./src/app/services/*"]
+      "@pipes/*": ["./src/app/pipes/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@utils/*": ["./src/app/utils/*"]
     }
   },
   "angularCompilerOptions": {

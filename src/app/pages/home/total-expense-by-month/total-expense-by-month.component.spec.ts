@@ -1,14 +1,11 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatDialogRef } from "@angular/material/dialog";
-import { environment } from "../../../../environments/environment";
+import { environment } from "@environments/environment";
 import { Label } from "@model/Label";
 import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
 import { TotalExpenseByMonthComponent } from "./total-expense-by-month.component";
 import { ComponentRef } from "@angular/core";
 import { provideHttpClient } from "@angular/common/http";
-import { provideRouter } from "@angular/router";
-import { routes } from "../../../app.routes";
 
 describe("TotalExpenseByMonthComponent", () => {
   let component: TotalExpenseByMonthComponent;
@@ -27,13 +24,7 @@ describe("TotalExpenseByMonthComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TotalExpenseByMonthComponent],
-      providers: [
-        { provide: MatDialogRef, useValue: {} },
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter(routes)
-      ]
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TotalExpenseByMonthComponent);
@@ -47,7 +38,7 @@ describe("TotalExpenseByMonthComponent", () => {
   });
 
   it("Should display the total with two labels", async () => {
-    componentRef.setInput("labels", labelData);
+    componentRef.setInput("expenseLabels", labelData);
     TestBed.tick();
     httpTestingController
       .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
@@ -60,7 +51,7 @@ describe("TotalExpenseByMonthComponent", () => {
       { date: "2022-03-01", total: 100 }
     ] as ITotalExpenseByMonth[];
 
-    const labelIdToSelect = component.labels()[0].id;
+    const labelIdToSelect = component.expenseLabels()[0].id;
     component.selectLabel(labelIdToSelect);
     TestBed.tick();
     httpTestingController

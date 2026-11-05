@@ -1,23 +1,23 @@
+import { NgOptimizedImage } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, inject, signal } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { form, FormField, FormRoot, required, submit } from "@angular/forms/signals";
 import { firstValueFrom } from "rxjs";
-import { AuthService } from "@services/auth.service/auth.service";
-import { ErrorHandlerService } from "@services/error.handler.service";
+import { AuthService } from "@services/auth.service";
+import { ErrorHandlerService } from "@services/error-handler.service";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatFormField, MatLabel, MatPrefix, MatSuffix } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 
-const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
-
 @Component({
   selector: "cash-manager-login",
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
   imports: [
+    NgOptimizedImage,
     RouterLink,
     FormRoot,
     FormField,
@@ -33,6 +33,19 @@ const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.
   ]
 })
 export class LoginComponent {
+  public readonly labels = {
+    logoAlt: "cash manager logo",
+    title: "CashManager",
+    subtitle: "Suivez et analysez vos dépenses",
+    usernameLabel: "Nom d'utilisateur",
+    username: "Username",
+    passwordLabel: "Mot de passe",
+    password: "Password",
+    hidePassword: "Masquer le mot de passe",
+    showPassword: "Afficher le mot de passe",
+    login: "Se connecter"
+  };
+
   public readonly isPasswordVisible = signal(false);
   public readonly loginModel = signal({ username: "", password: "" });
   public readonly loginForm = form(
@@ -51,7 +64,7 @@ export class LoginComponent {
           } catch (error) {
             this.errorHandlerService.handleLoginError(
               error as HttpErrorResponse,
-              ERROR_AUTHENTICATING_USER
+              this.ERROR_AUTHENTICATING_USER
             );
           }
           return undefined;
@@ -63,6 +76,7 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
   private readonly router = inject(Router);
+  private readonly ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 
   public handleLogin(): Promise<boolean> {
     return submit(this.loginForm);

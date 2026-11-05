@@ -10,9 +10,9 @@ import { provideRouter } from "@angular/router";
 import { provideServiceWorker } from "@angular/service-worker";
 import { fr } from "date-fns/locale/fr";
 import { provideCharts, withDefaultRegisterables } from "ng2-charts";
-import { AppComponent } from "./app/app.component";
-import { routes } from "./app/app.routes";
-import { authInterceptor } from "./app/interceptors/auth.interceptor";
+import { AppComponent } from "@app/app.component";
+import { routes } from "@app/app.routes";
+import { authInterceptor } from "@services/auth.interceptor";
 
 registerLocaleData(localeFr);
 

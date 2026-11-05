@@ -1,4 +1,4 @@
-export type ITotalExpenseByMonth = {
+export interface ITotalExpenseByMonth {
   total: number;
   date: string;
-};
+}

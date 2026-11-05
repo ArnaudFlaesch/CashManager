@@ -7,7 +7,6 @@ describe("ErrorComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [],
       providers: [provideRouter([])]
     }).compileComponents();
 

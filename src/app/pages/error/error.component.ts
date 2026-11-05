@@ -9,4 +9,10 @@ import { RouterLink } from "@angular/router";
   styleUrl: "./error.component.scss",
   imports: [MatButton, MatIcon, RouterLink]
 })
-export class ErrorComponent {}
+export class ErrorComponent {
+  public readonly labels = {
+    title: "Une erreur est survenue",
+    message: "La page demandée n'a pas pu être affichée.",
+    backToHome: "Retour à l'accueil"
+  };
+}
