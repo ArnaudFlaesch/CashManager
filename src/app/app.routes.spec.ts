@@ -1,8 +1,8 @@
 import { Route } from "@angular/router";
 import { routes } from "./app.routes";
-import { ErrorComponent } from "./pages/error/error.component";
-import { HomeComponent } from "./pages/home/home.component";
-import { LoginComponent } from "./pages/login/login.component";
+import { ErrorPage } from "@features/error/error-page";
+import { Home } from "@features/home/home";
+import { Login } from "@features/login/login";
 
 describe("Routes", () => {
   function findRoute(path: string): Route | undefined {
@@ -10,9 +10,9 @@ describe("Routes", () => {
   }
 
   it("Should lazy load the component of each page", async () => {
-    expect(await findRoute("login")?.loadComponent?.()).toEqual(LoginComponent);
-    expect(await findRoute("home")?.loadComponent?.()).toEqual(HomeComponent);
-    expect(await findRoute("error")?.loadComponent?.()).toEqual(ErrorComponent);
+    expect(await findRoute("login")?.loadComponent?.()).toEqual(Login);
+    expect(await findRoute("home")?.loadComponent?.()).toEqual(Home);
+    expect(await findRoute("error")?.loadComponent?.()).toEqual(ErrorPage);
   });
 
   it("Should protect the home page and redirect the unknown pages to it", () => {

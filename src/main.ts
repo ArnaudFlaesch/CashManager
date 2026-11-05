@@ -1,38 +1,10 @@
 /* global console */
 import { registerLocaleData } from "@angular/common";
-import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import localeFr from "@angular/common/locales/fr";
-import { isDevMode, provideBrowserGlobalErrorListeners } from "@angular/core";
-import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
-import { MAT_DATE_LOCALE } from "@angular/material/core";
-import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from "@angular/material/dialog";
 import { bootstrapApplication } from "@angular/platform-browser";
-import { provideRouter } from "@angular/router";
-import { provideServiceWorker } from "@angular/service-worker";
-import { fr } from "date-fns/locale/fr";
-import { provideCharts, withDefaultRegisterables } from "ng2-charts";
-import { AppComponent } from "@app/app.component";
-import { routes } from "@app/app.routes";
-import { authInterceptor } from "@services/auth.interceptor";
+import { App } from "@app/app";
+import { appConfig } from "@app/app.config";
 
 registerLocaleData(localeFr);
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideServiceWorker("ngsw-worker.js", {
-      enabled: !isDevMode(),
-      registrationStrategy: "registerWhenStable:30000"
-    }),
-    { provide: MAT_DATE_LOCALE, useValue: fr },
-    // Dialogs never overflow small screens
-    {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: { ...new MatDialogConfig(), maxWidth: "calc(100vw - 2rem)" }
-    },
-    provideRouter(routes),
-    provideCharts(withDefaultRegisterables()),
-    provideDateFnsAdapter(),
-    provideHttpClient(withInterceptors([authInterceptor])),
-    provideBrowserGlobalErrorListeners()
-  ]
-}).catch((err) => console.error(err));
+bootstrapApplication(App, appConfig).catch((err) => console.error(err));
