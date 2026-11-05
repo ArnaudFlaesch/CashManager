@@ -1,10 +1,10 @@
-export type INotification = {
+export interface INotification {
   id: number;
   message: string;
   notificationDate: string;
   notificationType: NotificationTypeEnum;
   isRead: boolean;
-};
+}
 
 export type INotificationToDisplay = INotification & {
   notificationDateToDisplay: string;

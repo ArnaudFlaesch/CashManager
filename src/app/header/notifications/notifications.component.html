@@ -1,53 +1,6 @@
-<button
-  id="display-notifications-button"
-  matTooltip="Notifications"
-  mat-icon-button
-  [matMenuTriggerFor]="notificationsMenu"
->
-  <mat-icon
-    [matBadge]="unreadNotificationsForBadge()"
-    [matBadgeHidden]="!unreadNotificationsForBadge()"
-    matBadgeSize="small"
-    title="Notifications"
-    aria-hidden="false"
-  >
-    notifications
-  </mat-icon>
-</button>
-
-<mat-menu #notificationsMenu="matMenu" class="notifications-menu">
-  @if (unreadNotificationsForBadge()) {
-    <button
-      id="mark-all-notifications-as-read-button"
-      matTooltip="Marquer tout comme lu"
-      (click)="markAllNotificationsAsRead($event)"
-      mat-icon-button
-    >
-      <mat-icon>check</mat-icon>
-    </button>
-  }
-
-  @for (notification of notificationsToDisplay(); track notification.id) {
-    <div
-      class="notification row"
-      [class.unread-notification]="!notification.isRead"
-      [class.info]="notification.notificationType === 'INFO'"
-      [class.warn]="notification.notificationType === 'WARN'"
-    >
-      <span>{{ notification.message }}</span>
-      <span [matTooltip]="notification.notificationDate | dateFormat: 'short'">
-        {{ notification.notificationDateToDisplay }}
-      </span>
-      <mat-icon>{{ notification.notificationTypeToDisplay }}</mat-icon>
-      @if (!notification.isRead) {
-        <button
-          class="mark-notification-as-read-button"
-          (click)="markNotificationAsRead(notification.id, $event)"
-          mat-icon-button
-        >
-          <mat-icon>check</mat-icon>
-        </button>
-      }
-    </div>
-  }
-</mat-menu>
+<cash-manager-notifications-list
+  (markNotificationAsReadEvent)="markNotificationAsRead($event)"
+  (markAllNotificationsAsReadEvent)="markAllNotificationsAsRead()"
+  [unreadNotificationsForBadge]="unreadNotificationsForBadge()"
+  [notificationsList]="notificationsToDisplay()"
+/>

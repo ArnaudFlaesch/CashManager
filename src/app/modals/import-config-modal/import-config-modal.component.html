@@ -1,15 +1,17 @@
-<h1 mat-dialog-title>Importer la configuration</h1>
+<h1 mat-dialog-title>{{ labels.title }}</h1>
 <mat-dialog-content>
   <input
     type="file"
     id="file"
     name="file"
-    aria-label="Sélectionner un fichier de configuration"
+    [attr.aria-label]="labels.selectFile"
     #fileInput
     (change)="selectFile(fileInput)"
   />
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button id="close-import-config-modal" mat-dialog-close>Annuler</button>
-  <button mat-flat-button id="upload-file-button" [disabled]="!fileToUpload()" (click)="upload()">Importer</button>
+  <button mat-button id="close-import-config-modal" mat-dialog-close>{{ labels.cancel }}</button>
+  <button mat-flat-button id="upload-file-button" [disabled]="!fileToUpload()" (click)="upload()">
+    {{ labels.import }}
+  </button>
 </mat-dialog-actions>

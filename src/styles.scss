@@ -4,7 +4,7 @@
 
 // Global styles of the components: their element and their theme colors
 @use "app/header/header.theme";
-@use "app/header/notifications/notifications.theme";
+@use "app/header/notifications/notifications-list/notifications-list.theme";
 @use "app/pages/error/error.theme";
 @use "app/pages/home/home.theme";
 @use "app/pages/home/expense-list-by-month/expense-list-by-month.theme";

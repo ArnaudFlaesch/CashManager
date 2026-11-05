@@ -1,32 +1,32 @@
 <div id="login-page" class="centered-page">
   <div id="login-card" class="stack">
     <a routerLink="/home" id="login-logo">
-      <img src="assets/logo.png" alt="cash manager logo" class="app-logo" />
+      <img ngSrc="assets/logo.png" width="128" height="128" priority [alt]="labels.logoAlt" class="app-logo" />
     </a>
-    <h1 id="login-page-title">CashManager</h1>
-    <p id="login-page-subtitle" class="muted-text">Suivez et analysez vos dépenses</p>
+    <h1 id="login-page-title">{{ labels.title }}</h1>
+    <p id="login-page-subtitle" class="muted-text">{{ labels.subtitle }}</p>
 
     <form id="login-form" class="stack" [formRoot]="loginForm">
       <mat-form-field appearance="outline">
-        <mat-label>Nom d'utilisateur</mat-label>
+        <mat-label>{{ labels.usernameLabel }}</mat-label>
         <mat-icon matPrefix>person</mat-icon>
         <input
           matInput
           id="input-username"
           autocomplete="username"
-          aria-label="Username"
+          [attr.aria-label]="labels.username"
           [formField]="loginForm.username"
         />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Mot de passe</mat-label>
+        <mat-label>{{ labels.passwordLabel }}</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
         <input
           matInput
           id="input-password"
           autocomplete="current-password"
-          aria-label="Password"
+          [attr.aria-label]="labels.password"
           [formField]="loginForm.password"
           [type]="isPasswordVisible() ? 'text' : 'password'"
         />
@@ -35,7 +35,7 @@
           matSuffix
           type="button"
           (click)="isPasswordVisible.set(!isPasswordVisible())"
-          [attr.aria-label]="isPasswordVisible() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+          [attr.aria-label]="isPasswordVisible() ? labels.hidePassword : labels.showPassword"
         >
           <mat-icon>{{ isPasswordVisible() ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
@@ -51,7 +51,7 @@
           @if (loginForm().submitting()) {
             <mat-spinner diameter="20" />
           }
-          <span>Se connecter</span>
+          <span>{{ labels.login }}</span>
         </span>
       </button>
     </form>

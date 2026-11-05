@@ -3,6 +3,6 @@
   {{ data.message }}
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button id="cancel-action" mat-dialog-close>Annuler</button>
-  <button mat-flat-button id="validate-action" [mat-dialog-close]="'validate'">Valider</button>
+  <button mat-button id="cancel-action" mat-dialog-close>{{ labels.cancel }}</button>
+  <button mat-flat-button id="validate-action" [mat-dialog-close]="'validate'">{{ labels.validate }}</button>
 </mat-dialog-actions>

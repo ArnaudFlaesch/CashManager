@@ -1,6 +1,6 @@
 <div id="brand" class="row">
-  <img src="assets/logo.png" alt="" id="brand-logo" class="app-logo" />
-  <span id="brand-name" class="ellipsis">CashManager</span>
+  <img ngSrc="assets/logo.png" width="128" height="128" priority alt="" id="brand-logo" class="app-logo" />
+  <span id="brand-name" class="ellipsis">{{ labels.appName }}</span>
 </div>
 
 <div id="header-actions" class="row">
@@ -8,18 +8,18 @@
     <cash-manager-notifications />
   }
 
-  <button mat-icon-button matTooltip="Applications" [matMenuTriggerFor]="appsMenu">
+  <button mat-icon-button [matTooltip]="labels.applications" [matMenuTriggerFor]="appsMenu">
     <mat-icon>apps</mat-icon>
   </button>
 
-  <button id="cashmanager-menu" matTooltip="Menu utilisateur" mat-icon-button [matMenuTriggerFor]="cashManagerMenu">
+  <button id="cashmanager-menu" [matTooltip]="labels.userMenu" mat-icon-button [matMenuTriggerFor]="cashManagerMenu">
     <mat-icon>account_circle</mat-icon>
   </button>
 
   <mat-menu #appsMenu="matMenu">
     <a mat-menu-item [href]="dashApplicationUrl">
       <mat-icon>dashboard</mat-icon>
-      <span>Dash</span>
+      <span>{{ labels.dash }}</span>
     </a>
   </mat-menu>
 
@@ -27,23 +27,27 @@
     <div mat-menu-item>
       <div class="row">
         <mat-icon>light_mode</mat-icon>
-        <mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)" aria-label="Thème sombre" />
+        <mat-slide-toggle
+          [checked]="isDarkMode()"
+          (change)="toggleTheme($event.checked)"
+          [aria-label]="labels.darkTheme"
+        />
         <mat-icon>dark_mode</mat-icon>
       </div>
     </div>
     <mat-divider />
     <button mat-menu-item (click)="downloadConfig()" id="download-config-button">
       <mat-icon>download</mat-icon>
-      <span>Télécharger la configuration</span>
+      <span>{{ labels.downloadConfig }}</span>
     </button>
     <button mat-menu-item (click)="openImportConfigModal()" id="open-import-config-modal">
       <mat-icon>upload</mat-icon>
-      <span>Importer une configuration</span>
+      <span>{{ labels.importConfig }}</span>
     </button>
     <mat-divider />
     <button mat-menu-item (click)="logout()" id="logout-button">
       <mat-icon>logout</mat-icon>
-      <span>Déconnexion</span>
+      <span>{{ labels.logout }}</span>
     </button>
   </mat-menu>
 </div>

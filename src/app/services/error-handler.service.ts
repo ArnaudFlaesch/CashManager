@@ -4,13 +4,16 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { catchError, of, OperatorFunction } from "rxjs";
 
-const ERROR_UNAUTHORIZED_CODE =
-  "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
-const ERROR_FORBIDDEN_CODE =
-  "Vous n'avez pas les droits nécessaires pour effectuer cette opération.";
-
 @Service()
 export class ErrorHandlerService {
+  private readonly ERROR_UNAUTHORIZED =
+    "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
+
+  private readonly ERROR_FORBIDDEN =
+    "Vous n'avez pas les droits nécessaires pour effectuer cette opération.";
+
+  private readonly SNACKBAR_DURATION = 3000;
+
   private readonly router = inject(Router);
   private readonly snackbar = inject(MatSnackBar);
 
@@ -19,11 +22,11 @@ export class ErrorHandlerService {
       case 401:
         this.router
           .navigate(["login"])
-          .then(() => this.displayErrorMessage(error.message, ERROR_UNAUTHORIZED_CODE))
+          .then(() => this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED))
           .catch((navigationError) => console.log(navigationError.message));
         break;
       case 403:
-        this.displayErrorMessage(error.message, ERROR_FORBIDDEN_CODE);
+        this.displayErrorMessage(error.message, this.ERROR_FORBIDDEN);
         break;
       default:
         this.displayErrorMessage(error.message, messageToDisplay);
@@ -44,6 +47,6 @@ export class ErrorHandlerService {
 
   private displayErrorMessage(errorMessage: string, messageToDisplay: string): void {
     console.error(errorMessage);
-    this.snackbar.open(messageToDisplay, undefined, { duration: 3000 });
+    this.snackbar.open(messageToDisplay, undefined, { duration: this.SNACKBAR_DURATION });
   }
 }

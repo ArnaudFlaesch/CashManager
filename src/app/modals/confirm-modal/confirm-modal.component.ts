@@ -6,7 +6,7 @@ import {
   MatDialogContent,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { IConfirmDialogData } from "./IConfirmDialogData";
+import { IConfirmModalData } from "@model/IConfirmModalData";
 import { MatButton } from "@angular/material/button";
 
 @Component({
@@ -15,5 +15,10 @@ import { MatButton } from "@angular/material/button";
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ConfirmModalComponent {
-  protected readonly data = inject<IConfirmDialogData>(MAT_DIALOG_DATA);
+  public readonly labels = {
+    cancel: "Annuler",
+    validate: "Valider"
+  };
+
+  protected readonly data = inject<IConfirmModalData>(MAT_DIALOG_DATA);
 }

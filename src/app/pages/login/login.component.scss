@@ -17,6 +17,7 @@
   #login-logo img {
     display: block;
     height: 4.5rem;
+    width: auto;
     margin-inline: auto;
   }
 
@@ -41,7 +42,7 @@
     width: 100%;
   }
 
-  button[type="submit"] {
+  #login-button {
     height: 2.75rem;
     margin-top: $space-s;
   }

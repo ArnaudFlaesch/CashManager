@@ -6,6 +6,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  packages: read # to pull the backend image
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -95,6 +99,8 @@ jobs:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
       - name: SonarQube Scan
+        # The commit SHA pinning the action (by Renovate) is mistaken for a SonarQube API key
+        # nosemgrep
         uses: SonarSource/sonarqube-scan-action@e805d875275f728fac1885b413934be6d7c63f65 # v8.4.1
         if: always() && steps.application-tests.outcome == 'success'
         env:

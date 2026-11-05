@@ -5,7 +5,12 @@
   @include themed {
     background:
       radial-gradient(circle at 15% 20%, rgb(37 99 235 / 18%), transparent 45%),
-      radial-gradient(circle at 85% 80%, rgb(16 185 129 / 16%), transparent 45%), $color-background;
+      radial-gradient(
+        circle at 85% 80%,
+        rgb(16 185 129 / 16%),
+        transparent 45%
+      ),
+      $color-background;
   }
 }
 

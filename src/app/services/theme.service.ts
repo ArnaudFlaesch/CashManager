@@ -1,15 +1,15 @@
 import { computed, DOCUMENT, inject, Service, signal } from "@angular/core";
 
-const DARK_MODE_CLASS_NAME = "dark-mode";
-const PREFERRED_THEME_LOCALSTORAGE_KEY = "preferredTheme";
-
 @Service()
 export class ThemeService {
+  private readonly DARK_MODE_CLASS_NAME = "dark-mode";
+  private readonly PREFERRED_THEME_STORAGE_KEY = "preferredTheme";
+
   public readonly isDarkMode = computed(() => this.darkMode());
 
   private readonly document = inject(DOCUMENT);
   private readonly darkMode = signal(
-    localStorage.getItem(PREFERRED_THEME_LOCALSTORAGE_KEY) === "dark"
+    localStorage.getItem(this.PREFERRED_THEME_STORAGE_KEY) === "dark"
   );
 
   public constructor() {
@@ -18,11 +18,11 @@ export class ThemeService {
 
   public selectDarkMode(isDarkModeEnabled: boolean): void {
     this.darkMode.set(isDarkModeEnabled);
-    localStorage.setItem(PREFERRED_THEME_LOCALSTORAGE_KEY, isDarkModeEnabled ? "dark" : "light");
+    localStorage.setItem(this.PREFERRED_THEME_STORAGE_KEY, isDarkModeEnabled ? "dark" : "light");
     this.applyTheme();
   }
 
   private applyTheme(): void {
-    this.document.body.classList.toggle(DARK_MODE_CLASS_NAME, this.darkMode());
+    this.document.body.classList.toggle(this.DARK_MODE_CLASS_NAME, this.darkMode());
   }
 }

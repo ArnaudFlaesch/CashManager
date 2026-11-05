@@ -4,10 +4,11 @@ import { form, FormField, FormRoot, min, required, submit, validate } from "@ang
 import { firstValueFrom } from "rxjs";
 
 import { Expense } from "@model/Expense";
-import { formatDateWithOffsetToUtc } from "../../../utils/date.utils";
+import { IExpenseFormModel } from "@model/IExpenseFormModel";
+import { formatDateWithOffsetToUtc } from "@utils/date.utils";
 import { Label } from "@model/Label";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { ExpenseService } from "@services/expense.service/expense.service";
+import { ErrorHandlerService } from "@services/error-handler.service";
+import { ExpenseService } from "@services/expense.service";
 import { MatButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
 import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -25,15 +26,6 @@ import {
   MatSuffix
 } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
-
-const ERROR_CREATING_EXPENSE_MESSAGE = "Erreur lors de l'ajout de la dépense.";
-
-type ExpenseModel = {
-  amount: number;
-  date: Date | null;
-  /** Text typed in the autocomplete, or the selected label. */
-  label: Label | string;
-};
 
 @Component({
   selector: "cash-manager-create-expense",
@@ -59,10 +51,22 @@ type ExpenseModel = {
   ]
 })
 export class CreateExpenseComponent {
-  public readonly labels = input<Label[]>([]);
+  public readonly labels = {
+    amount: "Montant",
+    amountPlaceholder: "Saisissez le montant de la dépense",
+    date: "Date",
+    datePlaceholder: "Sélectionnez une date",
+    dateHint: "DD/MM/YYYY",
+    label: "Étiquette",
+    labelPlaceholder: "Renseignez un label",
+    labelAriaLabel: "Label",
+    add: "Ajouter"
+  };
+
+  public readonly expenseLabels = input<Label[]>([]);
   public readonly insertedExpenseEvent = output<Expense>();
 
-  public readonly expenseModel = signal<ExpenseModel>({ amount: 0, date: null, label: "" });
+  public readonly expenseModel = signal<IExpenseFormModel>({ amount: 0, date: null, label: "" });
   public readonly expenseForm = form(
     this.expenseModel,
     (schema) => {
@@ -89,7 +93,7 @@ export class CreateExpenseComponent {
           } catch (error) {
             this.errorHandlerService.handleError(
               error as HttpErrorResponse,
-              ERROR_CREATING_EXPENSE_MESSAGE
+              this.ERROR_CREATING_EXPENSE
             );
           }
           return undefined;
@@ -104,11 +108,14 @@ export class CreateExpenseComponent {
   public readonly filteredOptions = computed(() => {
     const label = this.expenseModel().label;
     const filterValue = (typeof label === "string" ? label : label.label).toLowerCase();
-    return this.labels().filter((option) => option.label.toLowerCase().includes(filterValue));
+    return this.expenseLabels().filter((option) =>
+      option.label.toLowerCase().includes(filterValue)
+    );
   });
 
   private readonly expenseService = inject(ExpenseService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly ERROR_CREATING_EXPENSE = "Erreur lors de l'ajout de la dépense.";
 
   public handleCreateExpense(): Promise<boolean> {
     return submit(this.expenseForm);

@@ -12,14 +12,15 @@ import { ChartData } from "chart.js";
 import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { filter, switchMap } from "rxjs";
 
-import { ConfirmModalComponent } from "../../../modals/confirm-modal/confirm-modal.component";
+import { ConfirmModalComponent } from "@modals/confirm-modal/confirm-modal.component";
 import { Expense } from "@model/Expense";
+import { IConfirmModalData } from "@model/IConfirmModalData";
 import { Label } from "@model/Label";
-import { ErrorHandlerService } from "@services/error.handler.service";
-import { ThemeService } from "@services/theme.service/theme.service";
-import { ExpenseService } from "@services/expense.service/expense.service";
-import { getChartOptions, DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "../../../utils/Constants";
-import { CreateExpenseComponent } from "../create-expense/create-expense.component";
+import { ErrorHandlerService } from "@services/error-handler.service";
+import { ThemeService } from "@services/theme.service";
+import { ExpenseService } from "@services/expense.service";
+import { getChartOptions, DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "@utils/Constants";
+import { CreateExpenseComponent } from "@app/pages/home/create-expense/create-expense.component";
 
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
@@ -27,9 +28,6 @@ import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { BaseChartDirective } from "ng2-charts";
-
-const ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
-const EXPENSES_CHART_LABEL = "Dépenses";
 
 @Component({
   selector: "cash-manager-expense-list-by-month",
@@ -54,7 +52,25 @@ const EXPENSES_CHART_LABEL = "Dépenses";
   ]
 })
 export class ExpenseListByMonthComponent {
-  public readonly labels = input<Label[]>([]);
+  public readonly labels = {
+    previousMonth: "Mois précédent",
+    nextMonth: "Mois suivant",
+    selectMonth: "Sélectionnez un mois",
+    expensesByLabel: "Dépenses par étiquette",
+    noExpense: "Aucune dépense ce mois-ci.",
+    totalForMonth: "Total ce mois",
+    deleteExpense: "Supprimer la dépense",
+    newExpense: "Nouvelle dépense"
+  };
+
+  private readonly ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
+  private readonly EXPENSES_CHART_LABEL = "Dépenses";
+  private readonly DELETE_EXPENSE_MODAL_DATA: IConfirmModalData = {
+    title: "Suppression d'une dépense",
+    message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
+  };
+
+  public readonly expenseLabels = input<Label[]>([]);
   public readonly chartOptions = computed(() => getChartOptions(this.themeService.isDarkMode()));
 
   public readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
@@ -65,12 +81,12 @@ export class ExpenseListByMonthComponent {
     stream: ({ params: month }) =>
       this.expenseService
         .getExpensesAtMonth(month, endOfMonth(month))
-        .pipe(this.errorHandlerService.catchError<Expense[]>(ERROR_GETTING_EXPENSES, [])),
+        .pipe(this.errorHandlerService.catchError<Expense[]>(this.ERROR_GETTING_EXPENSES, [])),
     defaultValue: []
   });
 
   public readonly labelNames = computed(
-    () => new Map(this.labels().map((label) => [label.id, label.label]))
+    () => new Map(this.expenseLabels().map((label) => [label.id, label.label]))
   );
 
   public readonly totalForMonth = computed(() =>
@@ -88,7 +104,7 @@ export class ExpenseListByMonthComponent {
       totalByLabel.set(labelId, (totalByLabel.get(labelId) ?? 0) + amount);
     }
     return {
-      labels: [EXPENSES_CHART_LABEL],
+      labels: [this.EXPENSES_CHART_LABEL],
       datasets: [...totalByLabel].map(([labelId, total]) => {
         const labelName = this.labelNames().get(labelId);
         return labelName === undefined
@@ -117,10 +133,7 @@ export class ExpenseListByMonthComponent {
       .open(ConfirmModalComponent, {
         height: DIALOG_SMALL_HEIGHT,
         width: DIALOG_SMALL_WIDTH,
-        data: {
-          title: "Suppression d'une dépense",
-          message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
-        }
+        data: this.DELETE_EXPENSE_MODAL_DATA
       })
       .afterClosed()
       .pipe(

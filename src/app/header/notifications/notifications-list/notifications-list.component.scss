@@ -1,0 +1,45 @@
+@use "sass:color";
+@use "variables" as *;
+
+// Size of the Material icon button used to mark a notification as read
+$notification-button-size: 48px;
+
+// Same style as the notifications of Dash, the colors of the info notifications are set
+// in _notifications-list.theme.scss
+.notification-container {
+  gap: $space-s;
+  padding: $space-xs $space-m;
+  border-left: 3px solid transparent;
+
+  // The message takes the remaining space, so that the date and the icons are never shrunk
+  // and stay aligned from one notification to the other
+  .notification-message {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .notification-date,
+  .notification-type-icon,
+  .mark-notification-as-read-button {
+    flex-shrink: 0;
+  }
+
+  &.warn .notification-type-icon {
+    color: $color-warning;
+  }
+
+  // Keeps the icons of the read notifications aligned with the ones of the unread notifications
+  .mark-notification-as-read-placeholder {
+    flex-shrink: 0;
+    width: $notification-button-size;
+  }
+
+  &.unread-notification {
+    font-weight: 500;
+
+    &.warn {
+      border-left-color: $color-warning;
+      background-color: color.change($color-warning, $alpha: 0.15);
+    }
+  }
+}
