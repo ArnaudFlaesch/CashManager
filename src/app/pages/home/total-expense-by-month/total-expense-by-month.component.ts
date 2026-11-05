@@ -8,7 +8,7 @@ import { MatIcon } from "@angular/material/icon";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatSelect } from "@angular/material/select";
 import { ChartData } from "chart.js";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { fr } from "date-fns/locale/fr";
 import { BaseChartDirective } from "ng2-charts";
 import { ITotalExpenseByMonth } from "@model/ITotalExpenseByMonth";
@@ -59,12 +59,12 @@ export class TotalExpenseByMonthComponent {
   public readonly totalExpensesByMonthChart = computed<ChartData<"line">>(() => {
     const chartData = this.totalExpensesByMonth
       .value()
-      .toSorted((dataA, dataB) => new Date(dataA.date).getTime() - new Date(dataB.date).getTime());
+      .toSorted((dataA, dataB) => parseISO(dataA.date).getTime() - parseISO(dataB.date).getTime());
     const average =
       chartData.reduce((total, totalByMonth) => total + totalByMonth.total, 0) / chartData.length;
     return {
       labels: chartData.map((totalByMonth) =>
-        format(new Date(totalByMonth.date), this.CHART_DATE_FORMAT, { locale: fr })
+        format(parseISO(totalByMonth.date), this.CHART_DATE_FORMAT, { locale: fr })
       ),
       datasets: [
         {
