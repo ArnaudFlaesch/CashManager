@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+/* global describe, beforeEach, it, xit, cy, expect */
 
 describe("Home page tests", () => {
   beforeEach(() => {
