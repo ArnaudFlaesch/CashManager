@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { HttpErrorHandler } from "@core/http-error-handler";
 import { LabelApi } from "@features/home/labels/label-api";
 import { Component, DestroyRef, inject, input, output } from "@angular/core";
@@ -19,22 +20,24 @@ import { MatTooltip } from "@angular/material/tooltip";
   imports: [MatIconButton, MatIcon, MatTooltip]
 })
 export class LabelList {
-  protected readonly labels = {
-    deleteLabel: "Supprimer l'étiquette",
-    noLabel: "Aucune étiquette pour le moment."
-  };
-
-  public readonly expenseLabels = input<Label[]>([]);
-  public readonly labelDeleted = output<number>();
-
   private readonly labelApi = inject(LabelApi);
   private readonly httpErrorHandler = inject(HttpErrorHandler);
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly ERROR_DELETING_LABEL = "Erreur lors de la suppression du label.";
-  private readonly DELETE_LABEL_MODAL_DATA: ConfirmModalData = {
-    title: "Suppression d'un label",
-    message: "Êtes-vous sûr de vouloir supprimer ce label ?"
+
+  public readonly expenseLabels = input<Label[]>([]);
+  public readonly labelDeleted = output<number>();
+
+  protected readonly labels = {
+    deleteLabel: "Supprimer l'étiquette",
+    noLabel: "Aucune étiquette pour le moment.",
+    deleteLabelDialog: {
+      title: "Suppression d'un label",
+      message: "Êtes-vous sûr de vouloir supprimer ce label ?"
+    } satisfies ConfirmModalData,
+    errors: {
+      deletingLabel: "Erreur lors de la suppression du label."
+    }
   };
 
   protected openDeleteLabelDialog(labelId: number): void {
@@ -42,7 +45,7 @@ export class LabelList {
       .open(ConfirmModal, {
         height: DIALOG_SMALL_HEIGHT,
         width: DIALOG_SMALL_WIDTH,
-        data: this.DELETE_LABEL_MODAL_DATA
+        data: this.labels.deleteLabelDialog
       })
       .afterClosed()
       .pipe(
@@ -51,8 +54,12 @@ export class LabelList {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: () => this.labelDeleted.emit(labelId),
-        error: (error) => this.httpErrorHandler.handleError(error, this.ERROR_DELETING_LABEL)
+        next: () => {
+          this.labelDeleted.emit(labelId);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.httpErrorHandler.handleError(error, this.labels.errors.deletingLabel);
+        }
       });
   }
 }

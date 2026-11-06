@@ -17,6 +17,6 @@ describe("Routes", () => {
 
   it("Should protect the home page and redirect the unknown pages to it", () => {
     expect(findRoute("home")?.canActivate).toHaveLength(1);
-    expect(findRoute("**")?.redirectTo).toEqual("home");
+    expect(findRoute("**")?.redirectTo).toBe("home");
   });
 });

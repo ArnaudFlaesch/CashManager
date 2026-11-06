@@ -33,6 +33,10 @@ import { MatInput } from "@angular/material/input";
   ]
 })
 export class Login {
+  private readonly auth = inject(Auth);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly router = inject(Router);
+
   protected readonly labels = {
     logoAlt: "cash manager logo",
     title: "CashManager",
@@ -43,7 +47,10 @@ export class Login {
     password: "Password",
     hidePassword: "Masquer le mot de passe",
     showPassword: "Afficher le mot de passe",
-    login: "Se connecter"
+    login: "Se connecter",
+    errors: {
+      authenticatingUser: "Erreur lors de la connexion de l'utilisateur."
+    }
   };
 
   protected readonly isPasswordVisible = signal(false);
@@ -64,7 +71,7 @@ export class Login {
           } catch (error) {
             this.httpErrorHandler.handleLoginError(
               error as HttpErrorResponse,
-              this.ERROR_AUTHENTICATING_USER
+              this.labels.errors.authenticatingUser
             );
           }
           return undefined;
@@ -72,9 +79,4 @@ export class Login {
       }
     }
   );
-
-  private readonly auth = inject(Auth);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
-  private readonly router = inject(Router);
-  private readonly ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 }

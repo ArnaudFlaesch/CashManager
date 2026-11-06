@@ -47,7 +47,7 @@ describe("NotificationApi", () => {
     const readNotification = { ...notification, isRead: true };
     const updated = firstValueFrom(service.markNotificationAsRead([1]));
     const request = httpTestingController.expectOne(`${notificationsUrl}/markNotificationAsRead`);
-    expect(request.request.method).toEqual("PUT");
+    expect(request.request.method).toBe("PUT");
     expect(request.request.body).toEqual({ notificationIds: [1] });
     request.flush([readNotification]);
     expect(await updated).toEqual([readNotification]);

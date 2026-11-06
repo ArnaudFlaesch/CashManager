@@ -38,7 +38,8 @@ export class ExpenseApi {
     return this.http.post<Expense>(`${this.expenseUrl}/addExpense`, expense);
   }
 
-  public deleteExpense(expenseId: number): Observable<void> {
-    return this.http.delete<void>(`${this.expenseUrl}/deleteExpense/`, { params: { expenseId } });
+  /** The backend answers with an empty body, that HttpClient returns as null. */
+  public deleteExpense(expenseId: number): Observable<null> {
+    return this.http.delete<null>(`${this.expenseUrl}/deleteExpense/`, { params: { expenseId } });
   }
 }

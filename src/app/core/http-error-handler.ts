@@ -22,8 +22,14 @@ export class HttpErrorHandler {
       case 401:
         this.router
           .navigate(["login"])
-          .then(() => this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED))
-          .catch((navigationError) => console.log(navigationError.message));
+          .then(() => {
+            this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED);
+          })
+          .catch((navigationError: unknown) => {
+            console.log(
+              navigationError instanceof Error ? navigationError.message : navigationError
+            );
+          });
         break;
       case 403:
         this.displayErrorMessage(error.message, this.ERROR_FORBIDDEN);

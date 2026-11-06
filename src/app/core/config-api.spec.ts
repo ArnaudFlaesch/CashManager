@@ -24,8 +24,8 @@ describe("ConfigApi", () => {
     const config = new Blob(["{}"], { type: "application/json" });
     const exportedConfig = firstValueFrom(service.exportConfig());
     const request = httpTestingController.expectOne(`${configUrl}/export`);
-    expect(request.request.method).toEqual("GET");
-    expect(request.request.responseType).toEqual("blob");
+    expect(request.request.method).toBe("GET");
+    expect(request.request.responseType).toBe("blob");
     request.flush(config);
     expect(await exportedConfig).toEqual(config);
   });
@@ -34,9 +34,9 @@ describe("ConfigApi", () => {
     const file = new File(["{}"], "cashManagerData.json");
     const imported = firstValueFrom(service.importConfig(file));
     const request = httpTestingController.expectOne(`${configUrl}/import`);
-    expect(request.request.method).toEqual("POST");
+    expect(request.request.method).toBe("POST");
     expect((request.request.body as FormData).get("file")).toEqual(file);
     request.flush(true);
-    expect(await imported).toEqual(true);
+    expect(await imported).toBe(true);
   });
 });

@@ -27,11 +27,11 @@ describe("Login tests", () => {
     cy.wait("@login").then((request: Interception) => {
       expect(request.response?.statusCode).to.equal(200);
     });
-    cy.url().should("be.equal", `${Cypress.config("baseUrl")}home`);
+    cy.url().should("be.equal", `${Cypress.config("baseUrl") ?? ""}home`);
     cy.get("#cashmanager-menu").click();
     cy.get("#logout-button").click();
     cy.get("#login-page-title").should("have.text", "CashManager");
-    cy.url().should("be.equal", `${Cypress.config("baseUrl")}login`);
+    cy.url().should("be.equal", `${Cypress.config("baseUrl") ?? ""}login`);
     cy.window().its("localStorage").invoke("getItem", "user").should("be.null");
   });
 });

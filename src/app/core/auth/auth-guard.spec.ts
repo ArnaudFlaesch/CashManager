@@ -20,13 +20,13 @@ describe("authGuard", () => {
 
   it("Should let a user with a valid token access the page", () => {
     userHasValidToken.mockReturnValue(true);
-    expect(runGuard()).toEqual(true);
+    expect(runGuard()).toBe(true);
   });
 
   it("Should redirect a user without a valid token to the login page", () => {
     userHasValidToken.mockReturnValue(false);
     const result = runGuard();
     expect(result).toBeInstanceOf(UrlTree);
-    expect(String(result)).toEqual("/login");
+    expect((result as UrlTree).toString()).toBe("/login");
   });
 });

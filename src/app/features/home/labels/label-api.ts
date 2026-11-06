@@ -17,7 +17,8 @@ export class LabelApi {
     return this.http.post<Label>(`${this.labelUrl}/addLabel`, { newLabel: label });
   }
 
-  public deleteLabel(labelId: number): Observable<void> {
-    return this.http.delete<void>(`${this.labelUrl}/deleteLabel`, { params: { labelId } });
+  /** The backend answers with an empty body, that HttpClient returns as null. */
+  public deleteLabel(labelId: number): Observable<null> {
+    return this.http.delete<null>(`${this.labelUrl}/deleteLabel`, { params: { labelId } });
   }
 }

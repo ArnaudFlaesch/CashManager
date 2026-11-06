@@ -38,7 +38,7 @@ export class Auth {
 
   /** Token of the logged in user, read from the storage as it can be removed outside of this service. */
   public getAccessToken(): string | undefined {
-    return this.readStoredUser()?.accessToken || undefined;
+    return this.readStoredUser()?.accessToken;
   }
 
   public userHasValidToken(): boolean {
@@ -60,14 +60,14 @@ export class Auth {
       throw new Error("Invalid token");
     }
     // The payload is encoded in base64url
-    return JSON.parse(atob(payload.replaceAll("-", "+").replaceAll("_", "/")));
+    return JSON.parse(atob(payload.replaceAll("-", "+").replaceAll("_", "/"))) as JwtPayload;
   }
 
   /** User saved in the storage, null when there is none or when the entry is corrupted. */
   private readStoredUser(): User | null {
     const userData = localStorage.getItem(this.USER_STORAGE_KEY);
     try {
-      return userData ? JSON.parse(userData) : null;
+      return userData ? (JSON.parse(userData) as User) : null;
     } catch {
       return null;
     }

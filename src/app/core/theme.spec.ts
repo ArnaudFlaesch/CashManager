@@ -5,7 +5,13 @@ import { Theme } from "./theme";
 
 describe("Theme", () => {
   const doc = () => TestBed.inject(DOCUMENT);
-  const storage = () => doc().defaultView!.localStorage;
+  const storage = () => {
+    const window = doc().defaultView;
+    if (!window) {
+      throw new Error("The document has no window");
+    }
+    return window.localStorage;
+  };
 
   afterEach(() => {
     storage().removeItem("preferredTheme");
@@ -14,14 +20,14 @@ describe("Theme", () => {
 
   it("Should use the light theme by default", () => {
     const service = TestBed.inject(Theme);
-    expect(service.isDarkMode()).toEqual(false);
+    expect(service.isDarkMode()).toBe(false);
     expect(doc().body.classList).not.toContain("dark-mode");
   });
 
   it("Should apply the theme saved in the storage", () => {
     storage().setItem("preferredTheme", "dark");
     const service = TestBed.inject(Theme);
-    expect(service.isDarkMode()).toEqual(true);
+    expect(service.isDarkMode()).toBe(true);
     expect(doc().body.classList).toContain("dark-mode");
   });
 
@@ -29,13 +35,13 @@ describe("Theme", () => {
     const service = TestBed.inject(Theme);
 
     service.selectDarkMode(true);
-    expect(service.isDarkMode()).toEqual(true);
-    expect(storage().getItem("preferredTheme")).toEqual("dark");
+    expect(service.isDarkMode()).toBe(true);
+    expect(storage().getItem("preferredTheme")).toBe("dark");
     expect(doc().body.classList).toContain("dark-mode");
 
     service.selectDarkMode(false);
-    expect(service.isDarkMode()).toEqual(false);
-    expect(storage().getItem("preferredTheme")).toEqual("light");
+    expect(service.isDarkMode()).toBe(false);
+    expect(storage().getItem("preferredTheme")).toBe("light");
     expect(doc().body.classList).not.toContain("dark-mode");
   });
 });

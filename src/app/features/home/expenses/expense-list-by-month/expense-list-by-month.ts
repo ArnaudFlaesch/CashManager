@@ -53,6 +53,14 @@ import { BaseChartDirective } from "ng2-charts";
   ]
 })
 export class ExpenseListByMonth {
+  private readonly dialog = inject(MatDialog);
+  private readonly expenseApi = inject(ExpenseApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly theme = inject(Theme);
+  private readonly destroyRef = inject(DestroyRef);
+
+  public readonly expenseLabels = input<Label[]>([]);
+
   protected readonly labels = {
     previousMonth: "Mois précédent",
     nextMonth: "Mois suivant",
@@ -61,35 +69,34 @@ export class ExpenseListByMonth {
     noExpense: "Aucune dépense ce mois-ci.",
     totalForMonth: "Total ce mois",
     deleteExpense: "Supprimer la dépense",
-    newExpense: "Nouvelle dépense"
+    newExpense: "Nouvelle dépense",
+    expensesChart: "Dépenses",
+    deleteExpenseDialog: {
+      title: "Suppression d'une dépense",
+      message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
+    } satisfies ConfirmModalData,
+    errors: {
+      gettingExpenses: "Erreur lors de la récupération des dépenses."
+    }
   };
-
-  private readonly ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
-  private readonly EXPENSES_CHART_LABEL = "Dépenses";
-  private readonly DELETE_EXPENSE_MODAL_DATA: ConfirmModalData = {
-    title: "Suppression d'une dépense",
-    message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
-  };
-
-  public readonly expenseLabels = input<Label[]>([]);
-  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
 
   protected readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
   protected readonly selectedMonthForm = form(this.selectedMonthModel);
-
+  private readonly selectedMonth = computed(
+    () => startOfMonth(this.selectedMonthModel().selectedMonth),
+    { equal: (monthA, monthB) => monthA.getTime() === monthB.getTime() }
+  );
   protected readonly expenses = rxResource({
     params: () => this.selectedMonth(),
     stream: ({ params: month }) =>
       this.expenseApi
         .getExpensesAtMonth(month, endOfMonth(month))
-        .pipe(this.httpErrorHandler.catchError<Expense[]>(this.ERROR_GETTING_EXPENSES, [])),
+        .pipe(this.httpErrorHandler.catchError<Expense[]>(this.labels.errors.gettingExpenses, [])),
     defaultValue: []
   });
-
   protected readonly labelNames = computed(
     () => new Map(this.expenseLabels().map((label) => [label.id, label.label]))
   );
-
   protected readonly totalForMonth = computed(() =>
     Number.parseFloat(
       this.expenses
@@ -98,14 +105,14 @@ export class ExpenseListByMonth {
         .toFixed(10)
     )
   );
-
+  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
   protected readonly expensesByLabelChart = computed<ChartData<"bar">>(() => {
     const totalByLabel = new Map<number, number>();
     for (const { labelId, amount } of this.expenses.value()) {
       totalByLabel.set(labelId, (totalByLabel.get(labelId) ?? 0) + amount);
     }
     return {
-      labels: [this.EXPENSES_CHART_LABEL],
+      labels: [this.labels.expensesChart],
       datasets: [...totalByLabel].map(([labelId, total]) => {
         const labelName = this.labelNames().get(labelId);
         return labelName === undefined
@@ -114,16 +121,6 @@ export class ExpenseListByMonth {
       })
     };
   });
-
-  private readonly selectedMonth = computed(
-    () => startOfMonth(this.selectedMonthModel().selectedMonth),
-    { equal: (monthA, monthB) => monthA.getTime() === monthB.getTime() }
-  );
-  private readonly dialog = inject(MatDialog);
-  private readonly expenseApi = inject(ExpenseApi);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
-  private readonly theme = inject(Theme);
-  private readonly destroyRef = inject(DestroyRef);
 
   protected addExpense(newExpense: Expense): void {
     this.expenses.value.update((expenses) => [...expenses, newExpense]);
@@ -134,7 +131,7 @@ export class ExpenseListByMonth {
       .open(ConfirmModal, {
         height: DIALOG_SMALL_HEIGHT,
         width: DIALOG_SMALL_WIDTH,
-        data: this.DELETE_EXPENSE_MODAL_DATA
+        data: this.labels.deleteExpenseDialog
       })
       .afterClosed()
       .pipe(
@@ -142,11 +139,11 @@ export class ExpenseListByMonth {
         switchMap(() => this.expenseApi.deleteExpense(expenseId)),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe(() =>
+      .subscribe(() => {
         this.expenses.value.update((expenses) =>
           expenses.filter((expense) => expense.id !== expenseId)
-        )
-      );
+        );
+      });
   }
 
   protected selectPreviousMonth(): void {

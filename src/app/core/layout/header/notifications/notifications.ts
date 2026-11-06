@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component, computed, DestroyRef, inject } from "@angular/core";
 import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { isToday } from "date-fns";
@@ -14,6 +15,16 @@ import { NotificationsList } from "./notifications-list/notifications-list";
   imports: [NotificationsList]
 })
 export class Notifications {
+  private readonly notificationApi = inject(NotificationApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly labels = {
+    errors: {
+      markingNotificationAsRead: "Erreur lors du traitement de la requête."
+    }
+  };
+
   private readonly NOTIFICATION_TYPE_ICONS: Record<NotificationType, string> = {
     [NotificationType.INFO]: "info",
     [NotificationType.WARN]: "warning"
@@ -37,11 +48,6 @@ export class Notifications {
   protected readonly unreadNotificationsForBadge = computed(
     () => this.notifications.value().filter((notification) => !notification.isRead).length
   );
-
-  private readonly notificationApi = inject(NotificationApi);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly ERROR_MARKING_NOTIFICATION_AS_READ = "Erreur lors du traitement de la requête.";
 
   protected markNotificationAsRead(notificationId: number): void {
     this.markNotificationsAsRead([notificationId]);
@@ -68,8 +74,9 @@ export class Notifications {
             )
           );
         },
-        error: (error) =>
-          this.httpErrorHandler.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
+        error: (error: HttpErrorResponse) => {
+          this.httpErrorHandler.handleError(error, this.labels.errors.markingNotificationAsRead);
+        }
       });
   }
 

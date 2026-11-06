@@ -1,3 +1,4 @@
+import { getElement, queryElement } from "@testing/dom";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
   NotificationToDisplay,
@@ -41,14 +42,10 @@ describe("NotificationsList", () => {
     document.querySelector(".cdk-overlay-container")?.replaceChildren();
   });
 
-  function getElement<T extends HTMLElement>(selector: string): T {
-    return (fixture.nativeElement as HTMLElement).querySelector(selector) as T;
-  }
-
   /** Opens the notifications menu, rendered in an overlay. */
   async function openMenu(): Promise<void> {
     await fixture.whenStable();
-    getElement<HTMLButtonElement>("#display-notifications-button").click();
+    getElement(fixture, "#display-notifications-button", HTMLButtonElement).click();
     await fixture.whenStable();
   }
 
@@ -58,15 +55,17 @@ describe("NotificationsList", () => {
 
   it("Should hide the badge when there is no unread notification", async () => {
     await fixture.whenStable();
-    expect(getElement("mat-icon").getAttribute("title")).toEqual(component["labels"].notifications);
-    expect(getElement(".mat-badge-hidden")).not.toBeNull();
+    expect(getElement(fixture, "mat-icon", HTMLElement).getAttribute("title")).toBe(
+      "Notifications"
+    );
+    expect(queryElement(fixture, ".mat-badge-hidden")).not.toBeNull();
   });
 
   it("Should display the number of unread notifications in the badge", async () => {
     fixture.componentRef.setInput("unreadNotificationsForBadge", 1);
     await fixture.whenStable();
-    expect(getElement(".mat-badge-hidden")).toBeNull();
-    expect(getElement(".mat-badge-content").textContent?.trim()).toEqual("1");
+    expect(queryElement(fixture, ".mat-badge-hidden")).toBeNull();
+    expect(getElement(fixture, ".mat-badge-content", HTMLElement).textContent.trim()).toBe("1");
   });
 
   it("Should list the notifications in the menu", async () => {
@@ -78,7 +77,7 @@ describe("NotificationsList", () => {
     );
     expect(
       containers.map((container) =>
-        container.querySelector(".notification-date")?.textContent?.trim()
+        container.querySelector(".notification-date")?.textContent.trim()
       )
     ).toEqual(["09:30", "02/11"]);
     expect(containers.map((container) => container.querySelector("mat-icon")?.textContent)).toEqual(

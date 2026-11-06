@@ -33,7 +33,7 @@ describe("authInterceptor", () => {
 
   it("Should add the bearer token to backend requests", () => {
     localStorage.setItem("user", JSON.stringify({ accessToken: "token" }));
-    expect(sendRequest(`${environment.backend_url}/expense/`)).toEqual("Bearer token");
+    expect(sendRequest(`${environment.backend_url}/expense/`)).toBe("Bearer token");
   });
 
   it("Should not add the token to authentication requests", () => {

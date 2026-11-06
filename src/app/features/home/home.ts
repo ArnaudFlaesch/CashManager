@@ -38,6 +38,9 @@ import { Header } from "@core/layout/header/header";
   ]
 })
 export class Home {
+  private readonly labelApi = inject(LabelApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+
   protected readonly labels = {
     monthExpenses: "Dépenses du mois",
     totalByMonth: "Total par mois",
@@ -45,40 +48,46 @@ export class Home {
     newLabel: "Nouvelle étiquette",
     labelPlaceholder: "Renseignez un label",
     labelAriaLabel: "Label",
-    add: "Ajouter"
+    add: "Ajouter",
+    errors: {
+      creatingLabel: "Erreur lors de l'ajout du label.",
+      gettingLabels: "Erreur lors de la récupération des labels."
+    }
   };
-
-  private readonly ERROR_CREATING_LABEL = "Erreur lors de l'ajout du label.";
-  private readonly ERROR_GETTING_LABELS = "Erreur lors de la récupération des labels.";
 
   protected readonly expenseLabels = rxResource({
     stream: () =>
       this.labelApi
         .getLabels()
-        .pipe(this.httpErrorHandler.catchError<Label[]>(this.ERROR_GETTING_LABELS, [])),
+        .pipe(this.httpErrorHandler.catchError<Label[]>(this.labels.errors.gettingLabels, [])),
     defaultValue: []
   });
-
   private readonly labelModel = signal({ label: "" });
-  protected readonly labelForm = form(this.labelModel, (schema) => required(schema.label), {
-    submission: {
-      action: async (labelForm) => {
-        try {
-          const insertedLabel = await firstValueFrom(
-            this.labelApi.addLabel(labelForm.label().value())
-          );
-          this.expenseLabels.value.update((labels) => [...labels, insertedLabel]);
-          labelForm().reset({ label: "" });
-        } catch (error) {
-          this.httpErrorHandler.handleError(error as HttpErrorResponse, this.ERROR_CREATING_LABEL);
+  protected readonly labelForm = form(
+    this.labelModel,
+    (schema) => {
+      required(schema.label);
+    },
+    {
+      submission: {
+        action: async (labelForm) => {
+          try {
+            const insertedLabel = await firstValueFrom(
+              this.labelApi.addLabel(labelForm.label().value())
+            );
+            this.expenseLabels.value.update((labels) => [...labels, insertedLabel]);
+            labelForm().reset({ label: "" });
+          } catch (error) {
+            this.httpErrorHandler.handleError(
+              error as HttpErrorResponse,
+              this.labels.errors.creatingLabel
+            );
+          }
+          return undefined;
         }
-        return undefined;
       }
     }
-  });
-
-  private readonly labelApi = inject(LabelApi);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  );
 
   protected removeLabel(labelId: number): void {
     this.expenseLabels.value.update((labels) => labels.filter((label) => label.id !== labelId));

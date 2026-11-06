@@ -18,20 +18,22 @@ import { MatButton } from "@angular/material/button";
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ImportConfigModal {
-  protected readonly labels = {
-    title: "Importer la configuration",
-    selectFile: "Sélectionner un fichier de configuration",
-    cancel: "Annuler",
-    import: "Importer"
-  };
-
-  protected readonly fileToUpload = signal<File | null>(null);
-
   private readonly configApi = inject(ConfigApi);
   private readonly httpErrorHandler = inject(HttpErrorHandler);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialogRef = inject<MatDialogRef<ImportConfigModal>>(MatDialogRef);
-  private readonly ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
+
+  protected readonly labels = {
+    title: "Importer la configuration",
+    selectFile: "Sélectionner un fichier de configuration",
+    cancel: "Annuler",
+    import: "Importer",
+    errors: {
+      importConfiguration: "Erreur lors de l'import de la configuration."
+    }
+  };
+
+  protected readonly fileToUpload = signal<File | null>(null);
 
   protected selectFile(input: HTMLInputElement): void {
     this.fileToUpload.set(input.files?.[0] ?? null);
@@ -44,8 +46,9 @@ export class ImportConfigModal {
         .importConfig(fileToUpload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          error: (error: HttpErrorResponse) =>
-            this.httpErrorHandler.handleError(error, this.ERROR_IMPORT_CONFIGURATION),
+          error: (error: HttpErrorResponse) => {
+            this.httpErrorHandler.handleError(error, this.labels.errors.importConfiguration);
+          },
           complete: () => {
             this.dialogRef.close();
             window.location.reload();

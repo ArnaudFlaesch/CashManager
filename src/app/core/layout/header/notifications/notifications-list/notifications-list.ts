@@ -17,17 +17,16 @@ import { DateFormatPipe } from "@shared/date-format-pipe";
   imports: [MatTooltip, MatIcon, MatIconButton, MatMenuTrigger, MatBadge, MatMenu, DateFormatPipe]
 })
 export class NotificationsList {
+  public readonly notificationsList = input.required<NotificationToDisplay[]>();
+  public readonly unreadNotificationsForBadge = input<number>(0);
+  public readonly notificationRead = output<number>();
+  public readonly allNotificationsRead = output();
+
   protected readonly labels = {
     notifications: "Notifications",
     markAllAsRead: "Marquer tout comme lu",
     markAsRead: "Marquer comme lu"
   };
-
-  public readonly notificationsList = input.required<NotificationToDisplay[]>();
-  public readonly unreadNotificationsForBadge = input<number>(0);
-
-  public readonly notificationRead = output<number>();
-  public readonly allNotificationsRead = output();
 
   protected readonly NotificationType = NotificationType;
 

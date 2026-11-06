@@ -51,6 +51,12 @@ import { MatIcon } from "@angular/material/icon";
   ]
 })
 export class CreateExpense {
+  private readonly expenseApi = inject(ExpenseApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+
+  public readonly expenseLabels = input<Label[]>([]);
+  public readonly expenseCreated = output<Expense>();
+
   protected readonly labels = {
     amount: "Montant",
     amountPlaceholder: "Saisissez le montant de la dépense",
@@ -60,11 +66,11 @@ export class CreateExpense {
     label: "Étiquette",
     labelPlaceholder: "Renseignez un label",
     labelAriaLabel: "Label",
-    add: "Ajouter"
+    add: "Ajouter",
+    errors: {
+      creatingExpense: "Erreur lors de l'ajout de la dépense."
+    }
   };
-
-  public readonly expenseLabels = input<Label[]>([]);
-  public readonly expenseCreated = output<Expense>();
 
   private readonly expenseModel = signal<ExpenseFormModel>({ amount: 0, date: null, label: "" });
   protected readonly expenseForm = form(
@@ -80,12 +86,16 @@ export class CreateExpense {
       submission: {
         action: async (expenseForm) => {
           const { amount, date, label } = expenseForm().value();
+          // Already guaranteed by the validators, checked so that the types are narrowed
+          if (typeof label === "string" || date === null) {
+            return undefined;
+          }
           try {
             const createdExpense = await firstValueFrom(
               this.expenseApi.addExpense({
                 amount,
-                labelId: (label as Label).id,
-                expenseDate: formatDateWithOffsetToUtc(date as Date)
+                labelId: label.id,
+                expenseDate: formatDateWithOffsetToUtc(date)
               })
             );
             this.expenseCreated.emit(createdExpense);
@@ -93,7 +103,7 @@ export class CreateExpense {
           } catch (error) {
             this.httpErrorHandler.handleError(
               error as HttpErrorResponse,
-              this.ERROR_CREATING_EXPENSE
+              this.labels.errors.creatingExpense
             );
           }
           return undefined;
@@ -101,7 +111,6 @@ export class CreateExpense {
       }
     }
   );
-
   protected readonly canCreateExpense = computed(
     () => this.expenseForm().valid() && !this.expenseForm().submitting()
   );
@@ -112,10 +121,6 @@ export class CreateExpense {
       option.label.toLowerCase().includes(filterValue)
     );
   });
-
-  private readonly expenseApi = inject(ExpenseApi);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
-  private readonly ERROR_CREATING_EXPENSE = "Erreur lors de l'ajout de la dépense.";
 
   protected displayLabel(label: Label | string | null): string {
     return typeof label === "string" ? label : (label?.label ?? "");

@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     // Dialogs never overflow small screens
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: { ...new MatDialogConfig(), maxWidth: "calc(100vw - 2rem)" }
+      useValue: Object.assign(new MatDialogConfig(), { maxWidth: "calc(100vw - 2rem)" })
     },
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),

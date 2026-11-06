@@ -31,7 +31,7 @@ describe("LabelApi", () => {
   it("Should add a label", async () => {
     const added = firstValueFrom(service.addLabel("Courses"));
     const request = httpTestingController.expectOne(`${labelUrl}/addLabel`);
-    expect(request.request.method).toEqual("POST");
+    expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual({ newLabel: "Courses" });
     request.flush(label);
     expect(await added).toEqual(label);
@@ -40,8 +40,8 @@ describe("LabelApi", () => {
   it("Should delete a label", async () => {
     const deleted = firstValueFrom(service.deleteLabel(1));
     const request = httpTestingController.expectOne(`${labelUrl}/deleteLabel?labelId=1`);
-    expect(request.request.method).toEqual("DELETE");
+    expect(request.request.method).toBe("DELETE");
     request.flush(null);
-    expect(await deleted).toBeNull();
+    await expect(deleted).resolves.toBeNull();
   });
 });

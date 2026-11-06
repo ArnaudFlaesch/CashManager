@@ -35,27 +35,48 @@ import { getChartOptions } from "@shared/chart-options";
   ]
 })
 export class TotalExpenseByMonth {
+  private readonly expenseApi = inject(ExpenseApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly theme = inject(Theme);
+
+  public readonly expenseLabels = input<Label[]>([]);
+
   protected readonly labels = {
     title: "Total des dépenses par mois",
     expenseLabels: "Étiquettes",
-    allLabels: "Toutes les étiquettes"
+    allLabels: "Toutes les étiquettes",
+    chart: {
+      total: "Total des dépenses",
+      average: "Moyenne"
+    },
+    errors: {
+      gettingTotalExpenses: "Erreur lors de la récupération du total des dépenses."
+    }
   };
 
   private readonly NO_LABEL_ID_SELECTED = 0;
-  private readonly ERROR_GETTING_TOTAL_EXPENSES =
-    "Erreur lors de la récupération du total des dépenses.";
-  private readonly CHART_LABELS = { total: "Total des dépenses", average: "Moyenne" };
   private readonly CHART_DATE_FORMAT = "MMMM yyyy";
-
-  public readonly expenseLabels = input<Label[]>([]);
-  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
 
   private readonly labelModel = signal({ labelId: this.NO_LABEL_ID_SELECTED });
   protected readonly labelForm = form(this.labelModel);
   protected readonly isOneLabelSelected = computed(
     () => this.labelModel().labelId !== this.NO_LABEL_ID_SELECTED
   );
-
+  private readonly totalExpensesByMonth = rxResource({
+    params: () => this.labelModel().labelId,
+    stream: ({ params: labelId }) =>
+      (labelId === this.NO_LABEL_ID_SELECTED
+        ? this.expenseApi.getTotalExpensesByMonth()
+        : this.expenseApi.getTotalExpensesByMonthByLabelId(labelId)
+      ).pipe(
+        this.httpErrorHandler.catchError<MonthlyExpenseTotal[]>(
+          this.labels.errors.gettingTotalExpenses,
+          []
+        )
+      ),
+    defaultValue: []
+  });
+  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
   protected readonly totalExpensesByMonthChart = computed<ChartData<"line">>(() => {
     const chartData = this.totalExpensesByMonth
       .value()
@@ -68,38 +89,15 @@ export class TotalExpenseByMonth {
       ),
       datasets: [
         {
-          label: this.CHART_LABELS.total,
+          label: this.labels.chart.total,
           data: chartData.map((totalByMonth) => totalByMonth.total)
         },
-        { label: this.CHART_LABELS.average, data: chartData.map(() => average) }
+        { label: this.labels.chart.average, data: chartData.map(() => average) }
       ]
     };
   });
 
-  private readonly totalExpensesByMonth = rxResource({
-    params: () => this.labelModel().labelId,
-    stream: ({ params: labelId }) =>
-      (labelId === this.NO_LABEL_ID_SELECTED
-        ? this.expenseApi.getTotalExpensesByMonth()
-        : this.expenseApi.getTotalExpensesByMonthByLabelId(labelId)
-      ).pipe(
-        this.httpErrorHandler.catchError<MonthlyExpenseTotal[]>(
-          this.ERROR_GETTING_TOTAL_EXPENSES,
-          []
-        )
-      ),
-    defaultValue: []
-  });
-
-  private readonly expenseApi = inject(ExpenseApi);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
-  private readonly theme = inject(Theme);
-
-  private selectLabel(labelId: number): void {
-    this.labelForm.labelId().value.set(labelId);
-  }
-
   protected resetSelectedLabel(): void {
-    this.selectLabel(this.NO_LABEL_ID_SELECTED);
+    this.labelForm.labelId().value.set(this.NO_LABEL_ID_SELECTED);
   }
 }

@@ -49,6 +49,7 @@
     "@angular/compiler-cli": "22.2.4",
     "@eslint/js": "10.0.1",
     "@vitest/coverage-v8": "5.1.0",
+    "@vitest/eslint-plugin": "1.6.28",
     "angular-eslint": "22.6.0",
     "cypress": "16.2.1",
     "eslint": "10.14.0",

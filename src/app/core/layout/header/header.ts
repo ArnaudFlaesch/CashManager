@@ -36,6 +36,14 @@ import { MatIconButton } from "@angular/material/button";
   ]
 })
 export class Header {
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+  private readonly configApi = inject(ConfigApi);
+  private readonly theme = inject(Theme);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+
   protected readonly labels = {
     appName: "CashManager",
     applications: "Applications",
@@ -44,24 +52,18 @@ export class Header {
     darkTheme: "Thème sombre",
     downloadConfig: "Télécharger la configuration",
     importConfig: "Importer une configuration",
-    logout: "Déconnexion"
+    logout: "Déconnexion",
+    errors: {
+      exportConfiguration: "Erreur lors de l'export de la configuration."
+    }
   };
 
   protected readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
+  private readonly CONFIG_FILE_NAME = "cashManagerData.json";
+  private readonly IMPORT_CONFIG_MODAL_WIDTH = "640px";
 
   protected readonly isDarkMode = computed(() => this.theme.isDarkMode());
   protected readonly canUserSeeNotifications = computed(() => this.auth.isUserAdmin());
-
-  private readonly dialog = inject(MatDialog);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly auth = inject(Auth);
-  private readonly router = inject(Router);
-  private readonly configApi = inject(ConfigApi);
-  private readonly theme = inject(Theme);
-  private readonly httpErrorHandler = inject(HttpErrorHandler);
-  private readonly ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
-  private readonly CONFIG_FILE_NAME = "cashManagerData.json";
-  private readonly IMPORT_CONFIG_MODAL_WIDTH = "640px";
 
   protected downloadConfig(): void {
     this.configApi
@@ -77,8 +79,9 @@ export class Header {
           link.click();
           URL.revokeObjectURL(url);
         },
-        error: (error: HttpErrorResponse) =>
-          this.httpErrorHandler.handleError(error, this.ERROR_EXPORT_CONFIGURATION)
+        error: (error: HttpErrorResponse) => {
+          this.httpErrorHandler.handleError(error, this.labels.errors.exportConfiguration);
+        }
       });
   }
 

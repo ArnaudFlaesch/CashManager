@@ -50,7 +50,7 @@ describe("ExpenseApi", () => {
     const payload = { amount: 12.5, expenseDate: expense.expenseDate, labelId: 2 };
     const added = firstValueFrom(service.addExpense(payload));
     const request = httpTestingController.expectOne(`${expenseUrl}/addExpense`);
-    expect(request.request.method).toEqual("POST");
+    expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual(payload);
     request.flush(expense);
     expect(await added).toEqual(expense);
@@ -59,8 +59,8 @@ describe("ExpenseApi", () => {
   it("Should delete an expense", async () => {
     const deleted = firstValueFrom(service.deleteExpense(1));
     const request = httpTestingController.expectOne(`${expenseUrl}/deleteExpense/?expenseId=1`);
-    expect(request.request.method).toEqual("DELETE");
+    expect(request.request.method).toBe("DELETE");
     request.flush(null);
-    expect(await deleted).toBeNull();
+    await expect(deleted).resolves.toBeNull();
   });
 });

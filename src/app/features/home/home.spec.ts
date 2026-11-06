@@ -1,31 +1,29 @@
-import { submit } from "@angular/forms/signals";
+import { HarnessLoader } from "@angular/cdk/testing";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatInputHarness } from "@angular/material/input/testing";
+import { MatTabGroupHarness } from "@angular/material/tabs/testing";
 import { fr } from "date-fns/locale/fr";
+import { of } from "rxjs";
 import { environment } from "@environments/environment";
+import { getElement } from "@testing/dom";
 import { Label } from "./labels/label";
 import { Home } from "./home";
 import { HttpErrorHandler } from "@core/http-error-handler";
 
 describe("Home", () => {
-  const labelData = [
-    {
-      id: 1,
-      label: "Courses",
-      userId: 1
-    },
-    {
-      id: 2,
-      label: "Restaurant",
-      userId: 1
-    }
+  const labelData: Label[] = [
+    { id: 1, label: "Courses", userId: 1 },
+    { id: 2, label: "Restaurant", userId: 1 }
   ];
-  const labelPath = "/label/";
+  const labelUrl = environment.backend_url + "/label/";
 
-  let component: Home;
   let fixture: ComponentFixture<Home>;
+  let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
@@ -38,84 +36,99 @@ describe("Home", () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);
-    component = fixture.componentInstance;
+    loader = TestbedHarnessEnvironment.loader(fixture);
     httpTestingController = TestBed.inject(HttpTestingController);
+
+    TestBed.tick();
+    httpTestingController.expectOne(labelUrl).flush(labelData);
+    flushExpenses();
+    await fixture.whenStable();
+    await openLabelsTab();
   });
 
   afterEach(() => {
     httpTestingController.verify();
+    vi.restoreAllMocks();
   });
 
-  it("Should create component and get label list", async () => {
-    TestBed.tick();
-    const getLabelsRequest = httpTestingController.expectOne(environment.backend_url + labelPath);
-
-    getLabelsRequest.flush(labelData);
+  /** The tabs of the expenses load them when they are displayed. */
+  function flushExpenses(): void {
     httpTestingController
       .match((request) => request.url.includes("/expense/"))
-      .forEach((request) => request.flush([]));
+      .forEach((request) => {
+        request.flush([]);
+      });
+  }
+
+  async function openLabelsTab(): Promise<void> {
+    const tabs = await loader.getHarness(MatTabGroupHarness);
+    await tabs.selectTab({ label: /Étiquettes/ });
+    flushExpenses();
     await fixture.whenStable();
-    expect(component["expenseLabels"].value()).toEqual(labelData);
+  }
 
-    component["labelModel"].update((model) => ({ ...model, label: "New label" }));
-    const submitted = submit(component["labelForm"]);
-    const createLabelRequest = httpTestingController.expectOne(
-      environment.backend_url + labelPath + "addLabel"
+  function displayedLabels(): string[] {
+    return Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll(".label-name"),
+      (labelName) => labelName.textContent.trim()
     );
+  }
 
-    const newLabel = { id: 2, label: "New label" } as Label;
-    createLabelRequest.flush(newLabel);
-    expect(await submitted).toEqual(true);
-    expect(component["expenseLabels"].value()).toEqual([...labelData, newLabel]);
-    expect(component["labelModel"]().label).toEqual("");
+  /** Types the name of the label, and submits the form. */
+  async function createLabel(name: string): Promise<MatInputHarness> {
+    const input = await loader.getHarness(MatInputHarness.with({ selector: "#label-form" }));
+    await input.setValue(name);
+    getElement(fixture, "#create-label-button", HTMLButtonElement).click();
+    return input;
+  }
+
+  it("Should display the labels and create a new one", async () => {
+    expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
+
+    const input = await createLabel("New label");
+    const request = httpTestingController.expectOne(labelUrl + "addLabel");
+    expect(request.request.body).toEqual({ newLabel: "New label" });
+    request.flush({ id: 3, label: "New label", userId: 1 });
+    await fixture.whenStable();
+
+    expect(displayedLabels()).toEqual(["Courses", "Restaurant", "New label"]);
+    expect(await input.getValue()).toBe("");
   });
 
   it("Should not create a label without name", async () => {
-    TestBed.tick();
-    httpTestingController.expectOne(environment.backend_url + labelPath).flush(labelData);
-    httpTestingController
-      .match((request) => request.url.includes("/expense/"))
-      .forEach((request) => request.flush([]));
+    await createLabel("");
     await fixture.whenStable();
-
-    expect(await submit(component["labelForm"])).toEqual(false);
-    httpTestingController.expectNone(environment.backend_url + labelPath + "addLabel");
+    httpTestingController.expectNone(labelUrl + "addLabel");
+    expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
   });
 
   it("Should display an error when a label cannot be created", async () => {
     const handleErrorSpy = vi
       .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
-    TestBed.tick();
-    httpTestingController.expectOne(environment.backend_url + labelPath).flush(labelData);
+
+    await createLabel("New label");
     httpTestingController
-      .match((request) => request.url.includes("/expense/"))
-      .forEach((request) => request.flush([]));
+      .expectOne(labelUrl + "addLabel")
+      .flush(null, { status: 500, statusText: "Server error" });
     await fixture.whenStable();
 
-    component["labelModel"].set({ label: "New label" });
-    const submitted = submit(component["labelForm"]);
-    httpTestingController
-      .expectOne(environment.backend_url + labelPath + "addLabel")
-      .flush(null, { status: 500, statusText: "Server error" });
-
-    expect(await submitted).toEqual(true);
     expect(handleErrorSpy).toHaveBeenCalledWith(
       expect.objectContaining({ status: 500 }),
       "Erreur lors de l'ajout du label."
     );
-    expect(component["expenseLabels"].value()).toEqual(labelData);
+    expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
   });
 
   it("Should remove a deleted label from the list", async () => {
-    TestBed.tick();
-    httpTestingController.expectOne(environment.backend_url + labelPath).flush(labelData);
-    httpTestingController
-      .match((request) => request.url.includes("/expense/"))
-      .forEach((request) => request.flush([]));
+    vi.spyOn(TestBed.inject(MatDialog), "open").mockReturnValue({
+      afterClosed: () => of("validate")
+    } as MatDialogRef<unknown>);
+
+    getElement(fixture, ".delete-label-button", HTMLButtonElement).click();
+    httpTestingController.expectOne(`${labelUrl}deleteLabel?labelId=1`).flush(null);
     await fixture.whenStable();
 
-    component["removeLabel"](labelData[0].id);
-    expect(component["expenseLabels"].value()).toEqual([labelData[1]]);
+    expect(displayedLabels()).toEqual(["Restaurant"]);
   });
 });

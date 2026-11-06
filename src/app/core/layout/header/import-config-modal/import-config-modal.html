@@ -10,8 +10,8 @@
   />
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button id="close-import-config-modal" mat-dialog-close>{{ labels.cancel }}</button>
-  <button mat-flat-button id="upload-file-button" [disabled]="!fileToUpload()" (click)="upload()">
+  <button type="button" mat-button id="close-import-config-modal" mat-dialog-close>{{ labels.cancel }}</button>
+  <button type="button" mat-flat-button id="upload-file-button" [disabled]="!fileToUpload()" (click)="upload()">
     {{ labels.import }}
   </button>
 </mat-dialog-actions>
