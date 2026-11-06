@@ -2,11 +2,11 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { Label } from "./label.model";
-import { LabelService } from "./label-service";
+import { Label } from "./label";
+import { LabelApi } from "./label-api";
 
-describe("LabelService", () => {
-  let service: LabelService;
+describe("LabelApi", () => {
+  let service: LabelApi;
   let httpTestingController: HttpTestingController;
 
   const labelUrl = `${environment.backend_url}/label`;
@@ -14,7 +14,7 @@ describe("LabelService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(LabelService);
+    service = TestBed.inject(LabelApi);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 

@@ -2,11 +2,11 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { Expense } from "./expense.model";
-import { ExpenseService } from "./expense-service";
+import { Expense } from "./expense";
+import { ExpenseApi } from "./expense-api";
 
-describe("ExpenseService", () => {
-  let service: ExpenseService;
+describe("ExpenseApi", () => {
+  let service: ExpenseApi;
   let httpTestingController: HttpTestingController;
 
   const expenseUrl = `${environment.backend_url}/expense`;
@@ -14,7 +14,7 @@ describe("ExpenseService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(ExpenseService);
+    service = TestBed.inject(ExpenseApi);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 

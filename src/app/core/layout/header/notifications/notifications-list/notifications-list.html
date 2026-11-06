@@ -31,8 +31,8 @@
     <div
       class="notification-container row"
       [class.unread-notification]="!notification.isRead"
-      [class.info]="notification.notificationType === notificationTypeEnum.INFO"
-      [class.warn]="notification.notificationType === notificationTypeEnum.WARN"
+      [class.info]="notification.notificationType === NotificationType.INFO"
+      [class.warn]="notification.notificationType === NotificationType.WARN"
     >
       <span class="notification-message">{{ notification.message }}</span>
       <span [matTooltip]="notification.notificationDate | dateFormat: 'short'" class="notification-date">

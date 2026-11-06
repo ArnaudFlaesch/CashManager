@@ -5,9 +5,9 @@ import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuTrigger } from "@angular/material/menu";
 import { MatTooltip } from "@angular/material/tooltip";
 import {
-  INotificationToDisplay,
-  NotificationTypeEnum
-} from "@core/layout/header/notifications/notification.model";
+  NotificationToDisplay,
+  NotificationType
+} from "@core/layout/header/notifications/notification";
 import { DateFormatPipe } from "@shared/date-format-pipe";
 
 @Component({
@@ -17,29 +17,29 @@ import { DateFormatPipe } from "@shared/date-format-pipe";
   imports: [MatTooltip, MatIcon, MatIconButton, MatMenuTrigger, MatBadge, MatMenu, DateFormatPipe]
 })
 export class NotificationsList {
-  public readonly labels = {
+  protected readonly labels = {
     notifications: "Notifications",
     markAllAsRead: "Marquer tout comme lu",
     markAsRead: "Marquer comme lu"
   };
 
-  public readonly notificationsList = input.required<INotificationToDisplay[]>();
+  public readonly notificationsList = input.required<NotificationToDisplay[]>();
   public readonly unreadNotificationsForBadge = input<number>(0);
 
-  public readonly markNotificationAsReadEvent = output<number>();
-  public readonly markAllNotificationsAsReadEvent = output();
+  public readonly notificationRead = output<number>();
+  public readonly allNotificationsRead = output();
 
-  public readonly notificationTypeEnum = NotificationTypeEnum;
+  protected readonly NotificationType = NotificationType;
 
-  public markNotificationAsRead(notificationId: number, event: Event): void {
+  protected markNotificationAsRead(notificationId: number, event: Event): void {
     // Keeps the menu open
     event.stopPropagation();
-    this.markNotificationAsReadEvent.emit(notificationId);
+    this.notificationRead.emit(notificationId);
   }
 
-  public markAllNotificationsAsRead(event: Event): void {
+  protected markAllNotificationsAsRead(event: Event): void {
     // Keeps the menu open
     event.stopPropagation();
-    this.markAllNotificationsAsReadEvent.emit();
+    this.allNotificationsRead.emit();
   }
 }

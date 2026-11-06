@@ -1,11 +1,11 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { environment } from "@environments/environment";
-import { Label } from "@features/home/labels/label.model";
-import { ITotalExpenseByMonth } from "@features/home/expenses/total-expense-by-month.model";
+import { Label } from "@features/home/labels/label";
+import { MonthlyExpenseTotal } from "@features/home/expenses/monthly-expense-total";
 import { TotalExpenseByMonth } from "./total-expense-by-month";
 import { ComponentRef } from "@angular/core";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { HttpErrorHandler } from "@core/http-error-handler";
 
 describe("TotalExpenseByMonth", () => {
   let component: TotalExpenseByMonth;
@@ -20,7 +20,7 @@ describe("TotalExpenseByMonth", () => {
   ] as Label[];
   const expectedTotalExpenseByMonthData = [
     { date: "2022-04-01", total: 200 }
-  ] as ITotalExpenseByMonth[];
+  ] as MonthlyExpenseTotal[];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -44,15 +44,15 @@ describe("TotalExpenseByMonth", () => {
       .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
       .flush(expectedTotalExpenseByMonthData);
     await fixture.whenStable();
-    expect(component.isOneLabelSelected()).toEqual(false);
+    expect(component["isOneLabelSelected"]()).toEqual(false);
 
     const expectedTotalExpenseByMonthByLabelIdData = [
       { date: "2022-04-01", total: 400 },
       { date: "2022-03-01", total: 100 }
-    ] as ITotalExpenseByMonth[];
+    ] as MonthlyExpenseTotal[];
 
     const labelIdToSelect = component.expenseLabels()[0].id;
-    component.selectLabel(labelIdToSelect);
+    component["selectLabel"](labelIdToSelect);
     TestBed.tick();
     httpTestingController
       .expectOne(
@@ -60,8 +60,8 @@ describe("TotalExpenseByMonth", () => {
       )
       .flush(expectedTotalExpenseByMonthByLabelIdData);
     await fixture.whenStable();
-    expect(component.isOneLabelSelected()).toEqual(true);
-    expect(component.totalExpensesByMonthChart()).toEqual({
+    expect(component["isOneLabelSelected"]()).toEqual(true);
+    expect(component["totalExpensesByMonthChart"]()).toEqual({
       datasets: [
         { data: [100, 400], label: "Total des dépenses" },
         { data: [250, 250], label: "Moyenne" }
@@ -76,7 +76,7 @@ describe("TotalExpenseByMonth", () => {
     httpTestingController
       .expectOne(`${environment.backend_url}${expensePath}getTotalExpensesByMonth`)
       .flush(expectedTotalExpenseByMonthData);
-    component.selectLabel(labelData[0].id);
+    component["selectLabel"](labelData[0].id);
     TestBed.tick();
     httpTestingController
       .expectOne(
@@ -92,13 +92,13 @@ describe("TotalExpenseByMonth", () => {
       .flush(expectedTotalExpenseByMonthData);
     await fixture.whenStable();
 
-    expect(component.isOneLabelSelected()).toEqual(false);
+    expect(component["isOneLabelSelected"]()).toEqual(false);
     expect(fixture.nativeElement.querySelector("#label-filter button")).toBeNull();
   });
 
   it("Should display an error and an empty chart when the totals cannot be loaded", async () => {
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
     TestBed.tick();
     httpTestingController
@@ -110,6 +110,6 @@ describe("TotalExpenseByMonth", () => {
       expect.objectContaining({ status: 500 }),
       "Erreur lors de la récupération du total des dépenses."
     );
-    expect(component.totalExpensesByMonthChart().labels).toEqual([]);
+    expect(component["totalExpensesByMonthChart"]().labels).toEqual([]);
   });
 });

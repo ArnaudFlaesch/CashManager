@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDateWithOffsetToUtc } from "./date.utils";
+import { formatDateWithOffsetToUtc } from "./utc-date";
 
 describe("Date utils", () => {
   it("Should shift the date by the timezone offset, so that its UTC day stays the same", () => {

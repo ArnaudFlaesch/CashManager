@@ -2,26 +2,26 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { INotification, NotificationTypeEnum } from "./notification.model";
-import { IPage } from "@shared/page.model";
-import { NotificationService } from "./notification-service";
+import { AppNotification, NotificationType } from "./notification";
+import { Page } from "@shared/page";
+import { NotificationApi } from "./notification-api";
 
-describe("NotificationService", () => {
-  let service: NotificationService;
+describe("NotificationApi", () => {
+  let service: NotificationApi;
   let httpTestingController: HttpTestingController;
 
   const notificationsUrl = `${environment.backend_url}/notifications`;
-  const notification: INotification = {
+  const notification: AppNotification = {
     id: 1,
     message: "username: Connexion utilisateur",
     notificationDate: "2022-03-05T10:00:00",
-    notificationType: NotificationTypeEnum.INFO,
+    notificationType: NotificationType.INFO,
     isRead: false
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(NotificationService);
+    service = TestBed.inject(NotificationApi);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -30,7 +30,7 @@ describe("NotificationService", () => {
   });
 
   it("Should get the notifications", async () => {
-    const page: IPage<INotification> = {
+    const page: Page<AppNotification> = {
       content: [notification],
       totalPages: 1,
       totalElements: 1,

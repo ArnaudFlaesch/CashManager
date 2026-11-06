@@ -1,11 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { Observable } from "rxjs";
-import { Label } from "./label.model";
+import { Label } from "./label";
 import { environment } from "@environments/environment";
 
 @Service()
-export class LabelService {
+export class LabelApi {
   private readonly http = inject(HttpClient);
   private readonly labelUrl = `${environment.backend_url}/label`;
 

@@ -4,8 +4,8 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { of } from "rxjs";
 import { environment } from "@environments/environment";
 import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
-import { Label } from "@features/home/labels/label.model";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { Label } from "@features/home/labels/label";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { LabelList } from "./label-list";
 
 describe("LabelList", () => {
@@ -95,7 +95,7 @@ describe("LabelList", () => {
     mockConfirmModal("validate");
     const labelDeletedSpy = vi.spyOn(component.labelDeleted, "emit");
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
 
     await clickDeleteButton();

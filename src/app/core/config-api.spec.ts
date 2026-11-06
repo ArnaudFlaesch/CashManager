@@ -2,17 +2,17 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { ConfigService } from "./config-service";
+import { ConfigApi } from "./config-api";
 
-describe("ConfigService", () => {
-  let service: ConfigService;
+describe("ConfigApi", () => {
+  let service: ConfigApi;
   let httpTestingController: HttpTestingController;
 
   const configUrl = `${environment.backend_url}/cashManagerConfig`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(ConfigService);
+    service = TestBed.inject(ConfigApi);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 

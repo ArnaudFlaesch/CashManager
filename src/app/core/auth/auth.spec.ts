@@ -2,21 +2,21 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { IUser } from "./user.model";
-import { RoleEnum } from "./role.enum";
-import { AuthService } from "./auth-service";
+import { User } from "./user";
+import { Role } from "./role";
+import { Auth } from "./auth";
 
-describe("AuthService", () => {
-  let service: AuthService;
+describe("Auth", () => {
+  let service: Auth;
   let httpTestingController: HttpTestingController;
 
   const loginUrl = `${environment.backend_url}/auth/login`;
-  const user: IUser = {
+  const user: User = {
     id: 1,
     username: "admin",
     email: "admin@email.com",
     accessToken: "token",
-    roles: [RoleEnum.ROLE_USER, RoleEnum.ROLE_ADMIN]
+    roles: [Role.ROLE_USER, Role.ROLE_ADMIN]
   };
 
   /** Builds an unsigned JWT expiring at the given date. */
@@ -27,14 +27,14 @@ describe("AuthService", () => {
     return `header.${payload}.signature`;
   }
 
-  function storeUser(storedUser: IUser): void {
+  function storeUser(storedUser: User): void {
     localStorage.setItem("user", JSON.stringify(storedUser));
   }
 
   /** The service reads the stored user when it is created. */
   function createService(): void {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(AuthService);
+    service = TestBed.inject(Auth);
     httpTestingController = TestBed.inject(HttpTestingController);
   }
 
@@ -81,7 +81,7 @@ describe("AuthService", () => {
   });
 
   it("Should not consider a user without the admin role as admin", () => {
-    storeUser({ ...user, roles: [RoleEnum.ROLE_USER] });
+    storeUser({ ...user, roles: [Role.ROLE_USER] });
     createService();
     expect(service.isUserAdmin()).toEqual(false);
   });

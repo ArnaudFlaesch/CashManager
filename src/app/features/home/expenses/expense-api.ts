@@ -2,13 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { format } from "date-fns";
 import { Observable } from "rxjs";
-import { Expense } from "./expense.model";
+import { Expense } from "./expense";
 import { environment } from "@environments/environment";
-import { ITotalExpenseByMonth } from "./total-expense-by-month.model";
-import { InsertExpensePayload } from "./insert-expense.payload";
+import { MonthlyExpenseTotal } from "./monthly-expense-total";
+import { InsertExpensePayload } from "./insert-expense-payload";
 
 @Service()
-export class ExpenseService {
+export class ExpenseApi {
   private readonly DATE_FORMAT = "yyyy-MM-dd";
 
   private readonly http = inject(HttpClient);
@@ -23,12 +23,12 @@ export class ExpenseService {
     });
   }
 
-  public getTotalExpensesByMonth(): Observable<ITotalExpenseByMonth[]> {
-    return this.http.get<ITotalExpenseByMonth[]>(`${this.expenseUrl}/getTotalExpensesByMonth`);
+  public getTotalExpensesByMonth(): Observable<MonthlyExpenseTotal[]> {
+    return this.http.get<MonthlyExpenseTotal[]>(`${this.expenseUrl}/getTotalExpensesByMonth`);
   }
 
-  public getTotalExpensesByMonthByLabelId(labelId: number): Observable<ITotalExpenseByMonth[]> {
-    return this.http.get<ITotalExpenseByMonth[]>(
+  public getTotalExpensesByMonthByLabelId(labelId: number): Observable<MonthlyExpenseTotal[]> {
+    return this.http.get<MonthlyExpenseTotal[]>(
       `${this.expenseUrl}/getTotalExpensesByMonthByLabelId`,
       { params: { labelId } }
     );

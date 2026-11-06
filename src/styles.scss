@@ -3,13 +3,13 @@
 @use "variables" as *;
 
 // Global styles of the components: their element and their theme colors
-@use "app/core/layout/header/header.theme";
-@use "app/core/layout/header/notifications/notifications-list/notifications-list.theme";
-@use "app/features/error/error-page.theme";
-@use "app/features/home/home.theme";
-@use "app/features/home/expenses/expense-list-by-month/expense-list-by-month.theme";
-@use "app/features/home/labels/label-list/label-list.theme";
-@use "app/features/login/login.theme";
+@use "app/core/layout/header/header-theme";
+@use "app/core/layout/header/notifications/notifications-list/notifications-list-theme";
+@use "app/features/error/error-page-theme";
+@use "app/features/home/home-theme";
+@use "app/features/home/expenses/expense-list-by-month/expense-list-by-month-theme";
+@use "app/features/home/labels/label-list/label-list-theme";
+@use "app/features/login/login-theme";
 
 // Theme
 

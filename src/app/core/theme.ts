@@ -1,7 +1,7 @@
 import { computed, DOCUMENT, inject, Service, signal } from "@angular/core";
 
 @Service()
-export class ThemeService {
+export class Theme {
   private readonly DARK_MODE_CLASS_NAME = "dark-mode";
   private readonly PREFERRED_THEME_STORAGE_KEY = "preferredTheme";
 

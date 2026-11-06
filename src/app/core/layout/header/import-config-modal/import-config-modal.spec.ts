@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialogRef } from "@angular/material/dialog";
 import { environment } from "@environments/environment";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { ImportConfigModal } from "./import-config-modal";
 
 describe("ImportConfigModal", () => {
@@ -45,11 +45,11 @@ describe("ImportConfigModal", () => {
     await fixture.whenStable();
     expect(getUploadButton().disabled).toEqual(true);
 
-    component.upload();
+    component["upload"]();
     httpTestingController.expectNone(importConfigUrl);
 
     await selectFile();
-    expect(component.fileToUpload()).toEqual(file);
+    expect(component["fileToUpload"]()).toEqual(file);
     expect(getUploadButton().disabled).toEqual(false);
   });
 
@@ -68,11 +68,11 @@ describe("ImportConfigModal", () => {
 
   it("Should display an error when the file cannot be imported", async () => {
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
     await selectFile();
 
-    component.upload();
+    component["upload"]();
     httpTestingController
       .expectOne(importConfigUrl)
       .flush(null, { status: 500, statusText: "Server error" });

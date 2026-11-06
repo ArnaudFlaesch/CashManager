@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { AuthService } from "./auth-service";
+import { Auth } from "./auth";
 import { authGuard } from "./auth-guard";
 
 describe("authGuard", () => {
@@ -8,7 +8,7 @@ describe("authGuard", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: AuthService, useValue: { userHasValidToken } }]
+      providers: [{ provide: Auth, useValue: { userHasValidToken } }]
     });
   });
 

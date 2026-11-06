@@ -1,9 +1,9 @@
 import { DOCUMENT } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { afterEach, describe, expect, it } from "vitest";
-import { ThemeService } from "./theme-service";
+import { Theme } from "./theme";
 
-describe("ThemeService", () => {
+describe("Theme", () => {
   const doc = () => TestBed.inject(DOCUMENT);
   const storage = () => doc().defaultView!.localStorage;
 
@@ -13,20 +13,20 @@ describe("ThemeService", () => {
   });
 
   it("Should use the light theme by default", () => {
-    const service = TestBed.inject(ThemeService);
+    const service = TestBed.inject(Theme);
     expect(service.isDarkMode()).toEqual(false);
     expect(doc().body.classList).not.toContain("dark-mode");
   });
 
   it("Should apply the theme saved in the storage", () => {
     storage().setItem("preferredTheme", "dark");
-    const service = TestBed.inject(ThemeService);
+    const service = TestBed.inject(Theme);
     expect(service.isDarkMode()).toEqual(true);
     expect(doc().body.classList).toContain("dark-mode");
   });
 
   it("Should switch between the light and dark themes", () => {
-    const service = TestBed.inject(ThemeService);
+    const service = TestBed.inject(Theme);
 
     service.selectDarkMode(true);
     expect(service.isDarkMode()).toEqual(true);

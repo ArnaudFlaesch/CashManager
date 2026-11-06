@@ -1,3 +1,4 @@
+import { submit } from "@angular/forms/signals";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
@@ -5,7 +6,7 @@ import { MAT_DATE_LOCALE } from "@angular/material/core";
 import { fr } from "date-fns/locale/fr";
 import { environment } from "@environments/environment";
 import { CreateExpense } from "./create-expense";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { HttpErrorHandler } from "@core/http-error-handler";
 
 describe("CreateExpense", () => {
   let component: CreateExpense;
@@ -33,16 +34,16 @@ describe("CreateExpense", () => {
 
   it("Should create an expense", async () => {
     const newLabelName = "Vacances";
-    expect(component.canCreateExpense()).toEqual(false);
-    component.selectLabel({ id: 1, label: newLabelName, userId: 1 });
-    component.expenseModel.update((model) => ({
+    expect(component["canCreateExpense"]()).toEqual(false);
+    component["expenseForm"].label().value.set({ id: 1, label: newLabelName, userId: 1 });
+    component["expenseModel"].update((model) => ({
       ...model,
       date: new Date(2022, 2, 5),
       amount: 23
     }));
 
-    expect(component.canCreateExpense()).toEqual(true);
-    const submitted = component.handleCreateExpense();
+    expect(component["canCreateExpense"]()).toEqual(true);
+    const submitted = submit(component["expenseForm"]);
 
     const getExpensesRequest = httpTestingController.expectOne(
       `${environment.backend_url}${expensePath}addExpense`
@@ -54,14 +55,14 @@ describe("CreateExpense", () => {
       labelId: 1
     });
     expect(await submitted).toEqual(true);
-    expect(component.expenseModel().amount).toEqual(0);
-    expect(component.expenseModel().label).toEqual("");
-    expect(component.canCreateExpense()).toEqual(false);
+    expect(component["expenseModel"]().amount).toEqual(0);
+    expect(component["expenseModel"]().label).toEqual("");
+    expect(component["canCreateExpense"]()).toEqual(false);
   });
 
   it("Should display the label", () => {
     const label = { id: 1, label: "Dépense 1", userId: 1 };
-    expect(component.displayLabel(label)).toEqual("Dépense 1");
+    expect(component["displayLabel"](label)).toEqual("Dépense 1");
     expect(label.userId).toEqual(1);
   });
 
@@ -70,28 +71,28 @@ describe("CreateExpense", () => {
       { id: 1, label: "Courses", userId: 1 },
       { id: 2, label: "Restaurant", userId: 1 }
     ]);
-    component.expenseModel.update((model) => ({ ...model, label: "rest" }));
-    expect(component.filteredOptions().map((label) => label.label)).toEqual(["Restaurant"]);
+    component["expenseModel"].update((model) => ({ ...model, label: "rest" }));
+    expect(component["filteredOptions"]().map((label) => label.label)).toEqual(["Restaurant"]);
 
-    component.selectLabel({ id: 1, label: "Courses", userId: 1 });
-    expect(component.filteredOptions().map((label) => label.label)).toEqual(["Courses"]);
-    expect(component.displayLabel(null)).toEqual("");
-    expect(component.displayLabel("typed text")).toEqual("typed text");
+    component["expenseForm"].label().value.set({ id: 1, label: "Courses", userId: 1 });
+    expect(component["filteredOptions"]().map((label) => label.label)).toEqual(["Courses"]);
+    expect(component["displayLabel"](null)).toEqual("");
+    expect(component["displayLabel"]("typed text")).toEqual("typed text");
   });
 
   it("Should display an error when the expense cannot be created", async () => {
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
-    const insertedExpenseSpy = vi.spyOn(component.insertedExpenseEvent, "emit");
-    component.selectLabel({ id: 1, label: "Courses", userId: 1 });
-    component.expenseModel.update((model) => ({
+    const insertedExpenseSpy = vi.spyOn(component.expenseCreated, "emit");
+    component["expenseForm"].label().value.set({ id: 1, label: "Courses", userId: 1 });
+    component["expenseModel"].update((model) => ({
       ...model,
       date: new Date(2022, 2, 5),
       amount: 23
     }));
 
-    const submitted = component.handleCreateExpense();
+    const submitted = submit(component["expenseForm"]);
     httpTestingController
       .expectOne(`${environment.backend_url}${expensePath}addExpense`)
       .flush(null, { status: 500, statusText: "Server error" });
@@ -102,6 +103,6 @@ describe("CreateExpense", () => {
       "Erreur lors de l'ajout de la dépense."
     );
     expect(insertedExpenseSpy).not.toHaveBeenCalled();
-    expect(component.expenseModel().amount).toEqual(23);
+    expect(component["expenseModel"]().amount).toEqual(23);
   });
 });

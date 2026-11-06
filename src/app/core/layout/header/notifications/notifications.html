@@ -1,6 +1,6 @@
 <cash-manager-notifications-list
-  (markNotificationAsReadEvent)="markNotificationAsRead($event)"
-  (markAllNotificationsAsReadEvent)="markAllNotificationsAsRead()"
+  (notificationRead)="markNotificationAsRead($event)"
+  (allNotificationsRead)="markAllNotificationsAsRead()"
   [unreadNotificationsForBadge]="unreadNotificationsForBadge()"
   [notificationsList]="notificationsToDisplay()"
 />

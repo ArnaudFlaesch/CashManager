@@ -1,5 +1,5 @@
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { IConfirmModalData } from "./confirm-modal-data.model";
+import { ConfirmModalData } from "./confirm-modal-data";
 
 import { TestBed } from "@angular/core/testing";
 import { ConfirmModal } from "./confirm-modal";
@@ -15,7 +15,7 @@ describe("ConfirmModal", () => {
           useValue: {
             title: "Titre du dialog",
             message: "Message du dialog"
-          } as IConfirmModalData
+          } as ConfirmModalData
         }
       ]
     }).compileComponents();

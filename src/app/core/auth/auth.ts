@@ -3,24 +3,24 @@ import { computed, inject, Service, signal } from "@angular/core";
 import { Observable, tap } from "rxjs";
 
 import { environment } from "@environments/environment";
-import { IJwt } from "./jwt.model";
-import { IUser } from "./user.model";
-import { RoleEnum } from "./role.enum";
+import { JwtPayload } from "./jwt-payload";
+import { User } from "./user";
+import { Role } from "./role";
 
 @Service()
-export class AuthService {
+export class Auth {
   private readonly USER_STORAGE_KEY = "user";
 
   public readonly isUserAdmin = computed(
-    () => this.currentUser()?.roles.includes(RoleEnum.ROLE_ADMIN) ?? false
+    () => this.currentUser()?.roles.includes(Role.ROLE_ADMIN) ?? false
   );
 
   private readonly http = inject(HttpClient);
-  private readonly currentUser = signal<IUser | null>(this.readStoredUser());
+  private readonly currentUser = signal<User | null>(this.readStoredUser());
 
-  public login(username: string, password: string): Observable<IUser> {
+  public login(username: string, password: string): Observable<User> {
     return this.http
-      .post<IUser>(`${environment.backend_url}/auth/login`, { username, password })
+      .post<User>(`${environment.backend_url}/auth/login`, { username, password })
       .pipe(
         tap((user) => {
           if (user.accessToken) {
@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   /** Reads the payload of a JWT, without verifying it. Throws if the token is malformed. */
-  private decodeJwtPayload(token: string): IJwt {
+  private decodeJwtPayload(token: string): JwtPayload {
     const payload = token.split(".")[1];
     if (!payload) {
       throw new Error("Invalid token");
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   /** User saved in the storage, null when there is none or when the entry is corrupted. */
-  private readStoredUser(): IUser | null {
+  private readStoredUser(): User | null {
     const userData = localStorage.getItem(this.USER_STORAGE_KEY);
     try {
       return userData ? JSON.parse(userData) : null;

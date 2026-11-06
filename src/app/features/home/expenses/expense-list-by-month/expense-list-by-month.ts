@@ -13,13 +13,14 @@ import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { filter, switchMap } from "rxjs";
 
 import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
-import { Expense } from "@features/home/expenses/expense.model";
-import { IConfirmModalData } from "@shared/confirm-modal/confirm-modal-data.model";
-import { Label } from "@features/home/labels/label.model";
-import { ErrorHandlerService } from "@core/error-handler-service";
-import { ThemeService } from "@core/theme-service";
-import { ExpenseService } from "@features/home/expenses/expense-service";
-import { getChartOptions, DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "@shared/constants";
+import { Expense } from "@features/home/expenses/expense";
+import { ConfirmModalData } from "@shared/confirm-modal/confirm-modal-data";
+import { Label } from "@features/home/labels/label";
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { Theme } from "@core/theme";
+import { ExpenseApi } from "@features/home/expenses/expense-api";
+import { getChartOptions } from "@shared/chart-options";
+import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "@shared/dialog-sizes";
 import { CreateExpense } from "@features/home/expenses/create-expense/create-expense";
 
 import { MatInput } from "@angular/material/input";
@@ -52,7 +53,7 @@ import { BaseChartDirective } from "ng2-charts";
   ]
 })
 export class ExpenseListByMonth {
-  public readonly labels = {
+  protected readonly labels = {
     previousMonth: "Mois précédent",
     nextMonth: "Mois suivant",
     selectMonth: "Sélectionnez un mois",
@@ -65,31 +66,31 @@ export class ExpenseListByMonth {
 
   private readonly ERROR_GETTING_EXPENSES = "Erreur lors de la récupération des dépenses.";
   private readonly EXPENSES_CHART_LABEL = "Dépenses";
-  private readonly DELETE_EXPENSE_MODAL_DATA: IConfirmModalData = {
+  private readonly DELETE_EXPENSE_MODAL_DATA: ConfirmModalData = {
     title: "Suppression d'une dépense",
     message: "Êtes-vous sûr de vouloir supprimer cette dépense ?"
   };
 
   public readonly expenseLabels = input<Label[]>([]);
-  public readonly chartOptions = computed(() => getChartOptions(this.themeService.isDarkMode()));
+  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
 
-  public readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
-  public readonly selectedMonthForm = form(this.selectedMonthModel);
+  protected readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
+  protected readonly selectedMonthForm = form(this.selectedMonthModel);
 
-  public readonly expenses = rxResource({
+  protected readonly expenses = rxResource({
     params: () => this.selectedMonth(),
     stream: ({ params: month }) =>
-      this.expenseService
+      this.expenseApi
         .getExpensesAtMonth(month, endOfMonth(month))
-        .pipe(this.errorHandlerService.catchError<Expense[]>(this.ERROR_GETTING_EXPENSES, [])),
+        .pipe(this.httpErrorHandler.catchError<Expense[]>(this.ERROR_GETTING_EXPENSES, [])),
     defaultValue: []
   });
 
-  public readonly labelNames = computed(
+  protected readonly labelNames = computed(
     () => new Map(this.expenseLabels().map((label) => [label.id, label.label]))
   );
 
-  public readonly totalForMonth = computed(() =>
+  protected readonly totalForMonth = computed(() =>
     Number.parseFloat(
       this.expenses
         .value()
@@ -98,7 +99,7 @@ export class ExpenseListByMonth {
     )
   );
 
-  public readonly expensesByLabelChart = computed<ChartData<"bar">>(() => {
+  protected readonly expensesByLabelChart = computed<ChartData<"bar">>(() => {
     const totalByLabel = new Map<number, number>();
     for (const { labelId, amount } of this.expenses.value()) {
       totalByLabel.set(labelId, (totalByLabel.get(labelId) ?? 0) + amount);
@@ -119,16 +120,16 @@ export class ExpenseListByMonth {
     { equal: (monthA, monthB) => monthA.getTime() === monthB.getTime() }
   );
   private readonly dialog = inject(MatDialog);
-  private readonly expenseService = inject(ExpenseService);
-  private readonly errorHandlerService = inject(ErrorHandlerService);
-  private readonly themeService = inject(ThemeService);
+  private readonly expenseApi = inject(ExpenseApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly theme = inject(Theme);
   private readonly destroyRef = inject(DestroyRef);
 
-  public handleExpenseCreation(newExpense: Expense): void {
+  protected addExpense(newExpense: Expense): void {
     this.expenses.value.update((expenses) => [...expenses, newExpense]);
   }
 
-  public openDeleteExpenseModal(expenseId: number): void {
+  protected openDeleteExpenseModal(expenseId: number): void {
     this.dialog
       .open(ConfirmModal, {
         height: DIALOG_SMALL_HEIGHT,
@@ -138,7 +139,7 @@ export class ExpenseListByMonth {
       .afterClosed()
       .pipe(
         filter((result) => result === "validate"),
-        switchMap(() => this.expenseService.deleteExpense(expenseId)),
+        switchMap(() => this.expenseApi.deleteExpense(expenseId)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() =>
@@ -148,15 +149,15 @@ export class ExpenseListByMonth {
       );
   }
 
-  public selectPreviousMonth(): void {
+  protected selectPreviousMonth(): void {
     this.selectMonth(subMonths(this.selectedMonth(), 1));
   }
 
-  public selectNextMonth(): void {
+  protected selectNextMonth(): void {
     this.selectMonth(addMonths(this.selectedMonth(), 1));
   }
 
-  public setMonthAndYear(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>): void {
+  protected setMonthAndYear(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>): void {
     this.selectMonth(normalizedMonthAndYear);
     datepicker.close();
   }

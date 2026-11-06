@@ -4,10 +4,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { firstValueFrom, throwError } from "rxjs";
 import type { MockInstance } from "vitest";
-import { ErrorHandlerService } from "./error-handler-service";
+import { HttpErrorHandler } from "./http-error-handler";
 
-describe("ErrorHandlerService", () => {
-  let service: ErrorHandlerService;
+describe("HttpErrorHandler", () => {
+  let service: HttpErrorHandler;
   let navigateSpy: MockInstance<Router["navigate"]>;
   let snackbarSpy: MockInstance<MatSnackBar["open"]>;
 
@@ -19,7 +19,7 @@ describe("ErrorHandlerService", () => {
   }
 
   beforeEach(() => {
-    service = TestBed.inject(ErrorHandlerService);
+    service = TestBed.inject(HttpErrorHandler);
     navigateSpy = vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
     snackbarSpy = vi.spyOn(TestBed.inject(MatSnackBar), "open");
     vi.spyOn(console, "error").mockImplementation(() => undefined);

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
-  INotificationToDisplay,
-  NotificationTypeEnum
-} from "@core/layout/header/notifications/notification.model";
+  NotificationToDisplay,
+  NotificationType
+} from "@core/layout/header/notifications/notification";
 import { NotificationsList } from "./notifications-list";
 
 describe("NotificationsList", () => {
   let component: NotificationsList;
   let fixture: ComponentFixture<NotificationsList>;
 
-  const notifications: INotificationToDisplay[] = [
+  const notifications: NotificationToDisplay[] = [
     {
       id: 1,
       message: "username: Connexion utilisateur",
-      notificationType: NotificationTypeEnum.WARN,
+      notificationType: NotificationType.WARN,
       notificationDate: "2026-11-04T09:30:00",
       isRead: false,
       notificationDateToDisplay: "09:30",
@@ -22,7 +22,7 @@ describe("NotificationsList", () => {
     {
       id: 2,
       message: "username: Action user",
-      notificationType: NotificationTypeEnum.INFO,
+      notificationType: NotificationType.INFO,
       notificationDate: "2026-11-02T18:15:00",
       isRead: true,
       notificationDateToDisplay: "02/11",
@@ -58,7 +58,7 @@ describe("NotificationsList", () => {
 
   it("Should hide the badge when there is no unread notification", async () => {
     await fixture.whenStable();
-    expect(getElement("mat-icon").getAttribute("title")).toEqual(component.labels.notifications);
+    expect(getElement("mat-icon").getAttribute("title")).toEqual(component["labels"].notifications);
     expect(getElement(".mat-badge-hidden")).not.toBeNull();
   });
 
@@ -95,14 +95,14 @@ describe("NotificationsList", () => {
   });
 
   it("Should ask to mark a notification as read", async () => {
-    const markAsReadSpy = vi.spyOn(component.markNotificationAsReadEvent, "emit");
+    const markAsReadSpy = vi.spyOn(component.notificationRead, "emit");
     await openMenu();
     document.querySelector<HTMLButtonElement>(".mark-notification-as-read-button")?.click();
     expect(markAsReadSpy).toHaveBeenCalledWith(1);
   });
 
   it("Should ask to mark all the notifications as read", async () => {
-    const markAllAsReadSpy = vi.spyOn(component.markAllNotificationsAsReadEvent, "emit");
+    const markAllAsReadSpy = vi.spyOn(component.allNotificationsRead, "emit");
     fixture.componentRef.setInput("unreadNotificationsForBadge", 1);
     await openMenu();
     document.querySelector<HTMLButtonElement>("#mark-all-notifications-as-read-button")?.click();

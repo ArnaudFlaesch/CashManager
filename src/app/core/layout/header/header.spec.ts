@@ -4,8 +4,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { environment } from "@environments/environment";
 import { ImportConfigModal } from "./import-config-modal/import-config-modal";
-import { RoleEnum } from "@core/auth/role.enum";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { Role } from "@core/auth/role";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { Header } from "./header";
 
 describe("Header", () => {
@@ -39,7 +39,7 @@ describe("Header", () => {
   it("Should display the notifications to an administrator", async () => {
     localStorage.setItem(
       "user",
-      JSON.stringify({ accessToken: "token", roles: [RoleEnum.ROLE_ADMIN] })
+      JSON.stringify({ accessToken: "token", roles: [Role.ROLE_ADMIN] })
     );
     createComponent();
     // The notifications are loaded once rendered, the page is stable once they are received
@@ -50,24 +50,24 @@ describe("Header", () => {
       .flush({ content: [] });
     await fixture.whenStable();
 
-    expect(component.canUserSeeNotifications()).toEqual(true);
+    expect(component["canUserSeeNotifications"]()).toEqual(true);
     expect(fixture.nativeElement.querySelector("cash-manager-notifications")).not.toBeNull();
   });
 
   it("Should switch between light and dark mode", () => {
     createComponent();
-    component.toggleTheme(true);
-    expect(component.isDarkMode()).toEqual(true);
+    component["toggleTheme"](true);
+    expect(component["isDarkMode"]()).toEqual(true);
     expect(localStorage.getItem("preferredTheme")).toEqual("dark");
-    component.toggleTheme(false);
-    expect(component.isDarkMode()).toEqual(false);
+    component["toggleTheme"](false);
+    expect(component["isDarkMode"]()).toEqual(false);
     expect(localStorage.getItem("preferredTheme")).toEqual("light");
   });
 
   it("Should open the import configuration modal", () => {
     createComponent();
     const openSpy = vi.spyOn(TestBed.inject(MatDialog), "open");
-    component.openImportConfigModal();
+    component["openImportConfigModal"]();
     expect(openSpy).toHaveBeenCalledWith(ImportConfigModal, { width: "640px" });
   });
 
@@ -84,7 +84,7 @@ describe("Header", () => {
       expect(this.download).toEqual("cashManagerData.json");
     });
 
-    component.downloadConfig();
+    component["downloadConfig"]();
     const config = new Blob(["{}"], { type: "application/json" });
     httpTestingController.expectOne(exportConfigUrl).flush(config);
 
@@ -96,10 +96,10 @@ describe("Header", () => {
   it("Should display an error when the configuration cannot be downloaded", () => {
     createComponent();
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
 
-    component.downloadConfig();
+    component["downloadConfig"]();
     httpTestingController
       .expectOne(exportConfigUrl)
       .flush(null, { status: 500, statusText: "Server error" });
@@ -115,7 +115,7 @@ describe("Header", () => {
     createComponent();
     const navigateSpy = vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
 
-    await component.logout();
+    await component["logout"]();
 
     expect(localStorage.getItem("user")).toBeNull();
     expect(navigateSpy).toHaveBeenCalledWith(["login"]);

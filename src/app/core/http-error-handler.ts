@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { catchError, of, OperatorFunction } from "rxjs";
 
 @Service()
-export class ErrorHandlerService {
+export class HttpErrorHandler {
   private readonly ERROR_UNAUTHORIZED =
     "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
 

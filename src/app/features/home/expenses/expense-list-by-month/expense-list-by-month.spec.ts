@@ -6,7 +6,7 @@ import {
 
 import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { HttpErrorHandler } from "@core/http-error-handler";
 
 import { ComponentRef } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -14,7 +14,7 @@ import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
 import { fr } from "date-fns/locale/fr";
 import { environment } from "@environments/environment";
-import { Expense } from "@features/home/expenses/expense.model";
+import { Expense } from "@features/home/expenses/expense";
 import { ExpenseListByMonth } from "./expense-list-by-month";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { of } from "rxjs";
@@ -73,26 +73,28 @@ describe("ExpenseListByMonth", () => {
     expectExpensesRequest(mockedCurrentMonth).flush(expectedExpenseData);
     await fixture.whenStable();
 
-    expect(component.expenses.value()).toEqual(expectedExpenseData);
-    expect(component.totalForMonth()).toEqual(457);
-    expect(component.expensesByLabelChart().datasets).toEqual([
+    expect(component["expenses"].value()).toEqual(expectedExpenseData);
+    expect(component["totalForMonth"]()).toEqual(457);
+    expect(component["expensesByLabelChart"]().datasets).toEqual([
       { label: "Courses", data: [323] },
       { label: "Restaurant", data: [134] }
     ]);
-    expect(component.labelNames().get(99)).toEqual(undefined);
-    expect(component.labelNames().get(expectedExpenseData[0].labelId)).toEqual(labelData[0].label);
+    expect(component["labelNames"]().get(99)).toEqual(undefined);
+    expect(component["labelNames"]().get(expectedExpenseData[0].labelId)).toEqual(
+      labelData[0].label
+    );
 
-    component.selectPreviousMonth();
+    component["selectPreviousMonth"]();
     TestBed.tick();
     expectExpensesRequest(subMonths(mockedCurrentMonth, 1)).flush([]);
     await fixture.whenStable();
-    expect(component.expenses.value().length).toEqual(0);
+    expect(component["expenses"].value().length).toEqual(0);
 
-    component.selectNextMonth();
+    component["selectNextMonth"]();
     TestBed.tick();
     expectExpensesRequest(mockedCurrentMonth).flush(expectedExpenseData);
     await fixture.whenStable();
-    expect(component.expenses.value().length).toEqual(3);
+    expect(component["expenses"].value().length).toEqual(3);
   });
 
   it("Should display the empty state when there is no expense", async () => {
@@ -101,7 +103,7 @@ describe("ExpenseListByMonth", () => {
     expectExpensesRequest(mockedCurrentMonth).flush([]);
     await fixture.whenStable();
 
-    expect(component.totalForMonth()).toEqual(0);
+    expect(component["totalForMonth"]()).toEqual(0);
     expect(fixture.nativeElement.querySelector(".empty-state")).not.toBeNull();
     expect(fixture.nativeElement.querySelector("#expenses-list")).toBeNull();
   });
@@ -113,7 +115,7 @@ describe("ExpenseListByMonth", () => {
     ]);
     await fixture.whenStable();
 
-    expect(component.expensesByLabelChart().datasets).toEqual([{ label: "", data: [] }]);
+    expect(component["expensesByLabelChart"]().datasets).toEqual([{ label: "", data: [] }]);
   });
 
   it("Should add the created expense to the list", async () => {
@@ -127,9 +129,9 @@ describe("ExpenseListByMonth", () => {
       expenseDate: mockedCurrentMonth,
       labelId: labelData[0].id
     };
-    component.handleExpenseCreation(newExpense);
-    expect(component.expenses.value()).toEqual([newExpense]);
-    expect(component.totalForMonth()).toEqual(20);
+    component["addExpense"](newExpense);
+    expect(component["expenses"].value()).toEqual([newExpense]);
+    expect(component["totalForMonth"]()).toEqual(20);
   });
 
   it("Should select the month picked in the datepicker", async () => {
@@ -139,12 +141,12 @@ describe("ExpenseListByMonth", () => {
 
     const datepicker = { close: vi.fn() } as unknown as MatDatepicker<Date>;
     const pickedMonth = new Date(2021, 5, 20);
-    component.setMonthAndYear(pickedMonth, datepicker);
+    component["setMonthAndYear"](pickedMonth, datepicker);
     TestBed.tick();
     expectExpensesRequest(pickedMonth).flush([]);
 
     expect(datepicker.close).toHaveBeenCalled();
-    expect(component.selectedMonthModel().selectedMonth).toEqual(startOfMonth(pickedMonth));
+    expect(component["selectedMonthModel"]().selectedMonth).toEqual(startOfMonth(pickedMonth));
   });
 
   it("Should delete an expense once the deletion is confirmed", async () => {
@@ -156,7 +158,7 @@ describe("ExpenseListByMonth", () => {
       .spyOn(TestBed.inject(MatDialog), "open")
       .mockReturnValue({ afterClosed: () => of("validate") } as MatDialogRef<unknown>);
 
-    component.openDeleteExpenseModal(expense.id);
+    component["openDeleteExpenseModal"](expense.id);
     expect(openSpy).toHaveBeenCalledWith(
       ConfirmModal,
       expect.objectContaining({
@@ -170,12 +172,12 @@ describe("ExpenseListByMonth", () => {
       .expectOne(`${environment.backend_url}${expensePath}deleteExpense/?expenseId=1`)
       .flush(null);
 
-    expect(component.expenses.value()).toEqual([]);
+    expect(component["expenses"].value()).toEqual([]);
   });
 
   it("Should display an error and no expense when they cannot be loaded", async () => {
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
     TestBed.tick();
     expectExpensesRequest(mockedCurrentMonth).flush(null, {
@@ -188,6 +190,6 @@ describe("ExpenseListByMonth", () => {
       expect.objectContaining({ status: 500 }),
       "Erreur lors de la récupération des dépenses."
     );
-    expect(component.expenses.value()).toEqual([]);
+    expect(component["expenses"].value()).toEqual([]);
   });
 });

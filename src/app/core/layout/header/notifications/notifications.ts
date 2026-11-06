@@ -3,9 +3,9 @@ import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { isToday } from "date-fns";
 import { catchError, map, of } from "rxjs";
 
-import { INotification, INotificationToDisplay, NotificationTypeEnum } from "./notification.model";
-import { ErrorHandlerService } from "@core/error-handler-service";
-import { NotificationService } from "./notification-service";
+import { AppNotification, NotificationToDisplay, NotificationType } from "./notification";
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { NotificationApi } from "./notification-api";
 import { NotificationsList } from "./notifications-list/notifications-list";
 
 @Component({
@@ -14,45 +14,45 @@ import { NotificationsList } from "./notifications-list/notifications-list";
   imports: [NotificationsList]
 })
 export class Notifications {
-  private readonly NOTIFICATION_TYPE_ICONS: Record<NotificationTypeEnum, string> = {
-    [NotificationTypeEnum.INFO]: "info",
-    [NotificationTypeEnum.WARN]: "warning"
+  private readonly NOTIFICATION_TYPE_ICONS: Record<NotificationType, string> = {
+    [NotificationType.INFO]: "info",
+    [NotificationType.WARN]: "warning"
   };
 
-  public readonly notifications = rxResource({
+  protected readonly notifications = rxResource({
     stream: () =>
-      this.notificationService.getNotifications().pipe(
+      this.notificationApi.getNotifications().pipe(
         map((page) => page.content),
         catchError(() => of([]))
       ),
-    defaultValue: [] as INotification[]
+    defaultValue: [] as AppNotification[]
   });
-  public readonly notificationsToDisplay = computed<INotificationToDisplay[]>(() =>
+  protected readonly notificationsToDisplay = computed<NotificationToDisplay[]>(() =>
     this.notifications.value().map((notification) => ({
       ...notification,
       notificationDateToDisplay: this.computeDateToDisplay(notification.notificationDate),
       notificationTypeToDisplay: this.NOTIFICATION_TYPE_ICONS[notification.notificationType]
     }))
   );
-  public readonly unreadNotificationsForBadge = computed(
+  protected readonly unreadNotificationsForBadge = computed(
     () => this.notifications.value().filter((notification) => !notification.isRead).length
   );
 
-  private readonly notificationService = inject(NotificationService);
-  private readonly errorHandlerService = inject(ErrorHandlerService);
+  private readonly notificationApi = inject(NotificationApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
   private readonly destroyRef = inject(DestroyRef);
   private readonly ERROR_MARKING_NOTIFICATION_AS_READ = "Erreur lors du traitement de la requête.";
 
-  public markNotificationAsRead(notificationId: number): void {
+  protected markNotificationAsRead(notificationId: number): void {
     this.markNotificationsAsRead([notificationId]);
   }
 
-  public markAllNotificationsAsRead(): void {
+  protected markAllNotificationsAsRead(): void {
     this.markNotificationsAsRead(this.notifications.value().map((notif) => notif.id));
   }
 
   private markNotificationsAsRead(notificationIds: number[]): void {
-    this.notificationService
+    this.notificationApi
       .markNotificationAsRead(notificationIds)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -69,7 +69,7 @@ export class Notifications {
           );
         },
         error: (error) =>
-          this.errorHandlerService.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
+          this.httpErrorHandler.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
       });
   }
 

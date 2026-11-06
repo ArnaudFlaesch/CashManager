@@ -1,9 +1,10 @@
+import { submit } from "@angular/forms/signals";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { environment } from "@environments/environment";
 import { Login } from "./login";
 import { provideRouter, Router } from "@angular/router";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { HttpErrorHandler } from "@core/http-error-handler";
 
 describe("Login", () => {
   let component: Login;
@@ -27,8 +28,8 @@ describe("Login", () => {
   });
 
   it("Should prevent login", async () => {
-    expect(component.loginModel()).toEqual({ username: "", password: "" });
-    expect(await component.handleLogin()).toEqual(false);
+    expect(component["loginModel"]()).toEqual({ username: "", password: "" });
+    expect(await submit(component["loginForm"])).toEqual(false);
   });
 
   it("Should log the user in and redirect to the home page", async () => {
@@ -41,8 +42,8 @@ describe("Login", () => {
       roles: ["ROLE_ADMIN"],
       tokenType: "Bearer"
     };
-    component.loginModel.set({ username: "username", password: "password" });
-    const submitted = component.handleLogin();
+    component["loginModel"].set({ username: "username", password: "password" });
+    const submitted = submit(component["loginForm"]);
     const request = httpTestingController.expectOne(environment.backend_url + "/auth/login");
     expect(request.request.method).toBe("POST");
     request.flush(userData);
@@ -56,21 +57,21 @@ describe("Login", () => {
     const toggleButton: HTMLButtonElement =
       fixture.nativeElement.querySelector("button[matSuffix]");
     expect(passwordInput.type).toEqual("password");
-    expect(toggleButton.getAttribute("aria-label")).toEqual(component.labels.showPassword);
+    expect(toggleButton.getAttribute("aria-label")).toEqual(component["labels"].showPassword);
 
     toggleButton.click();
     await fixture.whenStable();
     expect(passwordInput.type).toEqual("text");
-    expect(toggleButton.getAttribute("aria-label")).toEqual(component.labels.hidePassword);
+    expect(toggleButton.getAttribute("aria-label")).toEqual(component["labels"].hidePassword);
   });
 
   it("Should display an error when the user cannot log in", async () => {
     const handleLoginErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleLoginError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleLoginError")
       .mockImplementation(() => undefined);
-    component.loginModel.set({ username: "username", password: "wrong password" });
+    component["loginModel"].set({ username: "username", password: "wrong password" });
 
-    const submitted = component.handleLogin();
+    const submitted = submit(component["loginForm"]);
     httpTestingController
       .expectOne(environment.backend_url + "/auth/login")
       .flush(null, { status: 401, statusText: "Unauthorized" });

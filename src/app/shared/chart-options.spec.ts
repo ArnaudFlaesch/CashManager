@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { getChartOptions } from "./constants";
+import { getChartOptions } from "./chart-options";
 
-describe("Constants", () => {
+describe("getChartOptions", () => {
   it("Should return chart options with colors matching the theme", () => {
     const lightOptions = getChartOptions(false);
     expect(lightOptions?.color).toEqual("#6b7280");

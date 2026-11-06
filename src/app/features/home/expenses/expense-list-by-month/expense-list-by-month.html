@@ -67,8 +67,5 @@
     <mat-icon>add_card</mat-icon>
     {{ labels.newExpense }}
   </h2>
-  <cash-manager-create-expense
-    (insertedExpenseEvent)="handleExpenseCreation($event)"
-    [expenseLabels]="expenseLabels()"
-  />
+  <cash-manager-create-expense (expenseCreated)="addExpense($event)" [expenseLabels]="expenseLabels()" />
 </section>
