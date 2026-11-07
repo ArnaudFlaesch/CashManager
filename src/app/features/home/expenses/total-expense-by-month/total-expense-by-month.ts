@@ -11,12 +11,12 @@ import { ChartData } from "chart.js";
 import { format, parseISO } from "date-fns";
 import { fr } from "date-fns/locale/fr";
 import { BaseChartDirective } from "ng2-charts";
-import { ITotalExpenseByMonth } from "@features/home/expenses/total-expense-by-month.model";
-import { ErrorHandlerService } from "@core/error-handler-service";
-import { ThemeService } from "@core/theme-service";
-import { ExpenseService } from "@features/home/expenses/expense-service";
-import { Label } from "@features/home/labels/label.model";
-import { getChartOptions } from "@shared/constants";
+import { MonthlyExpenseTotal } from "@features/home/expenses/monthly-expense-total";
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { Theme } from "@core/theme";
+import { ExpenseApi } from "@features/home/expenses/expense-api";
+import { Label } from "@features/home/labels/label";
+import { getChartOptions } from "@shared/chart-options";
 
 @Component({
   selector: "cash-manager-total-expense-by-month",
@@ -35,27 +35,48 @@ import { getChartOptions } from "@shared/constants";
   ]
 })
 export class TotalExpenseByMonth {
-  public readonly labels = {
+  private readonly expenseApi = inject(ExpenseApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly theme = inject(Theme);
+
+  public readonly expenseLabels = input<Label[]>([]);
+
+  protected readonly labels = {
     title: "Total des dépenses par mois",
     expenseLabels: "Étiquettes",
-    allLabels: "Toutes les étiquettes"
+    allLabels: "Toutes les étiquettes",
+    chart: {
+      total: "Total des dépenses",
+      average: "Moyenne"
+    },
+    errors: {
+      gettingTotalExpenses: "Erreur lors de la récupération du total des dépenses."
+    }
   };
 
   private readonly NO_LABEL_ID_SELECTED = 0;
-  private readonly ERROR_GETTING_TOTAL_EXPENSES =
-    "Erreur lors de la récupération du total des dépenses.";
-  private readonly CHART_LABELS = { total: "Total des dépenses", average: "Moyenne" };
   private readonly CHART_DATE_FORMAT = "MMMM yyyy";
 
-  public readonly expenseLabels = input<Label[]>([]);
-  public readonly chartOptions = computed(() => getChartOptions(this.themeService.isDarkMode()));
-
-  public readonly labelModel = signal({ labelId: this.NO_LABEL_ID_SELECTED });
+  private readonly labelModel = signal({ labelId: this.NO_LABEL_ID_SELECTED });
   public readonly labelForm = form(this.labelModel);
   public readonly isOneLabelSelected = computed(
     () => this.labelModel().labelId !== this.NO_LABEL_ID_SELECTED
   );
-
+  private readonly totalExpensesByMonth = rxResource({
+    params: () => this.labelModel().labelId,
+    stream: ({ params: labelId }) =>
+      (labelId === this.NO_LABEL_ID_SELECTED
+        ? this.expenseApi.getTotalExpensesByMonth()
+        : this.expenseApi.getTotalExpensesByMonthByLabelId(labelId)
+      ).pipe(
+        this.httpErrorHandler.catchError<MonthlyExpenseTotal[]>(
+          this.labels.errors.gettingTotalExpenses,
+          []
+        )
+      ),
+    defaultValue: []
+  });
+  public readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
   public readonly totalExpensesByMonthChart = computed<ChartData<"line">>(() => {
     const chartData = this.totalExpensesByMonth
       .value()
@@ -68,38 +89,15 @@ export class TotalExpenseByMonth {
       ),
       datasets: [
         {
-          label: this.CHART_LABELS.total,
+          label: this.labels.chart.total,
           data: chartData.map((totalByMonth) => totalByMonth.total)
         },
-        { label: this.CHART_LABELS.average, data: chartData.map(() => average) }
+        { label: this.labels.chart.average, data: chartData.map(() => average) }
       ]
     };
   });
 
-  private readonly totalExpensesByMonth = rxResource({
-    params: () => this.labelModel().labelId,
-    stream: ({ params: labelId }) =>
-      (labelId === this.NO_LABEL_ID_SELECTED
-        ? this.expenseService.getTotalExpensesByMonth()
-        : this.expenseService.getTotalExpensesByMonthByLabelId(labelId)
-      ).pipe(
-        this.errorHandlerService.catchError<ITotalExpenseByMonth[]>(
-          this.ERROR_GETTING_TOTAL_EXPENSES,
-          []
-        )
-      ),
-    defaultValue: []
-  });
-
-  private readonly expenseService = inject(ExpenseService);
-  private readonly errorHandlerService = inject(ErrorHandlerService);
-  private readonly themeService = inject(ThemeService);
-
-  public selectLabel(labelId: number): void {
-    this.labelForm.labelId().value.set(labelId);
-  }
-
   public resetSelectedLabel(): void {
-    this.selectLabel(this.NO_LABEL_ID_SELECTED);
+    this.labelForm.labelId().value.set(this.NO_LABEL_ID_SELECTED);
   }
 }

@@ -8,11 +8,17 @@
     <cash-manager-notifications />
   }
 
-  <button mat-icon-button [matTooltip]="labels.applications" [matMenuTriggerFor]="appsMenu">
+  <button type="button" mat-icon-button [matTooltip]="labels.applications" [matMenuTriggerFor]="appsMenu">
     <mat-icon>apps</mat-icon>
   </button>
 
-  <button id="cashmanager-menu" [matTooltip]="labels.userMenu" mat-icon-button [matMenuTriggerFor]="cashManagerMenu">
+  <button
+    type="button"
+    id="cashmanager-menu"
+    [matTooltip]="labels.userMenu"
+    mat-icon-button
+    [matMenuTriggerFor]="cashManagerMenu"
+  >
     <mat-icon>account_circle</mat-icon>
   </button>
 
@@ -36,16 +42,16 @@
       </div>
     </div>
     <mat-divider />
-    <button mat-menu-item (click)="downloadConfig()" id="download-config-button">
+    <button type="button" mat-menu-item (click)="downloadConfig()" id="download-config-button">
       <mat-icon>download</mat-icon>
       <span>{{ labels.downloadConfig }}</span>
     </button>
-    <button mat-menu-item (click)="openImportConfigModal()" id="open-import-config-modal">
+    <button type="button" mat-menu-item (click)="openImportConfigModal()" id="open-import-config-modal">
       <mat-icon>upload</mat-icon>
       <span>{{ labels.importConfig }}</span>
     </button>
     <mat-divider />
-    <button mat-menu-item (click)="logout()" id="logout-button">
+    <button type="button" mat-menu-item (click)="logout()" id="logout-button">
       <mat-icon>logout</mat-icon>
       <span>{{ labels.logout }}</span>
     </button>

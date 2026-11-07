@@ -3,40 +3,89 @@ import {
   provideHttpClientTesting,
   TestRequest
 } from "@angular/common/http/testing";
-
-import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { ErrorHandlerService } from "@core/error-handler-service";
-
-import { ComponentRef } from "@angular/core";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { MatDatepickerInputHarness } from "@angular/material/datepicker/testing";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { By } from "@angular/platform-browser";
+import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 import { fr } from "date-fns/locale/fr";
-import { environment } from "@environments/environment";
-import { Expense } from "@features/home/expenses/expense.model";
-import { ExpenseListByMonth } from "./expense-list-by-month";
-import { MatDatepicker } from "@angular/material/datepicker";
+import { BaseChartDirective } from "ng2-charts";
 import { of } from "rxjs";
+import type { MockInstance } from "vitest";
+import { environment } from "@environments/environment";
+import { Expense } from "@features/home/expenses/expense";
+import { getElement, queryElement } from "@testing/dom";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
+import { CreateExpense } from "../create-expense/create-expense";
+import { ExpenseListByMonth } from "./expense-list-by-month";
 
 describe("ExpenseListByMonth", () => {
-  let component: ExpenseListByMonth;
   let fixture: ComponentFixture<ExpenseListByMonth>;
-  let componentRef: ComponentRef<ExpenseListByMonth>;
   let httpTestingController: HttpTestingController;
+
   const mockedCurrentMonth = new Date(2022, 1, 15);
   const labelData = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }
   ];
+  const expenses: Expense[] = [
+    { id: 1, amount: 323, expenseDate: mockedCurrentMonth, labelId: 1 },
+    { id: 2, amount: 130, expenseDate: mockedCurrentMonth, labelId: 2 },
+    { id: 3, amount: 4, expenseDate: mockedCurrentMonth, labelId: 2 }
+  ];
   const dateFormat = "yyyy-MM-dd";
-  const expensePath = "/expense/";
 
-  const expectExpensesRequest = (month: Date): TestRequest =>
-    httpTestingController.expectOne(
-      `${environment.backend_url}${expensePath}?startIntervalDate=${format(startOfMonth(month), dateFormat)}&endIntervalDate=${format(endOfMonth(month), dateFormat)}`
+  function expectExpensesRequest(month: Date): TestRequest {
+    return httpTestingController.expectOne(
+      `${environment.backend_url}/expense/?startIntervalDate=${format(startOfMonth(month), dateFormat)}&endIntervalDate=${format(endOfMonth(month), dateFormat)}`
     );
+  }
+
+  /** Answers the request of the expenses of the month, sent once the component is rendered. */
+  async function loadExpenses(month: Date, monthExpenses: Expense[]): Promise<void> {
+    TestBed.tick();
+    expectExpensesRequest(month).flush(monthExpenses);
+    await fixture.whenStable();
+  }
+
+  /** Label and amount of each displayed expense, with the spaces of the formatted amounts normalized. */
+  function displayedExpenses(): string[][] {
+    return Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll(".expense-row"),
+      (row) =>
+        [".expense-label", ".expense-amount"].map((selector) =>
+          normalizeSpaces(row.querySelector(selector)?.textContent ?? "")
+        )
+    );
+  }
+
+  function displayedTotal(): string {
+    return normalizeSpaces(getElement(fixture, "#month-total-value", HTMLElement).textContent);
+  }
+
+  function normalizeSpaces(text: string): string {
+    return text.replace(/\s+/g, " ").trim();
+  }
+
+  function chartDatasets(): unknown {
+    return fixture.debugElement
+      .query(By.directive(BaseChartDirective))
+      .injector.get(BaseChartDirective).data?.datasets;
+  }
+
+  /** Changes the month, which sends the request of its expenses. */
+  function clickMonthButton(label: string): void {
+    getElement(
+      fixture,
+      `#month-navigation button[aria-label="${label}"]`,
+      HTMLButtonElement
+    ).click();
+    TestBed.tick();
+  }
 
   beforeEach(async () => {
     vi.useFakeTimers({ toFake: ["Date"] });
@@ -51,112 +100,107 @@ describe("ExpenseListByMonth", () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExpenseListByMonth);
-    component = fixture.componentInstance;
-    componentRef = fixture.componentRef;
+    fixture.componentRef.setInput("expenseLabels", labelData);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
     httpTestingController.verify();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
-  it("Should display two labels and three expenses, then change the month", async () => {
-    const expectedExpenseData: Expense[] = [
-      { id: 1, amount: 323, expenseDate: mockedCurrentMonth, labelId: labelData[0].id },
-      { id: 2, amount: 130, expenseDate: mockedCurrentMonth, labelId: labelData[1].id },
-      { id: 3, amount: 4, expenseDate: mockedCurrentMonth, labelId: labelData[1].id }
-    ];
+  it("Should display the expenses of the month with their total, then change the month", async () => {
+    await loadExpenses(mockedCurrentMonth, expenses);
 
-    componentRef.setInput("expenseLabels", labelData);
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush(expectedExpenseData);
-    await fixture.whenStable();
-
-    expect(component.expenses.value()).toEqual(expectedExpenseData);
-    expect(component.totalForMonth()).toEqual(457);
-    expect(component.expensesByLabelChart().datasets).toEqual([
+    expect(displayedExpenses()).toEqual([
+      ["Courses", "323,00 €"],
+      ["Restaurant", "130,00 €"],
+      ["Restaurant", "4,00 €"]
+    ]);
+    expect(displayedTotal()).toBe("457,00 €");
+    expect(chartDatasets()).toEqual([
       { label: "Courses", data: [323] },
       { label: "Restaurant", data: [134] }
     ]);
-    expect(component.labelNames().get(99)).toEqual(undefined);
-    expect(component.labelNames().get(expectedExpenseData[0].labelId)).toEqual(labelData[0].label);
 
-    component.selectPreviousMonth();
-    TestBed.tick();
+    clickMonthButton("Mois précédent");
     expectExpensesRequest(subMonths(mockedCurrentMonth, 1)).flush([]);
     await fixture.whenStable();
-    expect(component.expenses.value().length).toEqual(0);
+    expect(displayedExpenses()).toEqual([]);
 
-    component.selectNextMonth();
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush(expectedExpenseData);
+    clickMonthButton("Mois suivant");
+    expectExpensesRequest(mockedCurrentMonth).flush(expenses);
     await fixture.whenStable();
-    expect(component.expenses.value().length).toEqual(3);
+    expect(displayedExpenses()).toHaveLength(3);
   });
 
   it("Should display the empty state when there is no expense", async () => {
-    componentRef.setInput("expenseLabels", labelData);
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush([]);
-    await fixture.whenStable();
+    await loadExpenses(mockedCurrentMonth, []);
 
-    expect(component.totalForMonth()).toEqual(0);
-    expect(fixture.nativeElement.querySelector(".empty-state")).not.toBeNull();
-    expect(fixture.nativeElement.querySelector("#expenses-list")).toBeNull();
+    expect(displayedTotal()).toBe("0,00 €");
+    expect(queryElement(fixture, ".empty-state")).not.toBeNull();
+    expect(queryElement(fixture, "#expenses-list")).toBeNull();
   });
 
   it("Should ignore in the chart the expenses of an unknown label", async () => {
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush([
+    await loadExpenses(mockedCurrentMonth, [
       { id: 1, amount: 10, expenseDate: mockedCurrentMonth, labelId: 99 }
     ]);
-    await fixture.whenStable();
 
-    expect(component.expensesByLabelChart().datasets).toEqual([{ label: "", data: [] }]);
+    expect(displayedExpenses()).toEqual([["", "10,00 €"]]);
+    expect(chartDatasets()).toEqual([{ label: "", data: [] }]);
   });
 
   it("Should add the created expense to the list", async () => {
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush([]);
+    await loadExpenses(mockedCurrentMonth, []);
+
+    const newExpense: Expense = { id: 4, amount: 20, expenseDate: mockedCurrentMonth, labelId: 1 };
+    fixture.debugElement
+      .query(By.directive(CreateExpense))
+      .injector.get(CreateExpense)
+      .expenseCreated.emit(newExpense);
     await fixture.whenStable();
 
-    const newExpense: Expense = {
-      id: 4,
-      amount: 20,
-      expenseDate: mockedCurrentMonth,
-      labelId: labelData[0].id
-    };
-    component.handleExpenseCreation(newExpense);
-    expect(component.expenses.value()).toEqual([newExpense]);
-    expect(component.totalForMonth()).toEqual(20);
+    expect(displayedExpenses()).toEqual([["Courses", "20,00 €"]]);
+    expect(displayedTotal()).toBe("20,00 €");
   });
 
   it("Should select the month picked in the datepicker", async () => {
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush([]);
-    await fixture.whenStable();
+    await loadExpenses(mockedCurrentMonth, []);
 
-    const datepicker = { close: vi.fn() } as unknown as MatDatepicker<Date>;
-    const pickedMonth = new Date(2021, 5, 20);
-    component.setMonthAndYear(pickedMonth, datepicker);
-    TestBed.tick();
-    expectExpensesRequest(pickedMonth).flush([]);
+    const monthInput =
+      await TestbedHarnessEnvironment.loader(fixture).getHarness(MatDatepickerInputHarness);
+    await monthInput.openCalendar();
+    const calendar = await monthInput.getCalendar();
+    await calendar.selectCell({ text: "2021" });
+    // The harness waits for the page to be stable, so the request is answered meanwhile
+    const monthSelected = calendar.selectCell({ text: /juin/i });
+    await vi.waitFor(() => {
+      expectExpensesRequest(new Date(2021, 5, 1)).flush([]);
+    });
+    await monthSelected;
 
-    expect(datepicker.close).toHaveBeenCalled();
-    expect(component.selectedMonthModel().selectedMonth).toEqual(startOfMonth(pickedMonth));
+    expect(await monthInput.isCalendarOpen()).toBe(false);
+    expect(await monthInput.getValue()).toBe("01/06/2021");
   });
 
-  it("Should delete an expense once the deletion is confirmed", async () => {
-    const expense: Expense = { id: 1, amount: 10, expenseDate: mockedCurrentMonth, labelId: 1 };
-    TestBed.tick();
-    expectExpensesRequest(mockedCurrentMonth).flush([expense]);
-    await fixture.whenStable();
+  /**
+   * Opens the deletion modal of the expense, closed with the given result.
+   * The delete button is not displayed yet, so the method is called directly.
+   */
+  function deleteExpense(expenseId: number, modalResult: string): MockInstance<MatDialog["open"]> {
     const openSpy = vi
       .spyOn(TestBed.inject(MatDialog), "open")
-      .mockReturnValue({ afterClosed: () => of("validate") } as MatDialogRef<unknown>);
+      .mockReturnValue({ afterClosed: () => of(modalResult) } as MatDialogRef<unknown>);
+    fixture.componentInstance.openDeleteExpenseModal(expenseId);
+    return openSpy;
+  }
 
-    component.openDeleteExpenseModal(expense.id);
+  it("Should delete an expense once the deletion is confirmed", async () => {
+    await loadExpenses(mockedCurrentMonth, expenses);
+
+    const openSpy = deleteExpense(1, "validate");
     expect(openSpy).toHaveBeenCalledWith(
       ConfirmModal,
       expect.objectContaining({
@@ -167,15 +211,29 @@ describe("ExpenseListByMonth", () => {
       })
     );
     httpTestingController
-      .expectOne(`${environment.backend_url}${expensePath}deleteExpense/?expenseId=1`)
+      .expectOne(`${environment.backend_url}/expense/deleteExpense/?expenseId=1`)
       .flush(null);
+    await fixture.whenStable();
 
-    expect(component.expenses.value()).toEqual([]);
+    expect(displayedExpenses()).toEqual([
+      ["Restaurant", "130,00 €"],
+      ["Restaurant", "4,00 €"]
+    ]);
+    expect(displayedTotal()).toBe("134,00 €");
+  });
+
+  it("Should keep the expense when the deletion is cancelled", async () => {
+    await loadExpenses(mockedCurrentMonth, expenses);
+
+    deleteExpense(1, "cancel");
+    await fixture.whenStable();
+
+    expect(displayedExpenses()).toHaveLength(3);
   });
 
   it("Should display an error and no expense when they cannot be loaded", async () => {
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
     TestBed.tick();
     expectExpensesRequest(mockedCurrentMonth).flush(null, {
@@ -188,6 +246,6 @@ describe("ExpenseListByMonth", () => {
       expect.objectContaining({ status: 500 }),
       "Erreur lors de la récupération des dépenses."
     );
-    expect(component.expenses.value()).toEqual([]);
+    expect(queryElement(fixture, ".empty-state")).not.toBeNull();
   });
 });

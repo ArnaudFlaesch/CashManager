@@ -1,12 +1,12 @@
+import { getElement } from "@testing/dom";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialogRef } from "@angular/material/dialog";
 import { environment } from "@environments/environment";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { ImportConfigModal } from "./import-config-modal";
 
 describe("ImportConfigModal", () => {
-  let component: ImportConfigModal;
   let fixture: ComponentFixture<ImportConfigModal>;
   let httpTestingController: HttpTestingController;
 
@@ -19,7 +19,6 @@ describe("ImportConfigModal", () => {
       providers: [{ provide: MatDialogRef, useValue: dialogRef }, provideHttpClientTesting()]
     });
     fixture = TestBed.createComponent(ImportConfigModal);
-    component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -30,12 +29,12 @@ describe("ImportConfigModal", () => {
   });
 
   function getUploadButton(): HTMLButtonElement {
-    return fixture.nativeElement.querySelector("#upload-file-button");
+    return getElement(fixture, "#upload-file-button", HTMLButtonElement);
   }
 
   /** Selects the file in the input, as the user would. */
   async function selectFile(): Promise<void> {
-    const input: HTMLInputElement = fixture.nativeElement.querySelector("#file");
+    const input = getElement(fixture, "#file", HTMLInputElement);
     Object.defineProperty(input, "files", { value: [file] });
     input.dispatchEvent(new Event("change"));
     await fixture.whenStable();
@@ -43,14 +42,13 @@ describe("ImportConfigModal", () => {
 
   it("Should only allow the import once a file is selected", async () => {
     await fixture.whenStable();
-    expect(getUploadButton().disabled).toEqual(true);
+    expect(getUploadButton().disabled).toBe(true);
 
-    component.upload();
+    getUploadButton().click();
     httpTestingController.expectNone(importConfigUrl);
 
     await selectFile();
-    expect(component.fileToUpload()).toEqual(file);
-    expect(getUploadButton().disabled).toEqual(false);
+    expect(getUploadButton().disabled).toBe(false);
   });
 
   it("Should import the selected file, then close the modal and reload the page", async () => {
@@ -68,11 +66,11 @@ describe("ImportConfigModal", () => {
 
   it("Should display an error when the file cannot be imported", async () => {
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
     await selectFile();
 
-    component.upload();
+    getUploadButton().click();
     httpTestingController
       .expectOne(importConfigUrl)
       .flush(null, { status: 500, statusText: "Server error" });

@@ -1,5 +1,11 @@
 <div id="month-navigation" class="row">
-  <button (click)="selectPreviousMonth()" mat-icon-button [matTooltip]="labels.previousMonth">
+  <button
+    type="button"
+    (click)="selectPreviousMonth()"
+    mat-icon-button
+    [matTooltip]="labels.previousMonth"
+    [attr.aria-label]="labels.previousMonth"
+  >
     <mat-icon>chevron_left</mat-icon>
   </button>
   <mat-form-field appearance="outline" subscriptSizing="dynamic" id="month-field">
@@ -14,7 +20,13 @@
     />
   </mat-form-field>
 
-  <button (click)="selectNextMonth()" mat-icon-button [matTooltip]="labels.nextMonth">
+  <button
+    type="button"
+    (click)="selectNextMonth()"
+    mat-icon-button
+    [matTooltip]="labels.nextMonth"
+    [attr.aria-label]="labels.nextMonth"
+  >
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
@@ -51,7 +63,12 @@
             <span class="expense-label ellipsis">{{ labelNames().get(expense.labelId) }}</span>
             <span class="expense-amount">{{ expense.amount | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
             @if (false) {
-              <button mat-icon-button [matTooltip]="labels.deleteExpense" (click)="openDeleteExpenseModal(expense.id)">
+              <button
+                type="button"
+                mat-icon-button
+                [matTooltip]="labels.deleteExpense"
+                (click)="openDeleteExpenseModal(expense.id)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             }
@@ -67,8 +84,5 @@
     <mat-icon>add_card</mat-icon>
     {{ labels.newExpense }}
   </h2>
-  <cash-manager-create-expense
-    (insertedExpenseEvent)="handleExpenseCreation($event)"
-    [expenseLabels]="expenseLabels()"
-  />
+  <cash-manager-create-expense (expenseCreated)="addExpense($event)" [expenseLabels]="expenseLabels()" />
 </section>

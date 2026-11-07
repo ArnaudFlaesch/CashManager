@@ -15,7 +15,13 @@
         </mat-select>
       </mat-form-field>
       @if (isOneLabelSelected()) {
-        <button mat-icon-button [matTooltip]="labels.allLabels" (click)="resetSelectedLabel()">
+        <button
+          type="button"
+          mat-icon-button
+          [matTooltip]="labels.allLabels"
+          [attr.aria-label]="labels.allLabels"
+          (click)="resetSelectedLabel()"
+        >
           <mat-icon>close</mat-icon>
         </button>
       }

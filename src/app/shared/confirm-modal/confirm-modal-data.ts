@@ -1,4 +1,4 @@
-export interface IConfirmModalData {
+export interface ConfirmModalData {
   title: string;
   message: string;
 }

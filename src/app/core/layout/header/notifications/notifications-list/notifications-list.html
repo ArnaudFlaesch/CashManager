@@ -1,4 +1,5 @@
 <button
+  type="button"
   id="display-notifications-button"
   [matTooltip]="labels.notifications"
   mat-icon-button
@@ -18,6 +19,7 @@
 <mat-menu #notificationsMenu="matMenu" class="notifications-menu">
   @if (unreadNotificationsForBadge()) {
     <button
+      type="button"
       id="mark-all-notifications-as-read-button"
       [matTooltip]="labels.markAllAsRead"
       (click)="markAllNotificationsAsRead($event)"
@@ -31,8 +33,8 @@
     <div
       class="notification-container row"
       [class.unread-notification]="!notification.isRead"
-      [class.info]="notification.notificationType === notificationTypeEnum.INFO"
-      [class.warn]="notification.notificationType === notificationTypeEnum.WARN"
+      [class.info]="notification.notificationType === NotificationType.INFO"
+      [class.warn]="notification.notificationType === NotificationType.WARN"
     >
       <span class="notification-message">{{ notification.message }}</span>
       <span [matTooltip]="notification.notificationDate | dateFormat: 'short'" class="notification-date">
@@ -41,6 +43,7 @@
       <mat-icon class="notification-type-icon">{{ notification.notificationTypeToDisplay }}</mat-icon>
       @if (!notification.isRead) {
         <button
+          type="button"
           class="mark-notification-as-read-button"
           [matTooltip]="labels.markAsRead"
           [attr.aria-label]="labels.markAsRead"

@@ -1,11 +1,12 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component, computed, DestroyRef, inject } from "@angular/core";
 import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { isToday } from "date-fns";
 import { catchError, map, of } from "rxjs";
 
-import { INotification, INotificationToDisplay, NotificationTypeEnum } from "./notification.model";
-import { ErrorHandlerService } from "@core/error-handler-service";
-import { NotificationService } from "./notification-service";
+import { AppNotification, NotificationToDisplay, NotificationType } from "./notification";
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { NotificationApi } from "./notification-api";
 import { NotificationsList } from "./notifications-list/notifications-list";
 
 @Component({
@@ -14,20 +15,30 @@ import { NotificationsList } from "./notifications-list/notifications-list";
   imports: [NotificationsList]
 })
 export class Notifications {
-  private readonly NOTIFICATION_TYPE_ICONS: Record<NotificationTypeEnum, string> = {
-    [NotificationTypeEnum.INFO]: "info",
-    [NotificationTypeEnum.WARN]: "warning"
+  private readonly notificationApi = inject(NotificationApi);
+  private readonly httpErrorHandler = inject(HttpErrorHandler);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly labels = {
+    errors: {
+      markingNotificationAsRead: "Erreur lors du traitement de la requête."
+    }
   };
 
-  public readonly notifications = rxResource({
+  private readonly NOTIFICATION_TYPE_ICONS: Record<NotificationType, string> = {
+    [NotificationType.INFO]: "info",
+    [NotificationType.WARN]: "warning"
+  };
+
+  private readonly notifications = rxResource({
     stream: () =>
-      this.notificationService.getNotifications().pipe(
+      this.notificationApi.getNotifications().pipe(
         map((page) => page.content),
         catchError(() => of([]))
       ),
-    defaultValue: [] as INotification[]
+    defaultValue: [] as AppNotification[]
   });
-  public readonly notificationsToDisplay = computed<INotificationToDisplay[]>(() =>
+  public readonly notificationsToDisplay = computed<NotificationToDisplay[]>(() =>
     this.notifications.value().map((notification) => ({
       ...notification,
       notificationDateToDisplay: this.computeDateToDisplay(notification.notificationDate),
@@ -38,11 +49,6 @@ export class Notifications {
     () => this.notifications.value().filter((notification) => !notification.isRead).length
   );
 
-  private readonly notificationService = inject(NotificationService);
-  private readonly errorHandlerService = inject(ErrorHandlerService);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly ERROR_MARKING_NOTIFICATION_AS_READ = "Erreur lors du traitement de la requête.";
-
   public markNotificationAsRead(notificationId: number): void {
     this.markNotificationsAsRead([notificationId]);
   }
@@ -52,7 +58,7 @@ export class Notifications {
   }
 
   private markNotificationsAsRead(notificationIds: number[]): void {
-    this.notificationService
+    this.notificationApi
       .markNotificationAsRead(notificationIds)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -62,14 +68,15 @@ export class Notifications {
             [
               ...notifications.filter((notification) => !updatedIds.has(notification.id)),
               ...updatedNotifications
-            ].sort(
+            ].toSorted(
               (notifA, notifB) =>
                 Date.parse(notifB.notificationDate) - Date.parse(notifA.notificationDate)
             )
           );
         },
-        error: (error) =>
-          this.errorHandlerService.handleError(error, this.ERROR_MARKING_NOTIFICATION_AS_READ)
+        error: (error: HttpErrorResponse) => {
+          this.httpErrorHandler.handleError(error, this.labels.errors.markingNotificationAsRead);
+        }
       });
   }
 

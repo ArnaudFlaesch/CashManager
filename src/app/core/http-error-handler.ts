@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { catchError, of, OperatorFunction } from "rxjs";
 
 @Service()
-export class ErrorHandlerService {
+export class HttpErrorHandler {
   private readonly ERROR_UNAUTHORIZED =
     "Votre jeton d'authentification n'est plus valide, veuillez vous reconnecter.";
 
@@ -22,8 +22,14 @@ export class ErrorHandlerService {
       case 401:
         this.router
           .navigate(["login"])
-          .then(() => this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED))
-          .catch((navigationError) => console.log(navigationError.message));
+          .then(() => {
+            this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED);
+          })
+          .catch((navigationError: unknown) => {
+            console.log(
+              navigationError instanceof Error ? navigationError.message : navigationError
+            );
+          });
         break;
       case 403:
         this.displayErrorMessage(error.message, this.ERROR_FORBIDDEN);

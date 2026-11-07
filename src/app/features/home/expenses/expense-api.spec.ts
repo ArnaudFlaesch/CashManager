@@ -2,11 +2,11 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { Expense } from "./expense.model";
-import { ExpenseService } from "./expense-service";
+import { Expense } from "./expense";
+import { ExpenseApi } from "./expense-api";
 
-describe("ExpenseService", () => {
-  let service: ExpenseService;
+describe("ExpenseApi", () => {
+  let service: ExpenseApi;
   let httpTestingController: HttpTestingController;
 
   const expenseUrl = `${environment.backend_url}/expense`;
@@ -14,7 +14,7 @@ describe("ExpenseService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(ExpenseService);
+    service = TestBed.inject(ExpenseApi);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -50,7 +50,7 @@ describe("ExpenseService", () => {
     const payload = { amount: 12.5, expenseDate: expense.expenseDate, labelId: 2 };
     const added = firstValueFrom(service.addExpense(payload));
     const request = httpTestingController.expectOne(`${expenseUrl}/addExpense`);
-    expect(request.request.method).toEqual("POST");
+    expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual(payload);
     request.flush(expense);
     expect(await added).toEqual(expense);
@@ -59,8 +59,8 @@ describe("ExpenseService", () => {
   it("Should delete an expense", async () => {
     const deleted = firstValueFrom(service.deleteExpense(1));
     const request = httpTestingController.expectOne(`${expenseUrl}/deleteExpense/?expenseId=1`);
-    expect(request.request.method).toEqual("DELETE");
+    expect(request.request.method).toBe("DELETE");
     request.flush(null);
-    expect(await deleted).toBeNull();
+    await expect(deleted).resolves.toBeNull();
   });
 });

@@ -1,16 +1,21 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { HarnessLoader } from "@angular/cdk/testing";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialog } from "@angular/material/dialog";
+import { MatMenuHarness } from "@angular/material/menu/testing";
+import { MatSlideToggleHarness } from "@angular/material/slide-toggle/testing";
 import { Router } from "@angular/router";
 import { environment } from "@environments/environment";
+import { queryElement } from "@testing/dom";
 import { ImportConfigModal } from "./import-config-modal/import-config-modal";
-import { RoleEnum } from "@core/auth/role.enum";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { Role } from "@core/auth/role";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { Header } from "./header";
 
 describe("Header", () => {
-  let component: Header;
   let fixture: ComponentFixture<Header>;
+  let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
   const exportConfigUrl = `${environment.backend_url}/cashManagerConfig/export`;
@@ -19,13 +24,21 @@ describe("Header", () => {
   function createComponent(): void {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
     fixture = TestBed.createComponent(Header);
-    component = fixture.componentInstance;
+    loader = TestbedHarnessEnvironment.loader(fixture);
     httpTestingController = TestBed.inject(HttpTestingController);
+  }
+
+  /** Opens the user menu, rendered in an overlay. */
+  async function openUserMenu(): Promise<MatMenuHarness> {
+    const menu = await loader.getHarness(MatMenuHarness.with({ selector: "#cashmanager-menu" }));
+    await menu.open();
+    return menu;
   }
 
   afterEach(() => {
     localStorage.removeItem("user");
     localStorage.removeItem("preferredTheme");
+    document.body.classList.remove("dark-mode");
     vi.restoreAllMocks();
     httpTestingController.verify();
   });
@@ -33,13 +46,13 @@ describe("Header", () => {
   it("Should only display the notifications to the administrators", async () => {
     createComponent();
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector("cash-manager-notifications")).toBeNull();
+    expect(queryElement(fixture, "cash-manager-notifications")).toBeNull();
   });
 
   it("Should display the notifications to an administrator", async () => {
     localStorage.setItem(
       "user",
-      JSON.stringify({ accessToken: "token", roles: [RoleEnum.ROLE_ADMIN] })
+      JSON.stringify({ accessToken: "token", roles: [Role.ROLE_ADMIN] })
     );
     createComponent();
     // The notifications are loaded once rendered, the page is stable once they are received
@@ -50,41 +63,50 @@ describe("Header", () => {
       .flush({ content: [] });
     await fixture.whenStable();
 
-    expect(component.canUserSeeNotifications()).toEqual(true);
-    expect(fixture.nativeElement.querySelector("cash-manager-notifications")).not.toBeNull();
+    expect(queryElement(fixture, "cash-manager-notifications")).not.toBeNull();
   });
 
-  it("Should switch between light and dark mode", () => {
+  it("Should switch between light and dark mode", async () => {
     createComponent();
-    component.toggleTheme(true);
-    expect(component.isDarkMode()).toEqual(true);
-    expect(localStorage.getItem("preferredTheme")).toEqual("dark");
-    component.toggleTheme(false);
-    expect(component.isDarkMode()).toEqual(false);
-    expect(localStorage.getItem("preferredTheme")).toEqual("light");
+    await openUserMenu();
+    const themeToggle =
+      await TestbedHarnessEnvironment.documentRootLoader(fixture).getHarness(MatSlideToggleHarness);
+    expect(await themeToggle.isChecked()).toBe(false);
+
+    await themeToggle.toggle();
+    expect(await themeToggle.isChecked()).toBe(true);
+    expect(localStorage.getItem("preferredTheme")).toBe("dark");
+    expect(document.body.classList).toContain("dark-mode");
+
+    await themeToggle.toggle();
+    expect(await themeToggle.isChecked()).toBe(false);
+    expect(localStorage.getItem("preferredTheme")).toBe("light");
+    expect(document.body.classList).not.toContain("dark-mode");
   });
 
-  it("Should open the import configuration modal", () => {
+  it("Should open the import configuration modal", async () => {
     createComponent();
     const openSpy = vi.spyOn(TestBed.inject(MatDialog), "open");
-    component.openImportConfigModal();
+    const menu = await openUserMenu();
+    await menu.clickItem({ selector: "#open-import-config-modal" });
     expect(openSpy).toHaveBeenCalledWith(ImportConfigModal, { width: "640px" });
   });
 
-  it("Should download the configuration as a file", () => {
+  it("Should download the configuration as a file", async () => {
     createComponent();
     vi.spyOn(console, "info").mockImplementation(() => undefined);
     // jsdom does not implement the object URLs, nor the navigation triggered by a link
-    URL.createObjectURL = vi.fn(() => "blob:config");
-    URL.revokeObjectURL = vi.fn();
+    vi.spyOn(URL, "createObjectURL").mockImplementation(() => "blob:config");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => undefined);
     const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (
       this: HTMLAnchorElement
     ) {
-      expect(this.href).toEqual("blob:config");
-      expect(this.download).toEqual("cashManagerData.json");
+      expect(this.href).toBe("blob:config");
+      expect(this.download).toBe("cashManagerData.json");
     });
 
-    component.downloadConfig();
+    const menu = await openUserMenu();
+    await menu.clickItem({ selector: "#download-config-button" });
     const config = new Blob(["{}"], { type: "application/json" });
     httpTestingController.expectOne(exportConfigUrl).flush(config);
 
@@ -93,13 +115,14 @@ describe("Header", () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:config");
   });
 
-  it("Should display an error when the configuration cannot be downloaded", () => {
+  it("Should display an error when the configuration cannot be downloaded", async () => {
     createComponent();
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
 
-    component.downloadConfig();
+    const menu = await openUserMenu();
+    await menu.clickItem({ selector: "#download-config-button" });
     httpTestingController
       .expectOne(exportConfigUrl)
       .flush(null, { status: 500, statusText: "Server error" });
@@ -115,7 +138,9 @@ describe("Header", () => {
     createComponent();
     const navigateSpy = vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
 
-    await component.logout();
+    const menu = await openUserMenu();
+    await menu.clickItem({ selector: "#logout-button" });
+    await fixture.whenStable();
 
     expect(localStorage.getItem("user")).toBeNull();
     expect(navigateSpy).toHaveBeenCalledWith(["login"]);

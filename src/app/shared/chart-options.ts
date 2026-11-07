@@ -1,8 +1,5 @@
 import { ChartConfiguration } from "chart.js";
 
-export const DIALOG_SMALL_HEIGHT = "250px";
-export const DIALOG_SMALL_WIDTH = "400px";
-
 /** Options of the charts, with text and grid colors readable in the light or dark theme. */
 export function getChartOptions(isDarkMode: boolean): ChartConfiguration["options"] {
   const textColor = isDarkMode ? "#9ca3af" : "#6b7280";

@@ -7,4 +7,6 @@ import { appConfig } from "@app/app.config";
 
 registerLocaleData(localeFr);
 
-bootstrapApplication(App, appConfig).catch((err) => console.error(err));
+bootstrapApplication(App, appConfig).catch((err: unknown) => {
+  console.error(err);
+});

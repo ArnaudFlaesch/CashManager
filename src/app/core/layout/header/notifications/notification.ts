@@ -1,17 +1,17 @@
-export interface INotification {
+export interface AppNotification {
   id: number;
   message: string;
   notificationDate: string;
-  notificationType: NotificationTypeEnum;
+  notificationType: NotificationType;
   isRead: boolean;
 }
 
-export type INotificationToDisplay = INotification & {
+export type NotificationToDisplay = AppNotification & {
   notificationDateToDisplay: string;
   notificationTypeToDisplay: string;
 };
 
-export enum NotificationTypeEnum {
+export enum NotificationType {
   INFO = "INFO",
   WARN = "WARN"
 }

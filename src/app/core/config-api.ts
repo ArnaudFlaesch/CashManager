@@ -4,7 +4,7 @@ import { inject, Service } from "@angular/core";
 import { environment } from "@environments/environment";
 
 @Service()
-export class ConfigService {
+export class ConfigApi {
   private readonly http = inject(HttpClient);
   private readonly configUrl = `${environment.backend_url}/cashManagerConfig`;
 

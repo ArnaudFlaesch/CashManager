@@ -1,11 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { Observable } from "rxjs";
-import { Label } from "./label.model";
+import { Label } from "./label";
 import { environment } from "@environments/environment";
 
 @Service()
-export class LabelService {
+export class LabelApi {
   private readonly http = inject(HttpClient);
   private readonly labelUrl = `${environment.backend_url}/label`;
 
@@ -17,7 +17,8 @@ export class LabelService {
     return this.http.post<Label>(`${this.labelUrl}/addLabel`, { newLabel: label });
   }
 
-  public deleteLabel(labelId: number): Observable<void> {
-    return this.http.delete<void>(`${this.labelUrl}/deleteLabel`, { params: { labelId } });
+  /** The backend answers with an empty body, that HttpClient returns as null. */
+  public deleteLabel(labelId: number): Observable<null> {
+    return this.http.delete<null>(`${this.labelUrl}/deleteLabel`, { params: { labelId } });
   }
 }

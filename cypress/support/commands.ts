@@ -12,7 +12,7 @@ Cypress.Commands.add("shouldDisplayErrorMessage", (errorMessage: string): Cypres
 
 function loginAs(username: string, password: string): Cypress.Chainable {
   return cy
-    .request("POST", `${Cypress.expose("backend_url")}/auth/login`, {
+    .request("POST", `${Cypress.expose("backend_url") as string}/auth/login`, {
       username: username,
       password: password
     })

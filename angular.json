@@ -92,8 +92,13 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["src/test-setup.ts"],
+            "providersFile": "src/testing/providers.ts",
             "coverageReporters": ["lcov", "text-summary"],
-            "coverageExclude": ["**/*.spec.ts", "src/environments/**"]
+            "coverageExclude": [
+              "**/*.spec.ts",
+              "src/environments/**",
+              "src/testing/**"
+            ]
           }
         }
       }

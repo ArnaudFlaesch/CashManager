@@ -6,8 +6,8 @@ describe("DateFormatPipe", () => {
   const date = new Date(2022, 2, 15, 10, 30);
 
   it("Should format a date, or its string, in the short french format", () => {
-    expect(pipe.transform(date, "short")).toEqual("15/03/2022");
-    expect(pipe.transform(date.toString(), "short")).toEqual("15/03/2022");
+    expect(pipe.transform(date, "short")).toBe("15/03/2022");
+    expect(pipe.transform(date.toString(), "short")).toBe("15/03/2022");
   });
 
   it("Should format a date, or its string, in the full format by default", () => {

@@ -1,0 +1,14 @@
+import { describe, expect, it } from "vitest";
+import { getChartOptions } from "./chart-options";
+
+describe("getChartOptions", () => {
+  it("Should return chart options with colors matching the theme", () => {
+    const lightOptions = getChartOptions(false);
+    expect(lightOptions?.color).toBe("#6b7280");
+    expect(lightOptions?.scales?.["y"]?.grid?.color).toBe("rgb(148 163 184 / 25%)");
+
+    const darkOptions = getChartOptions(true);
+    expect(darkOptions?.color).toBe("#9ca3af");
+    expect(darkOptions?.scales?.["y"]?.grid?.color).toBe("rgb(148 163 184 / 15%)");
+  });
+});

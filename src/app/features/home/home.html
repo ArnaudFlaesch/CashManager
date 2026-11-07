@@ -52,7 +52,7 @@
           </button>
         </form>
 
-        <cash-manager-label-list [expenseLabels]="expenseLabels.value()" (labelDeleted)="onDeleteLabel($event)" />
+        <cash-manager-label-list [expenseLabels]="expenseLabels.value()" (labelDeleted)="removeLabel($event)" />
       </section>
     </mat-tab>
   </mat-tab-group>

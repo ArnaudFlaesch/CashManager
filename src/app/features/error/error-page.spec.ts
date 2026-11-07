@@ -21,8 +21,8 @@ describe("ErrorPage", () => {
   it("Should display the error and a link to the home page", async () => {
     const fixture = TestBed.createComponent(ErrorPage);
     await fixture.whenStable();
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector("h1")?.textContent).toEqual("Une erreur est survenue");
-    expect(element.querySelector("a")?.getAttribute("href")).toEqual("/home");
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector("h1")?.textContent).toBe("Une erreur est survenue");
+    expect(element.querySelector("a")?.getAttribute("href")).toBe("/home");
   });
 });

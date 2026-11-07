@@ -1,6 +1,6 @@
-import { Label } from "@features/home/labels/label.model";
+import { Label } from "@features/home/labels/label";
 
-export interface IExpenseFormModel {
+export interface ExpenseFormModel {
   amount: number;
   date: Date | null;
   /** Text typed in the autocomplete, or the selected label. */

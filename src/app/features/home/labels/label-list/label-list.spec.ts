@@ -1,11 +1,12 @@
+import { getElement } from "@testing/dom";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { of } from "rxjs";
 import { environment } from "@environments/environment";
 import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
-import { Label } from "@features/home/labels/label.model";
-import { ErrorHandlerService } from "@core/error-handler-service";
+import { Label } from "@features/home/labels/label";
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { LabelList } from "./label-list";
 
 describe("LabelList", () => {
@@ -32,7 +33,7 @@ describe("LabelList", () => {
   });
 
   /** Answers the confirmation modal with the given result. */
-  function mockConfirmModal(result: string | undefined): ReturnType<typeof vi.spyOn> {
+  function mockConfirmModal(result: string | undefined) {
     return vi
       .spyOn(TestBed.inject(MatDialog), "open")
       .mockReturnValue({ afterClosed: () => of(result) } as MatDialogRef<unknown>);
@@ -41,23 +42,24 @@ describe("LabelList", () => {
   async function clickDeleteButton(): Promise<void> {
     fixture.componentRef.setInput("expenseLabels", labels);
     await fixture.whenStable();
-    fixture.nativeElement.querySelector(".delete-label-button").click();
+    getElement(fixture, ".delete-label-button", HTMLButtonElement).click();
   }
 
   it("Should display a message when there is no label", async () => {
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector("#no-label-message")).not.toBeNull();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector("#no-label-message")
+    ).not.toBeNull();
   });
 
   it("Should display the labels", async () => {
     fixture.componentRef.setInput("expenseLabels", labels);
     await fixture.whenStable();
-    const names = fixture.nativeElement.querySelectorAll(".label-name");
-    expect(Array.from(names, (name: HTMLElement) => name.textContent)).toEqual([
-      "Courses",
-      "Restaurant"
-    ]);
-    expect(fixture.nativeElement.querySelector("#no-label-message")).toBeNull();
+    const names = (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
+      ".label-name"
+    );
+    expect(Array.from(names, (name) => name.textContent)).toEqual(["Courses", "Restaurant"]);
+    expect((fixture.nativeElement as HTMLElement).querySelector("#no-label-message")).toBeNull();
   });
 
   it("Should delete a label once the deletion is confirmed", async () => {
@@ -75,7 +77,7 @@ describe("LabelList", () => {
       })
     );
     const request = httpTestingController.expectOne(deleteLabelUrl);
-    expect(request.request.method).toEqual("DELETE");
+    expect(request.request.method).toBe("DELETE");
     request.flush(null);
 
     expect(labelDeletedSpy).toHaveBeenCalledWith(1);
@@ -95,7 +97,7 @@ describe("LabelList", () => {
     mockConfirmModal("validate");
     const labelDeletedSpy = vi.spyOn(component.labelDeleted, "emit");
     const handleErrorSpy = vi
-      .spyOn(TestBed.inject(ErrorHandlerService), "handleError")
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
 
     await clickDeleteButton();

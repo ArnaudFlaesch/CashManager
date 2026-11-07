@@ -2,11 +2,11 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
 import { environment } from "@environments/environment";
-import { Label } from "./label.model";
-import { LabelService } from "./label-service";
+import { Label } from "./label";
+import { LabelApi } from "./label-api";
 
-describe("LabelService", () => {
-  let service: LabelService;
+describe("LabelApi", () => {
+  let service: LabelApi;
   let httpTestingController: HttpTestingController;
 
   const labelUrl = `${environment.backend_url}/label`;
@@ -14,7 +14,7 @@ describe("LabelService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
-    service = TestBed.inject(LabelService);
+    service = TestBed.inject(LabelApi);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -31,7 +31,7 @@ describe("LabelService", () => {
   it("Should add a label", async () => {
     const added = firstValueFrom(service.addLabel("Courses"));
     const request = httpTestingController.expectOne(`${labelUrl}/addLabel`);
-    expect(request.request.method).toEqual("POST");
+    expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual({ newLabel: "Courses" });
     request.flush(label);
     expect(await added).toEqual(label);
@@ -40,8 +40,8 @@ describe("LabelService", () => {
   it("Should delete a label", async () => {
     const deleted = firstValueFrom(service.deleteLabel(1));
     const request = httpTestingController.expectOne(`${labelUrl}/deleteLabel?labelId=1`);
-    expect(request.request.method).toEqual("DELETE");
+    expect(request.request.method).toBe("DELETE");
     request.flush(null);
-    expect(await deleted).toBeNull();
+    await expect(deleted).resolves.toBeNull();
   });
 });
