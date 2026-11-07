@@ -30,7 +30,7 @@ export class Notifications {
     [NotificationType.WARN]: "warning"
   };
 
-  protected readonly notifications = rxResource({
+  private readonly notifications = rxResource({
     stream: () =>
       this.notificationApi.getNotifications().pipe(
         map((page) => page.content),
@@ -38,22 +38,22 @@ export class Notifications {
       ),
     defaultValue: [] as AppNotification[]
   });
-  protected readonly notificationsToDisplay = computed<NotificationToDisplay[]>(() =>
+  public readonly notificationsToDisplay = computed<NotificationToDisplay[]>(() =>
     this.notifications.value().map((notification) => ({
       ...notification,
       notificationDateToDisplay: this.computeDateToDisplay(notification.notificationDate),
       notificationTypeToDisplay: this.NOTIFICATION_TYPE_ICONS[notification.notificationType]
     }))
   );
-  protected readonly unreadNotificationsForBadge = computed(
+  public readonly unreadNotificationsForBadge = computed(
     () => this.notifications.value().filter((notification) => !notification.isRead).length
   );
 
-  protected markNotificationAsRead(notificationId: number): void {
+  public markNotificationAsRead(notificationId: number): void {
     this.markNotificationsAsRead([notificationId]);
   }
 
-  protected markAllNotificationsAsRead(): void {
+  public markAllNotificationsAsRead(): void {
     this.markNotificationsAsRead(this.notifications.value().map((notif) => notif.id));
   }
 

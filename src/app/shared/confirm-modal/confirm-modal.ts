@@ -15,7 +15,7 @@ import { MatButton } from "@angular/material/button";
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ConfirmModal {
-  protected readonly data = inject<ConfirmModalData>(MAT_DIALOG_DATA);
+  public readonly data = inject<ConfirmModalData>(MAT_DIALOG_DATA);
 
   protected readonly labels = {
     cancel: "Annuler",

@@ -58,8 +58,8 @@ export class TotalExpenseByMonth {
   private readonly CHART_DATE_FORMAT = "MMMM yyyy";
 
   private readonly labelModel = signal({ labelId: this.NO_LABEL_ID_SELECTED });
-  protected readonly labelForm = form(this.labelModel);
-  protected readonly isOneLabelSelected = computed(
+  public readonly labelForm = form(this.labelModel);
+  public readonly isOneLabelSelected = computed(
     () => this.labelModel().labelId !== this.NO_LABEL_ID_SELECTED
   );
   private readonly totalExpensesByMonth = rxResource({
@@ -76,8 +76,8 @@ export class TotalExpenseByMonth {
       ),
     defaultValue: []
   });
-  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
-  protected readonly totalExpensesByMonthChart = computed<ChartData<"line">>(() => {
+  public readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
+  public readonly totalExpensesByMonthChart = computed<ChartData<"line">>(() => {
     const chartData = this.totalExpensesByMonth
       .value()
       .toSorted((dataA, dataB) => parseISO(dataA.date).getTime() - parseISO(dataB.date).getTime());
@@ -97,7 +97,7 @@ export class TotalExpenseByMonth {
     };
   });
 
-  protected resetSelectedLabel(): void {
+  public resetSelectedLabel(): void {
     this.labelForm.labelId().value.set(this.NO_LABEL_ID_SELECTED);
   }
 }

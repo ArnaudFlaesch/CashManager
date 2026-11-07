@@ -58,14 +58,14 @@ export class Header {
     }
   };
 
-  protected readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
+  public readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
   private readonly CONFIG_FILE_NAME = "cashManagerData.json";
   private readonly IMPORT_CONFIG_MODAL_WIDTH = "640px";
 
-  protected readonly isDarkMode = computed(() => this.theme.isDarkMode());
-  protected readonly canUserSeeNotifications = computed(() => this.auth.isUserAdmin());
+  public readonly isDarkMode = computed(() => this.theme.isDarkMode());
+  public readonly canUserSeeNotifications = computed(() => this.auth.isUserAdmin());
 
-  protected downloadConfig(): void {
+  public downloadConfig(): void {
     this.configApi
       .exportConfig()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -85,15 +85,15 @@ export class Header {
       });
   }
 
-  protected openImportConfigModal(): void {
+  public openImportConfigModal(): void {
     this.dialog.open(ImportConfigModal, { width: this.IMPORT_CONFIG_MODAL_WIDTH });
   }
 
-  protected toggleTheme(isToggleChecked: boolean): void {
+  public toggleTheme(isToggleChecked: boolean): void {
     this.theme.selectDarkMode(isToggleChecked);
   }
 
-  protected async logout(): Promise<void> {
+  public async logout(): Promise<void> {
     this.auth.logout();
     await this.router.navigate(["login"]);
   }

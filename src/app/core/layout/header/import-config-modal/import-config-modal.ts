@@ -33,13 +33,13 @@ export class ImportConfigModal {
     }
   };
 
-  protected readonly fileToUpload = signal<File | null>(null);
+  public readonly fileToUpload = signal<File | null>(null);
 
-  protected selectFile(input: HTMLInputElement): void {
+  public selectFile(input: HTMLInputElement): void {
     this.fileToUpload.set(input.files?.[0] ?? null);
   }
 
-  protected upload(): void {
+  public upload(): void {
     const fileToUpload = this.fileToUpload();
     if (fileToUpload) {
       this.configApi

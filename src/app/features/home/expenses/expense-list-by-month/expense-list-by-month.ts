@@ -80,13 +80,13 @@ export class ExpenseListByMonth {
     }
   };
 
-  protected readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
-  protected readonly selectedMonthForm = form(this.selectedMonthModel);
+  public readonly selectedMonthModel = signal({ selectedMonth: startOfMonth(new Date()) });
+  public readonly selectedMonthForm = form(this.selectedMonthModel);
   private readonly selectedMonth = computed(
     () => startOfMonth(this.selectedMonthModel().selectedMonth),
     { equal: (monthA, monthB) => monthA.getTime() === monthB.getTime() }
   );
-  protected readonly expenses = rxResource({
+  public readonly expenses = rxResource({
     params: () => this.selectedMonth(),
     stream: ({ params: month }) =>
       this.expenseApi
@@ -94,10 +94,10 @@ export class ExpenseListByMonth {
         .pipe(this.httpErrorHandler.catchError<Expense[]>(this.labels.errors.gettingExpenses, [])),
     defaultValue: []
   });
-  protected readonly labelNames = computed(
+  public readonly labelNames = computed(
     () => new Map(this.expenseLabels().map((label) => [label.id, label.label]))
   );
-  protected readonly totalForMonth = computed(() =>
+  public readonly totalForMonth = computed(() =>
     Number.parseFloat(
       this.expenses
         .value()
@@ -105,8 +105,8 @@ export class ExpenseListByMonth {
         .toFixed(10)
     )
   );
-  protected readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
-  protected readonly expensesByLabelChart = computed<ChartData<"bar">>(() => {
+  public readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
+  public readonly expensesByLabelChart = computed<ChartData<"bar">>(() => {
     const totalByLabel = new Map<number, number>();
     for (const { labelId, amount } of this.expenses.value()) {
       totalByLabel.set(labelId, (totalByLabel.get(labelId) ?? 0) + amount);
@@ -122,11 +122,11 @@ export class ExpenseListByMonth {
     };
   });
 
-  protected addExpense(newExpense: Expense): void {
+  public addExpense(newExpense: Expense): void {
     this.expenses.value.update((expenses) => [...expenses, newExpense]);
   }
 
-  protected openDeleteExpenseModal(expenseId: number): void {
+  public openDeleteExpenseModal(expenseId: number): void {
     this.dialog
       .open(ConfirmModal, {
         height: DIALOG_SMALL_HEIGHT,
@@ -146,15 +146,15 @@ export class ExpenseListByMonth {
       });
   }
 
-  protected selectPreviousMonth(): void {
+  public selectPreviousMonth(): void {
     this.selectMonth(subMonths(this.selectedMonth(), 1));
   }
 
-  protected selectNextMonth(): void {
+  public selectNextMonth(): void {
     this.selectMonth(addMonths(this.selectedMonth(), 1));
   }
 
-  protected setMonthAndYear(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>): void {
+  public setMonthAndYear(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>): void {
     this.selectMonth(normalizedMonthAndYear);
     datepicker.close();
   }

@@ -28,15 +28,15 @@ export class NotificationsList {
     markAsRead: "Marquer comme lu"
   };
 
-  protected readonly NotificationType = NotificationType;
+  public readonly NotificationType = NotificationType;
 
-  protected markNotificationAsRead(notificationId: number, event: Event): void {
+  public markNotificationAsRead(notificationId: number, event: Event): void {
     // Keeps the menu open
     event.stopPropagation();
     this.notificationRead.emit(notificationId);
   }
 
-  protected markAllNotificationsAsRead(event: Event): void {
+  public markAllNotificationsAsRead(event: Event): void {
     // Keeps the menu open
     event.stopPropagation();
     this.allNotificationsRead.emit();

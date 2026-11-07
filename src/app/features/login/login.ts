@@ -53,9 +53,9 @@ export class Login {
     }
   };
 
-  protected readonly isPasswordVisible = signal(false);
+  public readonly isPasswordVisible = signal(false);
   private readonly loginModel = signal({ username: "", password: "" });
-  protected readonly loginForm = form(
+  public readonly loginForm = form(
     this.loginModel,
     (schema) => {
       required(schema.username);

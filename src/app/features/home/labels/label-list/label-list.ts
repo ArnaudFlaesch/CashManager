@@ -40,7 +40,7 @@ export class LabelList {
     }
   };
 
-  protected openDeleteLabelDialog(labelId: number): void {
+  public openDeleteLabelDialog(labelId: number): void {
     this.dialog
       .open(ConfirmModal, {
         height: DIALOG_SMALL_HEIGHT,

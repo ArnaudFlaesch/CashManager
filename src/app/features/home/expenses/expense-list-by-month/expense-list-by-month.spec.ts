@@ -193,9 +193,7 @@ describe("ExpenseListByMonth", () => {
     const openSpy = vi
       .spyOn(TestBed.inject(MatDialog), "open")
       .mockReturnValue({ afterClosed: () => of(modalResult) } as MatDialogRef<unknown>);
-    (
-      fixture.componentInstance as unknown as { openDeleteExpenseModal(id: number): void }
-    ).openDeleteExpenseModal(expenseId);
+    fixture.componentInstance.openDeleteExpenseModal(expenseId);
     return openSpy;
   }
 

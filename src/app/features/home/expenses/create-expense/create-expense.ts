@@ -73,7 +73,7 @@ export class CreateExpense {
   };
 
   private readonly expenseModel = signal<ExpenseFormModel>({ amount: 0, date: null, label: "" });
-  protected readonly expenseForm = form(
+  public readonly expenseForm = form(
     this.expenseModel,
     (schema) => {
       min(schema.amount, 0.01);
@@ -111,10 +111,10 @@ export class CreateExpense {
       }
     }
   );
-  protected readonly canCreateExpense = computed(
+  public readonly canCreateExpense = computed(
     () => this.expenseForm().valid() && !this.expenseForm().submitting()
   );
-  protected readonly filteredOptions = computed(() => {
+  public readonly filteredOptions = computed(() => {
     const label = this.expenseModel().label;
     const filterValue = (typeof label === "string" ? label : label.label).toLowerCase();
     return this.expenseLabels().filter((option) =>
@@ -122,7 +122,7 @@ export class CreateExpense {
     );
   });
 
-  protected displayLabel(label: Label | string | null): string {
+  public displayLabel(label: Label | string | null): string {
     return typeof label === "string" ? label : (label?.label ?? "");
   }
 }

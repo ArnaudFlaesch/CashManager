@@ -55,7 +55,7 @@ export class Home {
     }
   };
 
-  protected readonly expenseLabels = rxResource({
+  public readonly expenseLabels = rxResource({
     stream: () =>
       this.labelApi
         .getLabels()
@@ -63,7 +63,7 @@ export class Home {
     defaultValue: []
   });
   private readonly labelModel = signal({ label: "" });
-  protected readonly labelForm = form(
+  public readonly labelForm = form(
     this.labelModel,
     (schema) => {
       required(schema.label);
@@ -89,7 +89,7 @@ export class Home {
     }
   );
 
-  protected removeLabel(labelId: number): void {
+  public removeLabel(labelId: number): void {
     this.expenseLabels.value.update((labels) => labels.filter((label) => label.id !== labelId));
   }
 }
