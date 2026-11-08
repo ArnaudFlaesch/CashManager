@@ -54,7 +54,7 @@
     "cypress": "16.2.1",
     "eslint": "10.14.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-cypress": "7.0.3",
+    "eslint-plugin-cypress": "7.0.4",
     "globals": "17.14.0",
     "jsdom": "31.0.0",
     "mochawesome": "8.1.1",
