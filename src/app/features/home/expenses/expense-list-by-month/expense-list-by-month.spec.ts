@@ -41,7 +41,7 @@ describe("ExpenseListByMonth", () => {
 
   function expectExpensesRequest(month: Date): TestRequest {
     return httpTestingController.expectOne(
-      `${environment.backend_url}/expense/?startIntervalDate=${format(startOfMonth(month), dateFormat)}&endIntervalDate=${format(endOfMonth(month), dateFormat)}`
+      `${environment.backend_url}/expenses?startIntervalDate=${format(startOfMonth(month), dateFormat)}&endIntervalDate=${format(endOfMonth(month), dateFormat)}`
     );
   }
 
@@ -210,9 +210,7 @@ describe("ExpenseListByMonth", () => {
         }
       })
     );
-    httpTestingController
-      .expectOne(`${environment.backend_url}/expense/deleteExpense/?expenseId=1`)
-      .flush(null);
+    httpTestingController.expectOne(`${environment.backend_url}/expenses/1`).flush(null);
     await fixture.whenStable();
 
     expect(displayedExpenses()).toEqual([

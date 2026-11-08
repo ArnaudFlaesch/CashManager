@@ -6,15 +6,16 @@ import { environment } from "@environments/environment";
 @Service()
 export class ConfigApi {
   private readonly http = inject(HttpClient);
-  private readonly configUrl = `${environment.backend_url}/cashManagerConfig`;
+  private readonly configUrl = `${environment.backend_url}/cash-manager-config`;
 
   public exportConfig(): Observable<Blob> {
-    return this.http.get(`${this.configUrl}/export`, { responseType: "blob" });
+    return this.http.get(this.configUrl, { responseType: "blob" });
   }
 
-  public importConfig(file: File): Observable<boolean> {
+  /** The backend answers 204 No Content, that HttpClient returns as null. */
+  public importConfig(file: File): Observable<null> {
     const formData = new FormData();
     formData.append("file", file);
-    return this.http.post<boolean>(`${this.configUrl}/import`, formData);
+    return this.http.post<null>(this.configUrl, formData);
   }
 }

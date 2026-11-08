@@ -9,7 +9,7 @@ describe("ExpenseApi", () => {
   let service: ExpenseApi;
   let httpTestingController: HttpTestingController;
 
-  const expenseUrl = `${environment.backend_url}/expense`;
+  const expenseUrl = `${environment.backend_url}/expenses`;
   const expense: Expense = { id: 1, amount: 12.5, expenseDate: new Date(2022, 2, 5), labelId: 2 };
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe("ExpenseApi", () => {
       service.getExpensesAtMonth(new Date(2022, 2, 1), new Date(2022, 2, 31))
     );
     httpTestingController
-      .expectOne(`${expenseUrl}/?startIntervalDate=2022-03-01&endIntervalDate=2022-03-31`)
+      .expectOne(`${expenseUrl}?startIntervalDate=2022-03-01&endIntervalDate=2022-03-31`)
       .flush([expense]);
     expect(await expenses).toEqual([expense]);
   });
@@ -36,31 +36,29 @@ describe("ExpenseApi", () => {
     const totals = [{ date: "2022-03-01", total: 12.5 }];
 
     const allLabels = firstValueFrom(service.getTotalExpensesByMonth());
-    httpTestingController.expectOne(`${expenseUrl}/getTotalExpensesByMonth`).flush(totals);
+    httpTestingController.expectOne(`${expenseUrl}/monthly-totals`).flush(totals);
     expect(await allLabels).toEqual(totals);
 
     const oneLabel = firstValueFrom(service.getTotalExpensesByMonthByLabelId(2));
-    httpTestingController
-      .expectOne(`${expenseUrl}/getTotalExpensesByMonthByLabelId?labelId=2`)
-      .flush(totals);
+    httpTestingController.expectOne(`${expenseUrl}/monthly-totals?labelId=2`).flush(totals);
     expect(await oneLabel).toEqual(totals);
   });
 
   it("Should add an expense", async () => {
     const payload = { amount: 12.5, expenseDate: expense.expenseDate, labelId: 2 };
     const added = firstValueFrom(service.addExpense(payload));
-    const request = httpTestingController.expectOne(`${expenseUrl}/addExpense`);
+    const request = httpTestingController.expectOne(expenseUrl);
     expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual(payload);
-    request.flush(expense);
+    request.flush(expense, { status: 201, statusText: "Created" });
     expect(await added).toEqual(expense);
   });
 
   it("Should delete an expense", async () => {
     const deleted = firstValueFrom(service.deleteExpense(1));
-    const request = httpTestingController.expectOne(`${expenseUrl}/deleteExpense/?expenseId=1`);
+    const request = httpTestingController.expectOne(`${expenseUrl}/1`);
     expect(request.request.method).toBe("DELETE");
-    request.flush(null);
+    request.flush(null, { status: 204, statusText: "No Content" });
     await expect(deleted).resolves.toBeNull();
   });
 });

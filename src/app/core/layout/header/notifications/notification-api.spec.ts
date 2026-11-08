@@ -39,14 +39,14 @@ describe("NotificationApi", () => {
       number: 0
     };
     const notifications = firstValueFrom(service.getNotifications());
-    httpTestingController.expectOne(`${notificationsUrl}/`).flush(page);
+    httpTestingController.expectOne(notificationsUrl).flush(page);
     expect(await notifications).toEqual(page);
   });
 
   it("Should mark notifications as read", async () => {
     const readNotification = { ...notification, isRead: true };
     const updated = firstValueFrom(service.markNotificationAsRead([1]));
-    const request = httpTestingController.expectOne(`${notificationsUrl}/markNotificationAsRead`);
+    const request = httpTestingController.expectOne(`${notificationsUrl}/read`);
     expect(request.request.method).toBe("PUT");
     expect(request.request.body).toEqual({ notificationIds: [1] });
     request.flush([readNotification]);

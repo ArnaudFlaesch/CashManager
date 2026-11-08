@@ -14,8 +14,8 @@ describe("Notifications", () => {
   let fixture: ComponentFixture<Notifications>;
   let httpTestingController: HttpTestingController;
 
-  const notificationsUrl = environment.backend_url + "/notifications/";
-  const markAsReadUrl = environment.backend_url + "/notifications/markNotificationAsRead";
+  const notificationsUrl = environment.backend_url + "/notifications";
+  const markAsReadUrl = environment.backend_url + "/notifications/read";
 
   const notificationDate = new Date();
   const notificationsData = {

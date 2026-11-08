@@ -18,7 +18,7 @@ describe("Header", () => {
   let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
-  const exportConfigUrl = `${environment.backend_url}/cashManagerConfig/export`;
+  const exportConfigUrl = `${environment.backend_url}/cash-manager-config`;
 
   /** The header reads the logged in user when it is created. */
   function createComponent(): void {
@@ -59,7 +59,7 @@ describe("Header", () => {
     fixture.detectChanges();
     TestBed.tick();
     httpTestingController
-      .expectOne(`${environment.backend_url}/notifications/`)
+      .expectOne(`${environment.backend_url}/notifications`)
       .flush({ content: [] });
     await fixture.whenStable();
 
