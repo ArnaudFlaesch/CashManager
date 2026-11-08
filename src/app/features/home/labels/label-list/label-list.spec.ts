@@ -14,7 +14,7 @@ describe("LabelList", () => {
   let fixture: ComponentFixture<LabelList>;
   let httpTestingController: HttpTestingController;
 
-  const deleteLabelUrl = `${environment.backend_url}/label/deleteLabel?labelId=1`;
+  const deleteLabelUrl = `${environment.backend_url}/labels/1`;
   const labels: Label[] = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }

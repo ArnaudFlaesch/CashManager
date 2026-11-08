@@ -8,7 +8,7 @@ describe("ConfigApi", () => {
   let service: ConfigApi;
   let httpTestingController: HttpTestingController;
 
-  const configUrl = `${environment.backend_url}/cashManagerConfig`;
+  const configUrl = `${environment.backend_url}/cash-manager-config`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });
@@ -23,7 +23,7 @@ describe("ConfigApi", () => {
   it("Should export the configuration as a file", async () => {
     const config = new Blob(["{}"], { type: "application/json" });
     const exportedConfig = firstValueFrom(service.exportConfig());
-    const request = httpTestingController.expectOne(`${configUrl}/export`);
+    const request = httpTestingController.expectOne(configUrl);
     expect(request.request.method).toBe("GET");
     expect(request.request.responseType).toBe("blob");
     request.flush(config);
@@ -33,10 +33,10 @@ describe("ConfigApi", () => {
   it("Should import a configuration file", async () => {
     const file = new File(["{}"], "cashManagerData.json");
     const imported = firstValueFrom(service.importConfig(file));
-    const request = httpTestingController.expectOne(`${configUrl}/import`);
+    const request = httpTestingController.expectOne(configUrl);
     expect(request.request.method).toBe("POST");
     expect((request.request.body as FormData).get("file")).toEqual(file);
-    request.flush(true);
-    expect(await imported).toBe(true);
+    request.flush(null, { status: 204, statusText: "No Content" });
+    await expect(imported).resolves.toBeNull();
   });
 });

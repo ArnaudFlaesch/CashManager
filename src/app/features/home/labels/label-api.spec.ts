@@ -9,7 +9,7 @@ describe("LabelApi", () => {
   let service: LabelApi;
   let httpTestingController: HttpTestingController;
 
-  const labelUrl = `${environment.backend_url}/label`;
+  const labelUrl = `${environment.backend_url}/labels`;
   const label: Label = { id: 1, label: "Courses", userId: 1 };
 
   beforeEach(() => {
@@ -24,24 +24,24 @@ describe("LabelApi", () => {
 
   it("Should get the labels", async () => {
     const labels = firstValueFrom(service.getLabels());
-    httpTestingController.expectOne(`${labelUrl}/`).flush([label]);
+    httpTestingController.expectOne(labelUrl).flush([label]);
     expect(await labels).toEqual([label]);
   });
 
   it("Should add a label", async () => {
     const added = firstValueFrom(service.addLabel("Courses"));
-    const request = httpTestingController.expectOne(`${labelUrl}/addLabel`);
+    const request = httpTestingController.expectOne(labelUrl);
     expect(request.request.method).toBe("POST");
     expect(request.request.body).toEqual({ newLabel: "Courses" });
-    request.flush(label);
+    request.flush(label, { status: 201, statusText: "Created" });
     expect(await added).toEqual(label);
   });
 
   it("Should delete a label", async () => {
     const deleted = firstValueFrom(service.deleteLabel(1));
-    const request = httpTestingController.expectOne(`${labelUrl}/deleteLabel?labelId=1`);
+    const request = httpTestingController.expectOne(`${labelUrl}/1`);
     expect(request.request.method).toBe("DELETE");
-    request.flush(null);
+    request.flush(null, { status: 204, statusText: "No Content" });
     await expect(deleted).resolves.toBeNull();
   });
 });

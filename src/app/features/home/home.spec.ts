@@ -20,7 +20,7 @@ describe("Home", () => {
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }
   ];
-  const labelUrl = environment.backend_url + "/label/";
+  const labelUrl = environment.backend_url + "/labels";
 
   let fixture: ComponentFixture<Home>;
   let loader: HarnessLoader;
@@ -54,7 +54,7 @@ describe("Home", () => {
   /** The tabs of the expenses load them when they are displayed. */
   function flushExpenses(): void {
     httpTestingController
-      .match((request) => request.url.includes("/expense/"))
+      .match((request) => request.url.includes("/expenses"))
       .forEach((request) => {
         request.flush([]);
       });
@@ -86,7 +86,7 @@ describe("Home", () => {
     expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
 
     const input = await createLabel("New label");
-    const request = httpTestingController.expectOne(labelUrl + "addLabel");
+    const request = httpTestingController.expectOne({ method: "POST", url: labelUrl });
     expect(request.request.body).toEqual({ newLabel: "New label" });
     request.flush({ id: 3, label: "New label", userId: 1 });
     await fixture.whenStable();
@@ -98,7 +98,7 @@ describe("Home", () => {
   it("Should not create a label without name", async () => {
     await createLabel("");
     await fixture.whenStable();
-    httpTestingController.expectNone(labelUrl + "addLabel");
+    httpTestingController.expectNone({ method: "POST", url: labelUrl });
     expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
   });
 
@@ -109,7 +109,7 @@ describe("Home", () => {
 
     await createLabel("New label");
     httpTestingController
-      .expectOne(labelUrl + "addLabel")
+      .expectOne({ method: "POST", url: labelUrl })
       .flush(null, { status: 500, statusText: "Server error" });
     await fixture.whenStable();
 
@@ -126,7 +126,7 @@ describe("Home", () => {
     } as MatDialogRef<unknown>);
 
     getElement(fixture, ".delete-label-button", HTMLButtonElement).click();
-    httpTestingController.expectOne(`${labelUrl}deleteLabel?labelId=1`).flush(null);
+    httpTestingController.expectOne({ method: "DELETE", url: `${labelUrl}/1` }).flush(null);
     await fixture.whenStable();
 
     expect(displayedLabels()).toEqual(["Restaurant"]);

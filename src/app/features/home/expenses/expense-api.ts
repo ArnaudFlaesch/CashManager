@@ -12,10 +12,10 @@ export class ExpenseApi {
   private readonly DATE_FORMAT = "yyyy-MM-dd";
 
   private readonly http = inject(HttpClient);
-  private readonly expenseUrl = `${environment.backend_url}/expense`;
+  private readonly expenseUrl = `${environment.backend_url}/expenses`;
 
   public getExpensesAtMonth(startIntervalDate: Date, endIntervalDate: Date): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${this.expenseUrl}/`, {
+    return this.http.get<Expense[]>(this.expenseUrl, {
       params: {
         startIntervalDate: format(startIntervalDate, this.DATE_FORMAT),
         endIntervalDate: format(endIntervalDate, this.DATE_FORMAT)
@@ -24,22 +24,21 @@ export class ExpenseApi {
   }
 
   public getTotalExpensesByMonth(): Observable<MonthlyExpenseTotal[]> {
-    return this.http.get<MonthlyExpenseTotal[]>(`${this.expenseUrl}/getTotalExpensesByMonth`);
+    return this.http.get<MonthlyExpenseTotal[]>(`${this.expenseUrl}/monthly-totals`);
   }
 
   public getTotalExpensesByMonthByLabelId(labelId: number): Observable<MonthlyExpenseTotal[]> {
-    return this.http.get<MonthlyExpenseTotal[]>(
-      `${this.expenseUrl}/getTotalExpensesByMonthByLabelId`,
-      { params: { labelId } }
-    );
+    return this.http.get<MonthlyExpenseTotal[]>(`${this.expenseUrl}/monthly-totals`, {
+      params: { labelId }
+    });
   }
 
   public addExpense(expense: InsertExpensePayload): Observable<Expense> {
-    return this.http.post<Expense>(`${this.expenseUrl}/addExpense`, expense);
+    return this.http.post<Expense>(this.expenseUrl, expense);
   }
 
   /** The backend answers with an empty body, that HttpClient returns as null. */
   public deleteExpense(expenseId: number): Observable<null> {
-    return this.http.delete<null>(`${this.expenseUrl}/deleteExpense/`, { params: { expenseId } });
+    return this.http.delete<null>(`${this.expenseUrl}/${expenseId}`);
   }
 }

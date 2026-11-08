@@ -10,7 +10,7 @@ describe("ImportConfigModal", () => {
   let fixture: ComponentFixture<ImportConfigModal>;
   let httpTestingController: HttpTestingController;
 
-  const importConfigUrl = `${environment.backend_url}/cashManagerConfig/import`;
+  const importConfigUrl = `${environment.backend_url}/cash-manager-config`;
   const dialogRef = { close: vi.fn() };
   const file = new File(["{}"], "cashManagerData.json");
 
@@ -59,7 +59,7 @@ describe("ImportConfigModal", () => {
     getUploadButton().click();
     const request = httpTestingController.expectOne(importConfigUrl);
     expect((request.request.body as FormData).get("file")).toEqual(file);
-    request.flush(true);
+    request.flush(null, { status: 204, statusText: "No Content" });
 
     expect(dialogRef.close).toHaveBeenCalled();
   });

@@ -15,7 +15,7 @@ describe("HttpErrorHandler", () => {
   const snackbarConfig = { duration: 3000 };
 
   function httpError(status: number): HttpErrorResponse {
-    return new HttpErrorResponse({ status, url: "http://localhost:8080/label/" });
+    return new HttpErrorResponse({ status, url: "http://localhost:8080/labels" });
   }
 
   beforeEach(() => {

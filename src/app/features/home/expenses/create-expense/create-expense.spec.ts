@@ -20,7 +20,7 @@ describe("CreateExpense", () => {
   let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
-  const addExpenseUrl = `${environment.backend_url}/expense/addExpense`;
+  const addExpenseUrl = `${environment.backend_url}/expenses`;
   const labels = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }

@@ -7,18 +7,18 @@ import { environment } from "@environments/environment";
 @Service()
 export class LabelApi {
   private readonly http = inject(HttpClient);
-  private readonly labelUrl = `${environment.backend_url}/label`;
+  private readonly labelUrl = `${environment.backend_url}/labels`;
 
   public getLabels(): Observable<Label[]> {
-    return this.http.get<Label[]>(`${this.labelUrl}/`);
+    return this.http.get<Label[]>(this.labelUrl);
   }
 
   public addLabel(label: string): Observable<Label> {
-    return this.http.post<Label>(`${this.labelUrl}/addLabel`, { newLabel: label });
+    return this.http.post<Label>(this.labelUrl, { newLabel: label });
   }
 
   /** The backend answers with an empty body, that HttpClient returns as null. */
   public deleteLabel(labelId: number): Observable<null> {
-    return this.http.delete<null>(`${this.labelUrl}/deleteLabel`, { params: { labelId } });
+    return this.http.delete<null>(`${this.labelUrl}/${labelId}`);
   }
 }

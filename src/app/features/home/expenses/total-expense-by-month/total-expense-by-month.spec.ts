@@ -15,9 +15,9 @@ describe("TotalExpenseByMonth", () => {
   let fixture: ComponentFixture<TotalExpenseByMonth>;
   let httpTestingController: HttpTestingController;
 
-  const totalUrl = `${environment.backend_url}/expense/getTotalExpensesByMonth`;
+  const totalUrl = `${environment.backend_url}/expenses/monthly-totals`;
   const totalByLabelUrl = (labelId: number): string =>
-    `${environment.backend_url}/expense/getTotalExpensesByMonthByLabelId?labelId=${labelId}`;
+    `${environment.backend_url}/expenses/monthly-totals?labelId=${labelId}`;
   const labelData: Label[] = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }
