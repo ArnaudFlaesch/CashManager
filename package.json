@@ -59,7 +59,7 @@
     "jsdom": "31.0.0",
     "mochawesome": "8.1.1",
     "mochawesome-merge": "5.1.1",
-    "prettier": "3.10.0",
+    "prettier": "3.10.1",
     "stylelint": "17.16.0",
     "stylelint-config-standard-scss": "17.0.0",
     "typescript": "6.0.3",
