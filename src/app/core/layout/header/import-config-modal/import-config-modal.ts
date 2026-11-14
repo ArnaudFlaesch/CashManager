@@ -1,6 +1,7 @@
-import { HttpErrorHandler } from "@core/http-error-handler";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component, DestroyRef, inject, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatButton } from "@angular/material/button";
 import {
   MatDialogActions,
   MatDialogClose,
@@ -8,9 +9,9 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { HttpErrorResponse } from "@angular/common/http";
+
 import { ConfigApi } from "@core/config-api";
-import { MatButton } from "@angular/material/button";
+import { HttpErrorHandler } from "@core/http-error-handler";
 
 @Component({
   selector: "cash-manager-import-config-modal",

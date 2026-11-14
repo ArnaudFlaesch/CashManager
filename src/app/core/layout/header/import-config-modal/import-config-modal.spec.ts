@@ -1,16 +1,17 @@
-import { getElement } from "@testing/dom";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialogRef } from "@angular/material/dialog";
-import { environment } from "@environments/environment";
+
 import { HttpErrorHandler } from "@core/http-error-handler";
+import { environment } from "@environments/environment";
+import { getElement } from "@testing/dom";
 import { ImportConfigModal } from "./import-config-modal";
 
 describe("ImportConfigModal", () => {
   let fixture: ComponentFixture<ImportConfigModal>;
   let httpTestingController: HttpTestingController;
 
-  const importConfigUrl = `${environment.backend_url}/cash-manager-config`;
+  const importConfigUrl = `${environment.backendUrl}/cash-manager-config`;
   const dialogRef = { close: vi.fn() };
   const file = new File(["{}"], "cashManagerData.json");
 

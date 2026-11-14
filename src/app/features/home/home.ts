@@ -1,20 +1,21 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Label } from "./labels/label";
-import { HttpErrorHandler } from "@core/http-error-handler";
-import { LabelApi } from "./labels/label-api";
 import { Component, inject, signal } from "@angular/core";
 import { rxResource } from "@angular/core/rxjs-interop";
 import { form, FormField, FormRoot, required } from "@angular/forms/signals";
-import { firstValueFrom } from "rxjs";
-import { LabelList } from "./labels/label-list/label-list";
 import { MatButton } from "@angular/material/button";
-import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { TotalExpenseByMonth } from "./expenses/total-expense-by-month/total-expense-by-month";
-import { ExpenseListByMonth } from "./expenses/expense-list-by-month/expense-list-by-month";
-import { MatTab, MatTabGroup, MatTabLabel } from "@angular/material/tabs";
 import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
+import { MatTab, MatTabGroup, MatTabLabel } from "@angular/material/tabs";
+import { firstValueFrom } from "rxjs";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { Header } from "@core/layout/header/header";
+import { ExpenseListByMonth } from "./expenses/expense-list-by-month/expense-list-by-month";
+import { TotalExpenseByMonth } from "./expenses/total-expense-by-month/total-expense-by-month";
+import { Label } from "./labels/label";
+import { LabelApi } from "./labels/label-api";
+import { LabelList } from "./labels/label-list/label-list";
 
 @Component({
   selector: "cash-manager-home",

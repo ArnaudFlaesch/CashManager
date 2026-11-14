@@ -4,5 +4,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button type="button" mat-button id="cancel-action" mat-dialog-close>{{ labels.cancel }}</button>
-  <button type="button" mat-flat-button id="validate-action" mat-dialog-close="validate">{{ labels.validate }}</button>
+  <button type="button" mat-flat-button id="validate-action" [mat-dialog-close]="validateResult">
+    {{ labels.validate }}
+  </button>
 </mat-dialog-actions>

@@ -4,11 +4,9 @@ import { MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuTrigger } from "@angular/material/menu";
 import { MatTooltip } from "@angular/material/tooltip";
-import {
-  NotificationToDisplay,
-  NotificationType
-} from "@core/layout/header/notifications/notification";
+
 import { DateFormatPipe } from "@shared/date-format-pipe";
+import { NotificationToDisplay, NotificationType } from "../notification";
 
 @Component({
   selector: "cash-manager-notifications-list",

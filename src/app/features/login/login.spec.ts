@@ -4,9 +4,10 @@ import { HttpTestingController, provideHttpClientTesting } from "@angular/common
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatInputHarness } from "@angular/material/input/testing";
 import { provideRouter, Router } from "@angular/router";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
 import { getElement, queryElement } from "@testing/dom";
-import { HttpErrorHandler } from "@core/http-error-handler";
 import { Login } from "./login";
 
 describe("Login", () => {
@@ -14,7 +15,7 @@ describe("Login", () => {
   let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
-  const loginUrl = environment.backend_url + "/auth/login";
+  const loginUrl = `${environment.backendUrl}/auth/login`;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

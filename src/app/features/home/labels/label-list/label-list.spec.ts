@@ -1,12 +1,13 @@
-import { getElement } from "@testing/dom";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { of } from "rxjs";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
 import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
-import { Label } from "@features/home/labels/label";
-import { HttpErrorHandler } from "@core/http-error-handler";
+import { getElement } from "@testing/dom";
+import { Label } from "../label";
 import { LabelList } from "./label-list";
 
 describe("LabelList", () => {
@@ -14,7 +15,7 @@ describe("LabelList", () => {
   let fixture: ComponentFixture<LabelList>;
   let httpTestingController: HttpTestingController;
 
-  const deleteLabelUrl = `${environment.backend_url}/labels/1`;
+  const deleteLabelUrl = `${environment.backendUrl}/labels/1`;
   const labels: Label[] = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }

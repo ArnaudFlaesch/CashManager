@@ -1,5 +1,6 @@
 package-lock.json
 styleLintReport.json
+tests-report.json
 .angular/
 coverage/
 cypress/reports/

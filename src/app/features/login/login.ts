@@ -1,16 +1,17 @@
 import { NgOptimizedImage } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, inject, signal } from "@angular/core";
-import { Router, RouterLink } from "@angular/router";
 import { form, FormField, FormRoot, required } from "@angular/forms/signals";
-import { firstValueFrom } from "rxjs";
-import { Auth } from "@core/auth/auth";
-import { HttpErrorHandler } from "@core/http-error-handler";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatFormField, MatLabel, MatPrefix, MatSuffix } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { Router, RouterLink } from "@angular/router";
+import { firstValueFrom } from "rxjs";
+
+import { Auth } from "@core/auth/auth";
+import { HttpErrorHandler } from "@core/http-error-handler";
 
 @Component({
   selector: "cash-manager-login",

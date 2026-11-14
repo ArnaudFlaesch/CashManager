@@ -1,6 +1,7 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
+
 import { environment } from "@environments/environment";
 import { ConfigApi } from "./config-api";
 
@@ -8,7 +9,7 @@ describe("ConfigApi", () => {
   let service: ConfigApi;
   let httpTestingController: HttpTestingController;
 
-  const configUrl = `${environment.backend_url}/cash-manager-config`;
+  const configUrl = `${environment.backendUrl}/cash-manager-config`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideHttpClientTesting()] });

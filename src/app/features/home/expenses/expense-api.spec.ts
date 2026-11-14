@@ -1,6 +1,7 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
+
 import { environment } from "@environments/environment";
 import { Expense } from "./expense";
 import { ExpenseApi } from "./expense-api";
@@ -9,7 +10,7 @@ describe("ExpenseApi", () => {
   let service: ExpenseApi;
   let httpTestingController: HttpTestingController;
 
-  const expenseUrl = `${environment.backend_url}/expenses`;
+  const expenseUrl = `${environment.backendUrl}/expenses`;
   const expense: Expense = { id: 1, amount: 12.5, expenseDate: new Date(2022, 2, 5), labelId: 2 };
 
   beforeEach(() => {

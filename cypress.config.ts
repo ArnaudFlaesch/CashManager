@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+
 import { displayBrowserInFullSize, VIEWPORT } from "./cypress/plugins";
 
 export default defineConfig({
@@ -13,7 +14,7 @@ export default defineConfig({
     viewportHeight: VIEWPORT.height,
     screenshotOnRunFailure: false,
     expose: {
-      backend_url: "http://localhost:8080"
+      backendUrl: "http://localhost:8080"
     }
   }
 });

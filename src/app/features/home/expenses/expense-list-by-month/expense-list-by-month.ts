@@ -2,33 +2,31 @@ import { CurrencyPipe, DatePipe } from "@angular/common";
 import { Component, computed, DestroyRef, inject, input, signal } from "@angular/core";
 import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { form, FormField } from "@angular/forms/signals";
+import { MatIconButton } from "@angular/material/button";
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle
 } from "@angular/material/datepicker";
 import { MatDialog } from "@angular/material/dialog";
-import { ChartData } from "chart.js";
-import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
-import { filter, switchMap } from "rxjs";
-
-import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
-import { Expense } from "@features/home/expenses/expense";
-import { ConfirmModalData } from "@shared/confirm-modal/confirm-modal-data";
-import { Label } from "@features/home/labels/label";
-import { HttpErrorHandler } from "@core/http-error-handler";
-import { Theme } from "@core/theme";
-import { ExpenseApi } from "@features/home/expenses/expense-api";
-import { getChartOptions } from "@shared/chart-options";
-import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "@shared/dialog-sizes";
-import { CreateExpense } from "@features/home/expenses/create-expense/create-expense";
-
-import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
-import { MatIconButton } from "@angular/material/button";
+import { MatInput } from "@angular/material/input";
 import { MatTooltip } from "@angular/material/tooltip";
+import { ChartData } from "chart.js";
+import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { BaseChartDirective } from "ng2-charts";
+import { switchMap } from "rxjs";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { Theme } from "@core/theme";
+import { Label } from "@features/home/labels/label";
+import { getChartOptions } from "@shared/chart-options";
+import { confirmWithModal } from "@shared/confirm-modal/confirm-modal";
+import { ConfirmModalData } from "@shared/confirm-modal/confirm-modal-data";
+import { CreateExpense } from "../create-expense/create-expense";
+import { Expense } from "../expense";
+import { ExpenseApi } from "../expense-api";
 
 @Component({
   selector: "cash-manager-expense-list-by-month",
@@ -98,6 +96,7 @@ export class ExpenseListByMonth {
     () => new Map(this.expenseLabels().map((label) => [label.id, label.label]))
   );
   public readonly totalForMonth = computed(() =>
+    // Rounded to remove the floating point errors of the sum, such as 0.1 + 0.2
     Number.parseFloat(
       this.expenses
         .value()
@@ -127,15 +126,8 @@ export class ExpenseListByMonth {
   }
 
   public openDeleteExpenseModal(expenseId: number): void {
-    this.dialog
-      .open(ConfirmModal, {
-        height: DIALOG_SMALL_HEIGHT,
-        width: DIALOG_SMALL_WIDTH,
-        data: this.labels.deleteExpenseDialog
-      })
-      .afterClosed()
+    confirmWithModal(this.dialog, this.labels.deleteExpenseDialog)
       .pipe(
-        filter((result) => result === "validate"),
         switchMap(() => this.expenseApi.deleteExpense(expenseId)),
         takeUntilDestroyed(this.destroyRef)
       )

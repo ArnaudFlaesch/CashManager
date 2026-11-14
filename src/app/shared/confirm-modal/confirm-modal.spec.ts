@@ -1,8 +1,8 @@
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { ConfirmModalData } from "./confirm-modal-data";
-
 import { TestBed } from "@angular/core/testing";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+
 import { ConfirmModal } from "./confirm-modal";
+import { ConfirmModalData } from "./confirm-modal-data";
 
 describe("ConfirmModal", () => {
   let component: ConfirmModal;

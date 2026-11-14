@@ -2,17 +2,18 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { format } from "date-fns";
 import { Observable } from "rxjs";
-import { Expense } from "./expense";
+
 import { environment } from "@environments/environment";
-import { MonthlyExpenseTotal } from "./monthly-expense-total";
+import { Expense } from "./expense";
 import { InsertExpensePayload } from "./insert-expense-payload";
+import { MonthlyExpenseTotal } from "./monthly-expense-total";
 
 @Service()
 export class ExpenseApi {
   private readonly DATE_FORMAT = "yyyy-MM-dd";
 
   private readonly http = inject(HttpClient);
-  private readonly expenseUrl = `${environment.backend_url}/expenses`;
+  private readonly expenseUrl = `${environment.backendUrl}/expenses`;
 
   public getExpensesAtMonth(startIntervalDate: Date, endIntervalDate: Date): Observable<Expense[]> {
     return this.http.get<Expense[]>(this.expenseUrl, {

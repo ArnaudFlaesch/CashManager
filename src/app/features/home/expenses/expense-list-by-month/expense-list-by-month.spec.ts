@@ -1,9 +1,9 @@
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import {
   HttpTestingController,
   provideHttpClientTesting,
   TestRequest
 } from "@angular/common/http/testing";
-import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
@@ -15,12 +15,13 @@ import { fr } from "date-fns/locale/fr";
 import { BaseChartDirective } from "ng2-charts";
 import { of } from "rxjs";
 import type { MockInstance } from "vitest";
-import { environment } from "@environments/environment";
-import { Expense } from "@features/home/expenses/expense";
-import { getElement, queryElement } from "@testing/dom";
+
 import { HttpErrorHandler } from "@core/http-error-handler";
+import { environment } from "@environments/environment";
 import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
+import { getElement, queryElement } from "@testing/dom";
 import { CreateExpense } from "../create-expense/create-expense";
+import { Expense } from "../expense";
 import { ExpenseListByMonth } from "./expense-list-by-month";
 
 describe("ExpenseListByMonth", () => {
@@ -41,7 +42,7 @@ describe("ExpenseListByMonth", () => {
 
   function expectExpensesRequest(month: Date): TestRequest {
     return httpTestingController.expectOne(
-      `${environment.backend_url}/expenses?startIntervalDate=${format(startOfMonth(month), dateFormat)}&endIntervalDate=${format(endOfMonth(month), dateFormat)}`
+      `${environment.backendUrl}/expenses?startIntervalDate=${format(startOfMonth(month), dateFormat)}&endIntervalDate=${format(endOfMonth(month), dateFormat)}`
     );
   }
 
@@ -210,7 +211,7 @@ describe("ExpenseListByMonth", () => {
         }
       })
     );
-    httpTestingController.expectOne(`${environment.backend_url}/expenses/1`).flush(null);
+    httpTestingController.expectOne(`${environment.backendUrl}/expenses/1`).flush(null);
     await fixture.whenStable();
 
     expect(displayedExpenses()).toEqual([

@@ -5,18 +5,19 @@ import { MatIconButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
-import { MatTooltip } from "@angular/material/tooltip";
 import { MatSelect } from "@angular/material/select";
+import { MatTooltip } from "@angular/material/tooltip";
 import { ChartData } from "chart.js";
 import { format, parseISO } from "date-fns";
 import { fr } from "date-fns/locale/fr";
 import { BaseChartDirective } from "ng2-charts";
-import { MonthlyExpenseTotal } from "@features/home/expenses/monthly-expense-total";
+
 import { HttpErrorHandler } from "@core/http-error-handler";
 import { Theme } from "@core/theme";
-import { ExpenseApi } from "@features/home/expenses/expense-api";
 import { Label } from "@features/home/labels/label";
 import { getChartOptions } from "@shared/chart-options";
+import { ExpenseApi } from "../expense-api";
+import { MonthlyExpenseTotal } from "../monthly-expense-total";
 
 @Component({
   selector: "cash-manager-total-expense-by-month",

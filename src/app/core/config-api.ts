@@ -1,12 +1,13 @@
-import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
+import { Observable } from "rxjs";
+
 import { environment } from "@environments/environment";
 
 @Service()
 export class ConfigApi {
   private readonly http = inject(HttpClient);
-  private readonly configUrl = `${environment.backend_url}/cash-manager-config`;
+  private readonly configUrl = `${environment.backendUrl}/cash-manager-config`;
 
   public exportConfig(): Observable<Blob> {
     return this.http.get(this.configUrl, { responseType: "blob" });

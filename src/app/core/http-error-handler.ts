@@ -26,9 +26,7 @@ export class HttpErrorHandler {
             this.displayErrorMessage(error.message, this.ERROR_UNAUTHORIZED);
           })
           .catch((navigationError: unknown) => {
-            console.log(
-              navigationError instanceof Error ? navigationError.message : navigationError
-            );
+            console.error(navigationError);
           });
         break;
       case 403:

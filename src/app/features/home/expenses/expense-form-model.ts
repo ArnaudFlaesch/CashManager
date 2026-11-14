@@ -1,4 +1,4 @@
-import { Label } from "@features/home/labels/label";
+import { Label } from "../labels/label";
 
 export interface ExpenseFormModel {
   amount: number;

@@ -17,6 +17,7 @@ npm-debug.log
 /cypress/results
 /cypress/screenshots
 styleLintReport.json
+tests-report.json
 
 # IDEs and editors
 .idea/
