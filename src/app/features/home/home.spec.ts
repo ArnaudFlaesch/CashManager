@@ -9,9 +9,11 @@ import { MatInputHarness } from "@angular/material/input/testing";
 import { MatTabGroupHarness } from "@angular/material/tabs/testing";
 import { fr } from "date-fns/locale/fr";
 import { of } from "rxjs";
+import type { MockInstance } from "vitest";
 
 import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
+import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
 import { getElement } from "@testing/dom";
 import { Home } from "./home";
 import { Label } from "./labels/label";
@@ -108,7 +110,7 @@ describe("Home", () => {
       .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
       .mockImplementation(() => undefined);
 
-    await createLabel("New label");
+    const input = await createLabel("New label");
     httpTestingController
       .expectOne({ method: "POST", url: labelUrl })
       .flush(null, { status: 500, statusText: "Server error" });
@@ -119,17 +121,58 @@ describe("Home", () => {
       "Erreur lors de l'ajout du label."
     );
     expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
+    expect(await input.getValue()).toBe("New label");
   });
 
-  it("Should remove a deleted label from the list", async () => {
-    vi.spyOn(TestBed.inject(MatDialog), "open").mockReturnValue({
-      afterClosed: () => of("validate")
+  /** Clicks on the delete button of the first label, the confirmation modal answers the result. */
+  function deleteFirstLabel(modalResult: string | undefined): MockInstance<MatDialog["open"]> {
+    const openSpy = vi.spyOn(TestBed.inject(MatDialog), "open").mockReturnValue({
+      afterClosed: () => of(modalResult)
     } as MatDialogRef<unknown>);
-
     getElement(fixture, ".delete-label-button", HTMLButtonElement).click();
+    return openSpy;
+  }
+
+  it("Should delete a label once the deletion is confirmed", async () => {
+    const openSpy = deleteFirstLabel("validate");
+    expect(openSpy).toHaveBeenCalledWith(
+      ConfirmModal,
+      expect.objectContaining({
+        data: {
+          title: "Suppression d'un label",
+          message: "Êtes-vous sûr de vouloir supprimer ce label ?"
+        }
+      })
+    );
     httpTestingController.expectOne({ method: "DELETE", url: `${labelUrl}/1` }).flush(null);
     await fixture.whenStable();
 
     expect(displayedLabels()).toEqual(["Restaurant"]);
+  });
+
+  it("Should not delete the label when the deletion is cancelled", async () => {
+    deleteFirstLabel(undefined);
+    await fixture.whenStable();
+
+    httpTestingController.expectNone({ method: "DELETE", url: `${labelUrl}/1` });
+    expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
+  });
+
+  it("Should display an error when the label cannot be deleted", async () => {
+    const handleErrorSpy = vi
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
+      .mockImplementation(() => undefined);
+
+    deleteFirstLabel("validate");
+    httpTestingController
+      .expectOne({ method: "DELETE", url: `${labelUrl}/1` })
+      .flush(null, { status: 500, statusText: "Server error" });
+    await fixture.whenStable();
+
+    expect(handleErrorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 500 }),
+      "Erreur lors de la suppression du label."
+    );
+    expect(displayedLabels()).toEqual(["Courses", "Restaurant"]);
   });
 });

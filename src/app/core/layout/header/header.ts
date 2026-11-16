@@ -2,19 +2,14 @@ import { NgOptimizedImage } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, DestroyRef, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { MatIconButton } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
-import { MatDivider } from "@angular/material/divider";
-import { MatIcon } from "@angular/material/icon";
-import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
-import { MatSlideToggle } from "@angular/material/slide-toggle";
-import { MatTooltip } from "@angular/material/tooltip";
 import { Router } from "@angular/router";
 
 import { Auth } from "@core/auth/auth";
 import { ConfigApi } from "@core/config-api";
 import { HttpErrorHandler } from "@core/http-error-handler";
 import { Theme } from "@core/theme";
+import { HeaderActions } from "./header-actions/header-actions";
 import { ImportConfigModal } from "./import-config-modal/import-config-modal";
 import { Notifications } from "./notifications/notifications";
 
@@ -22,18 +17,7 @@ import { Notifications } from "./notifications/notifications";
   selector: "cash-manager-header",
   templateUrl: "./header.html",
   styleUrl: "./header.scss",
-  imports: [
-    NgOptimizedImage,
-    MatIconButton,
-    MatTooltip,
-    MatMenuTrigger,
-    MatIcon,
-    Notifications,
-    MatMenu,
-    MatMenuItem,
-    MatSlideToggle,
-    MatDivider
-  ]
+  imports: [NgOptimizedImage, HeaderActions, Notifications]
 })
 export class Header {
   private readonly dialog = inject(MatDialog);
@@ -46,13 +30,6 @@ export class Header {
 
   protected readonly labels = {
     appName: "CashManager",
-    applications: "Applications",
-    dash: "Dash",
-    userMenu: "Menu utilisateur",
-    darkTheme: "Thème sombre",
-    downloadConfig: "Télécharger la configuration",
-    importConfig: "Importer une configuration",
-    logout: "Déconnexion",
     errors: {
       exportConfiguration: "Erreur lors de l'export de la configuration."
     }
@@ -61,7 +38,6 @@ export class Header {
   private readonly CONFIG_FILE_NAME = "cashManagerData.json";
   private readonly IMPORT_CONFIG_MODAL_WIDTH = "640px";
 
-  public readonly dashApplicationUrl = "https://arnaudflaesch.github.io/Dash-Web/";
   public readonly isDarkMode = this.theme.isDarkMode;
   public readonly canUserSeeNotifications = this.auth.isUserAdmin;
 

@@ -1,0 +1,50 @@
+<ng-content />
+
+<button type="button" mat-icon-button [matTooltip]="labels.applications" [matMenuTriggerFor]="appsMenu">
+  <mat-icon>apps</mat-icon>
+</button>
+
+<button
+  type="button"
+  id="cashmanager-menu"
+  [matTooltip]="labels.userMenu"
+  mat-icon-button
+  [matMenuTriggerFor]="cashManagerMenu"
+>
+  <mat-icon>account_circle</mat-icon>
+</button>
+
+<mat-menu #appsMenu="matMenu">
+  <a mat-menu-item [href]="dashApplicationUrl">
+    <mat-icon>dashboard</mat-icon>
+    <span>{{ labels.dash }}</span>
+  </a>
+</mat-menu>
+
+<mat-menu #cashManagerMenu="matMenu">
+  <div mat-menu-item>
+    <div class="row">
+      <mat-icon>light_mode</mat-icon>
+      <mat-slide-toggle
+        [checked]="isDarkMode()"
+        (change)="darkModeToggled.emit($event.checked)"
+        [aria-label]="labels.darkTheme"
+      />
+      <mat-icon>dark_mode</mat-icon>
+    </div>
+  </div>
+  <mat-divider />
+  <button type="button" mat-menu-item (click)="configDownloadRequested.emit()" id="download-config-button">
+    <mat-icon>download</mat-icon>
+    <span>{{ labels.downloadConfig }}</span>
+  </button>
+  <button type="button" mat-menu-item (click)="configImportRequested.emit()" id="open-import-config-modal">
+    <mat-icon>upload</mat-icon>
+    <span>{{ labels.importConfig }}</span>
+  </button>
+  <mat-divider />
+  <button type="button" mat-menu-item (click)="logoutRequested.emit()" id="logout-button">
+    <mat-icon>logout</mat-icon>
+    <span>{{ labels.logout }}</span>
+  </button>
+</mat-menu>

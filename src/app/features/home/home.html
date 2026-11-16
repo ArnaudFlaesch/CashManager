@@ -33,26 +33,12 @@
           {{ labels.expenseLabels }}
         </h2>
 
-        <form id="create-label-form" class="row" [formRoot]="labelForm">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ labels.newLabel }}</mat-label>
-            <input
-              type="text"
-              id="label-form"
-              [placeholder]="labels.labelPlaceholder"
-              [attr.aria-label]="labels.labelAriaLabel"
-              matInput
-              [formField]="labelForm.label"
-            />
-          </mat-form-field>
+        <cash-manager-create-label [isSubmitting]="isCreatingLabel()" (labelSubmitted)="addLabel($event)" />
 
-          <button id="create-label-button" type="submit" mat-flat-button [disabled]="labelForm().submitting()">
-            <mat-icon>add</mat-icon>
-            {{ labels.add }}
-          </button>
-        </form>
-
-        <cash-manager-label-list [expenseLabels]="expenseLabels.value()" (labelDeleted)="removeLabel($event)" />
+        <cash-manager-label-list
+          [expenseLabels]="expenseLabels.value()"
+          (labelDeletionRequested)="openDeleteLabelDialog($event)"
+        />
       </section>
     </mat-tab>
   </mat-tab-group>
