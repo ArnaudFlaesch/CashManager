@@ -1,9 +1,7 @@
-import { getElement, queryElement } from "@testing/dom";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import {
-  NotificationToDisplay,
-  NotificationType
-} from "@core/layout/header/notifications/notification";
+
+import { getElement, queryElement } from "@testing/dom";
+import { NotificationToDisplay, NotificationType } from "../notification";
 import { NotificationsList } from "./notifications-list";
 
 describe("NotificationsList", () => {

@@ -20,7 +20,7 @@
     "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
     "lint:styles:fix": "npm run lint:styles -- --fix",
     "lint:styles:report": "npm run lint:styles -- --formatter json --output-file ./styleLintReport.json",
-    "report:merge": "npx mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
+    "report:merge": "mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
     "report:generate": "marge tests-report.json -o cypress/reports/html",
     "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots",
     "code:check": "prettier . --check",

@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+
 import baseConfig from "./cypress.config";
 
 // CI configuration: same as the local one, with retries, screenshots and a JSON report

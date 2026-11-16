@@ -1,16 +1,17 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
+
 import { environment } from "@environments/environment";
-import { AppNotification, NotificationType } from "./notification";
 import { Page } from "@shared/page";
+import { AppNotification, NotificationType } from "./notification";
 import { NotificationApi } from "./notification-api";
 
 describe("NotificationApi", () => {
   let service: NotificationApi;
   let httpTestingController: HttpTestingController;
 
-  const notificationsUrl = `${environment.backend_url}/notifications`;
+  const notificationsUrl = `${environment.backendUrl}/notifications`;
   const notification: AppNotification = {
     id: 1,
     message: "username: Connexion utilisateur",

@@ -1,21 +1,20 @@
-import { startOfYesterday } from "date-fns";
-
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { Page } from "@shared/page";
+import { startOfYesterday } from "date-fns";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
+import { Page } from "@shared/page";
 import { getElement, queryElement } from "@testing/dom";
 import { AppNotification, NotificationType } from "./notification";
 import { Notifications } from "./notifications";
-
-import { HttpErrorHandler } from "@core/http-error-handler";
 
 describe("Notifications", () => {
   let fixture: ComponentFixture<Notifications>;
   let httpTestingController: HttpTestingController;
 
-  const notificationsUrl = environment.backend_url + "/notifications";
-  const markAsReadUrl = environment.backend_url + "/notifications/read";
+  const notificationsUrl = `${environment.backendUrl}/notifications`;
+  const markAsReadUrl = `${environment.backendUrl}/notifications/read`;
 
   const notificationDate = new Date();
   const notificationsData = {

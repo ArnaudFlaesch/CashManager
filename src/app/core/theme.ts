@@ -1,16 +1,16 @@
-import { computed, DOCUMENT, inject, Service, signal } from "@angular/core";
+import { DOCUMENT, inject, Service, signal } from "@angular/core";
 
 @Service()
 export class Theme {
   private readonly DARK_MODE_CLASS_NAME = "dark-mode";
   private readonly PREFERRED_THEME_STORAGE_KEY = "preferredTheme";
 
-  public readonly isDarkMode = computed(() => this.darkMode());
-
   private readonly document = inject(DOCUMENT);
   private readonly darkMode = signal(
     localStorage.getItem(this.PREFERRED_THEME_STORAGE_KEY) === "dark"
   );
+
+  public readonly isDarkMode = this.darkMode.asReadonly();
 
   public constructor() {
     this.applyTheme();

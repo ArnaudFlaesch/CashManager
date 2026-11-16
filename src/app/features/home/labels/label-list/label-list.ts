@@ -1,17 +1,17 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { HttpErrorHandler } from "@core/http-error-handler";
-import { LabelApi } from "@features/home/labels/label-api";
 import { Component, DestroyRef, inject, input, output } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { Label } from "@features/home/labels/label";
-import { ConfirmModalData } from "@shared/confirm-modal/confirm-modal-data";
-import { MatDialog } from "@angular/material/dialog";
-import { filter, switchMap } from "rxjs";
-import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
-import { DIALOG_SMALL_HEIGHT, DIALOG_SMALL_WIDTH } from "@shared/dialog-sizes";
-import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
+import { MatDialog } from "@angular/material/dialog";
+import { MatIcon } from "@angular/material/icon";
 import { MatTooltip } from "@angular/material/tooltip";
+import { switchMap } from "rxjs";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { confirmWithModal } from "@shared/confirm-modal/confirm-modal";
+import { ConfirmModalData } from "@shared/confirm-modal/confirm-modal-data";
+import { Label } from "../label";
+import { LabelApi } from "../label-api";
 
 @Component({
   selector: "cash-manager-label-list",
@@ -41,15 +41,8 @@ export class LabelList {
   };
 
   public openDeleteLabelDialog(labelId: number): void {
-    this.dialog
-      .open(ConfirmModal, {
-        height: DIALOG_SMALL_HEIGHT,
-        width: DIALOG_SMALL_WIDTH,
-        data: this.labels.deleteLabelDialog
-      })
-      .afterClosed()
+    confirmWithModal(this.dialog, this.labels.deleteLabelDialog)
       .pipe(
-        filter((result) => result === "validate"),
         switchMap(() => this.labelApi.deleteLabel(labelId)),
         takeUntilDestroyed(this.destroyRef)
       )

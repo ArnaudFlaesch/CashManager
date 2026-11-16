@@ -1,24 +1,25 @@
-import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { HarnessLoader } from "@angular/cdk/testing";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuHarness } from "@angular/material/menu/testing";
 import { MatSlideToggleHarness } from "@angular/material/slide-toggle/testing";
 import { Router } from "@angular/router";
-import { environment } from "@environments/environment";
-import { queryElement } from "@testing/dom";
-import { ImportConfigModal } from "./import-config-modal/import-config-modal";
+
 import { Role } from "@core/auth/role";
 import { HttpErrorHandler } from "@core/http-error-handler";
+import { environment } from "@environments/environment";
+import { queryElement } from "@testing/dom";
 import { Header } from "./header";
+import { ImportConfigModal } from "./import-config-modal/import-config-modal";
 
 describe("Header", () => {
   let fixture: ComponentFixture<Header>;
   let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
-  const exportConfigUrl = `${environment.backend_url}/cash-manager-config`;
+  const exportConfigUrl = `${environment.backendUrl}/cash-manager-config`;
 
   /** The header reads the logged in user when it is created. */
   function createComponent(): void {
@@ -59,7 +60,7 @@ describe("Header", () => {
     fixture.detectChanges();
     TestBed.tick();
     httpTestingController
-      .expectOne(`${environment.backend_url}/notifications`)
+      .expectOne(`${environment.backendUrl}/notifications`)
       .flush({ content: [] });
     await fixture.whenStable();
 
@@ -94,7 +95,6 @@ describe("Header", () => {
 
   it("Should download the configuration as a file", async () => {
     createComponent();
-    vi.spyOn(console, "info").mockImplementation(() => undefined);
     // jsdom does not implement the object URLs, nor the navigation triggered by a link
     vi.spyOn(URL, "createObjectURL").mockImplementation(() => "blob:config");
     vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => undefined);

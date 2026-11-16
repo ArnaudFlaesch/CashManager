@@ -1,23 +1,14 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, computed, inject, input, output, signal } from "@angular/core";
 import { form, FormField, FormRoot, min, required, validate } from "@angular/forms/signals";
-import { firstValueFrom } from "rxjs";
-
-import { Expense } from "@features/home/expenses/expense";
-import { ExpenseFormModel } from "@features/home/expenses/expense-form-model";
-import { formatDateWithOffsetToUtc } from "@shared/utc-date";
-import { Label } from "@features/home/labels/label";
-import { HttpErrorHandler } from "@core/http-error-handler";
-import { ExpenseApi } from "@features/home/expenses/expense-api";
+import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { MatButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
-import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle
 } from "@angular/material/datepicker";
-import { MatInput } from "@angular/material/input";
 import {
   MatFormField,
   MatHint,
@@ -26,6 +17,15 @@ import {
   MatSuffix
 } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
+import { firstValueFrom } from "rxjs";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
+import { Label } from "@features/home/labels/label";
+import { formatDateWithOffsetToUtc } from "@shared/utc-date";
+import { Expense } from "../expense";
+import { ExpenseApi } from "../expense-api";
+import { ExpenseFormModel } from "../expense-form-model";
 
 @Component({
   selector: "cash-manager-create-expense",

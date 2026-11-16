@@ -1,13 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { Observable } from "rxjs";
-import { Label } from "./label";
+
 import { environment } from "@environments/environment";
+import { Label } from "./label";
 
 @Service()
 export class LabelApi {
   private readonly http = inject(HttpClient);
-  private readonly labelUrl = `${environment.backend_url}/labels`;
+  private readonly labelUrl = `${environment.backendUrl}/labels`;
 
   public getLabels(): Observable<Label[]> {
     return this.http.get<Label[]>(this.labelUrl);

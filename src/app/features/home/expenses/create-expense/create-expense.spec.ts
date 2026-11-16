@@ -9,18 +9,19 @@ import { MatDatepickerInputHarness } from "@angular/material/datepicker/testing"
 import { MatInputHarness } from "@angular/material/input/testing";
 import { format, setDate } from "date-fns";
 import { fr } from "date-fns/locale/fr";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
 import { getElement } from "@testing/dom";
 import { InsertExpensePayload } from "../insert-expense-payload";
 import { CreateExpense } from "./create-expense";
-import { HttpErrorHandler } from "@core/http-error-handler";
 
 describe("CreateExpense", () => {
   let fixture: ComponentFixture<CreateExpense>;
   let loader: HarnessLoader;
   let httpTestingController: HttpTestingController;
 
-  const addExpenseUrl = `${environment.backend_url}/expenses`;
+  const addExpenseUrl = `${environment.backendUrl}/expenses`;
   const labels = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }

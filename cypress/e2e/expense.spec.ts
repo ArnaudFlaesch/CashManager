@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-
 import { Interception } from "cypress/types/net-stubbing";
 
 describe("Home page tests", () => {

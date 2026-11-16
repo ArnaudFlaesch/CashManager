@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import { formatDateWithOffsetToUtc } from "./utc-date";
 
 describe("Date utils", () => {

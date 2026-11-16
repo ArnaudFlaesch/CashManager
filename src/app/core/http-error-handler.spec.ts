@@ -4,6 +4,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { firstValueFrom, throwError } from "rxjs";
 import type { MockInstance } from "vitest";
+
 import { HttpErrorHandler } from "./http-error-handler";
 
 describe("HttpErrorHandler", () => {
@@ -42,11 +43,11 @@ describe("HttpErrorHandler", () => {
   });
 
   it("Should log the error when the redirection to the login page fails", async () => {
-    const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const logSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     navigateSpy.mockRejectedValue(new Error("Navigation error"));
     service.handleError(httpError(401), errorMessage);
     await vi.waitFor(() => {
-      expect(logSpy).toHaveBeenCalledWith("Navigation error");
+      expect(logSpy).toHaveBeenCalledWith(new Error("Navigation error"));
     });
     expect(snackbarSpy).not.toHaveBeenCalled();
   });

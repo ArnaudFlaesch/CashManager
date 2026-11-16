@@ -4,20 +4,21 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatSelectHarness } from "@angular/material/select/testing";
 import { By } from "@angular/platform-browser";
 import { BaseChartDirective } from "ng2-charts";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
 import { Label } from "@features/home/labels/label";
-import { MonthlyExpenseTotal } from "@features/home/expenses/monthly-expense-total";
 import { getElement, queryElement } from "@testing/dom";
-import { HttpErrorHandler } from "@core/http-error-handler";
+import { MonthlyExpenseTotal } from "../monthly-expense-total";
 import { TotalExpenseByMonth } from "./total-expense-by-month";
 
 describe("TotalExpenseByMonth", () => {
   let fixture: ComponentFixture<TotalExpenseByMonth>;
   let httpTestingController: HttpTestingController;
 
-  const totalUrl = `${environment.backend_url}/expenses/monthly-totals`;
+  const totalUrl = `${environment.backendUrl}/expenses/monthly-totals`;
   const totalByLabelUrl = (labelId: number): string =>
-    `${environment.backend_url}/expenses/monthly-totals?labelId=${labelId}`;
+    `${environment.backendUrl}/expenses/monthly-totals?labelId=${labelId}`;
   const labelData: Label[] = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }

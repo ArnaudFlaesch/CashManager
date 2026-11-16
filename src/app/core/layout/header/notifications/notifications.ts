@@ -4,8 +4,8 @@ import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { isToday } from "date-fns";
 import { catchError, map, of } from "rxjs";
 
-import { AppNotification, NotificationToDisplay, NotificationType } from "./notification";
 import { HttpErrorHandler } from "@core/http-error-handler";
+import { AppNotification, NotificationToDisplay, NotificationType } from "./notification";
 import { NotificationApi } from "./notification-api";
 import { NotificationsList } from "./notifications-list/notifications-list";
 

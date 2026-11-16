@@ -4,8 +4,8 @@ import { Observable, tap } from "rxjs";
 
 import { environment } from "@environments/environment";
 import { JwtPayload } from "./jwt-payload";
-import { User } from "./user";
 import { Role } from "./role";
+import { User } from "./user";
 
 @Service()
 export class Auth {
@@ -20,7 +20,7 @@ export class Auth {
 
   public login(username: string, password: string): Observable<User> {
     return this.http
-      .post<User>(`${environment.backend_url}/auth/login`, { username, password })
+      .post<User>(`${environment.backendUrl}/auth/login`, { username, password })
       .pipe(
         tap((user) => {
           if (user.accessToken) {

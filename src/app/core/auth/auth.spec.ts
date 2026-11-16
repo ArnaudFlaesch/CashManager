@@ -1,16 +1,17 @@
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { firstValueFrom } from "rxjs";
+
 import { environment } from "@environments/environment";
-import { User } from "./user";
-import { Role } from "./role";
 import { Auth } from "./auth";
+import { Role } from "./role";
+import { User } from "./user";
 
 describe("Auth", () => {
   let service: Auth;
   let httpTestingController: HttpTestingController;
 
-  const loginUrl = `${environment.backend_url}/auth/login`;
+  const loginUrl = `${environment.backendUrl}/auth/login`;
   const user: User = {
     id: 1,
     username: "admin",

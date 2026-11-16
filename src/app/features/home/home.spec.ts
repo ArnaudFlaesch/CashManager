@@ -9,18 +9,19 @@ import { MatInputHarness } from "@angular/material/input/testing";
 import { MatTabGroupHarness } from "@angular/material/tabs/testing";
 import { fr } from "date-fns/locale/fr";
 import { of } from "rxjs";
+
+import { HttpErrorHandler } from "@core/http-error-handler";
 import { environment } from "@environments/environment";
 import { getElement } from "@testing/dom";
-import { Label } from "./labels/label";
 import { Home } from "./home";
-import { HttpErrorHandler } from "@core/http-error-handler";
+import { Label } from "./labels/label";
 
 describe("Home", () => {
   const labelData: Label[] = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }
   ];
-  const labelUrl = environment.backend_url + "/labels";
+  const labelUrl = `${environment.backendUrl}/labels`;
 
   let fixture: ComponentFixture<Home>;
   let loader: HarnessLoader;
