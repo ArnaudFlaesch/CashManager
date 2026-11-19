@@ -22,6 +22,8 @@ import { ConfirmModal } from "@shared/confirm-modal/confirm-modal";
 import { getElement, queryElement } from "@testing/dom";
 import { CreateExpense } from "../create-expense/create-expense";
 import { Expense } from "../expense";
+import { InsertExpensePayload } from "../insert-expense-payload";
+import { ExpenseListByMonthView } from "../expense-list-by-month-view/expense-list-by-month-view";
 import { ExpenseListByMonth } from "./expense-list-by-month";
 
 describe("ExpenseListByMonth", () => {
@@ -153,18 +155,61 @@ describe("ExpenseListByMonth", () => {
     expect(chartDatasets()).toEqual([{ label: "", data: [] }]);
   });
 
-  it("Should add the created expense to the list", async () => {
-    await loadExpenses(mockedCurrentMonth, []);
-
-    const newExpense: Expense = { id: 4, amount: 20, expenseDate: mockedCurrentMonth, labelId: 1 };
+  /** Submits a new expense from the form, which sends its creation request. */
+  function submitExpense(payload: InsertExpensePayload): TestRequest {
     fixture.debugElement
       .query(By.directive(CreateExpense))
       .injector.get(CreateExpense)
-      .expenseCreated.emit(newExpense);
+      .expenseSubmitted.emit(payload);
+    const request = httpTestingController.expectOne({
+      method: "POST",
+      url: `${environment.backendUrl}/expenses`
+    });
+    expect(request.request.body).toEqual(payload);
+    return request;
+  }
+
+  it("Should create the expense, add it to the list and clear the form", async () => {
+    await loadExpenses(mockedCurrentMonth, []);
+    const createExpense = fixture.debugElement
+      .query(By.directive(CreateExpense))
+      .injector.get(CreateExpense);
+    const clearSpy = vi.spyOn(createExpense, "clearAmountAndLabel");
+
+    const payload = { amount: 20, expenseDate: mockedCurrentMonth, labelId: 1 };
+    const request = submitExpense(payload);
+    await fixture.whenStable();
+    expect(createExpense.isSubmitting()).toBe(true);
+    request.flush({ id: 4, ...payload });
     await fixture.whenStable();
 
     expect(displayedExpenses()).toEqual([["Courses", "20,00 €"]]);
     expect(displayedTotal()).toBe("20,00 €");
+    expect(clearSpy).toHaveBeenCalled();
+  });
+
+  it("Should display an error and keep the form when the expense cannot be created", async () => {
+    await loadExpenses(mockedCurrentMonth, []);
+    const handleErrorSpy = vi
+      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
+      .mockImplementation(() => undefined);
+    const clearSpy = vi.spyOn(
+      fixture.debugElement.query(By.directive(CreateExpense)).injector.get(CreateExpense),
+      "clearAmountAndLabel"
+    );
+
+    submitExpense({ amount: 20, expenseDate: mockedCurrentMonth, labelId: 1 }).flush(null, {
+      status: 500,
+      statusText: "Server error"
+    });
+    await fixture.whenStable();
+
+    expect(handleErrorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 500 }),
+      "Erreur lors de l'ajout de la dépense."
+    );
+    expect(clearSpy).not.toHaveBeenCalled();
+    expect(displayedExpenses()).toEqual([]);
   });
 
   it("Should select the month picked in the datepicker", async () => {
@@ -188,13 +233,16 @@ describe("ExpenseListByMonth", () => {
 
   /**
    * Opens the deletion modal of the expense, closed with the given result.
-   * The delete button is not displayed yet, so the method is called directly.
+   * The delete button is not displayed yet, so the output of the view is emitted directly.
    */
   function deleteExpense(expenseId: number, modalResult: string): MockInstance<MatDialog["open"]> {
     const openSpy = vi
       .spyOn(TestBed.inject(MatDialog), "open")
       .mockReturnValue({ afterClosed: () => of(modalResult) } as MatDialogRef<unknown>);
-    fixture.componentInstance.openDeleteExpenseModal(expenseId);
+    fixture.debugElement
+      .query(By.directive(ExpenseListByMonthView))
+      .injector.get(ExpenseListByMonthView)
+      .expenseDeletionRequested.emit(expenseId);
     return openSpy;
   }
 

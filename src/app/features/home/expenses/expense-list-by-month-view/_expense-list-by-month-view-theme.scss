@@ -1,11 +1,14 @@
 @use "variables" as *;
 
-// Global styles of the expenses of the month: its element and its theme colors
-cash-manager-expense-list-by-month {
+// Global styles of the expenses of the month: the elements of the components and the theme colors
+cash-manager-expense-list-by-month,
+cash-manager-expense-list-by-month-view {
   display: flex;
   flex-direction: column;
   gap: $space-m;
+}
 
+cash-manager-expense-list-by-month-view {
   @include themed {
     #month-total {
       background-color: $color-accent-soft;

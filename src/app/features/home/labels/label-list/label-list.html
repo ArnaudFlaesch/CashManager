@@ -8,7 +8,7 @@
         mat-icon-button
         class="delete-label-button"
         [matTooltip]="labels.deleteLabel"
-        (click)="openDeleteLabelDialog(label.id)"
+        (click)="labelDeletionRequested.emit(label.id)"
       >
         <mat-icon>delete_outline</mat-icon>
       </button>
