@@ -54,7 +54,7 @@
     "cypress": "16.3.0",
     "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-cypress": "7.0.5",
+    "eslint-plugin-cypress": "7.1.0",
     "globals": "17.14.0",
     "jsdom": "31.0.1",
     "mochawesome": "8.1.1",
@@ -63,7 +63,7 @@
     "stylelint": "17.16.0",
     "stylelint-config-standard-scss": "17.0.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.2",
+    "typescript-eslint": "8.73.0",
     "vitest": "5.1.1"
   }
 }
