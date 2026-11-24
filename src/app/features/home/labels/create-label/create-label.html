@@ -1,0 +1,18 @@
+<form id="create-label-form" class="row" [formRoot]="labelForm">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>{{ labels.newLabel }}</mat-label>
+    <input
+      type="text"
+      id="label-form"
+      [placeholder]="labels.labelPlaceholder"
+      [attr.aria-label]="labels.labelAriaLabel"
+      matInput
+      [formField]="labelForm.label"
+    />
+  </mat-form-field>
+
+  <button id="create-label-button" type="submit" mat-flat-button [disabled]="isSubmitting()">
+    <mat-icon>add</mat-icon>
+    {{ labels.add }}
+  </button>
+</form>

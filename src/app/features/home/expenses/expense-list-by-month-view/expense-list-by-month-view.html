@@ -1,0 +1,80 @@
+<div id="month-navigation" class="row">
+  <button
+    type="button"
+    (click)="selectPreviousMonth()"
+    mat-icon-button
+    [matTooltip]="labels.previousMonth"
+    [attr.aria-label]="labels.previousMonth"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" id="month-field">
+    <mat-label>{{ labels.selectMonth }}</mat-label>
+    <input matInput [matDatepicker]="picker" [formField]="selectedMonthForm" />
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-datepicker
+      #picker
+      startView="multi-year"
+      (monthSelected)="setMonthAndYear($event, picker)"
+      [startAt]="selectedMonth()"
+    />
+  </mat-form-field>
+
+  <button
+    type="button"
+    (click)="selectNextMonth()"
+    mat-icon-button
+    [matTooltip]="labels.nextMonth"
+    [attr.aria-label]="labels.nextMonth"
+  >
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+
+<div id="expenses-layout">
+  <section id="chart-card" class="card">
+    <h2 class="card-title">
+      <mat-icon>bar_chart</mat-icon>
+      {{ labels.expensesByLabel }}
+    </h2>
+    @if (expenses().length) {
+      <div class="chart chart-container">
+        <canvas baseChart [data]="expensesByLabelChart()" [options]="chartOptions()" type="bar"></canvas>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <mat-icon>receipt_long</mat-icon>
+        <span>{{ labels.noExpense }}</span>
+      </div>
+    }
+  </section>
+
+  <section id="month-details" class="card stack">
+    <div id="month-total" class="stack">
+      <span id="month-total-label" class="muted-text">{{ labels.totalForMonth }}</span>
+      <span id="month-total-value">{{ totalForMonth() | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
+    </div>
+
+    @if (expenses().length) {
+      <ul id="expenses-list">
+        @for (expense of expenses(); track expense.id) {
+          <li class="expense-row row">
+            <span class="expense-date muted-text">{{ expense.expenseDate | date: "dd/MM" }}</span>
+            <span class="expense-label ellipsis">{{ labelNames().get(expense.labelId) }}</span>
+            <span class="expense-amount">{{ expense.amount | currency: "EUR" : "symbol" : "1.2-2" : "fr" }}</span>
+            @if (false) {
+              <button
+                type="button"
+                mat-icon-button
+                [matTooltip]="labels.deleteExpense"
+                (click)="expenseDeletionRequested.emit(expense.id)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

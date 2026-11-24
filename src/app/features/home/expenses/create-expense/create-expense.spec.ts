@@ -1,6 +1,5 @@
 import { HarnessLoader } from "@angular/cdk/testing";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
-import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideDateFnsAdapter } from "@angular/material-date-fns-adapter";
 import { MatAutocompleteHarness } from "@angular/material/autocomplete/testing";
@@ -10,18 +9,13 @@ import { MatInputHarness } from "@angular/material/input/testing";
 import { format, setDate } from "date-fns";
 import { fr } from "date-fns/locale/fr";
 
-import { HttpErrorHandler } from "@core/http-error-handler";
-import { environment } from "@environments/environment";
 import { getElement } from "@testing/dom";
-import { InsertExpensePayload } from "../insert-expense-payload";
 import { CreateExpense } from "./create-expense";
 
 describe("CreateExpense", () => {
   let fixture: ComponentFixture<CreateExpense>;
   let loader: HarnessLoader;
-  let httpTestingController: HttpTestingController;
 
-  const addExpenseUrl = `${environment.backendUrl}/expenses`;
   const labels = [
     { id: 1, label: "Courses", userId: 1 },
     { id: 2, label: "Restaurant", userId: 1 }
@@ -29,22 +23,12 @@ describe("CreateExpense", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        provideDateFnsAdapter(),
-        { provide: MAT_DATE_LOCALE, useValue: fr },
-        provideHttpClientTesting()
-      ]
+      providers: [provideDateFnsAdapter(), { provide: MAT_DATE_LOCALE, useValue: fr }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateExpense);
     fixture.componentRef.setInput("expenseLabels", labels);
     loader = TestbedHarnessEnvironment.loader(fixture);
-    httpTestingController = TestBed.inject(HttpTestingController);
-  });
-
-  afterEach(() => {
-    httpTestingController.verify();
-    vi.restoreAllMocks();
   });
 
   function getAmountInput(): Promise<MatInputHarness> {
@@ -70,30 +54,44 @@ describe("CreateExpense", () => {
     await labelInput.selectOption({ text: "Courses" });
   }
 
-  it("Should create an expense", async () => {
-    const expenseCreatedSpy = vi.spyOn(fixture.componentInstance.expenseCreated, "emit");
+  it("Should submit the expense", async () => {
+    const expenseSubmittedSpy = vi.spyOn(fixture.componentInstance.expenseSubmitted, "emit");
     await fixture.whenStable();
     expect(getAddButton().disabled).toBe(true);
 
     await fillForm();
     expect(getAddButton().disabled).toBe(false);
     getAddButton().click();
-
-    const request = httpTestingController.expectOne(addExpenseUrl);
-    const body = request.request.body as InsertExpensePayload;
-    expect(body.amount).toBe(23);
-    expect(body.labelId).toBe(1);
-    expect(body.expenseDate.toISOString().slice(0, 10)).toBe(
-      format(setDate(new Date(), 5), "yyyy-MM-dd")
-    );
-    const createdExpense = { id: 1, amount: 23, expenseDate: body.expenseDate, labelId: 1 };
-    request.flush(createdExpense);
     await fixture.whenStable();
 
-    expect(expenseCreatedSpy).toHaveBeenCalledWith(createdExpense);
-    // The amount and the label are reset, the date is kept for the next expense
+    expect(expenseSubmittedSpy).toHaveBeenCalledTimes(1);
+    const payload = expenseSubmittedSpy.mock.calls[0][0];
+    expect(payload.amount).toBe(23);
+    expect(payload.labelId).toBe(1);
+    expect(payload.expenseDate.toISOString().slice(0, 10)).toBe(
+      format(setDate(new Date(), 5), "yyyy-MM-dd")
+    );
+  });
+
+  it("Should disable the button while the expense is submitted", async () => {
+    await fillForm();
+    fixture.componentRef.setInput("isSubmitting", true);
+    await fixture.whenStable();
+
+    expect(getAddButton().disabled).toBe(true);
+  });
+
+  it("Should clear the amount and the label, and keep the date for the next expense", async () => {
+    await fillForm();
+    const dateInput = await loader.getHarness(MatDatepickerInputHarness);
+    const date = await dateInput.getValue();
+
+    fixture.componentInstance.clearAmountAndLabel();
+    await fixture.whenStable();
+
     expect(await (await getAmountInput()).getValue()).toBe("0");
     expect(await (await getLabelInput()).getValue()).toBe("");
+    expect(await dateInput.getValue()).toBe(date);
     expect(getAddButton().disabled).toBe(true);
   });
 
@@ -105,26 +103,5 @@ describe("CreateExpense", () => {
 
     await labelInput.selectOption({ text: "Restaurant" });
     expect(await labelInput.getValue()).toBe("Restaurant");
-  });
-
-  it("Should display an error when the expense cannot be created", async () => {
-    const handleErrorSpy = vi
-      .spyOn(TestBed.inject(HttpErrorHandler), "handleError")
-      .mockImplementation(() => undefined);
-    const expenseCreatedSpy = vi.spyOn(fixture.componentInstance.expenseCreated, "emit");
-
-    await fillForm();
-    getAddButton().click();
-    httpTestingController
-      .expectOne(addExpenseUrl)
-      .flush(null, { status: 500, statusText: "Server error" });
-    await fixture.whenStable();
-
-    expect(handleErrorSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 500 }),
-      "Erreur lors de l'ajout de la dépense."
-    );
-    expect(expenseCreatedSpy).not.toHaveBeenCalled();
-    expect(await (await getAmountInput()).getValue()).toBe("23");
   });
 });

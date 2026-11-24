@@ -1,39 +1,17 @@
-import { Component, computed, inject, input, signal } from "@angular/core";
+import { Component, inject, input, signal } from "@angular/core";
 import { rxResource } from "@angular/core/rxjs-interop";
-import { form, FormField } from "@angular/forms/signals";
-import { MatIconButton } from "@angular/material/button";
-import { MatOption } from "@angular/material/core";
-import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatIcon } from "@angular/material/icon";
-import { MatSelect } from "@angular/material/select";
-import { MatTooltip } from "@angular/material/tooltip";
-import { ChartData } from "chart.js";
-import { format, parseISO } from "date-fns";
-import { fr } from "date-fns/locale/fr";
-import { BaseChartDirective } from "ng2-charts";
 
 import { HttpErrorHandler } from "@core/http-error-handler";
 import { Theme } from "@core/theme";
-import { Label } from "@features/home/labels/label";
-import { getChartOptions } from "@shared/chart-options";
+import { Label, NO_LABEL_ID_SELECTED } from "@features/home/labels/label";
 import { ExpenseApi } from "../expense-api";
 import { MonthlyExpenseTotal } from "../monthly-expense-total";
+import { TotalExpenseByMonthView } from "../total-expense-by-month-view/total-expense-by-month-view";
 
 @Component({
   selector: "cash-manager-total-expense-by-month",
   templateUrl: "./total-expense-by-month.html",
-  styleUrl: "./total-expense-by-month.scss",
-  imports: [
-    BaseChartDirective,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    FormField,
-    MatOption,
-    MatIconButton,
-    MatIcon,
-    MatTooltip
-  ]
+  imports: [TotalExpenseByMonthView]
 })
 export class TotalExpenseByMonth {
   private readonly expenseApi = inject(ExpenseApi);
@@ -42,63 +20,23 @@ export class TotalExpenseByMonth {
 
   public readonly expenseLabels = input<Label[]>([]);
 
-  protected readonly labels = {
-    title: "Total des dépenses par mois",
-    expenseLabels: "Étiquettes",
-    allLabels: "Toutes les étiquettes",
-    chart: {
-      total: "Total des dépenses",
-      average: "Moyenne"
-    },
-    errors: {
-      gettingTotalExpenses: "Erreur lors de la récupération du total des dépenses."
-    }
-  };
+  private readonly ERROR_GETTING_TOTAL_EXPENSES =
+    "Erreur lors de la récupération du total des dépenses.";
 
-  private readonly NO_LABEL_ID_SELECTED = 0;
-  private readonly CHART_DATE_FORMAT = "MMMM yyyy";
-
-  private readonly labelModel = signal({ labelId: this.NO_LABEL_ID_SELECTED });
-  public readonly labelForm = form(this.labelModel);
-  public readonly isOneLabelSelected = computed(
-    () => this.labelModel().labelId !== this.NO_LABEL_ID_SELECTED
-  );
-  private readonly totalExpensesByMonth = rxResource({
-    params: () => this.labelModel().labelId,
+  public readonly selectedLabelId = signal(NO_LABEL_ID_SELECTED);
+  public readonly totalExpensesByMonth = rxResource({
+    params: () => this.selectedLabelId(),
     stream: ({ params: labelId }) =>
-      (labelId === this.NO_LABEL_ID_SELECTED
+      (labelId === NO_LABEL_ID_SELECTED
         ? this.expenseApi.getTotalExpensesByMonth()
         : this.expenseApi.getTotalExpensesByMonthByLabelId(labelId)
       ).pipe(
         this.httpErrorHandler.catchError<MonthlyExpenseTotal[]>(
-          this.labels.errors.gettingTotalExpenses,
+          this.ERROR_GETTING_TOTAL_EXPENSES,
           []
         )
       ),
     defaultValue: []
   });
-  public readonly chartOptions = computed(() => getChartOptions(this.theme.isDarkMode()));
-  public readonly totalExpensesByMonthChart = computed<ChartData<"line">>(() => {
-    const chartData = this.totalExpensesByMonth
-      .value()
-      .toSorted((dataA, dataB) => parseISO(dataA.date).getTime() - parseISO(dataB.date).getTime());
-    const average =
-      chartData.reduce((total, totalByMonth) => total + totalByMonth.total, 0) / chartData.length;
-    return {
-      labels: chartData.map((totalByMonth) =>
-        format(parseISO(totalByMonth.date), this.CHART_DATE_FORMAT, { locale: fr })
-      ),
-      datasets: [
-        {
-          label: this.labels.chart.total,
-          data: chartData.map((totalByMonth) => totalByMonth.total)
-        },
-        { label: this.labels.chart.average, data: chartData.map(() => average) }
-      ]
-    };
-  });
-
-  public resetSelectedLabel(): void {
-    this.labelForm.labelId().value.set(this.NO_LABEL_ID_SELECTED);
-  }
+  public readonly isDarkMode = this.theme.isDarkMode;
 }

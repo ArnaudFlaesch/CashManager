@@ -1,0 +1,10 @@
+@use "variables" as *;
+
+#create-label-form {
+  gap: $space-s;
+  margin-bottom: $space-m;
+
+  mat-form-field {
+    flex: 0 1 20rem;
+  }
+}
