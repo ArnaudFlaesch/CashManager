@@ -51,7 +51,7 @@
     "@vitest/coverage-v8": "5.1.2",
     "@vitest/eslint-plugin": "1.6.28",
     "angular-eslint": "22.8.0",
-    "cypress": "16.3.0",
+    "cypress": "16.4.0",
     "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-cypress": "7.0.5",
